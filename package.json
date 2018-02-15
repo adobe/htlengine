@@ -1,0 +1,13 @@
+{
+  "name": "htlengine",
+  "version": "1.0.0",
+  "description": "Javascript Based HTL (Sightly) parser",
+  "main": "src/main.js",
+  "license": "apache-2.0",
+  "dependencies": {
+    "antlr4": "^4.7.1"
+  },
+  "scripts": {
+    "build": "antlr4 -Dlanguage=JavaScript -Xexact-output-dir -o src/generated src/grammar/SightlyLexer.g4 src/grammar/SightlyParser.g4 src/grammar/SightlyParser.g4 src/grammar/HTMLLexer.g4 src/grammar/HTMLParser.g4"
+  }
+}
