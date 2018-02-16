@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "description": "Javascript Based HTL (Sightly) parser",
   "main": "src/main.js",
-  "license": "apache-2.0",
+  "license": "Apache-2.0",
+  "repository": "git@github.com:tripodsan/project-helix.git",
   "dependencies": {
     "antlr4": "^4.7.1"
   },
   "scripts": {
+    "test": "mocha",
     "build": "antlr4 -Dlanguage=JavaScript -Xexact-output-dir -o src/generated src/grammar/SightlyLexer.g4 src/grammar/SightlyParser.g4 src/grammar/SightlyParser.g4 src/grammar/HTMLLexer.g4 src/grammar/HTMLParser.g4"
+  },
+  "devDependencies": {
+    "mocha": "^5.0.1"
   }
 }

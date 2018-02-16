@@ -16,23 +16,25 @@
  *
  */
 
-const antlr4 = require('antlr4');
-const HTMLLexer = require('./generated/HTMLLexer').HTMLLexer;
-const HTMLParser = require('./generated/HTMLParser').HTMLParser;
-const HTMLParserListener = require('./generated/HTMLParserListener').HTMLParserListener;
+const ExpressionNode = require('./ExpressionNode');
+module.exports = class UnaryOperation extends ExpressionNode {
 
+    /**
+     *
+     * @param {BinaryOperator} operator
+     * @param {ExpressionNode} target
+     */
+    constructor(operator, target) {
+        super();
+        this._operator = operator;
+        this._target = target;
+    }
 
+    get operator() {
+        return this._operator;
+    }
 
-const filename = process.argv[2];
-const chars = new antlr4.FileStream(filename);
-const lexer = new HTMLLexer(chars);
-const tokens = new antlr4.CommonTokenStream(lexer);
-const parser = new HTMLParser(tokens);
-
-parser.buildParseTrees = true;
-
-const tree = parser.htmlDocument();
-
-console.log(tree.toStringTree());
-console.log(tree.getText());
-
+    get target() {
+        return this._target;
+    }
+};

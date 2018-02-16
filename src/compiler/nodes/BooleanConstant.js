@@ -16,23 +16,26 @@
  *
  */
 
-const antlr4 = require('antlr4');
-const HTMLLexer = require('./generated/HTMLLexer').HTMLLexer;
-const HTMLParser = require('./generated/HTMLParser').HTMLParser;
-const HTMLParserListener = require('./generated/HTMLParserListener').HTMLParserListener;
+const Atom = require('./Atom');
 
+class BooleanConstant extends Atom {
 
+    constructor(text) {
+        super();
+        this._value = Boolean(text);
+        this._text = text;
+    }
 
-const filename = process.argv[2];
-const chars = new antlr4.FileStream(filename);
-const lexer = new HTMLLexer(chars);
-const tokens = new antlr4.CommonTokenStream(lexer);
-const parser = new HTMLParser(tokens);
+    get text() {
+        return this._text;
+    }
 
-parser.buildParseTrees = true;
+    get value() {
+        return this._value;
+    }
+}
 
-const tree = parser.htmlDocument();
-
-console.log(tree.toStringTree());
-console.log(tree.getText());
+module.exports = BooleanConstant;
+module.exports.TRUE = new BooleanConstant(true);
+module.exports.FALSE = new BooleanConstant(false);
 

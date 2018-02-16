@@ -16,23 +16,18 @@
  *
  */
 
-const antlr4 = require('antlr4');
-const HTMLLexer = require('./generated/HTMLLexer').HTMLLexer;
-const HTMLParser = require('./generated/HTMLParser').HTMLParser;
-const HTMLParserListener = require('./generated/HTMLParserListener').HTMLParserListener;
+const ExpressionNode = require('./ExpressionNode');
+module.exports = class ArrayLiteral extends ExpressionNode {
 
+    /**
+     * @param {ExpressionNode[]} items
+     */
+    constructor(items) {
+        super();
+        this._items = items;
+    }
 
-
-const filename = process.argv[2];
-const chars = new antlr4.FileStream(filename);
-const lexer = new HTMLLexer(chars);
-const tokens = new antlr4.CommonTokenStream(lexer);
-const parser = new HTMLParser(tokens);
-
-parser.buildParseTrees = true;
-
-const tree = parser.htmlDocument();
-
-console.log(tree.toStringTree());
-console.log(tree.getText());
-
+    get items() {
+        return this._items;
+    }
+};

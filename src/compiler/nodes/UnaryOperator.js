@@ -15,24 +15,36 @@
  * limitations under the License.
  *
  */
+/**
+ * Binary operators used in expressions.
+ */
+module.exports = Object.freeze({
 
-const antlr4 = require('antlr4');
-const HTMLLexer = require('./generated/HTMLLexer').HTMLLexer;
-const HTMLParser = require('./generated/HTMLParser').HTMLParser;
-const HTMLParserListener = require('./generated/HTMLParserListener').HTMLParserListener;
+    /**
+     * Evaluates the logical negation of the operand
+     */
+    NOT: {
+        sym: '!',
+        calc: (operand) => {
+            return !Boolean(operand);
+        }
+    },
+    /**
+     * Evaluates whether the operand is a string of only whitespace characters
+     */
+    IS_WHITESPACE: {
+        calc: (operand) => {
+            return String(operand).trim().length === 0;
+        }
+    },
+    /**
+     * Evaluates the length of a collection
+     */
+    LENGTH: {
+        calc: (operand) => {
+            return operand.length();
+        }
+    },
 
-
-
-const filename = process.argv[2];
-const chars = new antlr4.FileStream(filename);
-const lexer = new HTMLLexer(chars);
-const tokens = new antlr4.CommonTokenStream(lexer);
-const parser = new HTMLParser(tokens);
-
-parser.buildParseTrees = true;
-
-const tree = parser.htmlDocument();
-
-console.log(tree.toStringTree());
-console.log(tree.getText());
+});
 

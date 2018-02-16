@@ -24,16 +24,21 @@ options {
 }
 
 @header {
-import org.apache.sling.scripting.sightly.compiler.expression.nodes.*;
-import org.apache.sling.scripting.sightly.compiler.expression.*;
-import org.apache.sling.scripting.sightly.impl.compiler.frontend.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Collections;
+    const NullLiteral = require('../compiler/nodes/NullLiteral');
+    const ArrayLiteral = require('../compiler/nodes/ArrayLiteral');
+    const NumericConstant = require('../compiler/nodes/NumericConstant');
+    const StringConstant = require('../compiler/nodes/StringConstant');
+    const BooleanConstant = require('../compiler/nodes/BooleanConstant');
+    const ExpressionNode = require('../compiler/nodes/ExpressionNode');
+    const PropertyAccess = require('../compiler/nodes/PropertyAccess');
+    const Expression = require('../compiler/nodes/Expression');
+    const Identifier = require('../compiler/nodes/Identifier');
+    const BinaryOperator = require('../compiler/nodes/BinaryOperator');
+    const BinaryOperation = require('../compiler/nodes/BinaryOperation');
+    const UnaryOperator = require('../compiler/nodes/UnaryOperator');
+    const UnaryOperation = require('../compiler/nodes/UnaryOperation');
+    const TernaryOperation = require('../compiler/nodes/TernaryOperation');
 }
-
 
 interpolation returns [Interpolation interp]
 @init { $interp = new Interpolation(); }
@@ -44,15 +49,15 @@ interpolation returns [Interpolation interp]
     ;
 
 textFrag returns [String str]
-@init { StringBuilder sb = new StringBuilder(); }
-    :   (TEXT_PART { sb.append($TEXT_PART.text); })+
-        { $str = sb.toString(); }
-    | (ESC_EXPR { sb.append($ESC_EXPR.text); })+
-        { $str = sb.toString().substring(1); }
+@init { let sb = ''; }
+    :   (TEXT_PART { sb += $TEXT_PART.text; })+
+        { $str = sb; }
+    | (ESC_EXPR { sb += $ESC_EXPR.text; })+
+        { $str = sb.substring(1); }
     ;
 
 expression returns [Expression expr]
-@init { ExpressionNode exNode = NullLiteral.INSTANCE; Map<String, ExpressionNode> opts = Collections.emptyMap(); }
+@init { let exNode = NullLiteral.INSTANCE; let opts = {}; }
     :   EXPR_START (exprNode {exNode = $exprNode.node;})?
         (OPTION_SEP optionList {opts = $optionList.options;})?
         EXPR_END
@@ -61,9 +66,9 @@ expression returns [Expression expr]
 
 
 optionList returns [Map<String, ExpressionNode> options]
-@init { $options = new HashMap<String, ExpressionNode>(); }
-    :    f=option { $options.put($f.name, ($f.value != null) ? $f.value : NullLiteral.INSTANCE); }
-        (COMMA r=option { $options.put($r.name, $r.value); })*
+@init { $options = {}; }
+    :    f=option { $options[$f.name] = ($f.value != null) ? $f.value : NullLiteral.INSTANCE; }
+        (COMMA r=option { $options[$r.name]=$r.value; })*
     ;
 
 option returns [String name, ExpressionNode value]
@@ -73,7 +78,7 @@ option returns [String name, ExpressionNode value]
 
 exprNode returns [ExpressionNode node]
     :   condition=binaryOp TERNARY_Q_OP thenBranch=binaryOp TERNARY_BRANCHES_OP elseBranch=binaryOp
-        {$node = new TernaryOperator($condition.node, $thenBranch.node, $elseBranch.node);}
+        {$node = new TernaryOperation($condition.node, $thenBranch.node, $elseBranch.node);}
     |   binaryOp {$node = $binaryOp.node;}
     ;
 
@@ -112,19 +117,19 @@ term returns [ExpressionNode node]
     ;
 
 field returns [ExpressionNode node]
-    : ID { $node = new StringConstant($ID.getText()); }
+    : ID { $node = new StringConstant($ID.text); }
     ;
 
 simple returns [ExpressionNode node]
     :    atom { $node = $atom.node; }
-    |    LBRACKET exprNode RBRACKET { $node = $exprNode.node; }
+    |    LBRACKET exprNode RBRACKET { $node = $exprNode.node.withHasParens(true); }
     |   ARRAY_START valueList ARRAY_END { $node = new ArrayLiteral($valueList.values); }
-    |   ARRAY_START ARRAY_END { $node = new ArrayLiteral(Collections.<ExpressionNode>emptyList()); }
+    |   ARRAY_START ARRAY_END { $node = new ArrayLiteral([]); }
     ;
 
 valueList returns [List<ExpressionNode> values]
-@init { $values = new ArrayList<ExpressionNode>(); }
-    :    (f=exprNode { $values.add($f.node); }) (COMMA p=exprNode { $values.add($p.node); })*
+@init { $values = []; }
+    :    (f=exprNode { $values.push($f.node); }) (COMMA p=exprNode { $values.push($p.node); })*
     ;
 
 atom returns [Atom node]
@@ -135,5 +140,5 @@ atom returns [Atom node]
     ;
 
 stringConst returns [StringConstant node]
-    :   STRING { $node = ParserHelper.createStringConstant($STRING.text); }
+    :   STRING { $node = StringConstant.parse($STRING.text); }
     ;

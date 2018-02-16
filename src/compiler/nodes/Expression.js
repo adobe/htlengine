@@ -15,24 +15,23 @@
  * limitations under the License.
  *
  */
+module.exports = class Expression {
 
-const antlr4 = require('antlr4');
-const HTMLLexer = require('./generated/HTMLLexer').HTMLLexer;
-const HTMLParser = require('./generated/HTMLParser').HTMLParser;
-const HTMLParserListener = require('./generated/HTMLParserListener').HTMLParserListener;
+    /**
+     *
+     * @param {ExpressionNode} root
+     * @param {Map<String, ExpressionNode>} options
+     */
+    constructor(root, options) {
+        this._options = options || {};
+        this._root = root;
+    }
 
+    get root() {
+        return this._root;
+    }
 
-
-const filename = process.argv[2];
-const chars = new antlr4.FileStream(filename);
-const lexer = new HTMLLexer(chars);
-const tokens = new antlr4.CommonTokenStream(lexer);
-const parser = new HTMLParser(tokens);
-
-parser.buildParseTrees = true;
-
-const tree = parser.htmlDocument();
-
-console.log(tree.toStringTree());
-console.log(tree.getText());
-
+    get options() {
+        return this._options;
+    }
+};
