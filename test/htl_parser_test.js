@@ -15,6 +15,9 @@
  * limitations under the License.
  *
  */
+
+/* global describe, it */
+
 const assert = require('assert');
 
 const DebugVisitor = require('../src/compiler/DebugVisitor');
@@ -44,7 +47,7 @@ const TESTS = {
         {s: '${42}'},
         {s: '${\'string\'}'},
         {s: '${"string"}', r: '${\'string\'}'},
-        {s: '${[1, 2, 3, true, \'string\']}'},
+        {s: '${[1, 2, 3, true, \'string\']}'}
     ],
     'Logic Operators': [
         {s: '${varOne && !(varTwo || varThree)}', r: '${varOne&&!(varTwo||varThree)}'},
@@ -66,7 +69,7 @@ const TESTS = {
         {s: '${numberValueOne != numberValueTwo}', r: '${numberValueOne!=numberValueTwo}'},
         {s: '${booleanValueOne == booleanValueTwo}', r: '${booleanValueOne==booleanValueTwo}'},
         {s: '${booleanValueOne != booleanValueTwo}', r: '${booleanValueOne!=booleanValueTwo}'},
-        {s: '${enumConstant == \'CONSTANT_NAME\'}', r: '${enumConstant==\'CONSTANT_NAME\'}'},
+        {s: '${enumConstant == \'CONSTANT_NAME\'}', r: '${enumConstant==\'CONSTANT_NAME\'}'}
     ],
     'Options': [
         {s: '${myVar @ optName}'},
@@ -80,7 +83,11 @@ const TESTS = {
         {s: '${myVar @ optOne, optTwo=myVar, optThree=\'string\', optFour=[myVar, \'string\']}'}
     ],
     'Fragments': [
-        {s: 'Hello, ${myVar}.'}
+        {s: 'Hello, ${myVar}.'},
+        {s: ''},
+        {s: 'Hello'},
+        {s: '${myVar} Hello'},
+        {s: 'Foo ${} Bar'}
     ]
 };
 
@@ -89,10 +96,10 @@ const TESTS = {
  */
 describe('HTL Expressions', function() {
     Object.keys(TESTS).forEach(function(name) {
-        const test = TESTS[name];
+        const categ = TESTS[name];
         describe(name, function() {
-            test.forEach(function(test) {
-                it('evaluates the expression correctly', function () {
+            categ.forEach(function(test) {
+                it('evaluates the expression correctly', function() {
                     const source = test.s;
                     const expected = test.r || test.s;
                     const result = process(source);

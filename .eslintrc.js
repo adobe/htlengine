@@ -145,7 +145,7 @@ module.exports = {
         'key-spacing': [2, {'beforeColon': false, 'afterColon': true}], // enforces spacing between keys and values in objects
         'lines-around-comment': [2, {'beforeBlockComment': true, 'beforeLineComment': false}], // enforces empty lines around comments
         'linebreak-style': [2, 'unix'], // disallow mixed 'LF' and 'CRLF' as linebreaks
-        'max-nested-callbacks': [2, 2], // specify the maximum depth callbacks can be nested
+        'max-nested-callbacks': [2, 6], // specify the maximum depth callbacks can be nested
         'new-cap': 2, // require a capital letter for constructors
         'new-parens': 2, // disallow the omission of parentheses when invoking a constructor with no arguments
         'newline-after-var': 0, // allow/disallow an empty newline after var statement

@@ -15,6 +15,9 @@
  * limitations under the License.
  *
  */
+
+/* global describe, it */
+
 const assert = require('assert');
 const fs = require('fs');
 
@@ -49,7 +52,7 @@ describe('Simple', function() {
     it('parses the simple html', function() {
         const filename = 'test/simple.html';
         const source = fs.readFileSync(filename, 'utf-8');
-        const result  = process(source);
+        const result = process(source);
         assert.equal(result, source);
     });
 });

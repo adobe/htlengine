@@ -19,6 +19,8 @@
 const antlr4 = require('antlr4');
 const HTMLLexer = require('./generated/HTMLLexer').HTMLLexer;
 const HTMLParser = require('./generated/HTMLParser').HTMLParser;
+const MarkupHandler = require('./html/MarkupHandler');
+const MarkupListener = require('./html/MarkupListener');
 
 const filename = process.argv[2];
 const chars = new antlr4.FileStream(filename);
@@ -30,6 +32,8 @@ parser.buildParseTrees = true;
 
 const tree = parser.htmlDocument();
 
-console.log(tree.toStringTree());
-console.log(tree.getText());
+const handler = new MarkupHandler();
+const listener = new MarkupListener(handler);
+antlr4.tree.ParseTreeWalker.DEFAULT.walk(listener, tree);
 
+console.log(handler.result);
