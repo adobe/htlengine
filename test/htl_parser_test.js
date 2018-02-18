@@ -17,33 +17,19 @@
  */
 const assert = require('assert');
 
-const antlr4 = require('antlr4');
-const SightlyLexer = require('../src/generated/SightlyLexer').SightlyLexer;
-const SightlyParser = require('../src/generated/SightlyParser').SightlyParser;
-
-const DebugVistor = require('../src/compiler/DebugVisitor');
-
-class TestErrorListener extends antlr4.error.ErrorListener {
-
-    syntaxError(recognizer, offendingSymbol, line, column, msg, e) {
-        throw new Error('Error: ' + msg);
-    };
-
-}
+const DebugVisitor = require('../src/compiler/DebugVisitor');
+const HTLParser = require('../src/compiler/HTLParser');
+const ThrowingErrorListener = require('../src/compiler/ThrowingErrorListener');
 
 function process(input) {
-    const chars = new antlr4.InputStream(input);
-    const lexer = new SightlyLexer(chars);
-    const tokens = new antlr4.CommonTokenStream(lexer);
-    const parser = new SightlyParser(tokens);
-    parser.addErrorListener(new TestErrorListener());
-    const tree = parser.expression();
+    const interp = new HTLParser()
+        .withErrorListener(ThrowingErrorListener.INSTANCE)
+        .parse(input);
 
-    const visitor = new DebugVistor();
-    visitor.visit(tree.expr);
+    const visitor = new DebugVisitor();
+    visitor.visit(interp);
 
     return visitor.result;
-    // return tree.getText();
 }
 
 const TESTS = {
@@ -92,21 +78,26 @@ const TESTS = {
         {s: '${myVar @ optName=[myVar, \'string\']}'},
         {s: '${myVar @ optName=(varOne && varTwo) || !varThree}', r: '${myVar @ optName=(varOne&&varTwo)||!varThree}'},
         {s: '${myVar @ optOne, optTwo=myVar, optThree=\'string\', optFour=[myVar, \'string\']}'}
+    ],
+    'Fragments': [
+        {s: 'Hello, ${myVar}.'}
     ]
 };
 
 /**
  * Simple tests that check if the parser can process all the expressions
  */
-Object.keys(TESTS).forEach(function(name) {
-    const test = TESTS[name];
-    describe(name, function() {
-        test.forEach(function(test) {
-            it('evaluates the expression correctly', function () {
-                const source = test.s;
-                const expected = test.r || test.s;
-                const result = process(source);
-                assert.equal(result, expected);
+describe('HTL Expressions', function() {
+    Object.keys(TESTS).forEach(function(name) {
+        const test = TESTS[name];
+        describe(name, function() {
+            test.forEach(function(test) {
+                it('evaluates the expression correctly', function () {
+                    const source = test.s;
+                    const expected = test.r || test.s;
+                    const result = process(source);
+                    assert.equal(result, expected);
+                });
             });
         });
     });

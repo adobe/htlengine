@@ -15,11 +15,16 @@
  * limitations under the License.
  *
  */
+const TemplateNode = require('./TemplateNode');
 
-const ExpressionNode = require('./ExpressionNode');
-class NullLiteral extends ExpressionNode {
+module.exports = class TemplateTextNode extends TemplateNode {
 
-}
+    constructor(text) {
+        super();
+        this._text = text;
+    }
 
-module.exports = NullLiteral;
-module.exports.INSTANCE = new NullLiteral();
+    get text() {
+        return this._text;
+    }
+};

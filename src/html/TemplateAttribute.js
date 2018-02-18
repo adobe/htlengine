@@ -15,11 +15,23 @@
  * limitations under the License.
  *
  */
+module.exports = class TemplateAttribute {
 
-const ExpressionNode = require('./ExpressionNode');
-class NullLiteral extends ExpressionNode {
+    constructor(name, value, quoteChar) {
+        this._name = name;
+        this._value = value;
+        this._quoteChar = quoteChar;
+    }
 
-}
+    get name() {
+        return this._name;
+    }
 
-module.exports = NullLiteral;
-module.exports.INSTANCE = new NullLiteral();
+    get value() {
+        return this._value;
+    }
+
+    get quoteChar() {
+        return this._quoteChar;
+    }
+};

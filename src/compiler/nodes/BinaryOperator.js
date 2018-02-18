@@ -26,18 +26,20 @@ module.exports = Object.freeze({
     AND: {
         sym: '&&',
         calc: (left, right) => {
-            return Boolean(left) ? right : left;
+            return left ? right : left;
         }
     },
+
     /**
      * Logical disjunction.
      */
     OR: {
         sym: '||',
         calc: (left, right) => {
-            return Boolean(left) ? left : right;
+            return left ? left : right;
         }
     },
+
     /**
      * String concatenation.
      */
@@ -47,6 +49,7 @@ module.exports = Object.freeze({
             return String(left).concat(right);
         }
     },
+
     /**
      * Less than.
      */
@@ -56,6 +59,7 @@ module.exports = Object.freeze({
             return left < right;
         }
     },
+
     /**
      * Less or equal.
      */
@@ -65,6 +69,7 @@ module.exports = Object.freeze({
             return left <= right;
         }
     },
+
     /**
      * Greater than.
      */
@@ -74,6 +79,7 @@ module.exports = Object.freeze({
             return left > right;
         }
     },
+
     /**
      * Greater or equal.
      */
@@ -83,16 +89,19 @@ module.exports = Object.freeze({
             return left >= right;
         }
     },
+
     /**
      * Equal.
      */
     EQ: {
         sym: '==',
         calc: (left, right) => {
+            /* eslint eqeqeq: 'off' */
             // noinspection EqualityComparisonWithCoercionJS
             return left == right;
         }
     },
+
     /**
      * Not equal.
      */
@@ -104,6 +113,7 @@ module.exports = Object.freeze({
         }
 
     },
+
     /**
      * Strict version of equality, restricted to just some types.
      */
@@ -113,6 +123,7 @@ module.exports = Object.freeze({
             return left === right;
         }
     },
+
     /**
      * Strict version of the not-equal operator.
      */
@@ -122,6 +133,7 @@ module.exports = Object.freeze({
             return left !== right;
         }
     },
+
     /**
      * Addition.
      */
@@ -141,6 +153,7 @@ module.exports = Object.freeze({
             return Number(left) - Number(right);
         }
     },
+
     /**
      * Multiplication.
      */
@@ -150,6 +163,7 @@ module.exports = Object.freeze({
             return Number(left) * Number(right);
         }
     },
+
     /**
      * Floating point division.
      */
@@ -159,13 +173,14 @@ module.exports = Object.freeze({
             return Number(left) / Number(right);
         }
     },
+
     /**
      * Integer division.
      */
     I_DIV: {
         sym: '/',
         calc: (left, right) => {
-            return Math.floor(Number.parseInt(left) / Number.parseInt(right));
+            return Math.floor(Number.parseInt(left, 10) / Number.parseInt(right, 10));
         }
     },
 

@@ -21,9 +21,9 @@ module.exports = class TernaryOperation extends ExpressionNode {
 
     /**
      *
-     * @param {ExpressionNode} condition
-     * @param {ExpressionNode} thenBranch
-     * @param {ExpressionNode} elseBranch
+     * @param {ExpressionNode} condition Condition expression
+     * @param {ExpressionNode} thenBranch Then branch expression
+     * @param {ExpressionNode} elseBranch Else branch expression
      */
     constructor(condition, thenBranch, elseBranch) {
         super();

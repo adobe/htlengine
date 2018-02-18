@@ -22,6 +22,7 @@ const StringConstant = require('./nodes/StringConstant');
 const BooleanConstant = require('./nodes/BooleanConstant');
 const PropertyAccess = require('./nodes/PropertyAccess');
 const Expression = require('./nodes/Expression');
+const Interpolation = require('./nodes/Interpolation');
 const Identifier = require('./nodes/Identifier');
 const BinaryOperation = require('./nodes/BinaryOperation');
 const UnaryOperation = require('./nodes/UnaryOperation');
@@ -41,7 +42,16 @@ module.exports = class DebugVisitor {
         if (node.hasParens) {
             this.result += '(';
         }
-        if (node instanceof ArrayLiteral) {
+        if (node instanceof Interpolation) {
+            node.fragments.forEach((frag) => {
+                if (frag.expression) {
+                    frag.expression.accept(this);
+                } else {
+                    this.result += frag.text;
+                }
+            });
+        }
+        else if (node instanceof ArrayLiteral) {
             this.result += '[';
             node.items.forEach((i, idx) => {
                 if (idx > 0) {
@@ -64,9 +74,9 @@ module.exports = class DebugVisitor {
         }
         else if (node instanceof TernaryOperation) {
             node.condition.accept(this);
-            this.result += " ? ";
+            this.result += ' ? ';
             node.thenBranch.accept(this);
-            this.result += " : ";
+            this.result += ' : ';
             node.elseBranch.accept(this);
         }
         else if (node instanceof UnaryOperation) {
@@ -76,7 +86,6 @@ module.exports = class DebugVisitor {
         else if (node instanceof Expression) {
             this.result += '${';
             node.root.accept(this);
-            let delim = '@';
             Object.keys(node.options).forEach((key, idx) => {
                 const option = node.options[key];
                 if (idx === 0) {
@@ -108,7 +117,7 @@ module.exports = class DebugVisitor {
             // nop
         }
         else {
-            throw new Error('unexpected node: ' +  node.constructor.name);
+            throw new Error('unexpected node: ' + node.constructor.name);
         }
         if (node.hasParens) {
             this.result += ')';

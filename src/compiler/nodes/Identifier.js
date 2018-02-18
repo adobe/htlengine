@@ -32,4 +32,4 @@ module.exports = class Identifier extends Atom {
     get text() {
         return this._name;
     }
-}
+};

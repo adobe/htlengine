@@ -21,8 +21,8 @@ module.exports = class UnaryOperation extends ExpressionNode {
 
     /**
      *
-     * @param {BinaryOperator} operator
-     * @param {ExpressionNode} target
+     * @param {BinaryOperator} operator Binary operator
+     * @param {ExpressionNode} target Target expression
      */
     constructor(operator, target) {
         super();

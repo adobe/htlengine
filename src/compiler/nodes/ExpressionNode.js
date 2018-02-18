@@ -34,4 +34,4 @@ module.exports = class ExpressionNode {
     accept(visitor) {
         return visitor.visit(this);
     }
-}
+};

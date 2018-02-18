@@ -20,7 +20,7 @@ const ExpressionNode = require('./ExpressionNode');
 module.exports = class ArrayLiteral extends ExpressionNode {
 
     /**
-     * @param {ExpressionNode[]} items
+     * @param {ExpressionNode[]} items Items
      */
     constructor(items) {
         super();

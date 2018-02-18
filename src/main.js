@@ -19,9 +19,6 @@
 const antlr4 = require('antlr4');
 const HTMLLexer = require('./generated/HTMLLexer').HTMLLexer;
 const HTMLParser = require('./generated/HTMLParser').HTMLParser;
-const HTMLParserListener = require('./generated/HTMLParserListener').HTMLParserListener;
-
-
 
 const filename = process.argv[2];
 const chars = new antlr4.FileStream(filename);

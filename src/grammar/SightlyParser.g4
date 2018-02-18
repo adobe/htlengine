@@ -32,6 +32,7 @@ options {
     const ExpressionNode = require('../compiler/nodes/ExpressionNode');
     const PropertyAccess = require('../compiler/nodes/PropertyAccess');
     const Expression = require('../compiler/nodes/Expression');
+    const Interpolation = require('../compiler/nodes/Interpolation');
     const Identifier = require('../compiler/nodes/Identifier');
     const BinaryOperator = require('../compiler/nodes/BinaryOperator');
     const BinaryOperation = require('../compiler/nodes/BinaryOperation');

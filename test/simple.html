@@ -1,8 +1,53 @@
+<!--
+    this is a simple test html
+-->
+<!DOCTYPE html>
+<!-- another comment -->
 <html>
 <head>
     <title>Test</title>
 </head>
 <body>
-    Hello, world!
+    Hello, world! this is a ${test}. ${'div'}. bug 50% are fine
+    <DIV>test</DIV>
+    <empty/>
+    <div class="foo" data-sly-use.customPage="CustomPage">Hello World</div>
+    <div data-sly-use.nav="${'Navigation' @ depth=1, showVisible=!wcmmode.edit}">${nav.foo}</div>
+    <input type="number" name="quantity" min="${qttMin @ context='number'}" max="${qttMax @ context='number'}"/>
+    <div a="1" b='2' border input=false single='toby"rules' checked=checked double="toby&quot;rules" empty="">
+        ${expression}
+    </div>
+    <!--/* Scripts */-->
+    <a href="#whatever" onclick="${myFunctionName @ context='scriptToken'}()">Link</a>
+    <scripted>
+        <div></div>
+    </scripted>
+    <script>
+        empty = "<div ";
+    </script>
+    <script>var ${myVarName @ context="scriptToken"}="Bar";</script>
+    <script>var bar='${someText @ context="scriptString"}';</script>
+    <script languages="javascript">
+        a=1;
+        var bar='${someText @ context="scriptString"}';
+        let c = '}';
+
+    </script>
+
+    <script src="foo"/>  this is no <b>script</b>!
+    <!--/* Styles */-->
+    <a href="#whatever" style="color: ${colorName @ context='styleToken'};">Link</a>
+    <style media="all">
+        .some {
+            /* yrsy */
+        }
+    </style>
+    <style>
+        a.${className @ context="styleToken"} {
+            font-family: '${fontFamily @ context="styleString"}', sans-serif;
+            color: #${colorHashValue @ context="styleToken"};
+            margin-${side @ context="styleToken"}: 1em; /* E.g. for bi-directional text */
+        }
+    </style>
 </body>
 </html>

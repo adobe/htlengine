@@ -15,11 +15,14 @@
  * limitations under the License.
  *
  */
+const antlr4 = require('antlr4');
 
-const ExpressionNode = require('./ExpressionNode');
-class NullLiteral extends ExpressionNode {
+class ThrowingErrorListener extends antlr4.error.ErrorListener {
 
+    syntaxError(recognizer, offendingSymbol, line, column, msg, e) {
+        throw new Error('Error: ' + msg);
+    }
 }
 
-module.exports = NullLiteral;
-module.exports.INSTANCE = new NullLiteral();
+module.exports = ThrowingErrorListener;
+module.exports.INSTANCE = new ThrowingErrorListener();

@@ -48,21 +48,24 @@ DTD
     : '<!' .*? '>'
     ;
 
-SCRIPTLET
-    : '<?' .*? '?>'
-    | '<%' .*? '%>'
-    ;
-
 SEA_WS
     :  (' '|'\t'|'\r'? '\n')+
     ;
 
 SCRIPT_OPEN
-    : '<script' .*? '>' ->pushMode(SCRIPT)
+    : '<script ' ->pushMode(SCRIPT_TAG)
+    ;
+
+SCRIPT_NOATTRS
+    : '<script>' ->pushMode(SCRIPT)
     ;
 
 STYLE_OPEN
-    : '<style' .*? '>'  ->pushMode(STYLE)
+    : '<style >'  ->pushMode(STYLE_TAG)
+    ;
+
+STYLE_NOATTRS
+    : '<style>' ->pushMode(STYLE)
     ;
 
 TAG_OPEN
@@ -71,38 +74,6 @@ TAG_OPEN
 
 HTML_TEXT
     : ~'<'+
-    ;
-
-//
-// tag declarations
-//
-mode TAG;
-
-TAG_CLOSE
-    : '>' -> popMode
-    ;
-
-TAG_SLASH_CLOSE
-    : '/>' -> popMode
-    ;
-
-TAG_SLASH
-    : '/'
-    ;
-
-//
-// lexing mode for attribute values
-//
-TAG_EQUALS
-    : '=' -> pushMode(ATTVALUE)
-    ;
-
-TAG_NAME
-    : TAG_NameStartChar TAG_NameChar*
-    ;
-
-TAG_WHITESPACE
-    : [ \t\r\n] -> skip
     ;
 
 fragment
@@ -138,16 +109,109 @@ TAG_NameStartChar
     ;
 
 //
+// script tag declatations
+//
+mode SCRIPT_TAG;
+
+SCRIPT_TAG_CLOSE
+    : '>' -> mode(SCRIPT)
+    ;
+
+SCRIPT_TAG_SLASH_CLOSE
+    : '/>' -> popMode
+    ;
+
+SCRIPT_TAG_SLASH
+    : '/'
+    ;
+
+//
+// lexing mode for attribute values inside script tag
+//
+SCRIPT_TAG_EQUALS
+    : '=' -> pushMode(ATTVALUE)
+    ;
+
+SCRIPT_TAG_NAME
+    : TAG_NameStartChar TAG_NameChar*
+    ;
+
+SCRIPT_TAG_WHITESPACE
+    : [ \t\r\n] -> skip
+    ;
+
+//
+// style tag declatations
+//
+mode STYLE_TAG;
+
+STYLE_TAG_CLOSE
+    : '>' -> mode(STYLE)
+    ;
+
+STYLE_TAG_SLASH_CLOSE
+    : '/>' -> popMode
+    ;
+
+STYLE_TAG_SLASH
+    : '/'
+    ;
+
+//
+// lexing mode for attribute values inside style tag
+//
+STYLE_TAG_EQUALS
+    : '=' -> pushMode(ATTVALUE)
+    ;
+
+STYLE_TAG_NAME
+    : TAG_NameStartChar TAG_NameChar*
+    ;
+
+STYLE_TAG_WHITESPACE
+    : [ \t\r\n] -> skip
+    ;
+
+//
+// tag declarations
+//
+mode TAG;
+
+TAG_CLOSE
+    : '>' -> popMode
+    ;
+
+TAG_SLASH_CLOSE
+    : '/>' -> popMode
+    ;
+
+TAG_SLASH
+    : '/'
+    ;
+
+//
+// lexing mode for attribute values
+//
+TAG_EQUALS
+    : '=' -> pushMode(ATTVALUE)
+    ;
+
+TAG_NAME
+    : TAG_NameStartChar TAG_NameChar*
+    ;
+
+TAG_WHITESPACE
+    : [ \t\r\n] -> skip
+    ;
+
+
+//
 // <scripts>
 //
 mode SCRIPT;
 
 SCRIPT_BODY
     : .*? '</script>' -> popMode
-    ;
-
-SCRIPT_SHORT_BODY
-    : .*? '</>' -> popMode
     ;
 
 //
@@ -157,10 +221,6 @@ mode STYLE;
 
 STYLE_BODY
     : .*? '</style>' -> popMode
-    ;
-
-STYLE_SHORT_BODY
-    : .*? '</>' -> popMode
     ;
 
 //

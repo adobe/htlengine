@@ -26,17 +26,17 @@ class StringConstant extends Atom {
         for (let i = 1; i <= end; i++) {
             let ch = str[i];
             if (ch === '\\') {
-                let nextChar = i === end ? '\\' : str[i+1];
+                let nextChar = i === end ? '\\' : str[i + 1];
 
                 // Octal escape?
                 if (nextChar >= '0' && nextChar <= '7') {
-                    let code = "" + nextChar;
+                    let code = '' + nextChar;
                     i++;
-                    if (i < end && str[i+1] >= '0' && str[i+1] <= '7') {
-                        code += str[i+1];
+                    if (i < end && str[i + 1] >= '0' && str[i + 1] <= '7') {
+                        code += str[i + 1];
                         i++;
-                        if (i < end && str[i+1] >= '0' && str[i+1] <= '7') {
-                            code += str[i+1];
+                        if (i < end && str[i + 1] >= '0' && str[i + 1] <= '7') {
+                            code += str[i + 1];
                             i++;
                         }
                     }

@@ -16,10 +16,43 @@
  *
  */
 
-const ExpressionNode = require('./ExpressionNode');
-class NullLiteral extends ExpressionNode {
+/**
+ * A sequence with alternating string fragments and HTL expressions. These result from parsing HTML attributes or string nodes. For
+ * instance "Hello ${World}!" would result in 3 fragments: "Hello ", ${World} and "!"
+ */
+module.exports = class Interpolation {
 
-}
+    constructor() {
+        this._fragments = [];
+        this._content = '';
+    }
 
-module.exports = NullLiteral;
-module.exports.INSTANCE = new NullLiteral();
+    addExpression(expression) {
+        this._fragments.push({
+            expression
+        });
+    }
+
+    addText(text) {
+        this._fragments.push({
+            text
+        });
+    }
+
+    get fragments() {
+        return this._fragments;
+    }
+
+    get content() {
+        return this._content;
+    }
+
+    set content(content) {
+        this._content = content;
+    }
+
+    accept(visitor) {
+        return visitor.visit(this);
+    }
+
+};

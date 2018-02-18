@@ -31,7 +31,7 @@ parser grammar HTMLParser;
 options { tokenVocab=HTMLLexer; }
 
 htmlDocument
-    : (scriptlet | SEA_WS)* xml? (scriptlet | SEA_WS)* dtd? (scriptlet | SEA_WS)* htmlElements*
+    : (htmlComment | htmlChardata)* dtd? (htmlComment | htmlChardata)* htmlElements*
     ;
 
 htmlElements
@@ -39,11 +39,10 @@ htmlElements
     ;
 
 htmlElement
-    : TAG_OPEN htmlTagName htmlAttribute* TAG_CLOSE htmlContent TAG_OPEN TAG_SLASH htmlTagName TAG_CLOSE
+    : script
+    | TAG_OPEN htmlTagName htmlAttribute* TAG_CLOSE htmlContent TAG_OPEN TAG_SLASH htmlTagName TAG_CLOSE
     | TAG_OPEN htmlTagName htmlAttribute* TAG_SLASH_CLOSE
     | TAG_OPEN htmlTagName htmlAttribute* TAG_CLOSE
-    | scriptlet
-    | script
     | style
     ;
 
@@ -56,8 +55,26 @@ htmlAttribute
     | htmlAttributeName
     ;
 
+htmlScriptAttribute
+    : htmlScriptAttributeName SCRIPT_TAG_EQUALS htmlAttributeValue
+    | htmlScriptAttributeName
+    ;
+
+htmlStyleAttribute
+    : htmlStyleAttributeName STYLE_TAG_EQUALS htmlAttributeValue
+    | htmlStyleAttributeName
+    ;
+
 htmlAttributeName
     : TAG_NAME
+    ;
+
+htmlScriptAttributeName
+    : SCRIPT_TAG_NAME
+    ;
+
+htmlStyleAttributeName
+    : STYLE_TAG_NAME
     ;
 
 htmlAttributeValue
@@ -95,14 +112,14 @@ xml
     : XML_DECLARATION
     ;
 
-scriptlet
-    : SCRIPTLET
-    ;
-
 script
-    : SCRIPT_OPEN ( SCRIPT_BODY | SCRIPT_SHORT_BODY)
+    : SCRIPT_OPEN htmlScriptAttribute+ SCRIPT_TAG_CLOSE SCRIPT_BODY
+    | SCRIPT_OPEN htmlScriptAttribute+ SCRIPT_TAG_SLASH_CLOSE
+    | SCRIPT_NOATTRS SCRIPT_BODY
     ;
 
 style
-    : STYLE_OPEN ( STYLE_BODY | STYLE_SHORT_BODY)
+    : STYLE_OPEN htmlStyleAttribute+ STYLE_TAG_CLOSE STYLE_BODY
+    | STYLE_OPEN htmlStyleAttribute+ STYLE_TAG_SLASH_CLOSE
+    | STYLE_NOATTRS STYLE_BODY
     ;

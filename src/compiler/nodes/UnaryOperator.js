@@ -26,9 +26,10 @@ module.exports = Object.freeze({
     NOT: {
         sym: '!',
         calc: (operand) => {
-            return !Boolean(operand);
+            return !operand;
         }
     },
+
     /**
      * Evaluates whether the operand is a string of only whitespace characters
      */
@@ -37,6 +38,7 @@ module.exports = Object.freeze({
             return String(operand).trim().length === 0;
         }
     },
+
     /**
      * Evaluates the length of a collection
      */
@@ -44,7 +46,7 @@ module.exports = Object.freeze({
         calc: (operand) => {
             return operand.length();
         }
-    },
+    }
 
 });
 

@@ -22,9 +22,9 @@ module.exports = class BinaryOperation extends ExpressionNode {
 
     /**
      *
-     * @param {BinaryOperator} operator
-     * @param {ExpressionNode} leftOperand
-     * @param {ExpressionNode} rightOperand
+     * @param {BinaryOperator} operator Operator
+     * @param {ExpressionNode} leftOperand Left operand expression
+     * @param {ExpressionNode} rightOperand Right operand expression
      */
     constructor(operator, leftOperand, rightOperand) {
         super();
