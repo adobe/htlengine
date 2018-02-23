@@ -16,37 +16,35 @@
  *
  */
 module.exports = class Expression {
+  /**
+   *
+   * @param {ExpressionNode} root Root node
+   * @param {Map<String, ExpressionNode>} options Options
+   * @param {String} rawText Raw text
+   */
+  constructor(root, options, rawText) {
+    this._options = options || {};
+    this._root = root;
+    this._rawText = rawText;
+  }
 
-    /**
-     *
-     * @param {ExpressionNode} root Root node
-     * @param {Map<String, ExpressionNode>} options Options
-     * @param {String} rawText Raw text
-     */
-    constructor(root, options, rawText) {
-        this._options = options || {};
-        this._root = root;
-        this._rawText = rawText;
-    }
+  get root() {
+    return this._root;
+  }
 
-    get root() {
-        return this._root;
-    }
+  get options() {
+    return this._options;
+  }
 
-    get options() {
-        return this._options;
-    }
+  get rawText() {
+    return this._rawText;
+  }
 
-    get rawText() {
-        return this._rawText;
-    }
+  withRawText(rawText) {
+    return new Expression(this._root, this._options, rawText);
+  }
 
-    withRawText(rawText) {
-        return new Expression(this._root, this._options, rawText);
-    }
-
-    accept(visitor) {
-        return visitor.visit(this);
-    }
-
+  accept(visitor) {
+    return visitor.visit(this);
+  }
 };

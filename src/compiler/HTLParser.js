@@ -15,35 +15,34 @@
  * limitations under the License.
  *
  */
-const antlr4 = require('antlr4');
-const SightlyLexer = require('../generated/SightlyLexer').SightlyLexer;
-const SightlyParser = require('../generated/SightlyParser').SightlyParser;
+const antlr4 = require("antlr4");
+const SightlyLexer = require("../generated/SightlyLexer").SightlyLexer;
+const SightlyParser = require("../generated/SightlyParser").SightlyParser;
 
 module.exports = class HTLParser {
+  /**
+   * @param {antlr4.error.ErrorListener} listener Error listener
+   * @returns {module.HTLParser} This parser.
+   */
+  withErrorListener(listener) {
+    this._errorListener = listener;
+    return this;
+  }
 
-    /**
-     * @param {antlr4.error.ErrorListener} listener Error listener
-     * @returns {module.HTLParser} This parser.
-     */
-    withErrorListener(listener) {
-        this._errorListener = listener;
-        return this;
+  /**
+   * Parses the input and returns an Interpolation.
+   * @param {String} input Input text
+   * @return {Interpolation} The parsed interpolation.
+   */
+  parse(input) {
+    const chars = new antlr4.InputStream(input);
+    const lexer = new SightlyLexer(chars);
+    const tokens = new antlr4.CommonTokenStream(lexer);
+    const parser = new SightlyParser(tokens);
+
+    if (this._errorListener) {
+      parser.addErrorListener(this._errorListener);
     }
-
-    /**
-     * Parses the input and returns an Interpolation.
-     * @param {String} input Input text
-     * @return {Interpolation} The parsed interpolation.
-     */
-    parse(input) {
-        const chars = new antlr4.InputStream(input);
-        const lexer = new SightlyLexer(chars);
-        const tokens = new antlr4.CommonTokenStream(lexer);
-        const parser = new SightlyParser(tokens);
-
-        if (this._errorListener) {
-            parser.addErrorListener(this._errorListener);
-        }
-        return parser.interpolation().interp;
-    }
+    return parser.interpolation().interp;
+  }
 };

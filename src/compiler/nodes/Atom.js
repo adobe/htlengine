@@ -16,9 +16,8 @@
  *
  */
 
-const ExpressionNode = require('./ExpressionNode');
+const ExpressionNode = require("./ExpressionNode");
 
 module.exports = class Atom extends ExpressionNode {
-
-    get text() { }
+  get text() {}
 };

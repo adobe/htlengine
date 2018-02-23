@@ -18,41 +18,41 @@
 
 /* global describe, it */
 
-const assert = require('assert');
-const fs = require('fs');
+const assert = require("assert");
+const fs = require("fs");
 
-const antlr4 = require('antlr4');
-const HTMLLexer = require('../src/generated/HTMLLexer').HTMLLexer;
-const HTMLParser = require('../src/generated/HTMLParser').HTMLParser;
-const ThrowingErrorListener = require('../src/compiler/ThrowingErrorListener');
+const antlr4 = require("antlr4");
+const HTMLLexer = require("../src/generated/HTMLLexer").HTMLLexer;
+const HTMLParser = require("../src/generated/HTMLParser").HTMLParser;
+const ThrowingErrorListener = require("../src/compiler/ThrowingErrorListener");
 
-const MarkupListener = require('../src/html/MarkupListener');
-const MarkupHandler = require('../src/html/MarkupHandler');
+const MarkupListener = require("../src/html/MarkupListener");
+const MarkupHandler = require("../src/html/MarkupHandler");
 
 function process(input) {
-    const chars = new antlr4.InputStream(input);
-    const lexer = new HTMLLexer(chars);
-    const tokens = new antlr4.CommonTokenStream(lexer);
-    const parser = new HTMLParser(tokens);
-    parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-    const tree = parser.htmlDocument();
+  const chars = new antlr4.InputStream(input);
+  const lexer = new HTMLLexer(chars);
+  const tokens = new antlr4.CommonTokenStream(lexer);
+  const parser = new HTMLParser(tokens);
+  parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+  const tree = parser.htmlDocument();
 
-    const handler = new MarkupHandler();
-    const listener = new MarkupListener(handler);
-    antlr4.tree.ParseTreeWalker.DEFAULT.walk(listener, tree);
+  const handler = new MarkupHandler();
+  const listener = new MarkupListener(handler);
+  antlr4.tree.ParseTreeWalker.DEFAULT.walk(listener, tree);
 
-    console.log(handler.result);
-    return handler.result;
+  console.log(handler.result);
+  return handler.result;
 }
 
 /**
  * Simple tests that check if the parser can process all the expressions
  */
-describe('Simple', function() {
-    it('parses the simple html', function() {
-        const filename = 'test/simple.html';
-        const source = fs.readFileSync(filename, 'utf-8');
-        const result = process(source);
-        assert.equal(result, source);
-    });
+describe("Simple", function() {
+  it("parses the simple html", function() {
+    const filename = "test/simple.html";
+    const source = fs.readFileSync(filename, "utf-8");
+    const result = process(source);
+    assert.equal(result, source);
+  });
 });

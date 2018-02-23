@@ -15,65 +15,63 @@
  * limitations under the License.
  *
  */
-const TemplateNode = require('./TemplateNode');
+const TemplateNode = require("./TemplateNode");
 
 module.exports = class TemplateElementNode extends TemplateNode {
+  /**
+   *
+   * @param {String} name name
+   * @param {Boolean} hasEndSlash if tag has end slash
+   * @param {TemplateAttribute[]} attributes The attributes
+   */
+  constructor(name, hasEndSlash, attributes) {
+    super();
+    this._hasEndElement = false;
+    this._hasStartElement = false;
+    this._attributes = attributes || [];
+    this._children = [];
+    this._name = name;
+    this._hasEndSlash = hasEndSlash;
+    this._attributes = attributes;
+  }
 
-    /**
-     *
-     * @param {String} name name
-     * @param {Boolean} hasEndSlash if tag has end slash
-     * @param {TemplateAttribute[]} attributes The attributes
-     */
-    constructor(name, hasEndSlash, attributes) {
-        super();
-        this._hasEndElement = false;
-        this._hasStartElement = false;
-        this._attributes = attributes || [];
-        this._children = [];
-        this._name = name;
-        this._hasEndSlash = hasEndSlash;
-        this._attributes = attributes;
-    }
+  get name() {
+    return this._name;
+  }
 
-    get name() {
-        return this._name;
-    }
+  get hasEndSlash() {
+    return this._hasEndSlash;
+  }
 
-    get hasEndSlash() {
-        return this._hasEndSlash;
-    }
+  set hasEndSlash(value) {
+    this._hasEndSlash = value;
+  }
 
-    set hasEndSlash(value) {
-        this._hasEndSlash = value;
-    }
+  get attributes() {
+    return this._attributes;
+  }
 
-    get attributes() {
-        return this._attributes;
-    }
+  get hasEndElement() {
+    return this._hasEndElement;
+  }
 
-    get hasEndElement() {
-        return this._hasEndElement;
-    }
+  set hasEndElement(value) {
+    this._hasEndElement = value;
+  }
 
-    set hasEndElement(value) {
-        this._hasEndElement = value;
-    }
+  get hasStartElement() {
+    return this._hasStartElement;
+  }
 
-    get hasStartElement() {
-        return this._hasStartElement;
-    }
+  set hasStartElement(value) {
+    this._hasStartElement = value;
+  }
 
-    set hasStartElement(value) {
-        this._hasStartElement = value;
-    }
+  get children() {
+    return this._children;
+  }
 
-    get children() {
-        return this._children;
-    }
-
-    addChild(node) {
-        this._children.push(node);
-    }
-
+  addChild(node) {
+    this._children.push(node);
+  }
 };

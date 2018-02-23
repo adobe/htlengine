@@ -15,6 +15,4 @@
  * limitations under the License.
  *
  */
-module.exports = class TemplateNode {
-
-};
+module.exports = class TemplateNode {};

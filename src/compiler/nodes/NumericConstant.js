@@ -16,35 +16,33 @@
  *
  */
 
-const Atom = require('./Atom');
+const Atom = require("./Atom");
 
 /**
  * Defines a numeric constant expression (e.g. "42.1").
  */
 class NumericConstant extends Atom {
+  /**
+   * Creates a numeric constant.
+   *
+   * @param {*} text the text representation
+   */
+  constructor(text) {
+    super();
+    this._value = Number(text);
+    this._text = text;
+  }
 
-    /**
-     * Creates a numeric constant.
-     *
-     * @param {*} text the text representation
-     */
-    constructor(text) {
-        super();
-        this._value = Number(text);
-        this._text = text;
-    }
+  get text() {
+    return this._text;
+  }
 
-    get text() {
-        return this._text;
-    }
-
-    get value() {
-        return this._value;
-    }
+  get value() {
+    return this._value;
+  }
 }
 
 module.exports = NumericConstant;
 module.exports.ZERO = new NumericConstant(0);
 module.exports.ONE = new NumericConstant(1);
 module.exports.TWO = new NumericConstant(2);
-

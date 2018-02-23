@@ -16,10 +16,8 @@
  *
  */
 
-const ExpressionNode = require('./ExpressionNode');
-class NullLiteral extends ExpressionNode {
-
-}
+const ExpressionNode = require("./ExpressionNode");
+class NullLiteral extends ExpressionNode {}
 
 module.exports = NullLiteral;
 module.exports.INSTANCE = new NullLiteral();

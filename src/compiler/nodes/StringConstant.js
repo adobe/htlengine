@@ -16,87 +16,84 @@
  *
  */
 
-const Atom = require('./Atom');
+const Atom = require("./Atom");
 
 class StringConstant extends Atom {
+  static parse(str) {
+    let sb = "";
+    const end = str.length - 2;
+    for (let i = 1; i <= end; i++) {
+      let ch = str[i];
+      if (ch === "\\") {
+        let nextChar = i === end ? "\\" : str[i + 1];
 
-    static parse(str) {
-        let sb = '';
-        const end = str.length - 2;
-        for (let i = 1; i <= end; i++) {
-            let ch = str[i];
-            if (ch === '\\') {
-                let nextChar = i === end ? '\\' : str[i + 1];
-
-                // Octal escape?
-                if (nextChar >= '0' && nextChar <= '7') {
-                    let code = '' + nextChar;
-                    i++;
-                    if (i < end && str[i + 1] >= '0' && str[i + 1] <= '7') {
-                        code += str[i + 1];
-                        i++;
-                        if (i < end && str[i + 1] >= '0' && str[i + 1] <= '7') {
-                            code += str[i + 1];
-                            i++;
-                        }
-                    }
-                    sb.append(Number.parseInt(code, 8));
-                    continue;
-                }
-                switch (nextChar) {
-                    case '\\':
-                        ch = '\\';
-                        break;
-                    case 'b':
-                        ch = '\b';
-                        break;
-                    case 'f':
-                        ch = '\f';
-                        break;
-                    case 'n':
-                        ch = '\n';
-                        break;
-                    case 'r':
-                        ch = '\r';
-                        break;
-                    case 't':
-                        ch = '\t';
-                        break;
-                    case '\"':
-                        ch = '\"';
-                        break;
-                    case '\'':
-                        ch = '\'';
-                        break;
-                    // Hex Unicode: u????
-                    case 'u':
-                        if (i >= str.length - 6) {
-                            ch = 'u';
-                            break;
-                        }
-                        let code = Number.parseInt(str.substr(i, 4), 16);
-                        sb += String.fromCharCode(code);
-                        i += 5;
-                        continue;
-                }
-                i++;
+        // Octal escape?
+        if (nextChar >= "0" && nextChar <= "7") {
+          let code = "" + nextChar;
+          i++;
+          if (i < end && str[i + 1] >= "0" && str[i + 1] <= "7") {
+            code += str[i + 1];
+            i++;
+            if (i < end && str[i + 1] >= "0" && str[i + 1] <= "7") {
+              code += str[i + 1];
+              i++;
             }
-            sb += ch;
+          }
+          sb.append(Number.parseInt(code, 8));
+          continue;
         }
-        return new StringConstant(sb);
+        switch (nextChar) {
+          case "\\":
+            ch = "\\";
+            break;
+          case "b":
+            ch = "\b";
+            break;
+          case "f":
+            ch = "\f";
+            break;
+          case "n":
+            ch = "\n";
+            break;
+          case "r":
+            ch = "\r";
+            break;
+          case "t":
+            ch = "\t";
+            break;
+          case '"':
+            ch = '"';
+            break;
+          case "'":
+            ch = "'";
+            break;
+          // Hex Unicode: u????
+          case "u":
+            if (i >= str.length - 6) {
+              ch = "u";
+              break;
+            }
+            let code = Number.parseInt(str.substr(i, 4), 16);
+            sb += String.fromCharCode(code);
+            i += 5;
+            continue;
+        }
+        i++;
+      }
+      sb += ch;
     }
+    return new StringConstant(sb);
+  }
 
-    constructor(text) {
-        super();
-        this._text = text;
-    }
+  constructor(text) {
+    super();
+    this._text = text;
+  }
 
-    get text() {
-        return this._text;
-    }
-
+  get text() {
+    return this._text;
+  }
 }
 
 module.exports = StringConstant;
-module.exports.EMPTY = new StringConstant('');
-
+module.exports.EMPTY = new StringConstant("");

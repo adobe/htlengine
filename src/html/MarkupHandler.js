@@ -17,50 +17,48 @@
  */
 
 module.exports = class MarkupHandler {
+  onDocumentStart() {
+    this._result = "";
+  }
 
-    onDocumentStart() {
-        this._result = '';
-    }
+  onDocumentEnd() {}
 
-    onDocumentEnd() {
-    }
+  onOpenTagStart(tagName) {
+    this._result += "<" + tagName;
+  }
 
-    onOpenTagStart(tagName) {
-        this._result += '<' + tagName;
+  onAttribute(name, value, quoteChar) {
+    if (value !== null) {
+      this._result += ` ${name}=${quoteChar}${value}${quoteChar}`;
+    } else {
+      this._result += " " + name;
     }
+  }
 
-    onAttribute(name, value, quoteChar) {
-        if (value !== null) {
-            this._result += ` ${name}=${quoteChar}${value}${quoteChar}`;
-        } else {
-            this._result += ' ' + name;
-        }
+  onOpenTagEnd(isEmpty) {
+    if (isEmpty) {
+      this._result += "/";
     }
+    this._result += ">";
+  }
 
-    onOpenTagEnd(isEmpty) {
-        if (isEmpty) {
-            this._result += '/';
-        }
-        this._result += '>';
-    }
+  onCloseTag(tagName) {
+    this._result += `</${tagName}>`;
+  }
 
-    onCloseTag(tagName) {
-        this._result += `</${tagName}>`;
-    }
+  onText(text) {
+    this._result += text;
+  }
 
-    onText(text) {
-        this._result += text;
-    }
+  onComment(markup) {
+    this._result += markup;
+  }
 
-    onComment(markup) {
-        this._result += markup;
-    }
+  onDocType(markup) {
+    this._result += markup; // todo: check why WS is missing
+  }
 
-    onDocType(markup) {
-        this._result += markup; // todo: check why WS is missing
-    }
-
-    get result() {
-        return this._result;
-    }
+  get result() {
+    return this._result;
+  }
 };

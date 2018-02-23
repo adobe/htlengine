@@ -15,16 +15,15 @@
  * limitations under the License.
  *
  */
-const TemplateNode = require('./TemplateNode');
+const TemplateNode = require("./TemplateNode");
 
 module.exports = class TemplateTextNode extends TemplateNode {
+  constructor(text) {
+    super();
+    this._text = text;
+  }
 
-    constructor(text) {
-        super();
-        this._text = text;
-    }
-
-    get text() {
-        return this._text;
-    }
+  get text() {
+    return this._text;
+  }
 };
