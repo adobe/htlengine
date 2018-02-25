@@ -16,30 +16,32 @@
  *
  */
 
-const ExpressionNode = require("./ExpressionNode");
+const ExpressionNode = require('./ExpressionNode');
 module.exports = class TernaryOperation extends ExpressionNode {
-  /**
-   *
-   * @param {ExpressionNode} condition Condition expression
-   * @param {ExpressionNode} thenBranch Then branch expression
-   * @param {ExpressionNode} elseBranch Else branch expression
-   */
-  constructor(condition, thenBranch, elseBranch) {
-    super();
-    this._condition = condition;
-    this._thenBranch = thenBranch;
-    this._elseBranch = elseBranch;
-  }
 
-  get condition() {
-    return this._condition;
-  }
+    /**
+     *
+     * @param {ExpressionNode} condition Condition expression
+     * @param {ExpressionNode} thenBranch Then branch expression
+     * @param {ExpressionNode} elseBranch Else branch expression
+     */
+    constructor(condition, thenBranch, elseBranch) {
+        super();
+        this._condition = condition;
+        this._thenBranch = thenBranch;
+        this._elseBranch = elseBranch;
+    }
 
-  get thenBranch() {
-    return this._thenBranch;
-  }
 
-  get elseBranch() {
-    return this._elseBranch;
-  }
+    get condition() {
+        return this._condition;
+    }
+
+    get thenBranch() {
+        return this._thenBranch;
+    }
+
+    get elseBranch() {
+        return this._elseBranch;
+    }
 };

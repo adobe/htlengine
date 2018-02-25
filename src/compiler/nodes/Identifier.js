@@ -16,19 +16,20 @@
  *
  */
 
-const Atom = require("./Atom");
+const Atom = require('./Atom');
 
 module.exports = class Identifier extends Atom {
-  constructor(name) {
-    super();
-    this._name = name;
-  }
 
-  get name() {
-    return this._name;
-  }
+    constructor(name) {
+        super();
+        this._name = name;
+    }
 
-  get text() {
-    return this._name;
-  }
+    get name() {
+        return this._name;
+    }
+
+    get text() {
+        return this._name;
+    }
 };

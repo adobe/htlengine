@@ -19,31 +19,34 @@
  * Binary operators used in expressions.
  */
 module.exports = Object.freeze({
-  /**
-   * Evaluates the logical negation of the operand
-   */
-  NOT: {
-    sym: "!",
-    calc: operand => {
-      return !operand;
-    }
-  },
 
-  /**
-   * Evaluates whether the operand is a string of only whitespace characters
-   */
-  IS_WHITESPACE: {
-    calc: operand => {
-      return String(operand).trim().length === 0;
-    }
-  },
+    /**
+     * Evaluates the logical negation of the operand
+     */
+    NOT: {
+        sym: '!',
+        calc: (operand) => {
+            return !operand;
+        }
+    },
 
-  /**
-   * Evaluates the length of a collection
-   */
-  LENGTH: {
-    calc: operand => {
-      return operand.length();
+    /**
+     * Evaluates whether the operand is a string of only whitespace characters
+     */
+    IS_WHITESPACE: {
+        calc: (operand) => {
+            return String(operand).trim().length === 0;
+        }
+    },
+
+    /**
+     * Evaluates the length of a collection
+     */
+    LENGTH: {
+        calc: (operand) => {
+            return operand.length();
+        }
     }
-  }
+
 });
+

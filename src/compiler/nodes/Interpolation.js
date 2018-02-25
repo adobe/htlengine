@@ -21,36 +21,38 @@
  * instance "Hello ${World}!" would result in 3 fragments: "Hello ", ${World} and "!"
  */
 module.exports = class Interpolation {
-  constructor() {
-    this._fragments = [];
-    this._content = "";
-  }
 
-  addExpression(expression) {
-    this._fragments.push({
-      expression
-    });
-  }
+    constructor() {
+        this._fragments = [];
+        this._content = '';
+    }
 
-  addText(text) {
-    this._fragments.push({
-      text
-    });
-  }
+    addExpression(expression) {
+        this._fragments.push({
+            expression
+        });
+    }
 
-  get fragments() {
-    return this._fragments;
-  }
+    addText(text) {
+        this._fragments.push({
+            text
+        });
+    }
 
-  get content() {
-    return this._content;
-  }
+    get fragments() {
+        return this._fragments;
+    }
 
-  set content(content) {
-    this._content = content;
-  }
+    get content() {
+        return this._content;
+    }
 
-  accept(visitor) {
-    return visitor.visit(this);
-  }
+    set content(content) {
+        this._content = content;
+    }
+
+    accept(visitor) {
+        return visitor.visit(this);
+    }
+
 };

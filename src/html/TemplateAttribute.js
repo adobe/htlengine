@@ -16,21 +16,22 @@
  *
  */
 module.exports = class TemplateAttribute {
-  constructor(name, value, quoteChar) {
-    this._name = name;
-    this._value = value;
-    this._quoteChar = quoteChar;
-  }
 
-  get name() {
-    return this._name;
-  }
+    constructor(name, value, quoteChar) {
+        this._name = name;
+        this._value = value;
+        this._quoteChar = quoteChar;
+    }
 
-  get value() {
-    return this._value;
-  }
+    get name() {
+        return this._name;
+    }
 
-  get quoteChar() {
-    return this._quoteChar;
-  }
+    get value() {
+        return this._value;
+    }
+
+    get quoteChar() {
+        return this._quoteChar;
+    }
 };

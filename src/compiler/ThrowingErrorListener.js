@@ -15,12 +15,13 @@
  * limitations under the License.
  *
  */
-const antlr4 = require("antlr4");
+const antlr4 = require('antlr4');
 
 class ThrowingErrorListener extends antlr4.error.ErrorListener {
-  syntaxError(recognizer, offendingSymbol, line, column, msg, e) {
-    throw new Error("Error: " + msg);
-  }
+
+    syntaxError(recognizer, offendingSymbol, line, column, msg, e) {
+        throw new Error('Error: ' + msg);
+    }
 }
 
 module.exports = ThrowingErrorListener;

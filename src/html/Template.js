@@ -15,10 +15,11 @@
  * limitations under the License.
  *
  */
-const TemplateElementNode = require("./TemplateElementNode");
+const TemplateElementNode = require('./TemplateElementNode');
 
 module.exports = class Template extends TemplateElementNode {
-  constructor() {
-    super("ROOT", false, null);
-  }
+
+    constructor() {
+        super('ROOT', false, null);
+    }
 };

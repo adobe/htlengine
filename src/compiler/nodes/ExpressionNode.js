@@ -17,20 +17,21 @@
  */
 
 module.exports = class ExpressionNode {
-  constructor() {
-    this._hasParens = false;
-  }
 
-  withHasParens(p) {
-    this._hasParens = p;
-    return this;
-  }
+    constructor() {
+        this._hasParens = false;
+    }
 
-  get hasParens() {
-    return this._hasParens;
-  }
+    withHasParens(p) {
+        this._hasParens = p;
+        return this;
+    }
 
-  accept(visitor) {
-    return visitor.visit(this);
-  }
+    get hasParens() {
+        return this._hasParens;
+    }
+
+    accept(visitor) {
+        return visitor.visit(this);
+    }
 };

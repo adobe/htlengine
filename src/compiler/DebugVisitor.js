@@ -15,99 +15,112 @@
  * limitations under the License.
  *
  */
-const NullLiteral = require("./nodes/NullLiteral");
-const ArrayLiteral = require("./nodes/ArrayLiteral");
-const NumericConstant = require("./nodes/NumericConstant");
-const StringConstant = require("./nodes/StringConstant");
-const BooleanConstant = require("./nodes/BooleanConstant");
-const PropertyAccess = require("./nodes/PropertyAccess");
-const Expression = require("./nodes/Expression");
-const Interpolation = require("./nodes/Interpolation");
-const Identifier = require("./nodes/Identifier");
-const BinaryOperation = require("./nodes/BinaryOperation");
-const UnaryOperation = require("./nodes/UnaryOperation");
-const TernaryOperation = require("./nodes/TernaryOperation");
+const NullLiteral = require('./nodes/NullLiteral');
+const ArrayLiteral = require('./nodes/ArrayLiteral');
+const NumericConstant = require('./nodes/NumericConstant');
+const StringConstant = require('./nodes/StringConstant');
+const BooleanConstant = require('./nodes/BooleanConstant');
+const PropertyAccess = require('./nodes/PropertyAccess');
+const Expression = require('./nodes/Expression');
+const Interpolation = require('./nodes/Interpolation');
+const Identifier = require('./nodes/Identifier');
+const BinaryOperation = require('./nodes/BinaryOperation');
+const UnaryOperation = require('./nodes/UnaryOperation');
+const TernaryOperation = require('./nodes/TernaryOperation');
 
 /**
  * Visitor that recreates the parsed text and stores it in {@code result}.
  * @type {module.DebugVisitor}
  */
 module.exports = class DebugVisitor {
-  constructor() {
-    this.result = "";
-  }
 
-  visit(node) {
-    if (node.hasParens) {
-      this.result += "(";
+    constructor() {
+        this.result = '';
     }
-    if (node instanceof Interpolation) {
-      node.fragments.forEach(frag => {
-        if (frag.expression) {
-          frag.expression.accept(this);
-        } else {
-          this.result += frag.text;
+
+    visit(node) {
+        if (node.hasParens) {
+            this.result += '(';
         }
-      });
-    } else if (node instanceof ArrayLiteral) {
-      this.result += "[";
-      node.items.forEach((i, idx) => {
-        if (idx > 0) {
-          this.result += ", ";
+        if (node instanceof Interpolation) {
+            node.fragments.forEach((frag) => {
+                if (frag.expression) {
+                    frag.expression.accept(this);
+                } else {
+                    this.result += frag.text;
+                }
+            });
         }
-        i.accept(this);
-      });
-      this.result += "]";
-    } else if (node instanceof PropertyAccess) {
-      node.target.accept(this);
-      this.result += "[";
-      node.property.accept(this);
-      this.result += "]";
-    } else if (node instanceof BinaryOperation) {
-      node.leftOperand.accept(this);
-      this.result += node.operator.sym;
-      node.rightOperand.accept(this);
-    } else if (node instanceof TernaryOperation) {
-      node.condition.accept(this);
-      this.result += " ? ";
-      node.thenBranch.accept(this);
-      this.result += " : ";
-      node.elseBranch.accept(this);
-    } else if (node instanceof UnaryOperation) {
-      this.result += node.operator.sym;
-      node.target.accept(this);
-    } else if (node instanceof Expression) {
-      this.result += "${";
-      node.root.accept(this);
-      Object.keys(node.options).forEach((key, idx) => {
-        const option = node.options[key];
-        if (idx === 0) {
-          this.result += " @ ";
-        } else {
-          this.result += ", ";
+        else if (node instanceof ArrayLiteral) {
+            this.result += '[';
+            node.items.forEach((i, idx) => {
+                if (idx > 0) {
+                    this.result += ', ';
+                }
+                i.accept(this);
+            });
+            this.result += ']';
         }
-        this.result += key;
-        if (!(option instanceof NullLiteral)) {
-          this.result += "=";
-          option.accept(this);
+        else if (node instanceof PropertyAccess) {
+            node.target.accept(this);
+            this.result += '[';
+            node.property.accept(this);
+            this.result += ']';
         }
-      });
-      this.result += "}";
-    } else if (node instanceof Identifier) {
-      this.result += node.name;
-    } else if (node instanceof NumericConstant) {
-      this.result += node.value;
-    } else if (node instanceof StringConstant) {
-      this.result += "'" + node.text + "'";
-    } else if (node instanceof BooleanConstant) {
-      this.result += node.value;
-    } else if (node instanceof NullLiteral) {
-      // nop
-    } else {
-      throw new Error("unexpected node: " + node.constructor.name);
+        else if (node instanceof BinaryOperation) {
+            node.leftOperand.accept(this);
+            this.result += node.operator.sym;
+            node.rightOperand.accept(this);
+        }
+        else if (node instanceof TernaryOperation) {
+            node.condition.accept(this);
+            this.result += ' ? ';
+            node.thenBranch.accept(this);
+            this.result += ' : ';
+            node.elseBranch.accept(this);
+        }
+        else if (node instanceof UnaryOperation) {
+            this.result += node.operator.sym;
+            node.target.accept(this);
+        }
+        else if (node instanceof Expression) {
+            this.result += '${';
+            node.root.accept(this);
+            Object.keys(node.options).forEach((key, idx) => {
+                const option = node.options[key];
+                if (idx === 0) {
+                    this.result += ' @ ';
+                } else {
+                    this.result += ', ';
+                }
+                this.result += key;
+                if (!(option instanceof NullLiteral)) {
+                    this.result += '=';
+                    option.accept(this);
+                }
+            });
+            this.result += '}';
+        }
+        else if (node instanceof Identifier) {
+            this.result += node.name;
+        }
+        else if (node instanceof NumericConstant) {
+            this.result += node.value;
+        }
+        else if (node instanceof StringConstant) {
+            this.result += '\'' + node.text + '\'';
+        }
+        else if (node instanceof BooleanConstant) {
+            this.result += node.value;
+        }
+        else if (node instanceof NullLiteral) {
+            // nop
+        }
+        else {
+            throw new Error('unexpected node: ' + node.constructor.name);
+        }
+        if (node.hasParens) {
+            this.result += ')';
+        }
     }
-    if (node.hasParens) {
-      this.result += ")";
-    }
-  }
 };
