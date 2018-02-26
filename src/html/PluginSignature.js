@@ -15,16 +15,36 @@
  * limitations under the License.
  *
  */
-const TemplateNode = require('./TemplateNode');
 
-module.exports = class TemplateTextNode extends TemplateNode {
+const PLUGIN_ATTRIBUTE_PREFIX = "data-sly-";
 
-    constructor(text) {
-        super();
-        this._text = text;
+module.exports = class PluginSignature {
+
+    constructor(name, args) {
+        this._name = name;
+        this._arguments = args || [];
     }
 
-    get text() {
-        return this._text;
+
+    get name() {
+        return this._name;
     }
+
+    get arguments() {
+        return this._arguments;
+    }
+
+    static fromAttribute(attributeName) {
+        if (!attributeName.startsWith(PLUGIN_ATTRIBUTE_PREFIX)) {
+            return null;
+        }
+
+        const fragment = attributeName.substring(9);
+        const parts = fragment.split('.');
+        if (parts.length === 0) {
+            return null;
+        }
+        return new PluginSignature(parts[0], parts.slice(1));
+    }
+
 };

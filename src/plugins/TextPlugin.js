@@ -15,42 +15,26 @@
  * limitations under the License.
  *
  */
-module.exports = class Expression {
+const Plugin = require('../html/Plugin');
+const VariableBinding = require('../commands/VariableBinding');
+const OutputVariable = require('../commands/OutputVariable');
+const ExpressionContext = require('../html/ExpressionContext');
+const MarkupContext = require('../html/MarkupContext');
 
-    /**
-     *
-     * @param {ExpressionNode} root Root node
-     * @param {Map<String, ExpressionNode>} options Options
-     * @param {String} rawText Raw text
-     */
-    constructor(root, options, rawText) {
-        this._options = options || {};
-        this._root = root;
-        this._rawText = rawText;
+module.exports = class TextPlugin extends Plugin {
+
+    beforeChildren(stream) {
+        const ctx = this.pluginContext;
+        const variable = ctx.generateVariable("textContent");
+        stream.write(new VariableBinding.Start(variable,
+                   ctx.adjustContext(this.expression, MarkupContext.TEXT, ExpressionContext.TEXT).root));
+        stream.write(new OutputVariable(variable));
+        stream.write(VariableBinding.END);
+        stream.beginIgnore();
     }
 
-    get root() {
-        return this._root;
-    }
-
-    get options() {
-        return this._options;
-    }
-
-    get rawText() {
-        return this._rawText;
-    }
-
-    withRawText(rawText) {
-        return new Expression(this._root, this._options, rawText);
-    }
-
-    withNode(node) {
-        return new Expression(node, this._options, null);
-    }
-
-    accept(visitor) {
-        return visitor.visit(this);
+    afterChildren(stream) {
+        stream.endIgnore();
     }
 
 };

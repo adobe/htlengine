@@ -1,0 +1,31 @@
+#
+### plain text
+#
+Hello, World
+---
+TEXT('Hello, World');
+#
+### simple expression
+#
+Hello, ${world}.
+---
+VAR.START('var_0', ''Hello, '+world+'.'')
+OUT(var_0)
+VAR.END()
+#
+### sly-text
+#
+<p data-sly-text="${properties.title}">This text would never be shown.</p>
+---
+TEXT('<p');
+TEXT('>');
+VAR.START('var_textContent0', 'properties['title']')
+OUT(var_textContent0)
+VAR.END()
+VAR.START('always_false"', 'false')
+COND.START('always_false"' == 'true')
+TEXT('This text would never be shown.');
+COND.END()
+VAR.END()
+TEXT('</p>');
+#

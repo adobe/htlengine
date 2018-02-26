@@ -15,6 +15,38 @@
  * limitations under the License.
  *
  */
-module.exports = class TemplateNode {
+const VariableBinding = require('./VariableBinding');
+const Conditional = require('./Conditional');
+const BooleanConstant = require('../compiler/nodes/BooleanConstant');
+
+const ALWAYS_FALSE_VAR = 'always_false"';
+
+module.exports = class CommandStream {
+
+    constructor() {
+        this._commands = [];
+    }
+
+    write(command) {
+        this._commands.push(command);
+    }
+
+    close() {
+
+    }
+
+    get commands() {
+        return this._commands;
+    }
+
+    beginIgnore() {
+        this.write(new VariableBinding.Start(ALWAYS_FALSE_VAR, BooleanConstant.FALSE));
+        this.write(new Conditional.Start(ALWAYS_FALSE_VAR, true));
+    }
+
+    endIgnore() {
+        this.write(Conditional.END);
+        this.write(VariableBinding.END);
+    }
 
 };

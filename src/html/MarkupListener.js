@@ -130,7 +130,7 @@ module.exports = class MarkupListener extends HTMLParserListener {
 
     enterHtmlComment(ctx) {
         /* eslint new-cap: 'off' */
-        this._handler.onComment(ctx.HTML_COMMENT());
+        this._handler.onComment(ctx.HTML_COMMENT().getText());
     }
 
     exitHtmlComment(ctx) {

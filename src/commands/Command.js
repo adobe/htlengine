@@ -15,42 +15,20 @@
  * limitations under the License.
  *
  */
-module.exports = class Expression {
+
+/**
+ * A {@code Command} represents the type of instruction a certain HTL expression or block element should execute.
+ * Commands are immutable and can only be processed through a {@link CommandVisitor}.
+ */
+module.exports = class Command {
 
     /**
+     * Accept a visitor.
      *
-     * @param {ExpressionNode} root Root node
-     * @param {Map<String, ExpressionNode>} options Options
-     * @param {String} rawText Raw text
+     * @param {CommandVisitor} visitor the visitor that will process this command
      */
-    constructor(root, options, rawText) {
-        this._options = options || {};
-        this._root = root;
-        this._rawText = rawText;
-    }
-
-    get root() {
-        return this._root;
-    }
-
-    get options() {
-        return this._options;
-    }
-
-    get rawText() {
-        return this._rawText;
-    }
-
-    withRawText(rawText) {
-        return new Expression(this._root, this._options, rawText);
-    }
-
-    withNode(node) {
-        return new Expression(node, this._options, null);
-    }
-
     accept(visitor) {
-        return visitor.visit(this);
+        visitor.visit(this);
     }
 
 };

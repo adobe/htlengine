@@ -15,17 +15,17 @@
  * limitations under the License.
  *
  */
-const TemplateNode = require('./TemplateNode');
 
-module.exports = class TemplateCommentNode extends TemplateNode {
+const Command = require('./Command');
 
-    constructor(text) {
+module.exports = class OutputVariable extends Command {
+
+    constructor(variableName) {
         super();
-        this._text = text;
+        this._variableName = variableName;
     }
 
-    get text() {
-        return this._text;
+    get variableName() {
+        return this._variableName;
     }
-
 };

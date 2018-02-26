@@ -15,42 +15,17 @@
  * limitations under the License.
  *
  */
-module.exports = class Expression {
 
-    /**
-     *
-     * @param {ExpressionNode} root Root node
-     * @param {Map<String, ExpressionNode>} options Options
-     * @param {String} rawText Raw text
-     */
-    constructor(root, options, rawText) {
-        this._options = options || {};
-        this._root = root;
-        this._rawText = rawText;
+const Command = require('./Command');
+
+module.exports = class OutText extends Command {
+
+    constructor(text) {
+        super();
+        this._text = text;
     }
 
-    get root() {
-        return this._root;
+    get text() {
+        return this._text;
     }
-
-    get options() {
-        return this._options;
-    }
-
-    get rawText() {
-        return this._rawText;
-    }
-
-    withRawText(rawText) {
-        return new Expression(this._root, this._options, rawText);
-    }
-
-    withNode(node) {
-        return new Expression(node, this._options, null);
-    }
-
-    accept(visitor) {
-        return visitor.visit(this);
-    }
-
 };

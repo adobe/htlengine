@@ -15,42 +15,48 @@
  * limitations under the License.
  *
  */
-module.exports = class Expression {
+const Plugin = require('./Plugin');
 
-    /**
-     *
-     * @param {ExpressionNode} root Root node
-     * @param {Map<String, ExpressionNode>} options Options
-     * @param {String} rawText Raw text
-     */
-    constructor(root, options, rawText) {
-        this._options = options || {};
-        this._root = root;
-        this._rawText = rawText;
+
+/**
+ * The element context contains the information about the current processed element in the markup handler,
+ * @type {module.ElementContext}
+ */
+module.exports = class ElementContext {
+
+    constructor(tagName) {
+        this._tagName = tagName;
+        this._attributes = [];
+        this._isSlyTag = 'sly' === tagName.toLowerCase();
+        this._plugin = new Plugin();
     }
 
-    get root() {
-        return this._root;
+    addAttribute(name, value, quoteChar) {
+        this._attributes.push({
+            name,
+            value,
+            quoteChar
+        });
     }
 
-    get options() {
-        return this._options;
+    get tagName() {
+        return this._tagName;
     }
 
-    get rawText() {
-        return this._rawText;
+    get isSlyTag() {
+        return this._isSlyTag;
     }
 
-    withRawText(rawText) {
-        return new Expression(this._root, this._options, rawText);
+    get attributes() {
+        return this._attributes;
     }
 
-    withNode(node) {
-        return new Expression(node, this._options, null);
+    addPlugin(p) {
+        // todo: composite plugin
+        this._plugin = p;
     }
 
-    accept(visitor) {
-        return visitor.visit(this);
+    get plugin() {
+        return this._plugin;
     }
-
 };

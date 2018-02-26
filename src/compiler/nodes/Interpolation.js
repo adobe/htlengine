@@ -55,4 +55,21 @@ module.exports = class Interpolation {
         return visitor.visit(this);
     }
 
+    getPlainText() {
+        let text = '';
+        for (let i=0; i<this._fragments.length; i++) {
+            const frag = this._fragments[i];
+            if (frag.expression) {
+                return null;
+            } else {
+                text += frag.text;
+            }
+        }
+        return text;
+    }
+
+    get length() {
+        return this._fragments.length;
+    }
+
 };

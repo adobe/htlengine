@@ -15,23 +15,31 @@
  * limitations under the License.
  *
  */
-module.exports = class TemplateAttribute {
+const Command = require('./Command');
 
-    constructor(name, value, quoteChar) {
-        this._name = name;
-        this._value = value;
-        this._quoteChar = quoteChar;
-    }
+module.exports = {
 
-    get name() {
-        return this._name;
-    }
+    Start: class Start extends Command {
 
-    get value() {
-        return this._value;
-    }
+        constructor(variable, expectedTruthValue) {
+            super();
+            this._variable = variable;
+            this._expectedTruthValue = expectedTruthValue;
+        }
 
-    get quoteChar() {
-        return this._quoteChar;
-    }
+        get variable() {
+            return this._variable;
+        }
+
+        get expectedTruthValue() {
+            return this._expectedTruthValue;
+        }
+    },
+
+    End: class End extends Command {
+
+    },
+
 };
+
+module.exports.END = new module.exports.End();

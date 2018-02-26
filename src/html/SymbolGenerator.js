@@ -15,11 +15,19 @@
  * limitations under the License.
  *
  */
-const TemplateElementNode = require('./TemplateElementNode');
+const DEFAULT_VAR_PREFIX = "var_";
 
-module.exports = class Template extends TemplateElementNode {
+module.exports = class SymbolGenerator {
 
-    constructor() {
-        super('ROOT', false, null);
+    constructor(prefix) {
+        this._prefix = prefix || DEFAULT_VAR_PREFIX;
+        this._counter = 0;
     }
+
+    next(hint) {
+        const middle = hint ? hint.replace('\\-', '_') : '';
+        return this._prefix + middle + this._counter++;
+    }
+
 };
+

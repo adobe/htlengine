@@ -29,6 +29,7 @@ const ThrowingErrorListener = require('../src/compiler/ThrowingErrorListener');
 const MarkupListener = require('../src/html/MarkupListener');
 const MarkupHandler = require('../src/html/MarkupHandler');
 const CommandStream = require('../src/commands/CommandStream');
+const DebugCommandVisitor = require('../src/commands/DebugCommandVisitor');
 
 function process(input) {
     const chars = new antlr4.InputStream(input);
@@ -38,22 +39,60 @@ function process(input) {
     parser.addErrorListener(ThrowingErrorListener.INSTANCE);
     const tree = parser.htmlDocument();
 
-    const handler = new MarkupHandler(new CommandStream());
+    const stream = new CommandStream();
+    const handler = new MarkupHandler(stream);
     const listener = new MarkupListener(handler);
     antlr4.tree.ParseTreeWalker.DEFAULT.walk(listener, tree);
 
-    console.log(handler.result);
-    return handler.result;
+    const cmdvisitor = new DebugCommandVisitor();
+    stream.commands.forEach((c) => {
+        c.accept(cmdvisitor);
+    });
+
+    console.log(cmdvisitor.result);
+    return cmdvisitor.result;
 }
 
-/**
- * Simple tests that check if the parser can process all the expressions
- */
-describe('Simple', function() {
-    it('parses the simple html', function() {
-        const filename = 'test/simple.html';
-        const source = fs.readFileSync(filename, 'utf-8');
-        const result = process(source);
-        assert.equal(result, source);
+function readTests(filename) {
+    const text = fs.readFileSync(filename, 'utf-8');
+    const lines = text.split(/\r\n|\r|\n/);
+
+    const tests = [];
+    let test = null;
+    lines.forEach((line) => {
+        if (line === '#') {
+            return;
+        }
+        if (line.startsWith('###')) {
+            test = {
+                name: line.substring(4),
+                input: ''
+            };
+            tests.push(test);
+        } else if (line.startsWith('---')) {
+            test.commands = ''
+        } else if (test && ('commands' in test)) {
+            test.commands += line + '\n';
+        } else if (test && ('input' in test)) {
+            test.input += line;
+        }
+    });
+    return tests;
+}
+
+describe('Command Stream Tests', function() {
+
+    const tests = readTests('test/command_stream_spec.txt');
+
+    describe('simple tests', function(done) {
+        tests.forEach(function(test) {
+            if (!test.input || !test.commands) {
+                return;
+            }
+            it(`Processes '${test.name}' correctly.`, function() {
+                const result = process(test.input);
+                assert.equal(result, test.commands);
+            });
+        });
     });
 });

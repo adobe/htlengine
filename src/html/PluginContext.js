@@ -15,42 +15,32 @@
  * limitations under the License.
  *
  */
-module.exports = class Expression {
+module.exports = class PluginContext {
 
-    /**
-     *
-     * @param {ExpressionNode} root Root node
-     * @param {Map<String, ExpressionNode>} options Options
-     * @param {String} rawText Raw text
-     */
-    constructor(root, options, rawText) {
-        this._options = options || {};
-        this._root = root;
-        this._rawText = rawText;
+    constructor(symbolGenerator, transformer) {
+        this._symbolGenerator = symbolGenerator;
+        this._transformer = transformer;
     }
 
-    get root() {
-        return this._root;
+    generateVariable(hint) {
+        return this._symbolGenerator.next(hint);
     }
 
-    get options() {
-        return this._options;
+
+adjustContext(expression, markupContext, expressionContext) {
+        const root = expression.root;
+        // if (root instanceof RuntimeCall) {
+        //     RuntimeCall
+        //     runtimeCall = (RuntimeCall)
+        //     root;
+        //     if (runtimeCall.getFunctionName().equals(RuntimeFunction.XSS)) {
+        //         return expression;
+        //     }
+        // }
+        return this._transformer.adjustToContext(expression, markupContext, expressionContext);
     }
 
-    get rawText() {
-        return this._rawText;
-    }
-
-    withRawText(rawText) {
-        return new Expression(this._root, this._options, rawText);
-    }
-
-    withNode(node) {
-        return new Expression(node, this._options, null);
-    }
-
-    accept(visitor) {
-        return visitor.visit(this);
-    }
 
 };
+
+
