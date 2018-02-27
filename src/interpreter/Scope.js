@@ -15,31 +15,26 @@
  * limitations under the License.
  *
  */
-const Command = require('./Command');
 
-module.exports = {
+module.exports = class Scope {
 
-    Start: class Start extends Command {
+    constructor(parent) {
+        this._props = {};
+        this._parent = parent;
+    }
 
-        constructor(variableName, expectedTruthValue) {
-            super();
-            this._variableName = variableName;
-            this._expectedTruthValue = expectedTruthValue;
+    setVariable(name, value) {
+        this._props[name] = value;
+    }
+
+    getVariable(name) {
+        if (name in this._props) {
+            return this._props[name];
         }
-
-        get variableName() {
-            return this._variableName;
+        if (this._parent) {
+            return this._parent.getVariable(name);
         }
-
-        get expectedTruthValue() {
-            return this._expectedTruthValue;
-        }
-    },
-
-    End: class End extends Command {
-
-    },
+        return null;
+    }
 
 };
-
-module.exports.END = new module.exports.End();

@@ -15,12 +15,15 @@
  * limitations under the License.
  *
  */
-const OutText = require('./OutText');
+const OutText = require('../commands/OutText');
 const VariableBinding = require('../commands/VariableBinding');
 const Conditional = require('../commands/Conditional');
 const OutputVariable = require('../commands/OutputVariable');
 
 const DebugVisitor = require('../compiler/DebugVisitor');
+
+const Runtime = require('./Runtime');
+const ExpressionEvaluator = require('./ExpressionEvaluator');
 
 function expression2text(expression) {
     const v = new DebugVisitor();
@@ -28,36 +31,65 @@ function expression2text(expression) {
     return v.result;
 }
 
-module.exports = class DebugCommandVisitor {
+module.exports = class InterpretingCommandVisitor {
 
-    constructor() {
+    constructor(runtime) {
         this._result = '';
+        this._runtime = runtime || new Runtime();
+        this._condition = [];
     }
 
     get result() {
         return this._result;
     }
 
+    _isSuspended() {
+        return this._condition.length > 0 && !this._condition[0];
+    }
+
     visit(cmd) {
         if (cmd instanceof OutText) {
-            this._result += `TEXT('${cmd.text}');\n`;
+            if (this._isSuspended()) {
+                return;
+            }
+            this._result += cmd.text;
         }
         else if (cmd instanceof VariableBinding.Start) {
-            const exp = expression2text(cmd.expression);
-            this._result += `VAR.START('${cmd.variableName}', '${exp}')\n`;
+            if (this._isSuspended()) {
+                return;
+            }
+            const scope = this._runtime.openScope();
+            const exp = new ExpressionEvaluator(scope).evaluate(cmd.expression);
+            scope.setVariable(cmd.variableName, exp);
         }
         else if (cmd instanceof VariableBinding.End) {
-            this._result += `VAR.END()\n`;
+            if (this._isSuspended()) {
+                return;
+            }
+            this._runtime.closeScope();
         }
         else if (cmd instanceof Conditional.Start) {
-            const exp = expression2text(cmd.expectedTruthValue);
-            this._result += `COND.START('${cmd.variableName}' == '${exp}')\n`;
+            if (this._isSuspended()) {
+                this._condition.push(false);
+                return;
+            }
+            const scope = this._runtime.scope;
+            const value = scope.getVariable(cmd.variableName);
+            const expected = new ExpressionEvaluator(scope).evaluate(cmd.expectedTruthValue);
+            // noinspection EqualityComparisonWithCoercionJS
+            this._condition.push(value == expected);
         }
         else if (cmd instanceof Conditional.End) {
-            this._result += `COND.END()\n`;
+            this._condition.pop();
         }
         else if (cmd instanceof OutputVariable) {
-            this._result += `OUT(${cmd.variableName})\n`;
+            if (this._isSuspended()) {
+                return;
+            }
+            const value = this._runtime.scope.getVariable(cmd.variableName);
+            if (value) {
+                this._result += value;
+            }
         }
 
     }

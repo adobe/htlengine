@@ -4,6 +4,8 @@
 Hello, World
 ---
 TEXT('Hello, World');
+===
+Hello, World
 #
 ### simple expression
 #
@@ -12,8 +14,28 @@ Hello, ${world}.
 VAR.START('var_0', ''Hello, '+world+'.'')
 OUT(var_0)
 VAR.END()
+===
+Hello, Earth.
 #
-### sly-text
+### sly-text with simple string
+#
+<p data-sly-text="${'Hello, world.'}">This text would never be shown.</p>
+---
+TEXT('<p');
+TEXT('>');
+VAR.START('var_textContent0', ''Hello, world.'')
+OUT(var_textContent0)
+VAR.END()
+VAR.START('always_false', 'false')
+COND.START('always_false' == 'true')
+TEXT('This text would never be shown.');
+COND.END()
+VAR.END()
+TEXT('</p>');
+===
+<p>Hello, world.</p>
+#
+### sly-text with variable
 #
 <p data-sly-text="${properties.title}">This text would never be shown.</p>
 ---
@@ -22,10 +44,32 @@ TEXT('>');
 VAR.START('var_textContent0', 'properties['title']')
 OUT(var_textContent0)
 VAR.END()
-VAR.START('always_false"', 'false')
-COND.START('always_false"' == 'true')
+VAR.START('always_false', 'false')
+COND.START('always_false' == 'true')
 TEXT('This text would never be shown.');
 COND.END()
 VAR.END()
 TEXT('</p>');
+===
+<p>Hello, world.</p>
+#
+### join filter test
+#
+Fruits: ${['Apple', 'Banana', 'Orange'] @ join='*'}
+---
+VAR.START('var_0', ''Fruits: '+join(['Apple', 'Banana', 'Orange'], '*')')
+OUT(var_0)
+VAR.END()
+===
+Fruits: Apple*Banana*Orange
+#
+### join filter test with variables
+#
+Fruits: ${properties.fruits @ join=properties.comma}
+---
+VAR.START('var_0', ''Fruits: '+join(properties['fruits'], properties['comma'])')
+OUT(var_0)
+VAR.END()
+===
+Fruits: Apple, Banana, Orange
 #

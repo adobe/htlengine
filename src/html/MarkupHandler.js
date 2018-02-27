@@ -40,6 +40,9 @@ const PluginContext = require('./PluginContext');
 const TextPlugin = require('../plugins/TextPlugin');
 const Plugin = require('./Plugin');
 
+// filters: todo: move to registry
+const JoinFilter = require('../filters/JoinFilter');
+
 const SLY_COMMENT_PREFIX = "<!--/*";
 const SLY_COMMENT_SUFFIX = "*/-->";
 
@@ -49,7 +52,8 @@ module.exports = class MarkupHandler {
     constructor(stream) {
         this._stream = stream;
         this._htlParser = new HTLParser().withErrorListener(ThrowingErrorListener.INSTANCE);
-        this._transformer = new ExpressionTransformer();
+        this._transformer = new ExpressionTransformer()
+            .withFilter(JoinFilter.INSTANCE);
         this._symbolGenerator = new SymbolGenerator();
         this._compilerContext = null; // todo
     }

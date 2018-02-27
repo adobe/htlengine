@@ -21,31 +21,33 @@
 const assert = require('assert');
 const fs = require('fs');
 
-const antlr4 = require('antlr4');
-const HTMLLexer = require('../src/generated/HTMLLexer').HTMLLexer;
-const HTMLParser = require('../src/generated/HTMLParser').HTMLParser;
 const ThrowingErrorListener = require('../src/compiler/ThrowingErrorListener');
 
-const MarkupListener = require('../src/html/MarkupListener');
-const MarkupHandler = require('../src/html/MarkupHandler');
-const CommandStream = require('../src/commands/CommandStream');
+const TemplateParser = require('../src/html/TemplateParser');
 const DebugCommandVisitor = require('../src/commands/DebugCommandVisitor');
+const InterpretingCommandVisitor = require('../src/interpreter/InterpretingCommandVisitor');
+const Runtime = require('../src/interpreter/Runtime');
+
 
 function process(input) {
-    const chars = new antlr4.InputStream(input);
-    const lexer = new HTMLLexer(chars);
-    const tokens = new antlr4.CommonTokenStream(lexer);
-    const parser = new HTMLParser(tokens);
-    parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-    const tree = parser.htmlDocument();
+    return new TemplateParser()
+        .withErrorListener(ThrowingErrorListener.INSTANCE)
+        .parse(input);
+}
 
-    const stream = new CommandStream();
-    const handler = new MarkupHandler(stream);
-    const listener = new MarkupListener(handler);
-    antlr4.tree.ParseTreeWalker.DEFAULT.walk(listener, tree);
-
+function debugCommands(commands) {
     const cmdvisitor = new DebugCommandVisitor();
-    stream.commands.forEach((c) => {
+    commands.forEach((c) => {
+        c.accept(cmdvisitor);
+    });
+
+    console.log(cmdvisitor.result);
+    return cmdvisitor.result;
+}
+
+function evaluateCommands(commands, runtime) {
+    const cmdvisitor = new InterpretingCommandVisitor(runtime);
+    commands.forEach((c) => {
         c.accept(cmdvisitor);
     });
 
@@ -71,6 +73,10 @@ function readTests(filename) {
             tests.push(test);
         } else if (line.startsWith('---')) {
             test.commands = ''
+        } else if (line.startsWith('===')) {
+            test.output = ''
+        } else if (test && ('output' in test)) {
+            test.output += line;
         } else if (test && ('commands' in test)) {
             test.commands += line + '\n';
         } else if (test && ('input' in test)) {
@@ -86,13 +92,30 @@ describe('Command Stream Tests', function() {
 
     describe('simple tests', function(done) {
         tests.forEach(function(test) {
-            if (!test.input || !test.commands) {
+            if (!test.input) {
                 return;
             }
-            it(`Processes '${test.name}' correctly.`, function() {
-                const result = process(test.input);
-                assert.equal(result, test.commands);
+            const commands = process(test.input);
+
+            const runtime = new Runtime();
+            runtime.scope.setVariable('world', 'Earth');
+            runtime.scope.setVariable('properties', {
+                title: 'Hello, world.',
+                fruits: ['Apple', 'Banana', 'Orange'],
+                comma: ', '
             });
+
+            if (test.commands) {
+                it(`Generates commands for '${test.name}' correctly.`, function() {
+                    assert.equal(debugCommands(commands), test.commands);
+                });
+            }
+
+            if (test.output) {
+                it(`Generates output for '${test.name}' correctly.`, function() {
+                    assert.equal(evaluateCommands(commands, runtime), test.output);
+                });
+            }
         });
     });
 });

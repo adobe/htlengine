@@ -15,25 +15,32 @@
  * limitations under the License.
  *
  */
+const fs = require('fs');
 
-const antlr4 = require('antlr4');
-const HTMLLexer = require('./generated/HTMLLexer').HTMLLexer;
-const HTMLParser = require('./generated/HTMLParser').HTMLParser;
-const MarkupHandler = require('./html/MarkupHandler');
-const MarkupListener = require('./html/MarkupListener');
+const ThrowingErrorListener = require('../src/compiler/ThrowingErrorListener');
+const TemplateParser = require('../src/html/TemplateParser');
+const InterpretingCommandVisitor = require('../src/interpreter/InterpretingCommandVisitor');
+const Runtime = require('../src/interpreter/Runtime');
+
 
 const filename = process.argv[2];
-const chars = new antlr4.FileStream(filename);
-const lexer = new HTMLLexer(chars);
-const tokens = new antlr4.CommonTokenStream(lexer);
-const parser = new HTMLParser(tokens);
+const source = fs.readFileSync(filename, 'utf-8');
 
-parser.buildParseTrees = true;
+const commands = new TemplateParser()
+    .withErrorListener(ThrowingErrorListener.INSTANCE)
+    .parse(source);
 
-const tree = parser.htmlDocument();
+const runtime = new Runtime();
+runtime.scope.setVariable('world', 'Earth');
+runtime.scope.setVariable('properties', {
+    title: 'Hello, world.',
+    fruits: ['Apple', 'Banana', 'Orange'],
+    comma: ', '
+});
 
-const handler = new MarkupHandler();
-const listener = new MarkupListener(handler);
-antlr4.tree.ParseTreeWalker.DEFAULT.walk(listener, tree);
+const cmdvisitor = new InterpretingCommandVisitor(runtime);
+commands.forEach((c) => {
+    c.accept(cmdvisitor);
+});
 
-console.log(handler.result);
+console.log(cmdvisitor.result);

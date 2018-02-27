@@ -15,38 +15,30 @@
  * limitations under the License.
  *
  */
-const VariableBinding = require('./VariableBinding');
-const Conditional = require('./Conditional');
-const BooleanConstant = require('../compiler/nodes/BooleanConstant');
+const ExpressionNode = require('./ExpressionNode');
 
-const ALWAYS_FALSE_VAR = 'always_false';
+/**
+ * A {@code RuntimeCall} is a special expression which provides access to utility functions from the runtime.
+ */
+module.exports = class RuntimeCall extends ExpressionNode {
 
-module.exports = class CommandStream {
-
-    constructor() {
-        this._commands = [];
+    /**
+     * Creates a {@code RuntimeCall} based on a {@code functionName} and an array of {@code arguments}.
+     *
+     * @param {String} functionName the name of the function identifying the runtime call
+     * @param {ExpressionNode...} args  the arguments passed to the runtime call
+     */
+    constructor(functionName, args) {
+        super();
+        this._functionName = functionName;
+        this._args = Array.prototype.slice.call(arguments, 1);
     }
 
-    write(command) {
-        this._commands.push(command);
+    get functionName() {
+        return this._functionName;
     }
 
-    close() {
-
+    get args() {
+        return this._args;
     }
-
-    get commands() {
-        return this._commands;
-    }
-
-    beginIgnore() {
-        this.write(new VariableBinding.Start(ALWAYS_FALSE_VAR, BooleanConstant.FALSE));
-        this.write(new Conditional.Start(ALWAYS_FALSE_VAR, BooleanConstant.TRUE));
-    }
-
-    endIgnore() {
-        this.write(Conditional.END);
-        this.write(VariableBinding.END);
-    }
-
 };

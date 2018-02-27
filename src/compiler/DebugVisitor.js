@@ -27,6 +27,7 @@ const Identifier = require('./nodes/Identifier');
 const BinaryOperation = require('./nodes/BinaryOperation');
 const UnaryOperation = require('./nodes/UnaryOperation');
 const TernaryOperation = require('./nodes/TernaryOperation');
+const RuntimeCall = require('./nodes/RuntimeCall');
 
 /**
  * Visitor that recreates the parsed text and stores it in {@code result}.
@@ -115,6 +116,16 @@ module.exports = class DebugVisitor {
         }
         else if (node instanceof NullLiteral) {
             // nop
+        }
+        else if (node instanceof RuntimeCall) {
+            this.result += node.functionName + '(';
+            node.args.forEach((v, idx) => {
+                if (idx > 0) {
+                    this.result += ', ';
+                }
+                v.accept(this);
+            });
+            this.result += ')';
         }
         else {
             throw new Error('unexpected node: ' + node.constructor.name);

@@ -15,31 +15,28 @@
  * limitations under the License.
  *
  */
-const Command = require('./Command');
+const Scope = require('./Scope');
 
-module.exports = {
+module.exports = class Runtime {
 
-    Start: class Start extends Command {
+    constructor() {
+        this._global = new Scope();
+        this._scope = new Scope(this._global);
+    }
 
-        constructor(variableName, expectedTruthValue) {
-            super();
-            this._variableName = variableName;
-            this._expectedTruthValue = expectedTruthValue;
-        }
+    openScope() {
+        this._scope = new Scope(this._scope);
+        return this._scope;
+    }
 
-        get variableName() {
-            return this._variableName;
-        }
+    closeScope() {
+        const scope = this._scope;
+        this._scope = scope._parent;
+        return scope;
+    }
 
-        get expectedTruthValue() {
-            return this._expectedTruthValue;
-        }
-    },
-
-    End: class End extends Command {
-
-    },
+    get scope() {
+        return this._scope;
+    }
 
 };
-
-module.exports.END = new module.exports.End();

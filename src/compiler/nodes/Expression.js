@@ -49,6 +49,22 @@ module.exports = class Expression {
         return new Expression(node, this._options, null);
     }
 
+    containsOption(option) {
+        return option in this._options;
+    }
+
+    /**
+     * Removes the given option from this expression.
+     *
+     * @param {String} option the option to be removed
+     * @return the option, or {@code null} if the option doesn't exist
+     */
+    removeOption(option) {
+        const ret = this._options[option];
+        delete this._options[option];
+        return ret;
+    }
+
     accept(visitor) {
         return visitor.visit(this);
     }
