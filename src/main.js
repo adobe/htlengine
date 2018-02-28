@@ -17,8 +17,8 @@
  */
 const fs = require('fs');
 
-const ThrowingErrorListener = require('../src/compiler/ThrowingErrorListener');
-const TemplateParser = require('../src/html/TemplateParser');
+const ThrowingErrorListener = require('./parser/htl/ThrowingErrorListener');
+const TemplateParser = require('./parser/html/TemplateParser');
 const InterpretingCommandVisitor = require('../src/interpreter/InterpretingCommandVisitor');
 const Runtime = require('../src/interpreter/Runtime');
 

@@ -15,12 +15,12 @@
  * limitations under the License.
  *
  */
-const OutText = require('../commands/OutText');
-const VariableBinding = require('../commands/VariableBinding');
-const Conditional = require('../commands/Conditional');
-const OutputVariable = require('../commands/OutputVariable');
+const OutText = require('../parser/commands/OutText');
+const VariableBinding = require('../parser/commands/VariableBinding');
+const Conditional = require('../parser/commands/Conditional');
+const OutputVariable = require('../parser/commands/OutputVariable');
 
-const DebugVisitor = require('../compiler/DebugVisitor');
+const DebugVisitor = require('../parser/htl/DebugVisitor');
 
 const Runtime = require('./Runtime');
 const ExpressionEvaluator = require('./ExpressionEvaluator');

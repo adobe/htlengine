@@ -20,9 +20,9 @@
 
 const assert = require('assert');
 
-const DebugVisitor = require('../src/compiler/DebugVisitor');
-const HTLParser = require('../src/compiler/HTLParser');
-const ThrowingErrorListener = require('../src/compiler/ThrowingErrorListener');
+const DebugVisitor = require('../src/parser/htl/DebugVisitor');
+const HTLParser = require('../src/parser/htl/HTLParser');
+const ThrowingErrorListener = require('../src/parser/htl/ThrowingErrorListener');
 
 function process(input) {
     const interp = new HTLParser()

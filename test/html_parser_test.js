@@ -22,13 +22,13 @@ const assert = require('assert');
 const fs = require('fs');
 
 const antlr4 = require('antlr4');
-const HTMLLexer = require('../src/generated/HTMLLexer').HTMLLexer;
-const HTMLParser = require('../src/generated/HTMLParser').HTMLParser;
-const ThrowingErrorListener = require('../src/compiler/ThrowingErrorListener');
+const HTMLLexer = require('../src/parser/generated/HTMLLexer').HTMLLexer;
+const HTMLParser = require('../src/parser/generated/HTMLParser').HTMLParser;
+const ThrowingErrorListener = require('../src/parser/htl/ThrowingErrorListener');
 
-const MarkupListener = require('../src/html/MarkupListener');
-const MarkupHandler = require('../src/html/MarkupHandler');
-const CommandStream = require('../src/commands/CommandStream');
+const MarkupListener = require('../src/parser/html/MarkupListener');
+const MarkupHandler = require('../src/parser/html/MarkupHandler');
+const CommandStream = require('../src/parser/commands/CommandStream');
 
 function process(input) {
     const chars = new antlr4.InputStream(input);

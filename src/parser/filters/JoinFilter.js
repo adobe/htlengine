@@ -18,7 +18,7 @@
 
 const Filter = require('./Filter');
 const ExpressionContext = require('../html/ExpressionContext');
-const RuntimeCall = require('../compiler/nodes/RuntimeCall');
+const RuntimeCall = require('../htl/nodes/RuntimeCall');
 
 const JOIN_OPTION = 'join';
 

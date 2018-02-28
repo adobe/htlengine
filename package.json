@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "build": "antlr4 -Dlanguage=JavaScript -Xexact-output-dir -o src/generated src/grammar/SightlyLexer.g4 src/grammar/SightlyParser.g4 src/grammar/SightlyParser.g4 src/grammar/HTMLLexer.g4 src/grammar/HTMLParser.g4",
+    "build": "antlr4 -Dlanguage=JavaScript -Xexact-output-dir -o src/parser/generated src/parser/grammar/SightlyLexer.g4 src/parser/grammar/SightlyParser.g4 src/parser/grammar/SightlyParser.g4 src/parser/grammar/HTMLLexer.g4 src/parser/grammar/HTMLParser.g4",
     "lint": "./node_modules/.bin/eslint src/ test/"
   },
   "devDependencies": {

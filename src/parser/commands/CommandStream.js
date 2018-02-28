@@ -17,7 +17,7 @@
  */
 const VariableBinding = require('./VariableBinding');
 const Conditional = require('./Conditional');
-const BooleanConstant = require('../compiler/nodes/BooleanConstant');
+const BooleanConstant = require('../htl/nodes/BooleanConstant');
 
 const ALWAYS_FALSE_VAR = 'always_false';
 

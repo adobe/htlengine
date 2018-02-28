@@ -24,21 +24,21 @@ options {
 }
 
 @header {
-    const NullLiteral = require('../compiler/nodes/NullLiteral');
-    const ArrayLiteral = require('../compiler/nodes/ArrayLiteral');
-    const NumericConstant = require('../compiler/nodes/NumericConstant');
-    const StringConstant = require('../compiler/nodes/StringConstant');
-    const BooleanConstant = require('../compiler/nodes/BooleanConstant');
-    const ExpressionNode = require('../compiler/nodes/ExpressionNode');
-    const PropertyAccess = require('../compiler/nodes/PropertyAccess');
-    const Expression = require('../compiler/nodes/Expression');
-    const Interpolation = require('../compiler/nodes/Interpolation');
-    const Identifier = require('../compiler/nodes/Identifier');
-    const BinaryOperator = require('../compiler/nodes/BinaryOperator');
-    const BinaryOperation = require('../compiler/nodes/BinaryOperation');
-    const UnaryOperator = require('../compiler/nodes/UnaryOperator');
-    const UnaryOperation = require('../compiler/nodes/UnaryOperation');
-    const TernaryOperation = require('../compiler/nodes/TernaryOperation');
+    const NullLiteral = require('../htl/nodes/NullLiteral');
+    const ArrayLiteral = require('../htl/nodes/ArrayLiteral');
+    const NumericConstant = require('../htl/nodes/NumericConstant');
+    const StringConstant = require('../htl/nodes/StringConstant');
+    const BooleanConstant = require('../htl/nodes/BooleanConstant');
+    const ExpressionNode = require('../htl/nodes/ExpressionNode');
+    const PropertyAccess = require('../htl/nodes/PropertyAccess');
+    const Expression = require('../htl/nodes/Expression');
+    const Interpolation = require('../htl/nodes/Interpolation');
+    const Identifier = require('../htl/nodes/Identifier');
+    const BinaryOperator = require('../htl/nodes/BinaryOperator');
+    const BinaryOperation = require('../htl/nodes/BinaryOperation');
+    const UnaryOperator = require('../htl/nodes/UnaryOperator');
+    const UnaryOperation = require('../htl/nodes/UnaryOperation');
+    const TernaryOperation = require('../htl/nodes/TernaryOperation');
 }
 
 interpolation returns [Interpolation interp]

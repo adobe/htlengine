@@ -21,10 +21,10 @@
 const assert = require('assert');
 const fs = require('fs');
 
-const ThrowingErrorListener = require('../src/compiler/ThrowingErrorListener');
+const ThrowingErrorListener = require('../src/parser/htl/ThrowingErrorListener');
 
-const TemplateParser = require('../src/html/TemplateParser');
-const DebugCommandVisitor = require('../src/commands/DebugCommandVisitor');
+const TemplateParser = require('../src/parser/html/TemplateParser');
+const DebugCommandVisitor = require('../src/parser/commands/DebugCommandVisitor');
 const InterpretingCommandVisitor = require('../src/interpreter/InterpretingCommandVisitor');
 const Runtime = require('../src/interpreter/Runtime');
 

@@ -16,10 +16,10 @@
  *
  */
 
-const StringConstant = require('../compiler/nodes/StringConstant');
-const Expression = require('../compiler/nodes/Expression');
-const BinaryOperation = require('../compiler/nodes/BinaryOperation');
-const BinaryOperator = require('../compiler/nodes/BinaryOperator');
+const StringConstant = require('../htl/nodes/StringConstant');
+const Expression = require('../htl/nodes/Expression');
+const BinaryOperation = require('../htl/nodes/BinaryOperation');
+const BinaryOperator = require('../htl/nodes/BinaryOperator');
 
 function _join(nodes) {
     if (nodes.length === 0) {

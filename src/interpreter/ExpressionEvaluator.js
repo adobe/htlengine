@@ -15,19 +15,19 @@
  * limitations under the License.
  *
  */
-const NullLiteral = require('../compiler/nodes/NullLiteral');
-const ArrayLiteral = require('../compiler/nodes/ArrayLiteral');
-const NumericConstant = require('../compiler/nodes/NumericConstant');
-const StringConstant = require('../compiler/nodes/StringConstant');
-const BooleanConstant = require('../compiler/nodes/BooleanConstant');
-const PropertyAccess = require('../compiler/nodes/PropertyAccess');
-const Expression = require('../compiler/nodes/Expression');
-const Interpolation = require('../compiler/nodes/Interpolation');
-const Identifier = require('../compiler/nodes/Identifier');
-const BinaryOperation = require('../compiler/nodes/BinaryOperation');
-const UnaryOperation = require('../compiler/nodes/UnaryOperation');
-const TernaryOperation = require('../compiler/nodes/TernaryOperation');
-const RuntimeCall = require('../compiler/nodes/RuntimeCall');
+const NullLiteral = require('../parser/htl/nodes/NullLiteral');
+const ArrayLiteral = require('../parser/htl/nodes/ArrayLiteral');
+const NumericConstant = require('../parser/htl/nodes/NumericConstant');
+const StringConstant = require('../parser/htl/nodes/StringConstant');
+const BooleanConstant = require('../parser/htl/nodes/BooleanConstant');
+const PropertyAccess = require('../parser/htl/nodes/PropertyAccess');
+const Expression = require('../parser/htl/nodes/Expression');
+const Interpolation = require('../parser/htl/nodes/Interpolation');
+const Identifier = require('../parser/htl/nodes/Identifier');
+const BinaryOperation = require('../parser/htl/nodes/BinaryOperation');
+const UnaryOperation = require('../parser/htl/nodes/UnaryOperation');
+const TernaryOperation = require('../parser/htl/nodes/TernaryOperation');
+const RuntimeCall = require('../parser/htl/nodes/RuntimeCall');
 
 function exec(name, args) {
     if (name === 'join') {

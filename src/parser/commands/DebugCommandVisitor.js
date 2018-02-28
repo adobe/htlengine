@@ -16,11 +16,11 @@
  *
  */
 const OutText = require('./OutText');
-const VariableBinding = require('../commands/VariableBinding');
-const Conditional = require('../commands/Conditional');
-const OutputVariable = require('../commands/OutputVariable');
+const VariableBinding = require('./VariableBinding');
+const Conditional = require('./Conditional');
+const OutputVariable = require('./OutputVariable');
 
-const DebugVisitor = require('../compiler/DebugVisitor');
+const DebugVisitor = require('../htl/DebugVisitor');
 
 function expression2text(expression) {
     const v = new DebugVisitor();
