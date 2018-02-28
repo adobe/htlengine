@@ -4,7 +4,6 @@
 
 ```bash
 $ yarn install
-$ yarn build
 ```
 
 ## run
@@ -21,4 +20,16 @@ The tests are more comprehensive. They validate if the the HTL expressions are p
 
 ```bash
 $ yarn test
+```
+
+## rebuild antlr4 generated source
+
+```bash
+$ yarn build
+```
+
+### prerequisites
+
+```bash
+$ brew install antlr4
 ```

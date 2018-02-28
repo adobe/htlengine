@@ -15,46 +15,36 @@
  * limitations under the License.
  *
  */
-/**
- * Binary operators used in expressions.
- */
-module.exports = Object.freeze({
+const Command = require('./Command');
 
-    /**
-     * Evaluates the logical negation of the operand
-     */
-    NOT: {
-        sym: '!',
-        calc: (operand) => {
-            return !operand;
+module.exports = {
+
+    Start: class Start extends Command {
+
+        constructor(listVariable, itemVariable, indexVariable) {
+            super();
+            this._listVariable = listVariable;
+            this._itemVariable = itemVariable;
+            this._indexVariable = indexVariable;
+        }
+
+        get listVariable() {
+            return this._listVariable;
+        }
+
+        get itemVariable() {
+            return this._itemVariable;
+        }
+
+        get indexVariable() {
+            return this._indexVariable;
         }
     },
 
-    /**
-     * Evaluates whether the operand is a string of only whitespace characters
-     */
-    IS_WHITESPACE: {
-        sym: 'ws:',
-        calc: (operand) => {
-            return String(operand).trim().length === 0;
-        }
-    },
+    End: class End extends Command {
 
-    /**
-     * Evaluates the length of a collection
-     */
-    LENGTH: {
-        sym: 'len:',
-        calc: (operand) => {
-            if (Array.isArray(operand)) {
-                return operand.length;
-            }
-            if (operand.length && (typeof operand === 'function')) {
-                return operand.length();
-            }
-            return -1;
-        }
     }
 
-});
+};
 
+module.exports.END = new module.exports.End();

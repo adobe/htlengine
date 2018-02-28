@@ -18,14 +18,19 @@
 const OutText = require('./OutText');
 const VariableBinding = require('./VariableBinding');
 const Conditional = require('./Conditional');
+const Loop = require('./Loop');
 const OutputVariable = require('./OutputVariable');
 
 const DebugVisitor = require('../htl/DebugVisitor');
+const ExpressionNode = require('../htl/nodes/ExpressionNode');
 
 function expression2text(expression) {
-    const v = new DebugVisitor();
-    expression.accept(v);
-    return v.result;
+    if (expression instanceof ExpressionNode) {
+        const v = new DebugVisitor();
+        expression.accept(v);
+        return v.result;
+    }
+    return expression;
 }
 
 module.exports = class DebugCommandVisitor {
@@ -58,6 +63,15 @@ module.exports = class DebugCommandVisitor {
         }
         else if (cmd instanceof OutputVariable) {
             this._result += `OUT(${cmd.variableName})\n`;
+        }
+        else if (cmd instanceof Loop.Start) {
+            this._result += `LOOP.START(${cmd.listVariable}, ${cmd.itemVariable}, ${cmd.indexVariable})\n`;
+        }
+        else if (cmd instanceof Loop.End) {
+            this._result += `LOOP.END()\n`;
+        }
+        else {
+            throw new Error('unknown command: ' + cmd);
         }
 
     }

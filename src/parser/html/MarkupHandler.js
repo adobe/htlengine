@@ -38,6 +38,7 @@ const PluginContext = require('./PluginContext');
 
 // plugins: todo: move to registry
 const TextPlugin = require('../plugins/TextPlugin');
+const ListPlugin = require('../plugins/ListPlugin');
 const Plugin = require('./Plugin');
 
 // filters: todo: move to registry
@@ -393,6 +394,9 @@ module.exports = class MarkupHandler {
         // todo properly
         if (name === 'text') {
             return TextPlugin;
+        }
+        if (name === 'list' || name === 'repeat') {
+            return ListPlugin;
         }
         return Plugin;
         // throw new Error(`None of the registered plugins can handle the data-sly-${name} block element.`);

@@ -17,11 +17,13 @@
  */
 const NullLiteral = require('../parser/htl/nodes/NullLiteral');
 const ArrayLiteral = require('../parser/htl/nodes/ArrayLiteral');
+const MapLiteral = require('../parser/htl/nodes/MapLiteral');
 const NumericConstant = require('../parser/htl/nodes/NumericConstant');
 const StringConstant = require('../parser/htl/nodes/StringConstant');
 const BooleanConstant = require('../parser/htl/nodes/BooleanConstant');
 const PropertyAccess = require('../parser/htl/nodes/PropertyAccess');
 const Expression = require('../parser/htl/nodes/Expression');
+const ExpressionNode = require('../parser/htl/nodes/ExpressionNode');
 const Interpolation = require('../parser/htl/nodes/Interpolation');
 const Identifier = require('../parser/htl/nodes/Identifier');
 const BinaryOperation = require('../parser/htl/nodes/BinaryOperation');
@@ -72,7 +74,11 @@ module.exports = class ExpressionEvaluator {
         if (node instanceof PropertyAccess) {
             const target = node.target.accept(this);
             const name = node.property.accept(this);
-            return target[name];
+            const obj = target[name];
+            if (obj instanceof ExpressionNode) {
+                return obj.accept(this);
+            }
+            return obj;
         }
 
         if (node instanceof BinaryOperation) {
@@ -138,6 +144,10 @@ module.exports = class ExpressionEvaluator {
 
         if (node instanceof NullLiteral) {
             return null;
+        }
+
+        if (node instanceof MapLiteral) {
+            return node.map;
         }
 
         throw new Error('unexpected node: ' + node.constructor.name);

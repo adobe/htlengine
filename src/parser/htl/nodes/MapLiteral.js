@@ -15,46 +15,37 @@
  * limitations under the License.
  *
  */
-/**
- * Binary operators used in expressions.
- */
-module.exports = Object.freeze({
 
-    /**
-     * Evaluates the logical negation of the operand
-     */
-    NOT: {
-        sym: '!',
-        calc: (operand) => {
-            return !operand;
-        }
-    },
+const ExpressionNode = require('./ExpressionNode');
 
-    /**
-     * Evaluates whether the operand is a string of only whitespace characters
-     */
-    IS_WHITESPACE: {
-        sym: 'ws:',
-        calc: (operand) => {
-            return String(operand).trim().length === 0;
-        }
-    },
+module.exports = class MapLiteral extends ExpressionNode {
 
-    /**
-     * Evaluates the length of a collection
-     */
-    LENGTH: {
-        sym: 'len:',
-        calc: (operand) => {
-            if (Array.isArray(operand)) {
-                return operand.length;
-            }
-            if (operand.length && (typeof operand === 'function')) {
-                return operand.length();
-            }
-            return -1;
-        }
+    constructor(map) {
+        super();
+        this._map = map;
     }
 
-});
+    /**
+     * Returns an {@link ExpressionNode} from the backing map.
+     *
+     * @param {String} key the key under which the node is stored
+     * @return {ExpressionNode} the node, if one is stored under that key; {@code null} otherwise
+     */
+    getValue(key) {
+        return this._map[key];
+    }
 
+    /**
+     * Checks if the map contains the property identified by the passed property name.
+     *
+     * @param {String} name the property name
+     * @return {@code true} if the map contains the property, {@code false} otherwise
+     */
+    containsKey(name) {
+        return name in this._map;
+    }
+
+    get map() {
+        return this._map;
+    }
+};

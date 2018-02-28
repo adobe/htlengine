@@ -24,6 +24,7 @@ const PropertyAccess = require('./nodes/PropertyAccess');
 const Expression = require('./nodes/Expression');
 const Interpolation = require('./nodes/Interpolation');
 const Identifier = require('./nodes/Identifier');
+const MapLiteral = require('./nodes/MapLiteral');
 const BinaryOperation = require('./nodes/BinaryOperation');
 const UnaryOperation = require('./nodes/UnaryOperation');
 const TernaryOperation = require('./nodes/TernaryOperation');
@@ -126,6 +127,15 @@ module.exports = class DebugVisitor {
                 v.accept(this);
             });
             this.result += ')';
+        }
+        else if (node instanceof MapLiteral) {
+            this.result += '{';
+            Object.keys(node.map).forEach((key) => {
+                this.result += key + ': ';
+                node.map[key].accept(this);
+                this.result += ', ';
+            });
+            this.result += '}';
         }
         else {
             throw new Error('unexpected node: ' + node.constructor.name);

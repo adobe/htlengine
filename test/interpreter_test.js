@@ -25,7 +25,7 @@ const ThrowingErrorListener = require('../src/parser/htl/ThrowingErrorListener')
 
 const TemplateParser = require('../src/parser/html/TemplateParser');
 const DebugCommandVisitor = require('../src/parser/commands/DebugCommandVisitor');
-const InterpretingCommandVisitor = require('../src/interpreter/InterpretingCommandVisitor');
+const Interpreter = require('../src/interpreter/Interpreter');
 const Runtime = require('../src/interpreter/Runtime');
 
 
@@ -46,13 +46,13 @@ function debugCommands(commands) {
 }
 
 function evaluateCommands(commands, runtime) {
-    const cmdvisitor = new InterpretingCommandVisitor(runtime);
-    commands.forEach((c) => {
-        c.accept(cmdvisitor);
-    });
-
-    console.log(cmdvisitor.result);
-    return cmdvisitor.result;
+    const result = new Interpreter()
+        .withRuntime(runtime)
+        .withCommands(commands)
+        .run()
+        .result;
+    console.log(result);
+    return result;
 }
 
 function readTests(filename) {
@@ -86,36 +86,41 @@ function readTests(filename) {
     return tests;
 }
 
-describe('Command Stream Tests', function() {
+describe('Interpreter Tests', function() {
 
-    const tests = readTests('test/command_stream_spec.txt');
-
-    describe('simple tests', function(done) {
-        tests.forEach(function(test) {
-            if (!test.input) {
-                return;
-            }
-            const commands = process(test.input);
+    fs.readdirSync('test/specs').forEach((filename) => {
+        if (filename.endsWith('_spec.txt')) {
+            const name = filename.substring(0, filename.length - 9);
+            const payload = require('./specs/' + name + '_spec.js');
 
             const runtime = new Runtime();
-            runtime.scope.setVariable('world', 'Earth');
-            runtime.scope.setVariable('properties', {
-                title: 'Hello, world.',
-                fruits: ['Apple', 'Banana', 'Orange'],
-                comma: ', '
+            runtime.scope.putAll(payload);
+
+            const tests = readTests('test/specs/' + filename);
+
+            describe(name, function() {
+                tests.forEach(function(test) {
+                    if (!test.input) {
+                        return;
+                    }
+                    const commands = process(test.input);
+
+                    if (test.commands) {
+                        it(`Generates commands for '${test.name}' correctly.`, function() {
+                            assert.equal(debugCommands(commands), test.commands);
+                        });
+                    }
+
+                    if ('output' in test) {
+                        it(`Generates output for '${test.name}' correctly.`, function() {
+                            assert.equal(evaluateCommands(commands, runtime), test.output);
+                        });
+                    }
+                });
             });
-
-            if (test.commands) {
-                it(`Generates commands for '${test.name}' correctly.`, function() {
-                    assert.equal(debugCommands(commands), test.commands);
-                });
-            }
-
-            if (test.output) {
-                it(`Generates output for '${test.name}' correctly.`, function() {
-                    assert.equal(evaluateCommands(commands, runtime), test.output);
-                });
-            }
-        });
+        }
     });
+
+
+
 });

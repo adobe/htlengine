@@ -1,0 +1,103 @@
+#
+### simple list
+#
+<ul data-sly-list="${properties.fruits}">
+    <li>${item}</li>
+</ul>
+---
+VAR.START('var_collectionVar0', 'properties['fruits']')
+VAR.START('var_size1', 'len:var_collectionVar0')
+COND.START('var_size1' == 'true')
+TEXT('<ul');
+TEXT('>');
+LOOP.START(var_collectionVar0, item, var_index2)
+VAR.START('itemList', '{index: var_index2, count: var_index2+1, first: var_index2==0, middle: !var_index2==0||var_index2==var_size1-1, last: var_index2==var_size1-1, odd: var_index2%2==0, even: var_index2%2==1, }')
+TEXT('    ');
+TEXT('<li');
+TEXT('>');
+VAR.START('var_3', 'item')
+OUT(var_3)
+VAR.END()
+TEXT('</li>');
+VAR.END()
+LOOP.END()
+TEXT('</ul>');
+COND.END()
+VAR.END()
+VAR.END()
+===
+<ul>
+    <li>Apple</li>
+
+    <li>Banana</li>
+
+    <li>Orange</li>
+</ul>
+#
+### empty list
+#
+<ul data-sly-list="${properties.emptyList}">
+    <li>${item}</li>
+</ul>
+===
+#
+### list variables
+#
+<code data-sly-list.myItem="${properties.fruits}">
+    ---
+    myItem: ${myItem}
+    index: ${myItemList.index}
+    count: ${myItemList.count}
+    first: ${myItemList.first}
+    middle: ${myItemList.middle}
+    last: ${myItemList.last}
+    odd: ${myItemList.odd}
+    even: ${myItemList.even}
+</code>
+===
+<code>
+    ---
+    myItem: Apple
+    index: 0
+    count: 1
+    first: true
+    middle: false
+    last: false
+    odd: true
+    even: false
+    ---
+    myItem: Banana
+    index: 1
+    count: 2
+    first: false
+    middle: true
+    last: false
+    odd: false
+    even: true
+    ---
+    myItem: Orange
+    index: 2
+    count: 3
+    first: false
+    middle: false
+    last: true
+    odd: true
+    even: false
+</code>
+#
+### list map
+#
+<dl data-sly-list="${properties.map}">
+    <dt>key: ${item}</dt>
+    <dd>value: ${properties.map[item]}</dd>
+</dl>
+===
+<dl>
+    <dt>key: a</dt>
+    <dd>value: 1</dd>
+    <dt>key: b</dt>
+    <dd>value: 2</dd>
+    <dt>key: c</dt>
+    <dd>value: 3</dd>
+</dl>
+#

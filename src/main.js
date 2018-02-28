@@ -19,7 +19,7 @@ const fs = require('fs');
 
 const ThrowingErrorListener = require('./parser/htl/ThrowingErrorListener');
 const TemplateParser = require('./parser/html/TemplateParser');
-const InterpretingCommandVisitor = require('../src/interpreter/InterpretingCommandVisitor');
+const InterpretingCommandVisitor = require('./interpreter/Interpreter');
 const Runtime = require('../src/interpreter/Runtime');
 
 
@@ -36,6 +36,9 @@ runtime.scope.setVariable('properties', {
     title: 'Hello, world.',
     fruits: ['Apple', 'Banana', 'Orange'],
     comma: ', '
+});
+runtime.scope.setVariable('nav', {
+    foo: 'This is foo. '
 });
 
 const cmdvisitor = new InterpretingCommandVisitor(runtime);
