@@ -15,25 +15,18 @@
  * limitations under the License.
  *
  */
-const ThrowingErrorListener = require('./parser/htl/ThrowingErrorListener');
-const TemplateParser = require('./parser/html/TemplateParser');
-const Interpreter = require('./interpreter/Interpreter');
-const Runtime = require('../src/interpreter/Runtime');
 
-module.exports = function(resource, template) {
+module.exports = class Compiler {
 
-    const runtime = new Runtime();
-    runtime.scope.putAll(resource);
+    compile(source) {
 
-    const commands = new TemplateParser()
-        .withErrorListener(ThrowingErrorListener.INSTANCE)
-        .parse(template);
+        const service = function service(resource) {
+            const engine = require('htlengine/src/main');
+            return engine(resource, source.code);
+        };
 
-    return new Interpreter()
-        .withRuntime(runtime)
-        .withCommands(commands)
-        .run()
-        .result;
+        source = JSON.stringify({code: source});
 
+        return `const source=${source};\n` + service;
+    }
 };
-

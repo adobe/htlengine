@@ -15,25 +15,33 @@
  * limitations under the License.
  *
  */
-const ThrowingErrorListener = require('./parser/htl/ThrowingErrorListener');
-const TemplateParser = require('./parser/html/TemplateParser');
-const Interpreter = require('./interpreter/Interpreter');
-const Runtime = require('../src/interpreter/Runtime');
+const fs = require('fs');
 
-module.exports = function(resource, template) {
+const engine = require('../src/main');
 
-    const runtime = new Runtime();
-    runtime.scope.putAll(resource);
+const filename = process.argv[2];
+const template = fs.readFileSync(filename, 'utf-8');
 
-    const commands = new TemplateParser()
-        .withErrorListener(ThrowingErrorListener.INSTANCE)
-        .parse(template);
-
-    return new Interpreter()
-        .withRuntime(runtime)
-        .withCommands(commands)
-        .run()
-        .result;
-
+const resource = {
+    'world': 'Earth',
+    'properties': {
+        title: 'Hello, world.',
+        fruits: ['Apple', 'Banana', 'Orange'],
+        comma: ', '
+    },
+    'nav': {
+        foo: 'This is foo. '
+    },
+    'it': {
+        "html": "foo barty!",
+        "title": "Hello, world!",
+        "children": [
+            "<div>A</div>",
+            "<div>B</div>"
+        ]
+    }
 };
 
+const html = engine(resource, template);
+
+console.log(html);
