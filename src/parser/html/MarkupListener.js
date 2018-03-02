@@ -17,6 +17,23 @@
  */
 const HTMLParserListener = require('../generated/HTMLParserListener').HTMLParserListener;
 
+const VOID_ELEMENTS = {
+    'area': true,
+    'base': true,
+    'br': true,
+    'col': true,
+    'embed': true,
+    'hr': true,
+    'img': true,
+    'input': true,
+    'link': true,
+    'meta': true,
+    'param': true,
+    'source': true,
+    'track': true,
+    'wb': true
+};
+
 module.exports = class MarkupListener extends HTMLParserListener {
 
     /**
@@ -44,9 +61,17 @@ module.exports = class MarkupListener extends HTMLParserListener {
 
 
     enterHtmlElement(ctx) {
-        const tagNames = ctx.htmlTagName();
-        if (tagNames.length > 0) {
-            const tagName = tagNames[0].getText();
+        const tagName = ctx.htmlTagName() ?ctx.htmlTagName().getText() : null;
+        if (!tagName) {
+            return;
+        }
+        const isClose = ctx.TAG_SLASH();
+        const isEmpty = ctx.TAG_SLASH_CLOSE();
+        const isVoid = VOID_ELEMENTS[tagName];
+
+        if (isClose) {
+            this._handler.onCloseTag(tagName, isVoid);
+        } else {
             this._handler.onOpenTagStart(tagName);
 
             const attributes = ctx.htmlAttribute();
@@ -66,15 +91,11 @@ module.exports = class MarkupListener extends HTMLParserListener {
                     this._handler.onAttribute(name, value, quoteChar);
                 }
             });
-            this._handler.onOpenTagEnd(tagNames.length === 1);
+            this._handler.onOpenTagEnd(isEmpty, isVoid);
         }
     }
 
     exitHtmlElement(ctx) {
-        const tagNames = ctx.htmlTagName();
-        if (tagNames.length > 1) {
-            this._handler.onCloseTag(tagNames[0].getText());
-        }
     }
 
     enterHtmlContent(ctx) {

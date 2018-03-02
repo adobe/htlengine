@@ -6,6 +6,9 @@
 <html>
 <head>
     <title>Test</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" src="bla.css">
+    <link rel="stylesheet" src="bla.css"/>
 </head>
 <body>
     Hello, world! this is a ${test}. ${'div'}. bug 50% are fine
@@ -17,6 +20,10 @@
     <div a="1" b='2' border input=false single='toby"rules' checked=checked double="toby&quot;rules" empty="">
         ${expression}
     </div>
+    <form>
+        <input type="text" value="${nav.foo}">
+    </form>
+
     <!--/* Scripts */-->
     <a href="#whatever" onclick="${myFunctionName @ context='scriptToken'}()">Link</a>
     <scripted>

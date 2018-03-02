@@ -5,7 +5,7 @@ var HTMLParserListener = require('./HTMLParserListener').HTMLParserListener;
 var grammarFileName = "HTMLParser.g4";
 
 var serializedATN = ["\u0003\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964",
-    "\u0003$\u00dd\u0004\u0002\t\u0002\u0004\u0003\t\u0003\u0004\u0004\t",
+    "\u0003$\u00cb\u0004\u0002\t\u0002\u0004\u0003\t\u0003\u0004\u0004\t",
     "\u0004\u0004\u0005\t\u0005\u0004\u0006\t\u0006\u0004\u0007\t\u0007\u0004",
     "\b\t\b\u0004\t\t\t\u0004\n\t\n\u0004\u000b\t\u000b\u0004\f\t\f\u0004",
     "\r\t\r\u0004\u000e\t\u000e\u0004\u000f\t\u000f\u0004\u0010\t\u0010\u0004",
@@ -16,134 +16,120 @@ var serializedATN = ["\u0003\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964",
     "\u0003\u0002\u0007\u0002=\n\u0002\f\u0002\u000e\u0002@\u000b\u0002\u0003",
     "\u0003\u0007\u0003C\n\u0003\f\u0003\u000e\u0003F\u000b\u0003\u0003\u0003",
     "\u0003\u0003\u0007\u0003J\n\u0003\f\u0003\u000e\u0003M\u000b\u0003\u0003",
-    "\u0004\u0003\u0004\u0003\u0004\u0003\u0004\u0007\u0004S\n\u0004\f\u0004",
-    "\u000e\u0004V\u000b\u0004\u0003\u0004\u0003\u0004\u0003\u0004\u0003",
-    "\u0004\u0003\u0004\u0003\u0004\u0003\u0004\u0003\u0004\u0003\u0004\u0003",
-    "\u0004\u0007\u0004b\n\u0004\f\u0004\u000e\u0004e\u000b\u0004\u0003\u0004",
-    "\u0003\u0004\u0003\u0004\u0003\u0004\u0003\u0004\u0007\u0004l\n\u0004",
-    "\f\u0004\u000e\u0004o\u000b\u0004\u0003\u0004\u0003\u0004\u0003\u0004",
-    "\u0005\u0004t\n\u0004\u0003\u0005\u0005\u0005w\n\u0005\u0003\u0005\u0003",
-    "\u0005\u0003\u0005\u0005\u0005|\n\u0005\u0003\u0005\u0005\u0005\u007f",
-    "\n\u0005\u0007\u0005\u0081\n\u0005\f\u0005\u000e\u0005\u0084\u000b\u0005",
+    "\u0004\u0003\u0004\u0003\u0004\u0003\u0004\u0003\u0004\u0007\u0004T",
+    "\n\u0004\f\u0004\u000e\u0004W\u000b\u0004\u0003\u0004\u0003\u0004\u0003",
+    "\u0004\u0003\u0004\u0003\u0004\u0003\u0004\u0005\u0004_\n\u0004\u0003",
+    "\u0004\u0003\u0004\u0003\u0004\u0003\u0004\u0003\u0004\u0007\u0004f",
+    "\n\u0004\f\u0004\u000e\u0004i\u000b\u0004\u0003\u0004\u0003\u0004\u0005",
+    "\u0004m\n\u0004\u0003\u0005\u0003\u0005\u0003\u0005\u0005\u0005r\n\u0005",
     "\u0003\u0006\u0003\u0006\u0003\u0006\u0003\u0006\u0003\u0006\u0005\u0006",
-    "\u008b\n\u0006\u0003\u0007\u0003\u0007\u0003\u0007\u0003\u0007\u0003",
-    "\u0007\u0005\u0007\u0092\n\u0007\u0003\b\u0003\b\u0003\b\u0003\b\u0003",
-    "\b\u0005\b\u0099\n\b\u0003\t\u0003\t\u0003\n\u0003\n\u0003\u000b\u0003",
-    "\u000b\u0003\f\u0003\f\u0003\r\u0003\r\u0003\u000e\u0003\u000e\u0003",
-    "\u000f\u0003\u000f\u0005\u000f\u00a9\n\u000f\u0003\u0010\u0003\u0010",
-    "\u0003\u0011\u0003\u0011\u0003\u0012\u0003\u0012\u0003\u0013\u0003\u0013",
-    "\u0003\u0014\u0003\u0014\u0006\u0014\u00b5\n\u0014\r\u0014\u000e\u0014",
-    "\u00b6\u0003\u0014\u0003\u0014\u0003\u0014\u0003\u0014\u0003\u0014\u0006",
-    "\u0014\u00be\n\u0014\r\u0014\u000e\u0014\u00bf\u0003\u0014\u0003\u0014",
-    "\u0003\u0014\u0003\u0014\u0005\u0014\u00c6\n\u0014\u0003\u0015\u0003",
-    "\u0015\u0006\u0015\u00ca\n\u0015\r\u0015\u000e\u0015\u00cb\u0003\u0015",
-    "\u0003\u0015\u0003\u0015\u0003\u0015\u0003\u0015\u0006\u0015\u00d3\n",
-    "\u0015\r\u0015\u000e\u0015\u00d4\u0003\u0015\u0003\u0015\u0003\u0015",
-    "\u0003\u0015\u0005\u0015\u00db\n\u0015\u0003\u0015\u0002\u0002\u0016",
-    "\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u001a\u001c",
-    "\u001e \"$&(\u0002\u0004\u0004\u0002\b\b\u000e\u000e\u0003\u0002\u0003",
-    "\u0004\u0002\u00e8\u0002.\u0003\u0002\u0002\u0002\u0004D\u0003\u0002",
-    "\u0002\u0002\u0006s\u0003\u0002\u0002\u0002\bv\u0003\u0002\u0002\u0002",
-    "\n\u008a\u0003\u0002\u0002\u0002\f\u0091\u0003\u0002\u0002\u0002\u000e",
-    "\u0098\u0003\u0002\u0002\u0002\u0010\u009a\u0003\u0002\u0002\u0002\u0012",
-    "\u009c\u0003\u0002\u0002\u0002\u0014\u009e\u0003\u0002\u0002\u0002\u0016",
-    "\u00a0\u0003\u0002\u0002\u0002\u0018\u00a2\u0003\u0002\u0002\u0002\u001a",
-    "\u00a4\u0003\u0002\u0002\u0002\u001c\u00a8\u0003\u0002\u0002\u0002\u001e",
-    "\u00aa\u0003\u0002\u0002\u0002 \u00ac\u0003\u0002\u0002\u0002\"\u00ae",
-    "\u0003\u0002\u0002\u0002$\u00b0\u0003\u0002\u0002\u0002&\u00c5\u0003",
-    "\u0002\u0002\u0002(\u00da\u0003\u0002\u0002\u0002*-\u0005\u001e\u0010",
-    "\u0002+-\u0005\u001a\u000e\u0002,*\u0003\u0002\u0002\u0002,+\u0003\u0002",
-    "\u0002\u0002-0\u0003\u0002\u0002\u0002.,\u0003\u0002\u0002\u0002./\u0003",
-    "\u0002\u0002\u0002/2\u0003\u0002\u0002\u00020.\u0003\u0002\u0002\u0002",
-    "13\u0005\"\u0012\u000221\u0003\u0002\u0002\u000223\u0003\u0002\u0002",
-    "\u000238\u0003\u0002\u0002\u000247\u0005\u001e\u0010\u000257\u0005\u001a",
-    "\u000e\u000264\u0003\u0002\u0002\u000265\u0003\u0002\u0002\u00027:\u0003",
-    "\u0002\u0002\u000286\u0003\u0002\u0002\u000289\u0003\u0002\u0002\u0002",
-    "9>\u0003\u0002\u0002\u0002:8\u0003\u0002\u0002\u0002;=\u0005\u0004\u0003",
-    "\u0002<;\u0003\u0002\u0002\u0002=@\u0003\u0002\u0002\u0002><\u0003\u0002",
-    "\u0002\u0002>?\u0003\u0002\u0002\u0002?\u0003\u0003\u0002\u0002\u0002",
-    "@>\u0003\u0002\u0002\u0002AC\u0005\u001c\u000f\u0002BA\u0003\u0002\u0002",
-    "\u0002CF\u0003\u0002\u0002\u0002DB\u0003\u0002\u0002\u0002DE\u0003\u0002",
-    "\u0002\u0002EG\u0003\u0002\u0002\u0002FD\u0003\u0002\u0002\u0002GK\u0005",
-    "\u0006\u0004\u0002HJ\u0005\u001c\u000f\u0002IH\u0003\u0002\u0002\u0002",
-    "JM\u0003\u0002\u0002\u0002KI\u0003\u0002\u0002\u0002KL\u0003\u0002\u0002",
-    "\u0002L\u0005\u0003\u0002\u0002\u0002MK\u0003\u0002\u0002\u0002Nt\u0005",
-    "&\u0014\u0002OP\u0007\r\u0002\u0002PT\u0005\u0018\r\u0002QS\u0005\n",
-    "\u0006\u0002RQ\u0003\u0002\u0002\u0002SV\u0003\u0002\u0002\u0002TR\u0003",
-    "\u0002\u0002\u0002TU\u0003\u0002\u0002\u0002UW\u0003\u0002\u0002\u0002",
-    "VT\u0003\u0002\u0002\u0002WX\u0007\u001b\u0002\u0002XY\u0005\b\u0005",
-    "\u0002YZ\u0007\r\u0002\u0002Z[\u0007\u001d\u0002\u0002[\\\u0005\u0018",
-    "\r\u0002\\]\u0007\u001b\u0002\u0002]t\u0003\u0002\u0002\u0002^_\u0007",
-    "\r\u0002\u0002_c\u0005\u0018\r\u0002`b\u0005\n\u0006\u0002a`\u0003\u0002",
-    "\u0002\u0002be\u0003\u0002\u0002\u0002ca\u0003\u0002\u0002\u0002cd\u0003",
-    "\u0002\u0002\u0002df\u0003\u0002\u0002\u0002ec\u0003\u0002\u0002\u0002",
-    "fg\u0007\u001c\u0002\u0002gt\u0003\u0002\u0002\u0002hi\u0007\r\u0002",
-    "\u0002im\u0005\u0018\r\u0002jl\u0005\n\u0006\u0002kj\u0003\u0002\u0002",
-    "\u0002lo\u0003\u0002\u0002\u0002mk\u0003\u0002\u0002\u0002mn\u0003\u0002",
-    "\u0002\u0002np\u0003\u0002\u0002\u0002om\u0003\u0002\u0002\u0002pq\u0007",
-    "\u001b\u0002\u0002qt\u0003\u0002\u0002\u0002rt\u0005(\u0015\u0002sN",
-    "\u0003\u0002\u0002\u0002sO\u0003\u0002\u0002\u0002s^\u0003\u0002\u0002",
-    "\u0002sh\u0003\u0002\u0002\u0002sr\u0003\u0002\u0002\u0002t\u0007\u0003",
-    "\u0002\u0002\u0002uw\u0005\u001a\u000e\u0002vu\u0003\u0002\u0002\u0002",
-    "vw\u0003\u0002\u0002\u0002w\u0082\u0003\u0002\u0002\u0002x|\u0005\u0006",
-    "\u0004\u0002y|\u0005 \u0011\u0002z|\u0005\u001e\u0010\u0002{x\u0003",
-    "\u0002\u0002\u0002{y\u0003\u0002\u0002\u0002{z\u0003\u0002\u0002\u0002",
-    "|~\u0003\u0002\u0002\u0002}\u007f\u0005\u001a\u000e\u0002~}\u0003\u0002",
-    "\u0002\u0002~\u007f\u0003\u0002\u0002\u0002\u007f\u0081\u0003\u0002",
-    "\u0002\u0002\u0080{\u0003\u0002\u0002\u0002\u0081\u0084\u0003\u0002",
-    "\u0002\u0002\u0082\u0080\u0003\u0002\u0002\u0002\u0082\u0083\u0003\u0002",
-    "\u0002\u0002\u0083\t\u0003\u0002\u0002\u0002\u0084\u0082\u0003\u0002",
-    "\u0002\u0002\u0085\u0086\u0005\u0010\t\u0002\u0086\u0087\u0007\u001e",
-    "\u0002\u0002\u0087\u0088\u0005\u0016\f\u0002\u0088\u008b\u0003\u0002",
-    "\u0002\u0002\u0089\u008b\u0005\u0010\t\u0002\u008a\u0085\u0003\u0002",
-    "\u0002\u0002\u008a\u0089\u0003\u0002\u0002\u0002\u008b\u000b\u0003\u0002",
-    "\u0002\u0002\u008c\u008d\u0005\u0012\n\u0002\u008d\u008e\u0007\u0012",
-    "\u0002\u0002\u008e\u008f\u0005\u0016\f\u0002\u008f\u0092\u0003\u0002",
-    "\u0002\u0002\u0090\u0092\u0005\u0012\n\u0002\u0091\u008c\u0003\u0002",
-    "\u0002\u0002\u0091\u0090\u0003\u0002\u0002\u0002\u0092\r\u0003\u0002",
-    "\u0002\u0002\u0093\u0094\u0005\u0014\u000b\u0002\u0094\u0095\u0007\u0018",
-    "\u0002\u0002\u0095\u0096\u0005\u0016\f\u0002\u0096\u0099\u0003\u0002",
-    "\u0002\u0002\u0097\u0099\u0005\u0014\u000b\u0002\u0098\u0093\u0003\u0002",
-    "\u0002\u0002\u0098\u0097\u0003\u0002\u0002\u0002\u0099\u000f\u0003\u0002",
-    "\u0002\u0002\u009a\u009b\u0007\u001f\u0002\u0002\u009b\u0011\u0003\u0002",
-    "\u0002\u0002\u009c\u009d\u0007\u0013\u0002\u0002\u009d\u0013\u0003\u0002",
-    "\u0002\u0002\u009e\u009f\u0007\u0019\u0002\u0002\u009f\u0015\u0003\u0002",
-    "\u0002\u0002\u00a0\u00a1\u0007#\u0002\u0002\u00a1\u0017\u0003\u0002",
-    "\u0002\u0002\u00a2\u00a3\u0007\u001f\u0002\u0002\u00a3\u0019\u0003\u0002",
-    "\u0002\u0002\u00a4\u00a5\t\u0002\u0002\u0002\u00a5\u001b\u0003\u0002",
-    "\u0002\u0002\u00a6\u00a9\u0005\u001e\u0010\u0002\u00a7\u00a9\u0007\b",
-    "\u0002\u0002\u00a8\u00a6\u0003\u0002\u0002\u0002\u00a8\u00a7\u0003\u0002",
-    "\u0002\u0002\u00a9\u001d\u0003\u0002\u0002\u0002\u00aa\u00ab\t\u0003",
-    "\u0002\u0002\u00ab\u001f\u0003\u0002\u0002\u0002\u00ac\u00ad\u0007\u0006",
-    "\u0002\u0002\u00ad!\u0003\u0002\u0002\u0002\u00ae\u00af\u0007\u0007",
-    "\u0002\u0002\u00af#\u0003\u0002\u0002\u0002\u00b0\u00b1\u0007\u0005",
-    "\u0002\u0002\u00b1%\u0003\u0002\u0002\u0002\u00b2\u00b4\u0007\t\u0002",
-    "\u0002\u00b3\u00b5\u0005\f\u0007\u0002\u00b4\u00b3\u0003\u0002\u0002",
-    "\u0002\u00b5\u00b6\u0003\u0002\u0002\u0002\u00b6\u00b4\u0003\u0002\u0002",
-    "\u0002\u00b6\u00b7\u0003\u0002\u0002\u0002\u00b7\u00b8\u0003\u0002\u0002",
-    "\u0002\u00b8\u00b9\u0007\u000f\u0002\u0002\u00b9\u00ba\u0007!\u0002",
-    "\u0002\u00ba\u00c6\u0003\u0002\u0002\u0002\u00bb\u00bd\u0007\t\u0002",
-    "\u0002\u00bc\u00be\u0005\f\u0007\u0002\u00bd\u00bc\u0003\u0002\u0002",
-    "\u0002\u00be\u00bf\u0003\u0002\u0002\u0002\u00bf\u00bd\u0003\u0002\u0002",
-    "\u0002\u00bf\u00c0\u0003\u0002\u0002\u0002\u00c0\u00c1\u0003\u0002\u0002",
-    "\u0002\u00c1\u00c2\u0007\u0010\u0002\u0002\u00c2\u00c6\u0003\u0002\u0002",
-    "\u0002\u00c3\u00c4\u0007\n\u0002\u0002\u00c4\u00c6\u0007!\u0002\u0002",
-    "\u00c5\u00b2\u0003\u0002\u0002\u0002\u00c5\u00bb\u0003\u0002\u0002\u0002",
-    "\u00c5\u00c3\u0003\u0002\u0002\u0002\u00c6\'\u0003\u0002\u0002\u0002",
-    "\u00c7\u00c9\u0007\u000b\u0002\u0002\u00c8\u00ca\u0005\u000e\b\u0002",
-    "\u00c9\u00c8\u0003\u0002\u0002\u0002\u00ca\u00cb\u0003\u0002\u0002\u0002",
-    "\u00cb\u00c9\u0003\u0002\u0002\u0002\u00cb\u00cc\u0003\u0002\u0002\u0002",
-    "\u00cc\u00cd\u0003\u0002\u0002\u0002\u00cd\u00ce\u0007\u0015\u0002\u0002",
-    "\u00ce\u00cf\u0007\"\u0002\u0002\u00cf\u00db\u0003\u0002\u0002\u0002",
-    "\u00d0\u00d2\u0007\u000b\u0002\u0002\u00d1\u00d3\u0005\u000e\b\u0002",
-    "\u00d2\u00d1\u0003\u0002\u0002\u0002\u00d3\u00d4\u0003\u0002\u0002\u0002",
-    "\u00d4\u00d2\u0003\u0002\u0002\u0002\u00d4\u00d5\u0003\u0002\u0002\u0002",
-    "\u00d5\u00d6\u0003\u0002\u0002\u0002\u00d6\u00d7\u0007\u0016\u0002\u0002",
-    "\u00d7\u00db\u0003\u0002\u0002\u0002\u00d8\u00d9\u0007\f\u0002\u0002",
-    "\u00d9\u00db\u0007\"\u0002\u0002\u00da\u00c7\u0003\u0002\u0002\u0002",
-    "\u00da\u00d0\u0003\u0002\u0002\u0002\u00da\u00d8\u0003\u0002\u0002\u0002",
-    "\u00db)\u0003\u0002\u0002\u0002\u001c,.268>DKTcmsv{~\u0082\u008a\u0091",
-    "\u0098\u00a8\u00b6\u00bf\u00c5\u00cb\u00d4\u00da"].join("");
+    "y\n\u0006\u0003\u0007\u0003\u0007\u0003\u0007\u0003\u0007\u0003\u0007",
+    "\u0005\u0007\u0080\n\u0007\u0003\b\u0003\b\u0003\b\u0003\b\u0003\b\u0005",
+    "\b\u0087\n\b\u0003\t\u0003\t\u0003\n\u0003\n\u0003\u000b\u0003\u000b",
+    "\u0003\f\u0003\f\u0003\r\u0003\r\u0003\u000e\u0003\u000e\u0003\u000f",
+    "\u0003\u000f\u0005\u000f\u0097\n\u000f\u0003\u0010\u0003\u0010\u0003",
+    "\u0011\u0003\u0011\u0003\u0012\u0003\u0012\u0003\u0013\u0003\u0013\u0003",
+    "\u0014\u0003\u0014\u0006\u0014\u00a3\n\u0014\r\u0014\u000e\u0014\u00a4",
+    "\u0003\u0014\u0003\u0014\u0003\u0014\u0003\u0014\u0003\u0014\u0006\u0014",
+    "\u00ac\n\u0014\r\u0014\u000e\u0014\u00ad\u0003\u0014\u0003\u0014\u0003",
+    "\u0014\u0003\u0014\u0005\u0014\u00b4\n\u0014\u0003\u0015\u0003\u0015",
+    "\u0006\u0015\u00b8\n\u0015\r\u0015\u000e\u0015\u00b9\u0003\u0015\u0003",
+    "\u0015\u0003\u0015\u0003\u0015\u0003\u0015\u0006\u0015\u00c1\n\u0015",
+    "\r\u0015\u000e\u0015\u00c2\u0003\u0015\u0003\u0015\u0003\u0015\u0003",
+    "\u0015\u0005\u0015\u00c9\n\u0015\u0003\u0015\u0002\u0002\u0016\u0002",
+    "\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u001a\u001c\u001e",
+    " \"$&(\u0002\u0004\u0004\u0002\b\b\u000e\u000e\u0003\u0002\u0003\u0004",
+    "\u0002\u00d3\u0002.\u0003\u0002\u0002\u0002\u0004D\u0003\u0002\u0002",
+    "\u0002\u0006l\u0003\u0002\u0002\u0002\bq\u0003\u0002\u0002\u0002\nx",
+    "\u0003\u0002\u0002\u0002\f\u007f\u0003\u0002\u0002\u0002\u000e\u0086",
+    "\u0003\u0002\u0002\u0002\u0010\u0088\u0003\u0002\u0002\u0002\u0012\u008a",
+    "\u0003\u0002\u0002\u0002\u0014\u008c\u0003\u0002\u0002\u0002\u0016\u008e",
+    "\u0003\u0002\u0002\u0002\u0018\u0090\u0003\u0002\u0002\u0002\u001a\u0092",
+    "\u0003\u0002\u0002\u0002\u001c\u0096\u0003\u0002\u0002\u0002\u001e\u0098",
+    "\u0003\u0002\u0002\u0002 \u009a\u0003\u0002\u0002\u0002\"\u009c\u0003",
+    "\u0002\u0002\u0002$\u009e\u0003\u0002\u0002\u0002&\u00b3\u0003\u0002",
+    "\u0002\u0002(\u00c8\u0003\u0002\u0002\u0002*-\u0005\u001e\u0010\u0002",
+    "+-\u0005\u001a\u000e\u0002,*\u0003\u0002\u0002\u0002,+\u0003\u0002\u0002",
+    "\u0002-0\u0003\u0002\u0002\u0002.,\u0003\u0002\u0002\u0002./\u0003\u0002",
+    "\u0002\u0002/2\u0003\u0002\u0002\u00020.\u0003\u0002\u0002\u000213\u0005",
+    "\"\u0012\u000221\u0003\u0002\u0002\u000223\u0003\u0002\u0002\u00023",
+    "8\u0003\u0002\u0002\u000247\u0005\u001e\u0010\u000257\u0005\u001a\u000e",
+    "\u000264\u0003\u0002\u0002\u000265\u0003\u0002\u0002\u00027:\u0003\u0002",
+    "\u0002\u000286\u0003\u0002\u0002\u000289\u0003\u0002\u0002\u00029>\u0003",
+    "\u0002\u0002\u0002:8\u0003\u0002\u0002\u0002;=\u0005\u0004\u0003\u0002",
+    "<;\u0003\u0002\u0002\u0002=@\u0003\u0002\u0002\u0002><\u0003\u0002\u0002",
+    "\u0002>?\u0003\u0002\u0002\u0002?\u0003\u0003\u0002\u0002\u0002@>\u0003",
+    "\u0002\u0002\u0002AC\u0005\b\u0005\u0002BA\u0003\u0002\u0002\u0002C",
+    "F\u0003\u0002\u0002\u0002DB\u0003\u0002\u0002\u0002DE\u0003\u0002\u0002",
+    "\u0002EG\u0003\u0002\u0002\u0002FD\u0003\u0002\u0002\u0002GK\u0005\u0006",
+    "\u0004\u0002HJ\u0005\b\u0005\u0002IH\u0003\u0002\u0002\u0002JM\u0003",
+    "\u0002\u0002\u0002KI\u0003\u0002\u0002\u0002KL\u0003\u0002\u0002\u0002",
+    "L\u0005\u0003\u0002\u0002\u0002MK\u0003\u0002\u0002\u0002Nm\u0005&\u0014",
+    "\u0002Om\u0005(\u0015\u0002PQ\u0007\r\u0002\u0002QU\u0005\u0018\r\u0002",
+    "RT\u0005\n\u0006\u0002SR\u0003\u0002\u0002\u0002TW\u0003\u0002\u0002",
+    "\u0002US\u0003\u0002\u0002\u0002UV\u0003\u0002\u0002\u0002VX\u0003\u0002",
+    "\u0002\u0002WU\u0003\u0002\u0002\u0002XY\u0007\u001b\u0002\u0002Ym\u0003",
+    "\u0002\u0002\u0002Z[\u0007\r\u0002\u0002[\\\u0007\u001d\u0002\u0002",
+    "\\^\u0005\u0018\r\u0002]_\u0007\b\u0002\u0002^]\u0003\u0002\u0002\u0002",
+    "^_\u0003\u0002\u0002\u0002_`\u0003\u0002\u0002\u0002`a\u0007\u001b\u0002",
+    "\u0002am\u0003\u0002\u0002\u0002bc\u0007\r\u0002\u0002cg\u0005\u0018",
+    "\r\u0002df\u0005\n\u0006\u0002ed\u0003\u0002\u0002\u0002fi\u0003\u0002",
+    "\u0002\u0002ge\u0003\u0002\u0002\u0002gh\u0003\u0002\u0002\u0002hj\u0003",
+    "\u0002\u0002\u0002ig\u0003\u0002\u0002\u0002jk\u0007\u001c\u0002\u0002",
+    "km\u0003\u0002\u0002\u0002lN\u0003\u0002\u0002\u0002lO\u0003\u0002\u0002",
+    "\u0002lP\u0003\u0002\u0002\u0002lZ\u0003\u0002\u0002\u0002lb\u0003\u0002",
+    "\u0002\u0002m\u0007\u0003\u0002\u0002\u0002nr\u0005\u001a\u000e\u0002",
+    "or\u0005 \u0011\u0002pr\u0005\u001e\u0010\u0002qn\u0003\u0002\u0002",
+    "\u0002qo\u0003\u0002\u0002\u0002qp\u0003\u0002\u0002\u0002r\t\u0003",
+    "\u0002\u0002\u0002st\u0005\u0010\t\u0002tu\u0007\u001e\u0002\u0002u",
+    "v\u0005\u0016\f\u0002vy\u0003\u0002\u0002\u0002wy\u0005\u0010\t\u0002",
+    "xs\u0003\u0002\u0002\u0002xw\u0003\u0002\u0002\u0002y\u000b\u0003\u0002",
+    "\u0002\u0002z{\u0005\u0012\n\u0002{|\u0007\u0012\u0002\u0002|}\u0005",
+    "\u0016\f\u0002}\u0080\u0003\u0002\u0002\u0002~\u0080\u0005\u0012\n\u0002",
+    "\u007fz\u0003\u0002\u0002\u0002\u007f~\u0003\u0002\u0002\u0002\u0080",
+    "\r\u0003\u0002\u0002\u0002\u0081\u0082\u0005\u0014\u000b\u0002\u0082",
+    "\u0083\u0007\u0018\u0002\u0002\u0083\u0084\u0005\u0016\f\u0002\u0084",
+    "\u0087\u0003\u0002\u0002\u0002\u0085\u0087\u0005\u0014\u000b\u0002\u0086",
+    "\u0081\u0003\u0002\u0002\u0002\u0086\u0085\u0003\u0002\u0002\u0002\u0087",
+    "\u000f\u0003\u0002\u0002\u0002\u0088\u0089\u0007\u001f\u0002\u0002\u0089",
+    "\u0011\u0003\u0002\u0002\u0002\u008a\u008b\u0007\u0013\u0002\u0002\u008b",
+    "\u0013\u0003\u0002\u0002\u0002\u008c\u008d\u0007\u0019\u0002\u0002\u008d",
+    "\u0015\u0003\u0002\u0002\u0002\u008e\u008f\u0007#\u0002\u0002\u008f",
+    "\u0017\u0003\u0002\u0002\u0002\u0090\u0091\u0007\u001f\u0002\u0002\u0091",
+    "\u0019\u0003\u0002\u0002\u0002\u0092\u0093\t\u0002\u0002\u0002\u0093",
+    "\u001b\u0003\u0002\u0002\u0002\u0094\u0097\u0005\u001e\u0010\u0002\u0095",
+    "\u0097\u0007\b\u0002\u0002\u0096\u0094\u0003\u0002\u0002\u0002\u0096",
+    "\u0095\u0003\u0002\u0002\u0002\u0097\u001d\u0003\u0002\u0002\u0002\u0098",
+    "\u0099\t\u0003\u0002\u0002\u0099\u001f\u0003\u0002\u0002\u0002\u009a",
+    "\u009b\u0007\u0006\u0002\u0002\u009b!\u0003\u0002\u0002\u0002\u009c",
+    "\u009d\u0007\u0007\u0002\u0002\u009d#\u0003\u0002\u0002\u0002\u009e",
+    "\u009f\u0007\u0005\u0002\u0002\u009f%\u0003\u0002\u0002\u0002\u00a0",
+    "\u00a2\u0007\t\u0002\u0002\u00a1\u00a3\u0005\f\u0007\u0002\u00a2\u00a1",
+    "\u0003\u0002\u0002\u0002\u00a3\u00a4\u0003\u0002\u0002\u0002\u00a4\u00a2",
+    "\u0003\u0002\u0002\u0002\u00a4\u00a5\u0003\u0002\u0002\u0002\u00a5\u00a6",
+    "\u0003\u0002\u0002\u0002\u00a6\u00a7\u0007\u000f\u0002\u0002\u00a7\u00a8",
+    "\u0007!\u0002\u0002\u00a8\u00b4\u0003\u0002\u0002\u0002\u00a9\u00ab",
+    "\u0007\t\u0002\u0002\u00aa\u00ac\u0005\f\u0007\u0002\u00ab\u00aa\u0003",
+    "\u0002\u0002\u0002\u00ac\u00ad\u0003\u0002\u0002\u0002\u00ad\u00ab\u0003",
+    "\u0002\u0002\u0002\u00ad\u00ae\u0003\u0002\u0002\u0002\u00ae\u00af\u0003",
+    "\u0002\u0002\u0002\u00af\u00b0\u0007\u0010\u0002\u0002\u00b0\u00b4\u0003",
+    "\u0002\u0002\u0002\u00b1\u00b2\u0007\n\u0002\u0002\u00b2\u00b4\u0007",
+    "!\u0002\u0002\u00b3\u00a0\u0003\u0002\u0002\u0002\u00b3\u00a9\u0003",
+    "\u0002\u0002\u0002\u00b3\u00b1\u0003\u0002\u0002\u0002\u00b4\'\u0003",
+    "\u0002\u0002\u0002\u00b5\u00b7\u0007\u000b\u0002\u0002\u00b6\u00b8\u0005",
+    "\u000e\b\u0002\u00b7\u00b6\u0003\u0002\u0002\u0002\u00b8\u00b9\u0003",
+    "\u0002\u0002\u0002\u00b9\u00b7\u0003\u0002\u0002\u0002\u00b9\u00ba\u0003",
+    "\u0002\u0002\u0002\u00ba\u00bb\u0003\u0002\u0002\u0002\u00bb\u00bc\u0007",
+    "\u0015\u0002\u0002\u00bc\u00bd\u0007\"\u0002\u0002\u00bd\u00c9\u0003",
+    "\u0002\u0002\u0002\u00be\u00c0\u0007\u000b\u0002\u0002\u00bf\u00c1\u0005",
+    "\u000e\b\u0002\u00c0\u00bf\u0003\u0002\u0002\u0002\u00c1\u00c2\u0003",
+    "\u0002\u0002\u0002\u00c2\u00c0\u0003\u0002\u0002\u0002\u00c2\u00c3\u0003",
+    "\u0002\u0002\u0002\u00c3\u00c4\u0003\u0002\u0002\u0002\u00c4\u00c5\u0007",
+    "\u0016\u0002\u0002\u00c5\u00c9\u0003\u0002\u0002\u0002\u00c6\u00c7\u0007",
+    "\f\u0002\u0002\u00c7\u00c9\u0007\"\u0002\u0002\u00c8\u00b5\u0003\u0002",
+    "\u0002\u0002\u00c8\u00be\u0003\u0002\u0002\u0002\u00c8\u00c6\u0003\u0002",
+    "\u0002\u0002\u00c9)\u0003\u0002\u0002\u0002\u0019,.268>DKU^glqx\u007f",
+    "\u0086\u0096\u00a4\u00ad\u00b3\u00b9\u00c2\u00c8"].join("");
 
 
 var atn = new antlr4.atn.ATNDeserializer().deserialize(serializedATN);
@@ -390,7 +376,7 @@ HTMLParser.prototype.htmlDocument = function() {
         this.state = 60;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
-        while((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << HTMLParser.HTML_COMMENT) | (1 << HTMLParser.HTML_CONDITIONAL_COMMENT) | (1 << HTMLParser.SEA_WS) | (1 << HTMLParser.SCRIPT_OPEN) | (1 << HTMLParser.SCRIPT_NOATTRS) | (1 << HTMLParser.STYLE_OPEN) | (1 << HTMLParser.STYLE_NOATTRS) | (1 << HTMLParser.TAG_OPEN))) !== 0)) {
+        while((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << HTMLParser.HTML_COMMENT) | (1 << HTMLParser.HTML_CONDITIONAL_COMMENT) | (1 << HTMLParser.CDATA) | (1 << HTMLParser.SEA_WS) | (1 << HTMLParser.SCRIPT_OPEN) | (1 << HTMLParser.SCRIPT_NOATTRS) | (1 << HTMLParser.STYLE_OPEN) | (1 << HTMLParser.STYLE_NOATTRS) | (1 << HTMLParser.TAG_OPEN) | (1 << HTMLParser.HTML_TEXT))) !== 0)) {
             this.state = 57;
             this.htmlElements();
             this.state = 62;
@@ -431,14 +417,14 @@ HtmlElementsContext.prototype.htmlElement = function() {
     return this.getTypedRuleContext(HtmlElementContext,0);
 };
 
-HtmlElementsContext.prototype.htmlMisc = function(i) {
+HtmlElementsContext.prototype.htmlContent = function(i) {
     if(i===undefined) {
         i = null;
     }
     if(i===null) {
-        return this.getTypedRuleContexts(HtmlMiscContext);
+        return this.getTypedRuleContexts(HtmlContentContext);
     } else {
-        return this.getTypedRuleContext(HtmlMiscContext,i);
+        return this.getTypedRuleContext(HtmlContentContext,i);
     }
 };
 
@@ -469,9 +455,9 @@ HTMLParser.prototype.htmlElements = function() {
         this.state = 66;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
-        while((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << HTMLParser.HTML_COMMENT) | (1 << HTMLParser.HTML_CONDITIONAL_COMMENT) | (1 << HTMLParser.SEA_WS))) !== 0)) {
+        while((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << HTMLParser.HTML_COMMENT) | (1 << HTMLParser.HTML_CONDITIONAL_COMMENT) | (1 << HTMLParser.CDATA) | (1 << HTMLParser.SEA_WS) | (1 << HTMLParser.HTML_TEXT))) !== 0)) {
             this.state = 63;
-            this.htmlMisc();
+            this.htmlContent();
             this.state = 68;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
@@ -484,7 +470,7 @@ HTMLParser.prototype.htmlElements = function() {
         while(_alt!=2 && _alt!=antlr4.atn.ATN.INVALID_ALT_NUMBER) {
             if(_alt===1) {
                 this.state = 70;
-                this.htmlMisc(); 
+                this.htmlContent(); 
             }
             this.state = 75;
             this._errHandler.sync(this);
@@ -525,47 +511,20 @@ HtmlElementContext.prototype.script = function() {
     return this.getTypedRuleContext(ScriptContext,0);
 };
 
-HtmlElementContext.prototype.TAG_OPEN = function(i) {
-	if(i===undefined) {
-		i = null;
-	}
-    if(i===null) {
-        return this.getTokens(HTMLParser.TAG_OPEN);
-    } else {
-        return this.getToken(HTMLParser.TAG_OPEN, i);
-    }
+HtmlElementContext.prototype.style = function() {
+    return this.getTypedRuleContext(StyleContext,0);
 };
 
-
-HtmlElementContext.prototype.htmlTagName = function(i) {
-    if(i===undefined) {
-        i = null;
-    }
-    if(i===null) {
-        return this.getTypedRuleContexts(HtmlTagNameContext);
-    } else {
-        return this.getTypedRuleContext(HtmlTagNameContext,i);
-    }
+HtmlElementContext.prototype.TAG_OPEN = function() {
+    return this.getToken(HTMLParser.TAG_OPEN, 0);
 };
 
-HtmlElementContext.prototype.TAG_CLOSE = function(i) {
-	if(i===undefined) {
-		i = null;
-	}
-    if(i===null) {
-        return this.getTokens(HTMLParser.TAG_CLOSE);
-    } else {
-        return this.getToken(HTMLParser.TAG_CLOSE, i);
-    }
+HtmlElementContext.prototype.htmlTagName = function() {
+    return this.getTypedRuleContext(HtmlTagNameContext,0);
 };
 
-
-HtmlElementContext.prototype.htmlContent = function() {
-    return this.getTypedRuleContext(HtmlContentContext,0);
-};
-
-HtmlElementContext.prototype.TAG_SLASH = function() {
-    return this.getToken(HTMLParser.TAG_SLASH, 0);
+HtmlElementContext.prototype.TAG_CLOSE = function() {
+    return this.getToken(HTMLParser.TAG_CLOSE, 0);
 };
 
 HtmlElementContext.prototype.htmlAttribute = function(i) {
@@ -579,12 +538,16 @@ HtmlElementContext.prototype.htmlAttribute = function(i) {
     }
 };
 
-HtmlElementContext.prototype.TAG_SLASH_CLOSE = function() {
-    return this.getToken(HTMLParser.TAG_SLASH_CLOSE, 0);
+HtmlElementContext.prototype.TAG_SLASH = function() {
+    return this.getToken(HTMLParser.TAG_SLASH, 0);
 };
 
-HtmlElementContext.prototype.style = function() {
-    return this.getTypedRuleContext(StyleContext,0);
+HtmlElementContext.prototype.SEA_WS = function() {
+    return this.getToken(HTMLParser.SEA_WS, 0);
+};
+
+HtmlElementContext.prototype.TAG_SLASH_CLOSE = function() {
+    return this.getToken(HTMLParser.TAG_SLASH_CLOSE, 0);
 };
 
 HtmlElementContext.prototype.enterRule = function(listener) {
@@ -610,7 +573,7 @@ HTMLParser.prototype.htmlElement = function() {
     this.enterRule(localctx, 4, HTMLParser.RULE_htmlElement);
     var _la = 0; // Token type
     try {
-        this.state = 113;
+        this.state = 106;
         this._errHandler.sync(this);
         var la_ = this._interp.adaptivePredict(this._input,11,this._ctx);
         switch(la_) {
@@ -623,77 +586,67 @@ HTMLParser.prototype.htmlElement = function() {
         case 2:
             this.enterOuterAlt(localctx, 2);
             this.state = 77;
-            this.match(HTMLParser.TAG_OPEN);
-            this.state = 78;
-            this.htmlTagName();
-            this.state = 82;
-            this._errHandler.sync(this);
-            _la = this._input.LA(1);
-            while(_la===HTMLParser.TAG_NAME) {
-                this.state = 79;
-                this.htmlAttribute();
-                this.state = 84;
-                this._errHandler.sync(this);
-                _la = this._input.LA(1);
-            }
-            this.state = 85;
-            this.match(HTMLParser.TAG_CLOSE);
-            this.state = 86;
-            this.htmlContent();
-            this.state = 87;
-            this.match(HTMLParser.TAG_OPEN);
-            this.state = 88;
-            this.match(HTMLParser.TAG_SLASH);
-            this.state = 89;
-            this.htmlTagName();
-            this.state = 90;
-            this.match(HTMLParser.TAG_CLOSE);
+            this.style();
             break;
 
         case 3:
             this.enterOuterAlt(localctx, 3);
-            this.state = 92;
+            this.state = 78;
             this.match(HTMLParser.TAG_OPEN);
-            this.state = 93;
+            this.state = 79;
             this.htmlTagName();
-            this.state = 97;
+            this.state = 83;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
             while(_la===HTMLParser.TAG_NAME) {
-                this.state = 94;
+                this.state = 80;
                 this.htmlAttribute();
-                this.state = 99;
+                this.state = 85;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
             }
-            this.state = 100;
-            this.match(HTMLParser.TAG_SLASH_CLOSE);
+            this.state = 86;
+            this.match(HTMLParser.TAG_CLOSE);
             break;
 
         case 4:
             this.enterOuterAlt(localctx, 4);
-            this.state = 102;
+            this.state = 88;
             this.match(HTMLParser.TAG_OPEN);
-            this.state = 103;
+            this.state = 89;
+            this.match(HTMLParser.TAG_SLASH);
+            this.state = 90;
             this.htmlTagName();
-            this.state = 107;
+            this.state = 92;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
-            while(_la===HTMLParser.TAG_NAME) {
-                this.state = 104;
-                this.htmlAttribute();
-                this.state = 109;
-                this._errHandler.sync(this);
-                _la = this._input.LA(1);
+            if(_la===HTMLParser.SEA_WS) {
+                this.state = 91;
+                this.match(HTMLParser.SEA_WS);
             }
-            this.state = 110;
+
+            this.state = 94;
             this.match(HTMLParser.TAG_CLOSE);
             break;
 
         case 5:
             this.enterOuterAlt(localctx, 5);
-            this.state = 112;
-            this.style();
+            this.state = 96;
+            this.match(HTMLParser.TAG_OPEN);
+            this.state = 97;
+            this.htmlTagName();
+            this.state = 101;
+            this._errHandler.sync(this);
+            _la = this._input.LA(1);
+            while(_la===HTMLParser.TAG_NAME) {
+                this.state = 98;
+                this.htmlAttribute();
+                this.state = 103;
+                this._errHandler.sync(this);
+                _la = this._input.LA(1);
+            }
+            this.state = 104;
+            this.match(HTMLParser.TAG_SLASH_CLOSE);
             break;
 
         }
@@ -727,48 +680,16 @@ function HtmlContentContext(parser, parent, invokingState) {
 HtmlContentContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 HtmlContentContext.prototype.constructor = HtmlContentContext;
 
-HtmlContentContext.prototype.htmlChardata = function(i) {
-    if(i===undefined) {
-        i = null;
-    }
-    if(i===null) {
-        return this.getTypedRuleContexts(HtmlChardataContext);
-    } else {
-        return this.getTypedRuleContext(HtmlChardataContext,i);
-    }
+HtmlContentContext.prototype.htmlChardata = function() {
+    return this.getTypedRuleContext(HtmlChardataContext,0);
 };
 
-HtmlContentContext.prototype.htmlElement = function(i) {
-    if(i===undefined) {
-        i = null;
-    }
-    if(i===null) {
-        return this.getTypedRuleContexts(HtmlElementContext);
-    } else {
-        return this.getTypedRuleContext(HtmlElementContext,i);
-    }
+HtmlContentContext.prototype.xhtmlCDATA = function() {
+    return this.getTypedRuleContext(XhtmlCDATAContext,0);
 };
 
-HtmlContentContext.prototype.xhtmlCDATA = function(i) {
-    if(i===undefined) {
-        i = null;
-    }
-    if(i===null) {
-        return this.getTypedRuleContexts(XhtmlCDATAContext);
-    } else {
-        return this.getTypedRuleContext(XhtmlCDATAContext,i);
-    }
-};
-
-HtmlContentContext.prototype.htmlComment = function(i) {
-    if(i===undefined) {
-        i = null;
-    }
-    if(i===null) {
-        return this.getTypedRuleContexts(HtmlCommentContext);
-    } else {
-        return this.getTypedRuleContext(HtmlCommentContext,i);
-    }
+HtmlContentContext.prototype.htmlComment = function() {
+    return this.getTypedRuleContext(HtmlCommentContext,0);
 };
 
 HtmlContentContext.prototype.enterRule = function(listener) {
@@ -792,59 +713,30 @@ HTMLParser.prototype.htmlContent = function() {
 
     var localctx = new HtmlContentContext(this, this._ctx, this.state);
     this.enterRule(localctx, 6, HTMLParser.RULE_htmlContent);
-    var _la = 0; // Token type
     try {
-        this.enterOuterAlt(localctx, 1);
-        this.state = 116;
+        this.state = 111;
         this._errHandler.sync(this);
-        _la = this._input.LA(1);
-        if(_la===HTMLParser.SEA_WS || _la===HTMLParser.HTML_TEXT) {
-            this.state = 115;
+        switch(this._input.LA(1)) {
+        case HTMLParser.SEA_WS:
+        case HTMLParser.HTML_TEXT:
+            this.enterOuterAlt(localctx, 1);
+            this.state = 108;
             this.htmlChardata();
+            break;
+        case HTMLParser.CDATA:
+            this.enterOuterAlt(localctx, 2);
+            this.state = 109;
+            this.xhtmlCDATA();
+            break;
+        case HTMLParser.HTML_COMMENT:
+        case HTMLParser.HTML_CONDITIONAL_COMMENT:
+            this.enterOuterAlt(localctx, 3);
+            this.state = 110;
+            this.htmlComment();
+            break;
+        default:
+            throw new antlr4.error.NoViableAltException(this);
         }
-
-        this.state = 128;
-        this._errHandler.sync(this);
-        var _alt = this._interp.adaptivePredict(this._input,15,this._ctx)
-        while(_alt!=2 && _alt!=antlr4.atn.ATN.INVALID_ALT_NUMBER) {
-            if(_alt===1) {
-                this.state = 121;
-                this._errHandler.sync(this);
-                switch(this._input.LA(1)) {
-                case HTMLParser.SCRIPT_OPEN:
-                case HTMLParser.SCRIPT_NOATTRS:
-                case HTMLParser.STYLE_OPEN:
-                case HTMLParser.STYLE_NOATTRS:
-                case HTMLParser.TAG_OPEN:
-                    this.state = 118;
-                    this.htmlElement();
-                    break;
-                case HTMLParser.CDATA:
-                    this.state = 119;
-                    this.xhtmlCDATA();
-                    break;
-                case HTMLParser.HTML_COMMENT:
-                case HTMLParser.HTML_CONDITIONAL_COMMENT:
-                    this.state = 120;
-                    this.htmlComment();
-                    break;
-                default:
-                    throw new antlr4.error.NoViableAltException(this);
-                }
-                this.state = 124;
-                this._errHandler.sync(this);
-                _la = this._input.LA(1);
-                if(_la===HTMLParser.SEA_WS || _la===HTMLParser.HTML_TEXT) {
-                    this.state = 123;
-                    this.htmlChardata();
-                }
-         
-            }
-            this.state = 130;
-            this._errHandler.sync(this);
-            _alt = this._interp.adaptivePredict(this._input,15,this._ctx);
-        }
-
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
 	        localctx.exception = re;
@@ -909,23 +801,23 @@ HTMLParser.prototype.htmlAttribute = function() {
     var localctx = new HtmlAttributeContext(this, this._ctx, this.state);
     this.enterRule(localctx, 8, HTMLParser.RULE_htmlAttribute);
     try {
-        this.state = 136;
+        this.state = 118;
         this._errHandler.sync(this);
-        var la_ = this._interp.adaptivePredict(this._input,16,this._ctx);
+        var la_ = this._interp.adaptivePredict(this._input,13,this._ctx);
         switch(la_) {
         case 1:
             this.enterOuterAlt(localctx, 1);
-            this.state = 131;
+            this.state = 113;
             this.htmlAttributeName();
-            this.state = 132;
+            this.state = 114;
             this.match(HTMLParser.TAG_EQUALS);
-            this.state = 133;
+            this.state = 115;
             this.htmlAttributeValue();
             break;
 
         case 2:
             this.enterOuterAlt(localctx, 2);
-            this.state = 135;
+            this.state = 117;
             this.htmlAttributeName();
             break;
 
@@ -994,23 +886,23 @@ HTMLParser.prototype.htmlScriptAttribute = function() {
     var localctx = new HtmlScriptAttributeContext(this, this._ctx, this.state);
     this.enterRule(localctx, 10, HTMLParser.RULE_htmlScriptAttribute);
     try {
-        this.state = 143;
+        this.state = 125;
         this._errHandler.sync(this);
-        var la_ = this._interp.adaptivePredict(this._input,17,this._ctx);
+        var la_ = this._interp.adaptivePredict(this._input,14,this._ctx);
         switch(la_) {
         case 1:
             this.enterOuterAlt(localctx, 1);
-            this.state = 138;
+            this.state = 120;
             this.htmlScriptAttributeName();
-            this.state = 139;
+            this.state = 121;
             this.match(HTMLParser.SCRIPT_TAG_EQUALS);
-            this.state = 140;
+            this.state = 122;
             this.htmlAttributeValue();
             break;
 
         case 2:
             this.enterOuterAlt(localctx, 2);
-            this.state = 142;
+            this.state = 124;
             this.htmlScriptAttributeName();
             break;
 
@@ -1079,23 +971,23 @@ HTMLParser.prototype.htmlStyleAttribute = function() {
     var localctx = new HtmlStyleAttributeContext(this, this._ctx, this.state);
     this.enterRule(localctx, 12, HTMLParser.RULE_htmlStyleAttribute);
     try {
-        this.state = 150;
+        this.state = 132;
         this._errHandler.sync(this);
-        var la_ = this._interp.adaptivePredict(this._input,18,this._ctx);
+        var la_ = this._interp.adaptivePredict(this._input,15,this._ctx);
         switch(la_) {
         case 1:
             this.enterOuterAlt(localctx, 1);
-            this.state = 145;
+            this.state = 127;
             this.htmlStyleAttributeName();
-            this.state = 146;
+            this.state = 128;
             this.match(HTMLParser.STYLE_TAG_EQUALS);
-            this.state = 147;
+            this.state = 129;
             this.htmlAttributeValue();
             break;
 
         case 2:
             this.enterOuterAlt(localctx, 2);
-            this.state = 149;
+            this.state = 131;
             this.htmlStyleAttributeName();
             break;
 
@@ -1157,7 +1049,7 @@ HTMLParser.prototype.htmlAttributeName = function() {
     this.enterRule(localctx, 14, HTMLParser.RULE_htmlAttributeName);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 152;
+        this.state = 134;
         this.match(HTMLParser.TAG_NAME);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1216,7 +1108,7 @@ HTMLParser.prototype.htmlScriptAttributeName = function() {
     this.enterRule(localctx, 16, HTMLParser.RULE_htmlScriptAttributeName);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 154;
+        this.state = 136;
         this.match(HTMLParser.SCRIPT_TAG_NAME);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1275,7 +1167,7 @@ HTMLParser.prototype.htmlStyleAttributeName = function() {
     this.enterRule(localctx, 18, HTMLParser.RULE_htmlStyleAttributeName);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 156;
+        this.state = 138;
         this.match(HTMLParser.STYLE_TAG_NAME);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1334,7 +1226,7 @@ HTMLParser.prototype.htmlAttributeValue = function() {
     this.enterRule(localctx, 20, HTMLParser.RULE_htmlAttributeValue);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 158;
+        this.state = 140;
         this.match(HTMLParser.ATTVALUE_VALUE);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1393,7 +1285,7 @@ HTMLParser.prototype.htmlTagName = function() {
     this.enterRule(localctx, 22, HTMLParser.RULE_htmlTagName);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 160;
+        this.state = 142;
         this.match(HTMLParser.TAG_NAME);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1457,7 +1349,7 @@ HTMLParser.prototype.htmlChardata = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 162;
+        this.state = 144;
         _la = this._input.LA(1);
         if(!(_la===HTMLParser.SEA_WS || _la===HTMLParser.HTML_TEXT)) {
         this._errHandler.recoverInline(this);
@@ -1526,18 +1418,18 @@ HTMLParser.prototype.htmlMisc = function() {
     var localctx = new HtmlMiscContext(this, this._ctx, this.state);
     this.enterRule(localctx, 26, HTMLParser.RULE_htmlMisc);
     try {
-        this.state = 166;
+        this.state = 148;
         this._errHandler.sync(this);
         switch(this._input.LA(1)) {
         case HTMLParser.HTML_COMMENT:
         case HTMLParser.HTML_CONDITIONAL_COMMENT:
             this.enterOuterAlt(localctx, 1);
-            this.state = 164;
+            this.state = 146;
             this.htmlComment();
             break;
         case HTMLParser.SEA_WS:
             this.enterOuterAlt(localctx, 2);
-            this.state = 165;
+            this.state = 147;
             this.match(HTMLParser.SEA_WS);
             break;
         default:
@@ -1605,7 +1497,7 @@ HTMLParser.prototype.htmlComment = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 168;
+        this.state = 150;
         _la = this._input.LA(1);
         if(!(_la===HTMLParser.HTML_COMMENT || _la===HTMLParser.HTML_CONDITIONAL_COMMENT)) {
         this._errHandler.recoverInline(this);
@@ -1671,7 +1563,7 @@ HTMLParser.prototype.xhtmlCDATA = function() {
     this.enterRule(localctx, 30, HTMLParser.RULE_xhtmlCDATA);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 170;
+        this.state = 152;
         this.match(HTMLParser.CDATA);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1730,7 +1622,7 @@ HTMLParser.prototype.dtd = function() {
     this.enterRule(localctx, 32, HTMLParser.RULE_dtd);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 172;
+        this.state = 154;
         this.match(HTMLParser.DTD);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1789,7 +1681,7 @@ HTMLParser.prototype.xml = function() {
     this.enterRule(localctx, 34, HTMLParser.RULE_xml);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 174;
+        this.state = 156;
         this.match(HTMLParser.XML_DECLARATION);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1875,53 +1767,53 @@ HTMLParser.prototype.script = function() {
     this.enterRule(localctx, 36, HTMLParser.RULE_script);
     var _la = 0; // Token type
     try {
-        this.state = 195;
+        this.state = 177;
         this._errHandler.sync(this);
-        var la_ = this._interp.adaptivePredict(this._input,22,this._ctx);
+        var la_ = this._interp.adaptivePredict(this._input,19,this._ctx);
         switch(la_) {
         case 1:
             this.enterOuterAlt(localctx, 1);
-            this.state = 176;
+            this.state = 158;
             this.match(HTMLParser.SCRIPT_OPEN);
-            this.state = 178; 
+            this.state = 160; 
             this._errHandler.sync(this);
             _la = this._input.LA(1);
             do {
-                this.state = 177;
+                this.state = 159;
                 this.htmlScriptAttribute();
-                this.state = 180; 
+                this.state = 162; 
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
             } while(_la===HTMLParser.SCRIPT_TAG_NAME);
-            this.state = 182;
+            this.state = 164;
             this.match(HTMLParser.SCRIPT_TAG_CLOSE);
-            this.state = 183;
+            this.state = 165;
             this.match(HTMLParser.SCRIPT_BODY);
             break;
 
         case 2:
             this.enterOuterAlt(localctx, 2);
-            this.state = 185;
+            this.state = 167;
             this.match(HTMLParser.SCRIPT_OPEN);
-            this.state = 187; 
+            this.state = 169; 
             this._errHandler.sync(this);
             _la = this._input.LA(1);
             do {
-                this.state = 186;
+                this.state = 168;
                 this.htmlScriptAttribute();
-                this.state = 189; 
+                this.state = 171; 
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
             } while(_la===HTMLParser.SCRIPT_TAG_NAME);
-            this.state = 191;
+            this.state = 173;
             this.match(HTMLParser.SCRIPT_TAG_SLASH_CLOSE);
             break;
 
         case 3:
             this.enterOuterAlt(localctx, 3);
-            this.state = 193;
+            this.state = 175;
             this.match(HTMLParser.SCRIPT_NOATTRS);
-            this.state = 194;
+            this.state = 176;
             this.match(HTMLParser.SCRIPT_BODY);
             break;
 
@@ -2010,53 +1902,53 @@ HTMLParser.prototype.style = function() {
     this.enterRule(localctx, 38, HTMLParser.RULE_style);
     var _la = 0; // Token type
     try {
-        this.state = 216;
+        this.state = 198;
         this._errHandler.sync(this);
-        var la_ = this._interp.adaptivePredict(this._input,25,this._ctx);
+        var la_ = this._interp.adaptivePredict(this._input,22,this._ctx);
         switch(la_) {
         case 1:
             this.enterOuterAlt(localctx, 1);
-            this.state = 197;
+            this.state = 179;
             this.match(HTMLParser.STYLE_OPEN);
-            this.state = 199; 
+            this.state = 181; 
             this._errHandler.sync(this);
             _la = this._input.LA(1);
             do {
-                this.state = 198;
+                this.state = 180;
                 this.htmlStyleAttribute();
-                this.state = 201; 
+                this.state = 183; 
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
             } while(_la===HTMLParser.STYLE_TAG_NAME);
-            this.state = 203;
+            this.state = 185;
             this.match(HTMLParser.STYLE_TAG_CLOSE);
-            this.state = 204;
+            this.state = 186;
             this.match(HTMLParser.STYLE_BODY);
             break;
 
         case 2:
             this.enterOuterAlt(localctx, 2);
-            this.state = 206;
+            this.state = 188;
             this.match(HTMLParser.STYLE_OPEN);
-            this.state = 208; 
+            this.state = 190; 
             this._errHandler.sync(this);
             _la = this._input.LA(1);
             do {
-                this.state = 207;
+                this.state = 189;
                 this.htmlStyleAttribute();
-                this.state = 210; 
+                this.state = 192; 
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
             } while(_la===HTMLParser.STYLE_TAG_NAME);
-            this.state = 212;
+            this.state = 194;
             this.match(HTMLParser.STYLE_TAG_SLASH_CLOSE);
             break;
 
         case 3:
             this.enterOuterAlt(localctx, 3);
-            this.state = 214;
+            this.state = 196;
             this.match(HTMLParser.STYLE_NOATTRS);
-            this.state = 215;
+            this.state = 197;
             this.match(HTMLParser.STYLE_BODY);
             break;
 

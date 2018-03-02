@@ -35,19 +35,21 @@ htmlDocument
     ;
 
 htmlElements
-    : htmlMisc* htmlElement htmlMisc*
+    : htmlContent* htmlElement htmlContent*
     ;
 
 htmlElement
     : script
-    | TAG_OPEN htmlTagName htmlAttribute* TAG_CLOSE htmlContent TAG_OPEN TAG_SLASH htmlTagName TAG_CLOSE
-    | TAG_OPEN htmlTagName htmlAttribute* TAG_SLASH_CLOSE
-    | TAG_OPEN htmlTagName htmlAttribute* TAG_CLOSE
     | style
+    | TAG_OPEN htmlTagName htmlAttribute* TAG_CLOSE
+    | TAG_OPEN TAG_SLASH htmlTagName SEA_WS? TAG_CLOSE
+    | TAG_OPEN htmlTagName htmlAttribute* TAG_SLASH_CLOSE
     ;
 
 htmlContent
-    : htmlChardata? ((htmlElement | xhtmlCDATA | htmlComment) htmlChardata?)*
+    : htmlChardata
+    | xhtmlCDATA
+    | htmlComment
     ;
 
 htmlAttribute

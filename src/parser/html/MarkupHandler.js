@@ -90,7 +90,7 @@ module.exports = class MarkupHandler {
         }
     }
 
-    onOpenTagEnd(isEmpty) {
+    onOpenTagEnd(isEmpty, isVoid) {
         const markup = isEmpty ? '/>' : '>';
         this._result += markup;
 
@@ -114,17 +114,19 @@ module.exports = class MarkupHandler {
         }
         plugin.beforeChildren(stream);
 
-        if (isEmpty) {
-            this._onEndTag(true);
+        if (isEmpty || isVoid) {
+            this._onEndTag(isEmpty, isVoid);
         }
     }
 
-    onCloseTag(tagName) {
-        this._result += `</${tagName}>`;
-        this._onEndTag(false);
+    onCloseTag(tagName, isVoid) {
+        if (!isVoid) {
+            this._result += `</${tagName}>`;
+            this._onEndTag(false, isVoid);
+        }
     }
 
-    _onEndTag(isEmpty) {
+    _onEndTag(isEmpty, isVoid) {
         const context = this._stack.pop();
         const plugin = context.plugin;
         const stream = this._stream;
