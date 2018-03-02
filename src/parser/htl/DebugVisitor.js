@@ -120,11 +120,10 @@ module.exports = class DebugVisitor {
         }
         else if (node instanceof RuntimeCall) {
             this.result += node.functionName + '(';
-            node.args.forEach((v, idx) => {
-                if (idx > 0) {
-                    this.result += ', ';
-                }
-                v.accept(this);
+            node.expression.accept(this);
+            Object.keys(node.args).forEach(key => {
+                this.result += `, ${key}=`;
+                node.args[key].accept(this);
             });
             this.result += ')';
         }

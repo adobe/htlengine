@@ -53,6 +53,10 @@ module.exports = class Expression {
         return option in this._options;
     }
 
+    containsSomeOption(options) {
+        return options.some(opt => opt in this._options);
+    }
+
     /**
      * Removes the given option from this expression.
      *

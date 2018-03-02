@@ -28,14 +28,19 @@ module.exports = class RuntimeCall extends ExpressionNode {
      * @param {String} functionName the name of the function identifying the runtime call
      * @param {ExpressionNode...} args  the arguments passed to the runtime call
      */
-    constructor(functionName, args) {
+    constructor(functionName, expression, args) {
         super();
         this._functionName = functionName;
-        this._args = Array.prototype.slice.call(arguments, 1);
+        this._expression = expression;
+        this._args = args;
     }
 
     get functionName() {
         return this._functionName;
+    }
+
+    get expression() {
+        return this._expression;
     }
 
     get args() {

@@ -16,42 +16,42 @@
  *
  */
 
+const ExpressionContext = require('../html/ExpressionContext');
+const RuntimeCall = require('./nodes/RuntimeCall');
+
+const OPTIONS = [
+    {
+        fn: 'join',
+        options: ['join'],
+        condition: (expContext) =>
+               expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
+            && expContext !== ExpressionContext.PLUGIN_DATA_SLY_TEMPLATE
+            && expContext !== ExpressionContext.PLUGIN_DATA_SLY_CALL
+    }
+];
+
+
 /**
  * A filter is a transformation which performs modifications on expressions. Unlike plugins, filters are always applied on an expression.
  * Whether the filter transformation is actually necessary is decided by the filter. The application order of filters is given by filter
  * priority.
  */
-module.exports = class Filter {
+class OptionHandler {
 
-    /**
-     * Transform the given expression
-     *
-     * @param {Expression} expression        the original expression
-     * @param {ExpressionContext} expressionContext the expression's context
-     * @return {Expression} a transformed expression. If the filter is not applicable
-     * to the given expression, then the original expression shall be returned
-     */
     apply(expression, expressionContext) {
-        return null;
-    };
+        OPTIONS.forEach(opt => {
+            if (expression.containsSomeOption(opt.options) && opt.condition(expressionContext)) {
+                const args = {};
+                opt.options.forEach(k => {
+                    args[k] = expression.removeOption(k);
+                });
+                const translation = new RuntimeCall(opt.fn, expression.root, args);
+                expression = expression.withNode(translation);
+            }
+        });
+        return expression;
+    }
 
-    /**
-     * The priority with which filters are applied. This establishes order between filters. Filters with
-     * lower priority are applied first.
-     *
-     * @return {Number} an integer representing the filter's priority
-     */
-    priority() {
-        return 0;
-    };
-
-    /**
-     * Collects the options passed in the {@code options} array into a new map while removing them from the original expression.
-     *
-     * @param {Expression} expression the expression providing the options to be processed
-     * @param {String...} options    the options of interest for the {@link Filter}
-     * @return {*} a map with the retrieved options; the map can be empty if none of the options were found
-     */
     getFilterOptions(expression, options) {
         const result = {};
         Array.prototype.slice.call(arguments, 1).forEach(option => {
@@ -62,4 +62,8 @@ module.exports = class Filter {
         });
         return result;
     }
-};
+
+}
+
+module.exports = OptionHandler;
+module.exports.INSTANCE = new OptionHandler();

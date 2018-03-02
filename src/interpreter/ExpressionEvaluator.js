@@ -31,11 +31,10 @@ const UnaryOperation = require('../parser/htl/nodes/UnaryOperation');
 const TernaryOperation = require('../parser/htl/nodes/TernaryOperation');
 const RuntimeCall = require('../parser/htl/nodes/RuntimeCall');
 
-function exec(name, args) {
+function exec(name, value, options) {
     if (name === 'join') {
-        const array = args[0];
-        const delim = args[1] || ', ';
-        return array.join(delim);
+        const delim = options.join || ', ';
+        return value.join(delim);
     }
     throw new Error('Unknown runtime call: ' + name);
 }
@@ -123,11 +122,11 @@ module.exports = class ExpressionEvaluator {
         }
 
         if (node instanceof RuntimeCall) {
-            const args = [];
-            node.args.forEach(arg => {
-                args.push(arg.accept(this))
+            const args = {};
+            Object.keys(node.args).forEach(key => {
+               args[key] = node.args[key].accept(this);
             });
-            return exec(node.functionName, args);
+            return exec(node.functionName, node.expression.accept(this), args);
         }
 
         if (node instanceof NumericConstant) {

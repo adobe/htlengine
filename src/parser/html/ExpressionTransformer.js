@@ -20,6 +20,7 @@ const StringConstant = require('../htl/nodes/StringConstant');
 const Expression = require('../htl/nodes/Expression');
 const BinaryOperation = require('../htl/nodes/BinaryOperation');
 const BinaryOperator = require('../htl/nodes/BinaryOperator');
+const OptionHandler = require('../htl/OptionHandler');
 
 function _join(nodes) {
     if (nodes.length === 0) {
@@ -33,15 +34,6 @@ function _join(nodes) {
 }
 
 module.exports = class ExpressionTransformer {
-
-    constructor() {
-        this._filters = [];
-    }
-
-    withFilter(filter) {
-        this._filters.push(filter);
-        return this;
-    }
 
     transform(interpolation, markupContext, expressionContext) {
         const nodes = [];
@@ -74,7 +66,7 @@ module.exports = class ExpressionTransformer {
         if (markupContext != null && !expression.options['context']) {
             expression.options['context'] = new StringConstant(markupContext);
         }
-        return this._applyFilters(expression, expressionContext);
+        return OptionHandler.INSTANCE.apply(expression, expressionContext);
     }
 
 };

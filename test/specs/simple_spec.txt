@@ -57,7 +57,7 @@ TEXT('</p>');
 #
 Fruits: ${['Apple', 'Banana', 'Orange'] @ join='*'}
 ---
-VAR.START('var_0', ''Fruits: '+join(['Apple', 'Banana', 'Orange'], '*')')
+VAR.START('var_0', ''Fruits: '+join(['Apple', 'Banana', 'Orange'], join='*')')
 OUT(var_0)
 VAR.END()
 ===
@@ -67,7 +67,7 @@ Fruits: Apple*Banana*Orange
 #
 Fruits: ${properties.fruits @ join=properties.comma}
 ---
-VAR.START('var_0', ''Fruits: '+join(properties['fruits'], properties['comma'])')
+VAR.START('var_0', ''Fruits: '+join(properties['fruits'], join=properties['comma'])')
 OUT(var_0)
 VAR.END()
 ===
