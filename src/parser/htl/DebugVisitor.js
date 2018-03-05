@@ -49,7 +49,7 @@ module.exports = class DebugVisitor {
                 if (frag.expression) {
                     frag.expression.accept(this);
                 } else {
-                    this.result += frag.text;
+                    this.result += '' + frag.text;
                 }
             });
         }

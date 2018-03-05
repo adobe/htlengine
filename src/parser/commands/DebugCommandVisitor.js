@@ -51,6 +51,10 @@ module.exports = class DebugCommandVisitor {
             const exp = expression2text(cmd.expression);
             this._result += `VAR.START('${cmd.variableName}', '${exp}')\n`;
         }
+        else if (cmd instanceof VariableBinding.Global) {
+            const exp = expression2text(cmd.expression);
+            this._result += `VAR.GLOBAL('${cmd.variableName}', '${exp}')\n`;
+        }
         else if (cmd instanceof VariableBinding.End) {
             this._result += `VAR.END()\n`;
         }

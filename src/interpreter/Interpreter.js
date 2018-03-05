@@ -102,6 +102,13 @@ module.exports = class InterpretingCommandVisitor {
             }
             this._runtime.closeScope();
         }
+        else if (cmd instanceof VariableBinding.Global) {
+            if (this._isSuspended()) {
+                return;
+            }
+            const exp = new ExpressionEvaluator(this._runtime.scope).evaluate(cmd.expression);
+            this._runtime.global.setVariable(cmd.variableName, exp);
+        }
         else if (cmd instanceof Conditional.Start) {
             if (this._isSuspended()) {
                 this._condition.push(false);

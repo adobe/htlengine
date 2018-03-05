@@ -1,0 +1,17 @@
+#
+### String format
+#
+${'Asset {0}' @ format=properties.assetName}
+${'Asset {0}' @ format=[properties.assetName]}
+${'Asset {0} out of {1}' @ format=[properties.current, properties.total]}
+${properties.formatter @ format=[properties.current, properties.total]}
+===
+Asset Night Sky
+Asset Night Sky
+Asset 3 out of 5
+Asset 3 out of 5
+#
+### todo: number formats
+#
+### todo: date formats
+#

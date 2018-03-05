@@ -1,0 +1,52 @@
+#
+### simple test
+#
+<div data-sly-test="${properties.false0}">nope</div>
+<div data-sly-test="${properties.true0}">yeah!</div>
+---
+VAR.START('var_testVariable0', 'properties['false0']')
+COND.START('var_testVariable0' == 'true')
+TEXT('<div');
+TEXT('>');
+TEXT('nope');
+TEXT('</div>');
+COND.END()
+VAR.END()
+TEXT('
+');
+VAR.START('var_testVariable1', 'properties['true0']')
+COND.START('var_testVariable1' == 'true')
+TEXT('<div');
+TEXT('>');
+TEXT('yeah!');
+TEXT('</div>');
+COND.END()
+VAR.END()
+TEXT('
+');
+===
+
+<div>yeah!</div>
+#
+### test with variable
+#
+<div data-sly-test.mytest="${properties.true0}">It is true!</div>
+It was: ${mytest}
+---
+VAR.GLOBAL('mytest', 'properties['true0']')
+COND.START('mytest' == 'true')
+TEXT('<div');
+TEXT('>');
+TEXT('It is true!');
+TEXT('</div>');
+COND.END()
+VAR.START('var_0', ''
+It was: '+mytest+'
+'')
+OUT(var_0)
+VAR.END()
+===
+<div>It is true!</div>
+It was: hello
+#
+### todo: add recursive tests

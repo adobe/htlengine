@@ -76,11 +76,11 @@ function readTests(filename) {
         } else if (line.startsWith('===')) {
             test.output = ''
         } else if (test && ('output' in test)) {
-            test.output += line;
+            test.output += line + '\n';
         } else if (test && ('commands' in test)) {
             test.commands += line + '\n';
         } else if (test && ('input' in test)) {
-            test.input += line;
+            test.input += line + '\n';
         }
     });
     return tests;

@@ -27,9 +27,30 @@ const OPTIONS = [
                expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
             && expContext !== ExpressionContext.PLUGIN_DATA_SLY_TEMPLATE
             && expContext !== ExpressionContext.PLUGIN_DATA_SLY_CALL
+    }, {
+        fn: 'format',
+        options: ['format'],
+        condition: (expContext) =>
+               expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
+            && expContext !== ExpressionContext.PLUGIN_DATA_SLY_TEMPLATE
+            && expContext !== ExpressionContext.PLUGIN_DATA_SLY_CALL
+    }, {
+        fn: 'uriManipulation',
+        options: ['scheme', 'domain', 'path', 'appendPath', 'prependPath', 'selectors', 'addSelectors', 'removeSelectors',
+            'extension', 'suffix', 'prependSuffix', 'appendSuffix', 'fragment', 'query', 'addQuery', 'removeQuery'],
+        condition: (expContext) =>
+               expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
+            && expContext !== ExpressionContext.PLUGIN_DATA_SLY_TEMPLATE
+            && expContext !== ExpressionContext.PLUGIN_DATA_SLY_CALL
+    }, {
+        fn: 'xss',
+        options: ['context'],
+        condition: (expContext) =>
+               expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
+            && expContext !== ExpressionContext.PLUGIN_DATA_SLY_TEMPLATE
+            && expContext !== ExpressionContext.PLUGIN_DATA_SLY_CALL
     }
 ];
-
 
 /**
  * A filter is a transformation which performs modifications on expressions. Unlike plugins, filters are always applied on an expression.
@@ -43,7 +64,9 @@ class OptionHandler {
             if (expression.containsSomeOption(opt.options) && opt.condition(expressionContext)) {
                 const args = {};
                 opt.options.forEach(k => {
-                    args[k] = expression.removeOption(k);
+                    if (expression.containsOption(k)) {
+                        args[k] = expression.removeOption(k);
+                    }
                 });
                 const translation = new RuntimeCall(opt.fn, expression.root, args);
                 expression = expression.withNode(translation);
@@ -51,18 +74,6 @@ class OptionHandler {
         });
         return expression;
     }
-
-    getFilterOptions(expression, options) {
-        const result = {};
-        Array.prototype.slice.call(arguments, 1).forEach(option => {
-            const optionNode = expression.removeOption(option);
-            if (optionNode != null) {
-                result[option] = optionNode;
-            }
-        });
-        return result;
-    }
-
 }
 
 module.exports = OptionHandler;

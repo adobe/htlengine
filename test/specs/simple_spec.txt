@@ -3,7 +3,8 @@
 #
 Hello, World
 ---
-TEXT('Hello, World');
+TEXT('Hello, World
+');
 ===
 Hello, World
 #
@@ -11,7 +12,8 @@ Hello, World
 #
 Hello, ${world}.
 ---
-VAR.START('var_0', ''Hello, '+world+'.'')
+VAR.START('var_0', ''Hello, '+world+'.
+'')
 OUT(var_0)
 VAR.END()
 ===
@@ -23,7 +25,7 @@ Hello, Earth.
 ---
 TEXT('<p');
 TEXT('>');
-VAR.START('var_textContent0', ''Hello, world.'')
+VAR.START('var_textContent0', 'xss('Hello, world.', context='text')')
 OUT(var_textContent0)
 VAR.END()
 VAR.START('always_false', 'false')
@@ -32,6 +34,8 @@ TEXT('This text would never be shown.');
 COND.END()
 VAR.END()
 TEXT('</p>');
+TEXT('
+');
 ===
 <p>Hello, world.</p>
 #
@@ -41,7 +45,7 @@ TEXT('</p>');
 ---
 TEXT('<p');
 TEXT('>');
-VAR.START('var_textContent0', 'properties['title']')
+VAR.START('var_textContent0', 'xss(properties['title'], context='text')')
 OUT(var_textContent0)
 VAR.END()
 VAR.START('always_false', 'false')
@@ -50,6 +54,8 @@ TEXT('This text would never be shown.');
 COND.END()
 VAR.END()
 TEXT('</p>');
+TEXT('
+');
 ===
 <p>Hello, world.</p>
 #
@@ -57,7 +63,8 @@ TEXT('</p>');
 #
 Fruits: ${['Apple', 'Banana', 'Orange'] @ join='*'}
 ---
-VAR.START('var_0', ''Fruits: '+join(['Apple', 'Banana', 'Orange'], join='*')')
+VAR.START('var_0', ''Fruits: '+join(['Apple', 'Banana', 'Orange'], join='*')+'
+'')
 OUT(var_0)
 VAR.END()
 ===
@@ -67,9 +74,97 @@ Fruits: Apple*Banana*Orange
 #
 Fruits: ${properties.fruits @ join=properties.comma}
 ---
-VAR.START('var_0', ''Fruits: '+join(properties['fruits'], join=properties['comma'])')
+VAR.START('var_0', ''Fruits: '+join(properties['fruits'], join=properties['comma'])+'
+'')
 OUT(var_0)
 VAR.END()
 ===
 Fruits: Apple, Banana, Orange
 #
+### string OR
+#
+${properties.pageTitle || properties.title || 'string constant'}
+${properties.foo || properties.title || 'string constant'}
+${'string constant' || properties.pageTitle || properties.title}
+===
+Hello, world.
+bar
+string constant
+#
+### comparison
+#
+${nullValue1 == nullValue2}
+${nullValue1 != nullValue2}
+${stringValue1 == stringValue2}
+${stringValue1 != stringValue2}
+${stringValue1 != stringValue3}
+${numberValue1 < numberValue2}
+${numberValue1 <= numberValue2}
+${numberValue1 == numberValue2}
+${numberValue1 >= numberValue2}
+${numberValue1 > numberValue2}
+${numberValue1 != numberValue2}
+${booleanValue1 == booleanValue2}
+${booleanValue1 != booleanValue2}
+${stringValue1 == 'hello'}
+===
+true
+false
+true
+false
+true
+false
+true
+true
+true
+false
+false
+true
+false
+true
+#
+### boolean casting
+#
+${!0}
+${!''}
+${!""}
+${![]}
+${!"false"}
+${![0]}
+===
+true
+true
+true
+true
+false
+false
+#
+### string casting
+#
+${0}
+${true}
+${false}
+${[1, 2, 3]}
+${[true, false]}
+${['foo', 'bar']}
+${['foo', '']}
+===
+0
+true
+false
+1,2,3
+true,false
+foo,bar
+foo,
+#
+### comments
+#
+<!-- This is normal HTML comment -->
+<!--/* The content of this comment will be removed from the output. */-->
+<!-- Page title: ${properties.title} -->
+===
+<!-- This is normal HTML comment -->
+
+<!-- Page title: Hello, world. -->
+#
+###

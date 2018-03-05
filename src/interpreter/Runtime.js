@@ -39,4 +39,7 @@ module.exports = class Runtime {
         return this._scope;
     }
 
+    get global() {
+        return this._global;
+    }
 };

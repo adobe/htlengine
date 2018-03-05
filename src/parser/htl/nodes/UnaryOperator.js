@@ -26,6 +26,9 @@ module.exports = Object.freeze({
     NOT: {
         sym: '!',
         calc: (operand) => {
+            if (Array.isArray(operand)) {
+                return !operand.length;
+            }
             return !operand;
         }
     },

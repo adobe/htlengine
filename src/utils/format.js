@@ -15,32 +15,14 @@
  * limitations under the License.
  *
  */
-const MarkupHandler = require('./MarkupHandler');
-const CommandStream = require('../commands/CommandStream');
-const HTMLParser = require('./HTMLParser');
-
-
-module.exports = class TemplateParser {
-
-    /**
-     * @param {antlr4.error.ErrorListener} listener Error listener
-     * @returns {module.TemplateParser} This parser.
-     */
-    withErrorListener(listener) {
-        this._errorListener = listener;
-        return this;
+module.exports = function format(fmt, args) {
+    if (!Array.isArray(args)) {
+        args = [args];
     }
-
-    /**
-     * Parses the input and returns an the generated commands.
-     * @param {String} input Input text
-     * @return {Command[]} The generated commands
-     */
-    parse(input) {
-        const stream = new CommandStream();
-        const handler = new MarkupHandler(stream);
-
-        HTMLParser.parse(input, handler);
-        return stream.commands;
-    }
+    return fmt.replace(/{(\d+)}/g, function(match, number) {
+        return typeof args[number] !== 'undefined'
+            ? args[number]
+            : match
+            ;
+    });
 };

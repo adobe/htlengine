@@ -28,6 +28,7 @@ const BinaryOperation = require('../htl/nodes/BinaryOperation');
 const BinaryOperator = require('../htl/nodes/BinaryOperator');
 const BooleanConstant = require('../htl/nodes/BooleanConstant');
 const StringConstant = require('../htl/nodes/StringConstant');
+const RuntimeCall = require('../htl/nodes/RuntimeCall');
 
 const OutText = require('../commands/OutText');
 const VariableBinding = require('../commands/VariableBinding');
@@ -39,6 +40,7 @@ const PluginContext = require('./PluginContext');
 // plugins: todo: move to registry
 const TextPlugin = require('../plugins/TextPlugin');
 const ListPlugin = require('../plugins/ListPlugin');
+const TestPlugin = require('../plugins/TestPlugin');
 const Plugin = require('./Plugin');
 
 const SLY_COMMENT_PREFIX = "<!--/*";
@@ -52,7 +54,6 @@ module.exports = class MarkupHandler {
         this._htlParser = new HTLParser().withErrorListener(ThrowingErrorListener.INSTANCE);
         this._transformer = new ExpressionTransformer();
         this._symbolGenerator = new SymbolGenerator();
-        this._compilerContext = null; // todo
     }
 
     onDocumentStart() {
@@ -304,7 +305,7 @@ module.exports = class MarkupHandler {
         stream.write(new VariableBinding.Start(attrValue, node)); //attrContent = <expr>
         if (!alreadyEscaped) {
             const contentExpression = valueExpression.withNode(new Identifier(attrValue));
-            stream.write(new VariableBinding.Start(attrContent, this._adjustContext(this._compilerContext, contentExpression, markupContext, ExpressionContext.ATTRIBUTE).root));
+            stream.write(new VariableBinding.Start(attrContent, this._adjustContext(contentExpression, markupContext, ExpressionContext.ATTRIBUTE).root));
             stream.write(
                 new VariableBinding.Start(
                     shouldDisplayAttr,
@@ -375,17 +376,14 @@ module.exports = class MarkupHandler {
         this._stream.write(new OutText(text));
     }
 
-    _adjustContext(compilerContext, expression, markupContext, expressionContext) {
-        // todo!
-        // ExpressionNode root = expression.getRoot();
-        // if (root instanceof RuntimeCall) {
-        //     RuntimeCall runtimeCall = (RuntimeCall) root;
-        //     if (runtimeCall.getFunctionName().equals(RuntimeFunction.XSS)) {
-        //         return expression;
-        //     }
-        // }
-        // return compilerContext.adjustToContext(expression, markupContext, expressionContext);
-        return expression;
+    _adjustContext(expression, markupContext, expressionContext) {
+        const root = expression.root;
+        if (root instanceof RuntimeCall) {
+            if (root.functionName === 'xss') {
+                return expression;
+            }
+        }
+        return this._transformer.adjustToContext(expression, markupContext, expressionContext);
     }
 
     _lookupPlugin(name) {
@@ -395,6 +393,9 @@ module.exports = class MarkupHandler {
         }
         if (name === 'list' || name === 'repeat') {
             return ListPlugin;
+        }
+        if (name === 'test') {
+            return TestPlugin;
         }
         return Plugin;
         // throw new Error(`None of the registered plugins can handle the data-sly-${name} block element.`);

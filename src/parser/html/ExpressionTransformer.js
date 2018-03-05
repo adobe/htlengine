@@ -57,11 +57,6 @@ module.exports = class ExpressionTransformer {
         return new Expression(root, options, interpolation.content);
     }
 
-    _applyFilters(expression, expressionContext) {
-        return this._filters.reduce((p, filter) => filter.apply(p, expressionContext), expression);
-    }
-
-
     adjustToContext(expression, markupContext, expressionContext) {
         if (markupContext != null && !expression.options['context']) {
             expression.options['context'] = new StringConstant(markupContext);

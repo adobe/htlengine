@@ -15,6 +15,8 @@
  * limitations under the License.
  *
  */
+const RuntimeCall = require('../htl/nodes/RuntimeCall');
+
 module.exports = class PluginContext {
 
     constructor(symbolGenerator, transformer) {
@@ -29,17 +31,13 @@ module.exports = class PluginContext {
 
 adjustContext(expression, markupContext, expressionContext) {
         const root = expression.root;
-        // if (root instanceof RuntimeCall) {
-        //     RuntimeCall
-        //     runtimeCall = (RuntimeCall)
-        //     root;
-        //     if (runtimeCall.getFunctionName().equals(RuntimeFunction.XSS)) {
-        //         return expression;
-        //     }
-        // }
+        if (root instanceof RuntimeCall) {
+            if (root.functionName === 'xss') {
+                return expression;
+            }
+        }
         return this._transformer.adjustToContext(expression, markupContext, expressionContext);
     }
-
 
 };
 

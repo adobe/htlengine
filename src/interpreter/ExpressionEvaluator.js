@@ -31,11 +31,25 @@ const UnaryOperation = require('../parser/htl/nodes/UnaryOperation');
 const TernaryOperation = require('../parser/htl/nodes/TernaryOperation');
 const RuntimeCall = require('../parser/htl/nodes/RuntimeCall');
 
+const format = require('../utils/format');
+const format_uri = require('../utils/format_uri');
+const format_xss = require('../utils/format_xss');
+
 function exec(name, value, options) {
     if (name === 'join') {
         const delim = options.join || ', ';
         return value.join(delim);
     }
+    if (name === 'format') {
+        return format(value, options.format);
+    }
+    if (name === 'uriManipulation') {
+        return format_uri(value, options);
+    }
+    if (name === 'xss') {
+        return format_xss(value, options.context);
+    }
+
     throw new Error('Unknown runtime call: ' + name);
 }
 
@@ -54,9 +68,9 @@ module.exports = class ExpressionEvaluator {
             let result = '';
             node.fragments.forEach((frag) => {
                 if (frag.expression) {
-                    result += frag.expression.accept(this);
+                    result += '' + frag.expression.accept(this);
                 } else {
-                    result += frag.text;
+                    result += '' + frag.text;
                 }
             });
             return result;
@@ -124,7 +138,8 @@ module.exports = class ExpressionEvaluator {
         if (node instanceof RuntimeCall) {
             const args = {};
             Object.keys(node.args).forEach(key => {
-               args[key] = node.args[key].accept(this);
+                const arg = node.args[key];
+                args[key] = (arg instanceof ExpressionNode) ? arg.accept(this) : arg;
             });
             return exec(node.functionName, node.expression.accept(this), args);
         }

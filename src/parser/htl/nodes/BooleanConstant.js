@@ -22,7 +22,7 @@ class BooleanConstant extends Atom {
 
     constructor(text) {
         super();
-        this._value = Boolean(text);
+        this._value = text.toString() === 'true';
         this._text = text;
     }
 

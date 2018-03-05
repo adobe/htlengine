@@ -21,27 +21,14 @@
 const assert = require('assert');
 const fs = require('fs');
 
-const antlr4 = require('antlr4');
-const HTMLLexer = require('../src/parser/generated/HTMLLexer').HTMLLexer;
-const HTMLParser = require('../src/parser/generated/HTMLParser').HTMLParser;
-const ThrowingErrorListener = require('../src/parser/htl/ThrowingErrorListener');
-
-const MarkupListener = require('../src/parser/html/MarkupListener');
 const MarkupHandler = require('../src/parser/html/MarkupHandler');
 const CommandStream = require('../src/parser/commands/CommandStream');
 
+const HTMLParser = require('../src/parser/html/HTMLParser');
+
 function process(input) {
-    const chars = new antlr4.InputStream(input);
-    const lexer = new HTMLLexer(chars);
-    const tokens = new antlr4.CommonTokenStream(lexer);
-    const parser = new HTMLParser(tokens);
-    parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-    const tree = parser.htmlDocument();
-
     const handler = new MarkupHandler(new CommandStream());
-    const listener = new MarkupListener(handler);
-    antlr4.tree.ParseTreeWalker.DEFAULT.walk(listener, tree);
-
+    HTMLParser.parse(input, handler);
     console.log(handler.result);
     return handler.result;
 }

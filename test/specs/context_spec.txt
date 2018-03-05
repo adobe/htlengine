@@ -1,0 +1,112 @@
+#
+### html
+#
+${properties.title @ context='html'}
+===
+HTML &amp; Things <b>are bold</b> or Single ' or double " quoted.
+#
+### text
+#
+${properties.title @ context='text'}
+===
+HTML &amp; Things &lt;b&gt;are bold&lt;&#x2f;b&gt; or Single &#x27; or double &quot; quoted.&lt;script&gt;alert&#x28;&quot;hello&quot;&#x29;&#x3b;&lt;&#x2f;script&gt;
+#
+### element name
+#
+${'div' @ context='elementName'}
+${'blockquote' @ context='elementName'}
+${'object' @ context='elementName'}
+===
+div
+blockquote
+div
+#
+### attributeName
+#
+${'data-foo' @ context='attributeName'}
+${'onMouseClick' @ context='attributeName'}
+===
+data-foo
+
+#
+### attribute
+#
+${properties.title @ context='attribute'}
+<div class="${properties.attvalue}" />
+===
+HTML &amp; Things &lt;b&gt;are bold&lt;&#x2f;b&gt; or Single &#x27; or double &quot; quoted.&lt;script&gt;alert&#x28;&quot;hello&quot;&#x29;&#x3b;&lt;&#x2f;script&gt;
+<div class="&quot; onload&#x3d;&quot;alert&#x28;&#x29;&quot; &quot;"/>
+#
+### uri
+#
+${properties.title @ context='uri'}
+===
+HTML%20&%20Things%20%3Cb%3Eare%20bold%3C/b%3E%20or%20Single%20%27%20or%20double%20%22%20quoted.%3Cscript%3Ealert(%22hello%22);%3C/script%3E
+#
+### scriptToken
+#
+${'foo' @ context='scriptToken'}
+${'12Foo' @ context='scriptToken'}
+${'_token' @ context='scriptToken'}
+===
+foo
+
+_token
+#
+### scriptString
+#
+${properties.title @ context='scriptString'}
+===
+HTML\x20\x26\x20Things\x20\x3Cb\x3Eare\x20bold\x3C\x2Fb\x3E\x20or\x20Single\x20\x27\x20or\x20double\x20\x22\x20quoted.\x3Cscript\x3Ealert\x28\x22hello\x22\x29\x3B\x3C\x2Fscript\x3E
+#
+### scriptComment
+#
+${'ok comment' @ context='scriptComment'}
+${'not ok */ comment' @ context='scriptComment'}
+===
+ok comment
+
+#
+### styleToken
+#
+${'border-color' @ context='styleToken'}
+${'*/' @ context='styleToken'}
+===
+border-color
+*/
+#
+### styleString
+#
+${'foo/img.src' @ context='styleString'}
+===
+foo\2f img\2e src
+#
+### styleComment
+#
+${'ok comment' @ context='styleComment'}
+${'not ok */ comment' @ context='styleComment'}
+===
+ok comment
+
+#
+### html comment
+#
+${properties.title @ context='comment'}
+===
+HTML &amp; Things &lt;b&gt;are bold&lt;&#x2f;b&gt; or Single &#x27; or double &quot; quoted.&lt;script&gt;alert&#x28;&quot;hello&quot;&#x29;&#x3b;&lt;&#x2f;script&gt;
+#
+### number
+#
+${'3.5' @ context='number'}
+${'hello' @ context='number'}
+===
+3.5
+0
+#
+### unsafe
+#
+${properties.title @ context='unsafe'}
+===
+HTML & Things <b>are bold</b> or Single ' or double " quoted.<script>alert("hello");</script>
+#
+###

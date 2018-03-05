@@ -12,19 +12,24 @@ TEXT('<ul');
 TEXT('>');
 LOOP.START(var_collectionVar0, item, var_index2)
 VAR.START('itemList', '{index: var_index2, count: var_index2+1, first: var_index2==0, middle: !var_index2==0||var_index2==var_size1-1, last: var_index2==var_size1-1, odd: var_index2%2==0, even: var_index2%2==1, }')
-TEXT('    ');
+TEXT('
+    ');
 TEXT('<li');
 TEXT('>');
 VAR.START('var_3', 'item')
 OUT(var_3)
 VAR.END()
 TEXT('</li>');
+TEXT('
+');
 VAR.END()
 LOOP.END()
 TEXT('</ul>');
 COND.END()
 VAR.END()
 VAR.END()
+TEXT('
+');
 ===
 <ul>
     <li>Apple</li>
@@ -40,6 +45,7 @@ VAR.END()
     <li>${item}</li>
 </ul>
 ===
+
 #
 ### list variables
 #
@@ -65,6 +71,7 @@ VAR.END()
     last: false
     odd: true
     even: false
+
     ---
     myItem: Banana
     index: 1
@@ -74,6 +81,7 @@ VAR.END()
     last: false
     odd: false
     even: true
+
     ---
     myItem: Orange
     index: 2
@@ -88,16 +96,19 @@ VAR.END()
 ### list map
 #
 <dl data-sly-list="${properties.map}">
-    <dt>key: ${item}</dt>
-    <dd>value: ${properties.map[item]}</dd>
+<dt>key: ${item}</dt>
+<dd>value: ${properties.map[item]}</dd>
 </dl>
 ===
 <dl>
-    <dt>key: a</dt>
-    <dd>value: 1</dd>
-    <dt>key: b</dt>
-    <dd>value: 2</dd>
-    <dt>key: c</dt>
-    <dd>value: 3</dd>
+<dt>key: a</dt>
+<dd>value: 1</dd>
+
+<dt>key: b</dt>
+<dd>value: 2</dd>
+
+<dt>key: c</dt>
+<dd>value: 3</dd>
 </dl>
 #
+###
