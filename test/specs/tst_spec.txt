@@ -49,4 +49,22 @@ VAR.END()
 <div>It is true!</div>
 It was: hello
 #
-### todo: add recursive tests
+### recursive test: true - true
+#
+<div data-sly-test="${properties.true1}">Title: <b data-sly-test="${properties.true1}">Bold!</b></test>
+===
+<div>Title: <b>Bold!</b></div>
+#
+### recursive test: true - false
+#
+<div data-sly-test="${properties.true1}">Title: <b data-sly-test="${properties.false1}">Bold!</b></test>
+===
+<div>Title: </div>
+#
+### recursive test: false - true
+#
+<div data-sly-test="${properties.false1}">Title: <b data-sly-test="${properties.true1}">Bold!</b></test>
+===
+
+#
+###

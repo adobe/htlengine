@@ -70,7 +70,7 @@ module.exports = class InterpretingCommandVisitor {
     }
 
     _isSuspended() {
-        return this._condition.length > 0 && !this._condition[0];
+        return this._condition.length > 0 && !this._condition[this._condition.length-1];
     }
 
     _run() {
@@ -119,8 +119,8 @@ module.exports = class InterpretingCommandVisitor {
             const expected = cmd.expectedTruthValue instanceof ExpressionNode
                 ? new ExpressionEvaluator(scope).evaluate(cmd.expectedTruthValue)
                 : cmd.expectedTruthValue;
-            // noinspection EqualityComparisonWithCoercionJS
-            this._condition.push(!!value == expected);
+            const boolValue = Array.isArray(value) ? value.length > 0 : !!value;
+            this._condition.push(boolValue === expected);
         }
         else if (cmd instanceof Conditional.End) {
             this._condition.pop();
