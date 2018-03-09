@@ -21,17 +21,13 @@ const Conditional = require('../commands/Conditional');
 const OutText = require('../commands/OutText');
 const OutputVariable = require('../commands/OutputVariable');
 const Loop = require('../commands/Loop');
-const NumericConstant = require('../htl/nodes/NumericConstant');
 const MapLiteral = require('../htl/nodes/MapLiteral');
 const PropertyAccess = require('../htl/nodes/PropertyAccess');
 const BooleanConstant = require('../htl/nodes/BooleanConstant');
 const BinaryOperation = require('../htl/nodes/BinaryOperation');
 const BinaryOperator = require('../htl/nodes/BinaryOperator');
 const StringConstant = require('../htl/nodes/StringConstant');
-const NullLiteral = require('../htl/nodes/NullLiteral');
 const RuntimeCall = require('../htl/nodes/RuntimeCall');
-const UnaryOperation = require('../htl/nodes/UnaryOperation');
-const UnaryOperator = require('../htl/nodes/UnaryOperator');
 const Identifier = require('../htl/nodes/Identifier');
 const Expression = require('../htl/nodes/Expression');
 const ExpressionContext = require('../html/ExpressionContext');
@@ -186,7 +182,7 @@ class MultiAttributePlugin extends Plugin {
             stream.write(new VariableBinding.Start(attrValue, this._attributeValueNode(new StringConstant(attributeName))));
             this._writeAttribute(stream, attrNameVar, attrValue);
             const varExistsVar = this.pluginContext.generateVariable("varExists");
-            stream.write(new VariableBinding.Start(varExistsVar, new BinaryOperation(BinaryOperator.NEQ, new Identifier(attrValue), NullLiteral.INSTANCE)));
+            stream.write(new VariableBinding.Start(varExistsVar, new BinaryOperation(BinaryOperator.NEQ, new Identifier(attrValue), Identifier.NULL)));
             stream.write(new Conditional.Start(varExistsVar, false));
         }
     }

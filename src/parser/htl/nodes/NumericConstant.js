@@ -21,7 +21,7 @@ const Atom = require('./Atom');
 /**
  * Defines a numeric constant expression (e.g. "42.1").
  */
-class NumericConstant extends Atom {
+module.exports = class NumericConstant extends Atom {
 
     /**
      * Creates a numeric constant.
@@ -41,10 +41,9 @@ class NumericConstant extends Atom {
     get value() {
         return this._value;
     }
-}
+};
 
-module.exports = NumericConstant;
-module.exports.ZERO = new NumericConstant(0);
-module.exports.ONE = new NumericConstant(1);
-module.exports.TWO = new NumericConstant(2);
+module.exports.ZERO = new module.exports(0);
+module.exports.ONE = new module.exports(1);
+module.exports.TWO = new module.exports(2);
 

@@ -116,7 +116,7 @@ module.exports = class DebugVisitor {
             this.result += node.value;
         }
         else if (node instanceof NullLiteral) {
-            this.result += 'null';
+            // nop
         }
         else if (node instanceof RuntimeCall) {
             this.result += node.functionName + '(';

@@ -18,7 +18,7 @@
 
 const Atom = require('./Atom');
 
-class StringConstant extends Atom {
+module.exports = class StringConstant extends Atom {
 
     static parse(str) {
         let sb = '';
@@ -95,8 +95,7 @@ class StringConstant extends Atom {
         return this._text;
     }
 
-}
+};
 
-module.exports = StringConstant;
-module.exports.EMPTY = new StringConstant('');
+module.exports.EMPTY = new module.exports('');
 

@@ -33,3 +33,5 @@ module.exports = class Identifier extends Atom {
         return this._name;
     }
 };
+
+module.exports.NULL = new module.exports('null');

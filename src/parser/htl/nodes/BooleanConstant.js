@@ -18,7 +18,7 @@
 
 const Atom = require('./Atom');
 
-class BooleanConstant extends Atom {
+module.exports = class BooleanConstant extends Atom {
 
     constructor(text) {
         super();
@@ -33,9 +33,8 @@ class BooleanConstant extends Atom {
     get value() {
         return this._value;
     }
-}
+};
 
-module.exports = BooleanConstant;
-module.exports.TRUE = new BooleanConstant(true);
-module.exports.FALSE = new BooleanConstant(false);
+module.exports.TRUE = new module.exports(true);
+module.exports.FALSE = new module.exports(false);
 
