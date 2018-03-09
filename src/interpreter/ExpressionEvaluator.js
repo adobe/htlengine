@@ -47,6 +47,9 @@ function exec(name, value, options) {
         return format_uri(value, options);
     }
     if (name === 'xss') {
+        // if (value instanceof Array) {
+        //     value = value.join(',');
+        // }
         return format_xss(value, options.context);
     }
 

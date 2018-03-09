@@ -161,4 +161,18 @@ out("/>\n");
 <input checked="false"/>
 <input checked/>
 #
+### Arrays are cast to strings:
+#
+<div title="${['one', 'two', 'three']}"></div>
+<div title="${[]}"></div>
+===
+<div title="one,two,three"></div>
+<div></div>
+#
+### Numbers are cast to strings (i.e. zero doesn't remove the attribute):
+#
+<div class="${0}"></div>
+===
+<div class="0"></div>
+#
 ###

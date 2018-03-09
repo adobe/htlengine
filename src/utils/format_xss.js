@@ -37,6 +37,15 @@ const ELEMENT_NAME_WHITELIST = [
 }, {});
 
 module.exports = function format_xss(value, ctx) {
+    if (typeof value === 'boolean' || value === undefined) {
+        return value;
+    }
+    if (Array.isArray(value)) {
+        value = value.join(',');
+    } else {
+        value = '' + value;
+    }
+
     switch (ctx) {
         case 'unsafe':
             return value;
@@ -100,10 +109,6 @@ function filterAttributeName(name) {
 }
 
 function escapeAttributeValue(input, mContext) {
-    if (typeof input === 'boolean') {
-        return input;
-    }
-
     if (isUriAttribute(mContext.attributeName)) {
         return xss.getValidHref(input);
     } else {
