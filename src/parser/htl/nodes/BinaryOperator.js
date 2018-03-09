@@ -118,7 +118,7 @@ module.exports = Object.freeze({
      * Strict version of equality, restricted to just some types.
      */
     STRICT_EQ: {
-        sym: '==',
+        sym: '===',
         calc: (left, right) => {
             return left === right;
         }
@@ -128,7 +128,7 @@ module.exports = Object.freeze({
      * Strict version of the not-equal operator.
      */
     STRICT_NEQ: {
-        sym: '!=',
+        sym: '!==',
         calc: (left, right) => {
             return left !== right;
         }

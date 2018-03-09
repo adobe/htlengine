@@ -57,19 +57,19 @@ const TESTS = {
         {s: '${varChoice ? varOne : varTwo}'}
     ],
     'Comparison': [
-        {s: '${nullValueOne == nullValueTwo}', r: '${nullValueOne==nullValueTwo}'},
-        {s: '${nullValueOne != nullValueTwo}', r: '${nullValueOne!=nullValueTwo}'},
-        {s: '${stringValueOne == stringValueTwo}', r: '${stringValueOne==stringValueTwo}'},
-        {s: '${stringValueOne != stringValueTwo}', r: '${stringValueOne!=stringValueTwo}'},
+        {s: '${nullValueOne == nullValueTwo}', r: '${nullValueOne===nullValueTwo}'},
+        {s: '${nullValueOne != nullValueTwo}', r: '${nullValueOne!==nullValueTwo}'},
+        {s: '${stringValueOne == stringValueTwo}', r: '${stringValueOne===stringValueTwo}'},
+        {s: '${stringValueOne != stringValueTwo}', r: '${stringValueOne!==stringValueTwo}'},
         {s: '${numberValueOne < numberValueTwo}', r: '${numberValueOne<numberValueTwo}'},
         {s: '${numberValueOne <= numberValueTwo}', r: '${numberValueOne<=numberValueTwo}'},
-        {s: '${numberValueOne == numberValueTwo}', r: '${numberValueOne==numberValueTwo}'},
+        {s: '${numberValueOne == numberValueTwo}', r: '${numberValueOne===numberValueTwo}'},
         {s: '${numberValueOne >= numberValueTwo}', r: '${numberValueOne>=numberValueTwo}'},
         {s: '${numberValueOne > numberValueTwo}', r: '${numberValueOne>numberValueTwo}'},
-        {s: '${numberValueOne != numberValueTwo}', r: '${numberValueOne!=numberValueTwo}'},
-        {s: '${booleanValueOne == booleanValueTwo}', r: '${booleanValueOne==booleanValueTwo}'},
-        {s: '${booleanValueOne != booleanValueTwo}', r: '${booleanValueOne!=booleanValueTwo}'},
-        {s: '${enumConstant == \'CONSTANT_NAME\'}', r: '${enumConstant==\'CONSTANT_NAME\'}'}
+        {s: '${numberValueOne != numberValueTwo}', r: '${numberValueOne!==numberValueTwo}'},
+        {s: '${booleanValueOne == booleanValueTwo}', r: '${booleanValueOne===booleanValueTwo}'},
+        {s: '${booleanValueOne != booleanValueTwo}', r: '${booleanValueOne!==booleanValueTwo}'},
+        {s: '${enumConstant == \'CONSTANT_NAME\'}', r: '${enumConstant===\'CONSTANT_NAME\'}'}
     ],
     'Options': [
         {s: '${myVar @ optName}'},
