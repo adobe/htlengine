@@ -63,8 +63,6 @@ class SingleAttributePlugin extends Plugin {
         this.attributeName = attributeName;
         this.attrValue = ctx.generateVariable("attrValue_" + attributeName);
         this.escapedAttrValue = ctx.generateVariable("attrValueEscaped_" + attributeName);
-        this.isTrueValue = ctx.generateVariable("isTrueValue_" + attributeName);
-        this.shouldDisplayAttribute = ctx.generateVariable("shouldDisplayAttr_" + attributeName);
         this.node = expression.root;
         this.contentNode = new Identifier(this.attrValue);
         if (!expression.containsOption('context')) {
@@ -121,37 +119,23 @@ class SingleAttributePlugin extends Plugin {
     _emitStart(stream) {
         stream.write(new VariableBinding.Start(this.attrValue, this.node));
         stream.write(new VariableBinding.Start(this.escapedAttrValue, this.contentNode));
-        stream.write(
-            new VariableBinding.Start(
-                this.shouldDisplayAttribute,
-                new BinaryOperation(
-                    BinaryOperator.OR,
-                    new Identifier(this.escapedAttrValue),
-                    new BinaryOperation(BinaryOperator.EQ, new StringConstant("false"), new Identifier(this.attrValue))
-                )
-            )
-        );
-        stream.write(new Conditional.Start(this.shouldDisplayAttribute, true));
+        stream.write(new Conditional.Start(new BinaryOperation(
+            BinaryOperator.OR,
+            new Identifier(this.escapedAttrValue),
+            new BinaryOperation(BinaryOperator.EQ, new StringConstant("false"), new Identifier(this.attrValue))
+        )));
     }
 
     _emitWrite(stream) {
-        stream.write(new VariableBinding.Start(this.isTrueValue,
-            new BinaryOperation(BinaryOperator.EQ,
-                new Identifier(this.attrValue),
-                BooleanConstant.TRUE)
-            )
-        );
-        stream.write(new Conditional.Start(this.isTrueValue, false));
+        stream.write(new Conditional.Start(new Identifier(this.attrValue), false));
         stream.write(new OutText('="'));
         stream.write(new OutputVariable(this.escapedAttrValue));
         stream.write(new OutText('"'));
         stream.write(Conditional.END);
-        stream.write(VariableBinding.END);
     }
 
     _emitEnd(stream) {
         stream.write(Conditional.END);
-        stream.write(VariableBinding.END);
         stream.write(VariableBinding.END);
         stream.write(VariableBinding.END);
     }
@@ -170,7 +154,7 @@ class MultiAttributePlugin extends Plugin {
     }
 
     beforeAttributes(stream) {
-        stream.write(new VariableBinding.Start(this.attrMapVar, this.attrMap));
+        stream.write(new VariableBinding.Start(this.attrMapVar, this.attrMap)); // attrMapVar =
     }
 
     beforeAttribute(stream, attributeName) {
@@ -178,21 +162,18 @@ class MultiAttributePlugin extends Plugin {
         if (this.beforeCall) {
             const attrNameVar = this.pluginContext.generateVariable("attrName_" + attributeName);
             const attrValue = this.pluginContext.generateVariable("mapContains_" + attributeName);
-            stream.write(new VariableBinding.Start(attrNameVar, new StringConstant(attributeName)));
-            stream.write(new VariableBinding.Start(attrValue, this._attributeValueNode(new StringConstant(attributeName))));
+            stream.write(new VariableBinding.Start(attrNameVar, new StringConstant(attributeName))); // attrNameVar = ...
+            stream.write(new VariableBinding.Start(attrValue, this._attributeValueNode(new StringConstant(attributeName)))); // attrValue = ...
             this._writeAttribute(stream, attrNameVar, attrValue);
-            const varExistsVar = this.pluginContext.generateVariable("varExists");
-            stream.write(new VariableBinding.Start(varExistsVar, new BinaryOperation(BinaryOperator.NEQ, new Identifier(attrValue), Identifier.NULL)));
-            stream.write(new Conditional.Start(varExistsVar, false));
+            stream.write(new Conditional.Start(new BinaryOperation(BinaryOperator.EQ, new Identifier(attrValue), Identifier.NULL))); // if (mapContains != null)
         }
     }
 
     afterAttribute(stream, attributeName) {
         if (this.beforeCall) {
-            stream.write(Conditional.END);
-            stream.write(VariableBinding.END);
-            stream.write(VariableBinding.END);
-            stream.write(VariableBinding.END);
+            stream.write(Conditional.END); // end: if (map contains != null)
+            stream.write(VariableBinding.END); // end: attrVale = ...
+            stream.write(VariableBinding.END); // end: attrNameVar = ...
         }
     }
 
@@ -213,70 +194,49 @@ class MultiAttributePlugin extends Plugin {
         const ctx = this.pluginContext;
         const ignoredLiteral = new MapLiteral(this.ignored);
         const ignoredVar = ctx.generateVariable("ignoredAttributes");
-        stream.write(new VariableBinding.Start(ignoredVar, ignoredLiteral));
         const attrNameVar = ctx.generateVariable("attrName");
         const attrNameEscaped = ctx.generateVariable("attrNameEscaped");
         const attrIndex = ctx.generateVariable("attrIndex");
-        stream.write(new Loop.Start(this.attrMapVar, attrNameVar, attrIndex));
-        stream.write(new VariableBinding.Start(attrNameEscaped, this._escapeNode(new Identifier(attrNameVar), MarkupContext.ATTRIBUTE_NAME, null)));
-        stream.write(new Conditional.Start(attrNameEscaped, true));
-        const isIgnoredAttr = ctx.generateVariable("isIgnoredAttr");
-        stream.write(new VariableBinding.Start(isIgnoredAttr, new PropertyAccess(new Identifier(ignoredVar), new Identifier(attrNameVar))));
-        stream.write(new Conditional.Start(isIgnoredAttr, false));
         const attrContent = ctx.generateVariable("attrContent");
-        stream.write(new VariableBinding.Start(attrContent, this._attributeValueNode(new Identifier(attrNameVar))));
+
+        stream.write(new VariableBinding.Start(ignoredVar, ignoredLiteral)); // ignoredVar = [];
+        stream.write(new Loop.Start(this.attrMapVar, attrNameVar, attrIndex)); // for (attrNameVar in attrMapVar) {
+        stream.write(new VariableBinding.Start(attrNameEscaped, this._escapeNode(new Identifier(attrNameVar), MarkupContext.ATTRIBUTE_NAME, null))); // attrNameEscaped = ...
+        stream.write(new Conditional.Start(new Identifier(attrNameEscaped))); // if (attrNameEscaped) {
+        stream.write(new Conditional.Start(new PropertyAccess(new Identifier(ignoredVar), new Identifier(attrNameVar)), true)); // if (!ignored[attrName) {
+        stream.write(new VariableBinding.Start(attrContent, this._attributeValueNode(new Identifier(attrNameVar)))); // attrContent =
+
         this._writeAttribute(stream, attrNameEscaped, attrContent);
-        stream.write(VariableBinding.END); //end of attrContent
-        stream.write(Conditional.END);
-        stream.write(VariableBinding.END);
-        stream.write(Conditional.END);
-        stream.write(VariableBinding.END);
-        stream.write(Loop.END);
-        stream.write(VariableBinding.END);
-        stream.write(VariableBinding.END);
+
+        stream.write(VariableBinding.END); //end: attrContent =
+        stream.write(Conditional.END); // end: if (!ignored[attrName]
+        stream.write(Conditional.END); // end: if (attrNameEscaped)
+        stream.write(VariableBinding.END); // end: attrNameEscaped =
+        stream.write(Loop.END); // end: for
+        stream.write(VariableBinding.END); // end: ignoredVar
+
+        stream.write(VariableBinding.END); // end: attrMapVar (created in beforeAttributes)
     }
 
     _writeAttribute(stream, attrNameVar, attrContentVar) {
         const escapedContent = this.pluginContext.generateVariable("attrContentEscaped");
-        const shouldDisplayAttribute = this.pluginContext.generateVariable("shouldDisplayAttr");
-        stream.write(
-            new VariableBinding.Start(escapedContent, this._escapedExpression(new Identifier(attrContentVar), new Identifier(attrNameVar)))
-        );
-        stream.write(
-            new VariableBinding.Start(
-                shouldDisplayAttribute,
-                new BinaryOperation(
-                    BinaryOperator.OR,
-                    new Identifier(escapedContent),
-                    new BinaryOperation(BinaryOperator.EQ, new StringConstant("false"), new Identifier(attrContentVar))
-                )
-            )
-        );
-        stream.write(new Conditional.Start(shouldDisplayAttribute, true));
-        stream.write(new OutText(" "));   //write("attrName");
-        this._writeAttributeName(stream, attrNameVar);
-        this._writeAttributeValue(stream, escapedContent, attrContentVar);
+        stream.write(new VariableBinding.Start(escapedContent, this._escapedExpression(new Identifier(attrContentVar), new Identifier(attrNameVar))));
+        stream.write(new Conditional.Start(new BinaryOperation(
+            BinaryOperator.OR,
+            new Identifier(escapedContent),
+            new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrContentVar))
+        )));
+        stream.write(new OutText(" "));
+        stream.write(new OutputVariable(attrNameVar));
+
+        stream.write(new Conditional.Start(new Identifier(attrContentVar)));
+        stream.write(new OutText("=\""));
+        stream.write(new OutputVariable(escapedContent));
+        stream.write(new OutText("\""));
+        stream.write(Conditional.END);
+
         stream.write(Conditional.END);
         stream.write(VariableBinding.END);
-        stream.write(VariableBinding.END);
-    }
-
-    _writeAttributeName(stream, attrNameVar) {
-        stream.write(new OutputVariable(attrNameVar));
-    }
-
-    _writeAttributeValue(stream, escapedContent, attrContentVar) {
-        const isTrueVar = this.pluginContext.generateVariable("isTrueAttr"); // holds the comparison (attrValue == true)
-        stream.write(new VariableBinding.Start(isTrueVar, //isTrueAttr = (attrContent == true)
-            new BinaryOperation(BinaryOperator.EQ, new Identifier(attrContentVar), BooleanConstant.TRUE)));
-        stream.write(new Conditional.Start(isTrueVar, false)); //if (!isTrueAttr)
-        stream.write(new OutText("=\""));
-
-        stream.write(new OutputVariable(escapedContent)); //write(escapedContent)
-
-        stream.write(new OutText("\""));
-        stream.write(Conditional.END); //end if isTrueAttr
-        stream.write(VariableBinding.END); //end scope for isTrueAttr
     }
 
     _attributeValueNode(attributeNameNode) {

@@ -108,12 +108,13 @@ module.exports = class InterpretingCommandVisitor {
                 return;
             }
             const scope = this._runtime.scope;
-            const value = scope.getVariable(cmd.variableName);
-            const expected = cmd.expectedTruthValue instanceof ExpressionNode
-                ? new ExpressionEvaluator(scope).evaluate(cmd.expectedTruthValue)
-                : cmd.expectedTruthValue;
+            const value = new ExpressionEvaluator(scope).evaluate(cmd.expression);
             const boolValue = Array.isArray(value) ? value.length > 0 : !!value;
-            this._condition.push(boolValue === expected);
+            if (cmd.negate) {
+                this._condition.push(!boolValue);
+            } else {
+                this._condition.push(boolValue);
+            }
         }
         else if (cmd instanceof Conditional.End) {
             this._condition.pop();

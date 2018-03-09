@@ -5,13 +5,13 @@
 <div data-sly-test="${properties.true0}">yeah!</div>
 ---
 { const var_testVariable0 = properties["false0"];
-  if (var_testVariable0 == true) {
+  if (var_testVariable0) {
     out("<div>nope</div>");
   }
 }
 out("\n");
 { const var_testVariable1 = properties["true0"];
-  if (var_testVariable1 == true) {
+  if (var_testVariable1) {
     out("<div>yeah!</div>");
   }
 }
@@ -26,7 +26,7 @@ out("\n");
 It was: ${mytest}
 ---
 global.mytest = properties["true0"];
-if (mytest == true) {
+if (mytest) {
   out("<div>It is true!</div>");
 }
 { const var_0 = "\nIt was: "+mytest+"\n";

@@ -20,8 +20,6 @@ const Conditional = require('./Conditional');
 const BooleanConstant = require('../htl/nodes/BooleanConstant');
 const OutText = require('./OutText');
 
-const ALWAYS_FALSE_VAR = 'always_false';
-
 module.exports = class CommandStream {
 
     constructor() {
@@ -48,7 +46,6 @@ module.exports = class CommandStream {
     }
 
     close() {
-
     }
 
     get commands() {
@@ -56,13 +53,11 @@ module.exports = class CommandStream {
     }
 
     beginIgnore() {
-        this.write(new VariableBinding.Start(ALWAYS_FALSE_VAR, BooleanConstant.FALSE));
-        this.write(new Conditional.Start(ALWAYS_FALSE_VAR, BooleanConstant.TRUE));
+        this.write(new Conditional.Start(BooleanConstant.FALSE));
     }
 
     endIgnore() {
         this.write(Conditional.END);
-        this.write(VariableBinding.END);
     }
 
 };

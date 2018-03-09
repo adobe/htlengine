@@ -78,7 +78,7 @@ module.exports = class ListPlugin extends Plugin {
         stream.write(new VariableBinding.Start(this._listVariable, this.expression.root));
         stream.write(new VariableBinding.Start(this._collectionSizeVar,
             new UnaryOperation(UnaryOperator.LENGTH, new Identifier(this._listVariable))));
-        stream.write(new Conditional.Start(this._collectionSizeVar, true));
+        stream.write(new Conditional.Start(new Identifier(this._collectionSizeVar)));
 
     }
 

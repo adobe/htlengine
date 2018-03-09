@@ -65,8 +65,9 @@ module.exports = class DebugCommandVisitor {
             this.out('}');
         }
         else if (cmd instanceof Conditional.Start) {
-            const exp = ExpressionFormatter.format(cmd.expectedTruthValue);
-            this.out(`if (${cmd.variableName} == ${exp}) {`);
+            const exp = ExpressionFormatter.format(cmd.expression);
+            const neg = cmd.negate ? '!' : '';
+            this.out(`if (${neg}${exp}) {`);
             this._indent++;
         }
         else if (cmd instanceof Conditional.End) {

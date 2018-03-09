@@ -98,4 +98,6 @@ module.exports = class StringConstant extends Atom {
 };
 
 module.exports.EMPTY = new module.exports('');
+module.exports.TRUE = new module.exports('true');
+module.exports.FALSE = new module.exports('false');
 

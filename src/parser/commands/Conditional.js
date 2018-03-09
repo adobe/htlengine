@@ -21,18 +21,18 @@ module.exports = {
 
     Start: class Start extends Command {
 
-        constructor(variableName, expectedTruthValue) {
+        constructor(expression, negate) {
             super();
-            this._variableName = variableName;
-            this._expectedTruthValue = expectedTruthValue;
+            this._expression = expression;
+            this._negate = negate;
         }
 
-        get variableName() {
-            return this._variableName;
+        get expression() {
+            return this._expression;
         }
 
-        get expectedTruthValue() {
-            return this._expectedTruthValue;
+        get negate() {
+            return this._negate;
         }
     },
 

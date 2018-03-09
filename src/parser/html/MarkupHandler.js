@@ -260,19 +260,11 @@ module.exports = class MarkupHandler {
         const stream = this._stream;
         const expression = this._transformer.transform(interpolation, MarkupContext.attributeContext(name), ExpressionContext.ATTRIBUTE);
         const attrContent = this._symbolGenerator.next("attrContent");
-        const shouldDisplayAttr = this._symbolGenerator.next("shouldDisplayAttr");
         stream.write(new VariableBinding.Start(attrContent, expression.root));
-        stream.write(
-            new VariableBinding.Start(
-                shouldDisplayAttr,
-                new BinaryOperation(
-                    BinaryOperator.OR,
-                    new Identifier(attrContent),
-                    new BinaryOperation(BinaryOperator.EQ, new StringConstant("false"), new Identifier(attrContent))
-                )
-            )
-        );
-        stream.write(new Conditional.Start(shouldDisplayAttr, true));
+        stream.write(new Conditional.Start(new BinaryOperation(BinaryOperator.OR,
+            new Identifier(attrContent),
+            new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrContent))
+        )));
         this._emitAttributeStart(name);
         plugin.beforeAttributeValue(stream, name, expression.root);
         this._emitAttributeValueStart(quoteChar);
@@ -280,7 +272,6 @@ module.exports = class MarkupHandler {
         this._emitAttributeEnd(quoteChar);
         plugin.afterAttributeValue(stream, name);
         stream.write(Conditional.END);
-        stream.write(VariableBinding.END);
         stream.write(VariableBinding.END);
     }
 
@@ -301,40 +292,26 @@ module.exports = class MarkupHandler {
         //     }
         // }
         const node = valueExpression.root;
-        stream.write(new VariableBinding.Start(attrValue, node)); //attrContent = <expr>
+        stream.write(new VariableBinding.Start(attrValue, node)); //attrValue = <expr>
+        let shouldDisplayExp;
         if (!alreadyEscaped) {
             const contentExpression = valueExpression.withNode(new Identifier(attrValue));
-            stream.write(new VariableBinding.Start(attrContent, this._adjustContext(contentExpression, markupContext, ExpressionContext.ATTRIBUTE).root));
-            stream.write(
-                new VariableBinding.Start(
-                    shouldDisplayAttr,
-                    new BinaryOperation(
-                        BinaryOperator.OR,
-                        new Identifier(attrContent),
-                        new BinaryOperation(BinaryOperator.EQ, new StringConstant("false"), new Identifier(attrValue))
-                    )
-                )
+            stream.write(new VariableBinding.Start(attrContent, this._adjustContext(contentExpression, markupContext, ExpressionContext.ATTRIBUTE).root)); // attrContent = <expr>
+            shouldDisplayExp = new BinaryOperation(BinaryOperator.OR,
+                new Identifier(attrContent),
+                new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrValue))
             );
-
         } else {
-            stream.write(
-                new VariableBinding.Start(
-                    shouldDisplayAttr,
-                    new BinaryOperation(
-                        BinaryOperator.OR,
-                        new Identifier(attrValue),
-                        new BinaryOperation(BinaryOperator.EQ, new StringConstant("false"), new Identifier(attrValue))
-                    )
-                )
+            shouldDisplayExp = new BinaryOperation(BinaryOperator.OR,
+                new Identifier(attrValue),
+                new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrValue))
             );
         }
-        stream.write(new Conditional.Start(shouldDisplayAttr, true)); // if (attrContent)
+        stream.write(new Conditional.Start(shouldDisplayExp)); // if (attrContent)
 
         this._emitAttributeStart(name);   //write("attrName");
         plugin.beforeAttributeValue(stream, name, node);
-        stream.write(new VariableBinding.Start(isTrueVar, //isTrueAttr = (attrValue == true)
-            new BinaryOperation(BinaryOperator.EQ, new Identifier(attrValue), BooleanConstant.TRUE)));
-        stream.write(new Conditional.Start(isTrueVar, false)); //if (!isTrueAttr)
+        stream.write(new Conditional.Start(new Identifier(attrValue))); // if (attrValue)
         this._emitAttributeValueStart(quoteChar); // write("='");
         if (!alreadyEscaped) {
             stream.write(new OutputVariable(attrContent)); //write(attrContent)
@@ -342,14 +319,12 @@ module.exports = class MarkupHandler {
             stream.write(new OutputVariable(attrValue)); // write(attrValue)
         }
         this._emitAttributeEnd(quoteChar); //write("'");
-        stream.write(Conditional.END); //end if isTrueAttr
-        stream.write(VariableBinding.END); //end scope for isTrueAttr
+        stream.write(Conditional.END); //end if (!attrValue)
         plugin.afterAttributeValue(stream, name);
-        stream.write(Conditional.END); //end if attrContent
-        stream.write(VariableBinding.END); //end scope for attrContent
+        stream.write(Conditional.END); //end if (attrContent)
         if (!alreadyEscaped) {
-            stream.write(VariableBinding.END);
-        }
+            stream.write(VariableBinding.END); //end scope for attrContent
+       }
         stream.write(VariableBinding.END); //end scope for attrValue
     }
 

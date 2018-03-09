@@ -18,6 +18,7 @@
 const Plugin = require('../html/Plugin');
 const VariableBinding = require('../commands/VariableBinding');
 const Conditional = require('../commands/Conditional');
+const Identifier = require('../htl/nodes/Identifier');
 
 module.exports = class TestPlugin extends Plugin {
 
@@ -34,7 +35,7 @@ module.exports = class TestPlugin extends Plugin {
         } else {
             stream.write(new VariableBinding.Start(variableName, this.expression.root));
         }
-        stream.write(new Conditional.Start(variableName, true));
+        stream.write(new Conditional.Start(new Identifier(variableName)));
     }
 
     afterElement(stream) {

@@ -25,10 +25,8 @@ out("<p>");
 { const var_textContent0 = xss("Hello, world.", context="text");
   out(var_textContent0);
 }
-{ const always_false = false;
-  if (always_false == true) {
-    out("This text would never be shown.");
-  }
+if (false) {
+  out("This text would never be shown.");
 }
 out("</p>\n");
 ===
@@ -42,10 +40,8 @@ out("<p>");
 { const var_textContent0 = xss(properties["title"], context="text");
   out(var_textContent0);
 }
-{ const always_false = false;
-  if (always_false == true) {
-    out("This text would never be shown.");
-  }
+if (false) {
+  out("This text would never be shown.");
 }
 out("</p>\n");
 ===
