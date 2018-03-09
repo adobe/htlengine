@@ -4,26 +4,18 @@
 <div data-sly-test="${properties.false0}">nope</div>
 <div data-sly-test="${properties.true0}">yeah!</div>
 ---
-VAR.START('var_testVariable0', 'properties['false0']')
-COND.START('var_testVariable0' == 'true')
-TEXT('<div');
-TEXT('>');
-TEXT('nope');
-TEXT('</div>');
-COND.END()
-VAR.END()
-TEXT('
-');
-VAR.START('var_testVariable1', 'properties['true0']')
-COND.START('var_testVariable1' == 'true')
-TEXT('<div');
-TEXT('>');
-TEXT('yeah!');
-TEXT('</div>');
-COND.END()
-VAR.END()
-TEXT('
-');
+{ const var_testVariable0 = properties['false0'];
+  if (var_testVariable0 == true) {
+    out("<div>nope</div>");
+  }
+}
+out("\n");
+{ const var_testVariable1 = properties['true0'];
+  if (var_testVariable1 == true) {
+    out("<div>yeah!</div>");
+  }
+}
+out("\n");
 ===
 
 <div>yeah!</div>
@@ -33,18 +25,15 @@ TEXT('
 <div data-sly-test.mytest="${properties.true0}">It is true!</div>
 It was: ${mytest}
 ---
-VAR.GLOBAL('mytest', 'properties['true0']')
-COND.START('mytest' == 'true')
-TEXT('<div');
-TEXT('>');
-TEXT('It is true!');
-TEXT('</div>');
-COND.END()
-VAR.START('var_0', ''
+global.mytest = properties['true0'];
+if (mytest == true) {
+  out("<div>It is true!</div>");
+}
+{ const var_0 = '
 It was: '+mytest+'
-'')
-OUT(var_0)
-VAR.END()
+';
+  out(var_0);
+}
 ===
 <div>It is true!</div>
 It was: hello

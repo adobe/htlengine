@@ -3,8 +3,7 @@
 #
 Hello, World
 ---
-TEXT('Hello, World
-');
+out("Hello, World\n");
 ===
 Hello, World
 #
@@ -12,10 +11,10 @@ Hello, World
 #
 Hello, ${world}.
 ---
-VAR.START('var_0', ''Hello, '+world+'.
-'')
-OUT(var_0)
-VAR.END()
+{ const var_0 = 'Hello, '+world+'.
+';
+  out(var_0);
+}
 ===
 Hello, Earth.
 #
@@ -23,19 +22,16 @@ Hello, Earth.
 #
 <p data-sly-text="${'Hello, world.'}">This text would never be shown.</p>
 ---
-TEXT('<p');
-TEXT('>');
-VAR.START('var_textContent0', 'xss('Hello, world.', context='text')')
-OUT(var_textContent0)
-VAR.END()
-VAR.START('always_false', 'false')
-COND.START('always_false' == 'true')
-TEXT('This text would never be shown.');
-COND.END()
-VAR.END()
-TEXT('</p>');
-TEXT('
-');
+out("<p>");
+{ const var_textContent0 = xss('Hello, world.', context='text');
+  out(var_textContent0);
+}
+{ const always_false = false;
+  if (always_false == true) {
+    out("This text would never be shown.");
+  }
+}
+out("</p>\n");
 ===
 <p>Hello, world.</p>
 #
@@ -43,19 +39,16 @@ TEXT('
 #
 <p data-sly-text="${properties.title}">This text would never be shown.</p>
 ---
-TEXT('<p');
-TEXT('>');
-VAR.START('var_textContent0', 'xss(properties['title'], context='text')')
-OUT(var_textContent0)
-VAR.END()
-VAR.START('always_false', 'false')
-COND.START('always_false' == 'true')
-TEXT('This text would never be shown.');
-COND.END()
-VAR.END()
-TEXT('</p>');
-TEXT('
-');
+out("<p>");
+{ const var_textContent0 = xss(properties['title'], context='text');
+  out(var_textContent0);
+}
+{ const always_false = false;
+  if (always_false == true) {
+    out("This text would never be shown.");
+  }
+}
+out("</p>\n");
 ===
 <p>Hello, world.</p>
 #
@@ -63,10 +56,10 @@ TEXT('
 #
 Fruits: ${['Apple', 'Banana', 'Orange'] @ join='*'}
 ---
-VAR.START('var_0', ''Fruits: '+join(['Apple', 'Banana', 'Orange'], join='*')+'
-'')
-OUT(var_0)
-VAR.END()
+{ const var_0 = 'Fruits: '+join(['Apple', 'Banana', 'Orange'], join='*')+'
+';
+  out(var_0);
+}
 ===
 Fruits: Apple*Banana*Orange
 #
@@ -74,10 +67,10 @@ Fruits: Apple*Banana*Orange
 #
 Fruits: ${properties.fruits @ join=properties.comma}
 ---
-VAR.START('var_0', ''Fruits: '+join(properties['fruits'], join=properties['comma'])+'
-'')
-OUT(var_0)
-VAR.END()
+{ const var_0 = 'Fruits: '+join(properties['fruits'], join=properties['comma'])+'
+';
+  out(var_0);
+}
 ===
 Fruits: Apple, Banana, Orange
 #

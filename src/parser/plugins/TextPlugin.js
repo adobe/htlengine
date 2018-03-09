@@ -27,7 +27,7 @@ module.exports = class TextPlugin extends Plugin {
         const ctx = this.pluginContext;
         const variable = ctx.generateVariable("textContent");
         stream.write(new VariableBinding.Start(variable,
-                   ctx.adjustContext(this.expression, MarkupContext.TEXT, ExpressionContext.TEXT).root));
+                   ctx.adjustToContext(this.expression, MarkupContext.TEXT, ExpressionContext.TEXT).root));
         stream.write(new OutputVariable(variable));
         stream.write(VariableBinding.END);
         stream.beginIgnore();

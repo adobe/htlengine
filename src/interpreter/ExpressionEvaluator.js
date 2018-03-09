@@ -87,6 +87,12 @@ module.exports = class ExpressionEvaluator {
         if (node instanceof PropertyAccess) {
             const target = node.target.accept(this);
             const name = node.property.accept(this);
+            if (target === null || target === undefined) {
+                throw new Error(`Invalid property access. ${node.target._name} evaluates to null`);
+            }
+            if (!(name in target)) {
+                // throw new Error(`No such property ${name} in ${node.target._name}`);
+            }
             const obj = target[name];
             if (obj instanceof ExpressionNode) {
                 return obj.accept(this);

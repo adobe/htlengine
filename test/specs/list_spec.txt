@@ -5,31 +5,24 @@
     <li>${item}</li>
 </ul>
 ---
-VAR.START('var_collectionVar0', 'properties['fruits']')
-VAR.START('var_size1', 'len:var_collectionVar0')
-COND.START('var_size1' == 'true')
-TEXT('<ul');
-TEXT('>');
-LOOP.START(var_collectionVar0, item, var_index2)
-VAR.START('itemList', '{index: var_index2, count: var_index2+1, first: var_index2==0, middle: !var_index2==0||var_index2==var_size1-1, last: var_index2==var_size1-1, odd: var_index2%2==0, even: var_index2%2==1, }')
-TEXT('
-    ');
-TEXT('<li');
-TEXT('>');
-VAR.START('var_3', 'item')
-OUT(var_3)
-VAR.END()
-TEXT('</li>');
-TEXT('
-');
-VAR.END()
-LOOP.END()
-TEXT('</ul>');
-COND.END()
-VAR.END()
-VAR.END()
-TEXT('
-');
+{ const var_collectionVar0 = properties['fruits'];
+  { const var_size1 = len:var_collectionVar0;
+    if (var_size1 == true) {
+      out("<ul>");
+      for ((var_index2,item) in var_collectionVar0) {
+        { const itemList = {index: var_index2, count: var_index2+1, first: var_index2==0, middle: !var_index2==0||var_index2==var_size1-1, last: var_index2==var_size1-1, odd: var_index2%2==0, even: var_index2%2==1, };
+          out("\n    <li>");
+          { const var_3 = item;
+            out(var_3);
+          }
+          out("</li>\n");
+        }
+      }
+      out("</ul>");
+    }
+  }
+}
+out("\n");
 ===
 <ul>
     <li>Apple</li>

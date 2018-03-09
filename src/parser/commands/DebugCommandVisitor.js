@@ -33,10 +33,24 @@ function expression2text(expression) {
     return expression;
 }
 
+function escapeJavaString(s) {
+    return JSON.stringify(s);
+}
+
+const INDENTS = [''];
+for (let i=0; i < 50; i++) {
+    INDENTS[i + 1] = INDENTS[i] + '  ';
+}
+
 module.exports = class DebugCommandVisitor {
 
     constructor() {
         this._result = '';
+        this._indent = 0;
+    }
+
+    out(msg) {
+        this._result += INDENTS[this._indent] + msg + '\n';
     }
 
     get result() {
@@ -45,34 +59,41 @@ module.exports = class DebugCommandVisitor {
 
     visit(cmd) {
         if (cmd instanceof OutText) {
-            this._result += `TEXT('${cmd.text}');\n`;
+            this.out(`out(${escapeJavaString(cmd.text)});`);
         }
+
         else if (cmd instanceof VariableBinding.Start) {
             const exp = expression2text(cmd.expression);
-            this._result += `VAR.START('${cmd.variableName}', '${exp}')\n`;
+            this.out(`{ const ${cmd.variableName} = ${exp};`);
+            this._indent++;
         }
         else if (cmd instanceof VariableBinding.Global) {
             const exp = expression2text(cmd.expression);
-            this._result += `VAR.GLOBAL('${cmd.variableName}', '${exp}')\n`;
+            this.out(`global.${cmd.variableName} = ${exp};`);
         }
         else if (cmd instanceof VariableBinding.End) {
-            this._result += `VAR.END()\n`;
+            this._indent--;
+            this.out('}');
         }
         else if (cmd instanceof Conditional.Start) {
             const exp = expression2text(cmd.expectedTruthValue);
-            this._result += `COND.START('${cmd.variableName}' == '${exp}')\n`;
+            this.out(`if (${cmd.variableName} == ${exp}) {`);
+            this._indent++;
         }
         else if (cmd instanceof Conditional.End) {
-            this._result += `COND.END()\n`;
+            this._indent--;
+            this.out('}');
         }
         else if (cmd instanceof OutputVariable) {
-            this._result += `OUT(${cmd.variableName})\n`;
+            this.out(`out(${cmd.variableName});`);
         }
         else if (cmd instanceof Loop.Start) {
-            this._result += `LOOP.START(${cmd.listVariable}, ${cmd.itemVariable}, ${cmd.indexVariable})\n`;
+            this.out(`for ((${cmd.indexVariable},${cmd.itemVariable}) in ${cmd.listVariable}) {`);
+            this._indent++;
         }
         else if (cmd instanceof Loop.End) {
-            this._result += `LOOP.END()\n`;
+            this._indent--;
+            this.out('}');
         }
         else {
             throw new Error('unknown command: ' + cmd);

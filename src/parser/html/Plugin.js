@@ -25,6 +25,10 @@ module.exports = class Plugin {
         this._expression = expression;
     }
 
+    isValid() {
+        return true;
+    }
+
     get pluginContext() {
         return this._pluginContext;
     }
@@ -54,7 +58,7 @@ module.exports = class Plugin {
     afterAttribute(stream, attributeName) {
     };
 
-    onPluginCall(stream, callInfo, expression) {
+    onPluginCall(stream, signature, expression) {
     };
 
     afterAttributes(stream) {

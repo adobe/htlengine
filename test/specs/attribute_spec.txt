@@ -1,0 +1,141 @@
+#
+### add single attribute
+#
+<div data-sly-attribute.data-values="${properties.myValues}"></div>
+---
+out("<div");
+{ const var_attrValue_data-values0 = properties['myValues'];
+  { const var_attrValueEscaped_data-values1 = xss(var_attrValue_data-values0, context='attribute', hint='data-values');
+    { const var_shouldDisplayAttr_data-values3 = var_attrValueEscaped_data-values1||'false'==var_attrValue_data-values0;
+      if (var_shouldDisplayAttr_data-values3 == true) {
+        out(" data-values");
+        { const var_isTrueValue_data-values2 = var_attrValue_data-values0==true;
+          if (var_isTrueValue_data-values2 == false) {
+            out("=\"");
+            out(var_attrValueEscaped_data-values1);
+            out("\"");
+          }
+        }
+      }
+    }
+  }
+}
+out("></div>\n");
+===
+<div data-values="some data value"></div>
+#
+### replace single attribute
+#
+<div title="" class="className" data-sly-attribute.class="${properties.myClass}"/>
+===
+<div title="" class="super-green"/>
+#
+### replace single attribute after call must not work.
+#
+<div data-sly-attribute.class="${properties.myClass}" class="className"/>
+===
+<div class="className"/>
+#
+### remove single attribute
+#
+<div title="" class="className" data-sly-attribute.class="${false}"/>
+===
+<div title=""/>
+#
+### ignore dangerous attributes
+#
+<div title="" onMouseMove="javascript:alert()" data-sly-attribute.onMouseMove="${'system.exit()'}"/>
+===
+<div title="" onMouseMove="javascript:alert()"/>
+#
+### create / replace / delete multiple arguments
+#
+<input class="green" lang="en" data-sly-attribute="${foobar}" type="text" />
+---
+out("<input");
+{ const var_attrMap0 = foobar;
+  { const var_attrName_class1 = 'class';
+    { const var_mapContains_class2 = var_attrMap0['class'];
+      { const var_attrContentEscaped3 = xss(var_mapContains_class2, context='attribute', hint=var_attrName_class1);
+        { const var_shouldDisplayAttr4 = var_attrContentEscaped3||'false'==var_mapContains_class2;
+          if (var_shouldDisplayAttr4 == true) {
+            out(" ");
+            out(var_attrName_class1);
+            { const var_isTrueAttr5 = var_mapContains_class2==true;
+              if (var_isTrueAttr5 == false) {
+                out("=\"");
+                out(var_attrContentEscaped3);
+                out("\"");
+              }
+            }
+          }
+        }
+      }
+      { const var_varExists6 = var_mapContains_class2!=null;
+        if (var_varExists6 == false) {
+          out(" class=\"green\"");
+        }
+      }
+    }
+  }
+  { const var_attrName_lang7 = 'lang';
+    { const var_mapContains_lang8 = var_attrMap0['lang'];
+      { const var_attrContentEscaped9 = xss(var_mapContains_lang8, context='attribute', hint=var_attrName_lang7);
+        { const var_shouldDisplayAttr10 = var_attrContentEscaped9||'false'==var_mapContains_lang8;
+          if (var_shouldDisplayAttr10 == true) {
+            out(" ");
+            out(var_attrName_lang7);
+            { const var_isTrueAttr11 = var_mapContains_lang8==true;
+              if (var_isTrueAttr11 == false) {
+                out("=\"");
+                out(var_attrContentEscaped9);
+                out("\"");
+              }
+            }
+          }
+        }
+      }
+      { const var_varExists12 = var_mapContains_lang8!=null;
+        if (var_varExists12 == false) {
+          out(" lang=\"en\"");
+        }
+      }
+    }
+  }
+  out(" type=\"text\"");
+  { const var_ignoredAttributes13 = {class: true, lang: true, type: true, };
+    for ((var_attrIndex16,var_attrName14) in var_attrMap0) {
+      { const var_attrNameEscaped15 = xss(var_attrName14, context='attributeName');
+        if (var_attrNameEscaped15 == true) {
+          { const var_isIgnoredAttr17 = var_ignoredAttributes13[var_attrName14];
+            if (var_isIgnoredAttr17 == false) {
+              { const var_attrContent18 = var_attrMap0[var_attrName14];
+                { const var_attrContentEscaped19 = xss(var_attrContent18, context='attribute', hint=var_attrNameEscaped15);
+                  { const var_shouldDisplayAttr20 = var_attrContentEscaped19||'false'==var_attrContent18;
+                    if (var_shouldDisplayAttr20 == true) {
+                      out(" ");
+                      out(var_attrNameEscaped15);
+                      { const var_isTrueAttr21 = var_attrContent18==true;
+                        if (var_isTrueAttr21 == false) {
+                          out("=\"");
+                          out(var_attrContentEscaped19);
+                          out("\"");
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+out("/>\n");
+===
+<input class="bar" type="text" id="foo"/>
+#
+###
+#

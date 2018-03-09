@@ -39,6 +39,14 @@ module.exports = class ElementContext {
         });
     }
 
+    addPluginAttribute(name, signature, expression) {
+        this._attributes.push({
+            name,
+            signature,
+            expression
+        });
+    }
+
     get tagName() {
         return this._tagName;
     }

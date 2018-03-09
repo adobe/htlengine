@@ -15,21 +15,14 @@
  * limitations under the License.
  *
  */
-
-const Command = require('./Command');
-
-module.exports = class OutText extends Command {
-
-    constructor(text) {
-        super();
-        this._text = text;
-    }
-
-    get text() {
-        return this._text;
-    }
-
-    append(text) {
-        this._text += text;
+module.exports = {
+    'properties': {
+        'myValues': "some data value",
+        'myClass': 'super-green'
+    },
+    'foobar': {
+        'id': 'foo',
+        'class': 'bar',
+        'lang': ''
     }
 };

@@ -24,12 +24,12 @@ module.exports = class TestPlugin extends Plugin {
     beforeElement(stream, tagName) {
         const ctx = this.pluginContext;
         let variableName = this._decodeVariableName();
-        ctx._useGlobalBinding = variableName != null;
+        this._useGlobalBinding = variableName != null;
         if (variableName == null) {
             variableName = ctx.generateVariable("testVariable");
         }
 
-        if (ctx._useGlobalBinding) {
+        if (this._useGlobalBinding) {
             stream.write(new VariableBinding.Global(variableName, this.expression.root));
         } else {
             stream.write(new VariableBinding.Start(variableName, this.expression.root));
@@ -39,7 +39,7 @@ module.exports = class TestPlugin extends Plugin {
 
     afterElement(stream) {
         stream.write(Conditional.END);
-        if (!this.pluginContext._useGlobalBinding) {
+        if (!this._useGlobalBinding) {
             stream.write(VariableBinding.END);
         }
     }

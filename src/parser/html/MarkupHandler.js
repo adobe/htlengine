@@ -41,6 +41,7 @@ const PluginContext = require('./PluginContext');
 const TextPlugin = require('../plugins/TextPlugin');
 const ListPlugin = require('../plugins/ListPlugin');
 const TestPlugin = require('../plugins/TestPlugin');
+const AttributePlugin = require('../plugins/AttributePlugin');
 const Plugin = require('./Plugin');
 
 const SLY_COMMENT_PREFIX = "<!--/*";
@@ -81,7 +82,7 @@ module.exports = class MarkupHandler {
         const context = this._stack[this._stack.length - 1];
         const signature = PluginSignature.fromAttribute(name);
         if (signature) {
-            this._handlePlugin(signature, value, context);
+            this._handlePlugin(name, signature, value, context);
         } else {
             context.addAttribute(name, value, quoteChar);
         }
@@ -175,31 +176,29 @@ module.exports = class MarkupHandler {
         return this._result;
     }
 
-    _handlePlugin(signature, value, context) {
+    _handlePlugin(name, signature, value, context) {
         const expressionContext = ExpressionContext.getContextForPlugin(signature.name);
         const interpolation = this._htlParser.parse(value);
         const expr = this._transformer.transform(interpolation, null, expressionContext);
 
         const pluginClass = this._lookupPlugin(signature.name);
-        const pluginContext = new PluginContext(this._symbolGenerator, this._transformer);
+        const pluginContext = new PluginContext(this._symbolGenerator, this._transformer, this._stream);
         const plugin = new pluginClass(signature, pluginContext, expr);
-
-        context.addPlugin(plugin);
-        //context.addPluginCall(name, callInfo, expr);
+        if (plugin.isValid()) {
+            context.addPlugin(plugin);
+            context.addPluginAttribute(name, signature, expr);
+        }
     }
 
     _emitAttributes(context, plugin) {
         context.attributes.forEach(attr => {
             const attrName = attr.name;
             const value = attr.value;
-            if (value == null || typeof value === 'string') {
+            if (attr.signature) {
+                plugin.onPluginCall(this._stream, attr.signature, attr.expression);
+            }
+            else if (value == null || typeof value === 'string') {
                 this._emitAttribute(attrName, value, attr.quoteChar, plugin);
-
-            // } else if (value instanceof Map.Entry) {
-                // Map.Entry entry = (Map.Entry) contentObj;
-                // PluginCallInfo info = (PluginCallInfo) entry.getKey();
-                // Expression expression = (Expression) entry.getValue();
-                // invoke.onPluginCall(stream, info, expression);
             }
         });
     }
@@ -396,6 +395,9 @@ module.exports = class MarkupHandler {
         }
         if (name === 'test') {
             return TestPlugin;
+        }
+        if (name === 'attribute') {
+            return AttributePlugin;
         }
         return Plugin;
         // throw new Error(`None of the registered plugins can handle the data-sly-${name} block element.`);

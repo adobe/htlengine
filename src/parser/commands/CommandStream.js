@@ -18,6 +18,7 @@
 const VariableBinding = require('./VariableBinding');
 const Conditional = require('./Conditional');
 const BooleanConstant = require('../htl/nodes/BooleanConstant');
+const OutText = require('./OutText');
 
 const ALWAYS_FALSE_VAR = 'always_false';
 
@@ -25,10 +26,25 @@ module.exports = class CommandStream {
 
     constructor() {
         this._commands = [];
+        this._warnings = [];
+        this._wasText = false;
     }
 
     write(command) {
+        const isText = command instanceof OutText;
+        if (isText && this._wasText) {
+            this._commands[this._commands.length - 1].append(command.text);
+            return;
+        }
+        this._wasText = isText;
         this._commands.push(command);
+    }
+
+    warn(message, code) {
+        this._warnings.push({
+            message: message,
+            code: code
+        })
     }
 
     close() {
