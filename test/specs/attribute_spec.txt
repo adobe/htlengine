@@ -4,9 +4,9 @@
 <div data-sly-attribute.data-values="${properties.myValues}"></div>
 ---
 out("<div");
-{ const var_attrValue_data-values0 = properties['myValues'];
-  { const var_attrValueEscaped_data-values1 = xss(var_attrValue_data-values0, context='attribute', hint='data-values');
-    { const var_shouldDisplayAttr_data-values3 = var_attrValueEscaped_data-values1||'false'==var_attrValue_data-values0;
+{ const var_attrValue_data-values0 = properties["myValues"];
+  { const var_attrValueEscaped_data-values1 = xss(var_attrValue_data-values0, context="attribute", hint="data-values");
+    { const var_shouldDisplayAttr_data-values3 = var_attrValueEscaped_data-values1||"false"==var_attrValue_data-values0;
       if (var_shouldDisplayAttr_data-values3 == true) {
         out(" data-values");
         { const var_isTrueValue_data-values2 = var_attrValue_data-values0==true;
@@ -54,10 +54,10 @@ out("></div>\n");
 ---
 out("<input");
 { const var_attrMap0 = foobar;
-  { const var_attrName_class1 = 'class';
-    { const var_mapContains_class2 = var_attrMap0['class'];
-      { const var_attrContentEscaped3 = xss(var_mapContains_class2, context='attribute', hint=var_attrName_class1);
-        { const var_shouldDisplayAttr4 = var_attrContentEscaped3||'false'==var_mapContains_class2;
+  { const var_attrName_class1 = "class";
+    { const var_mapContains_class2 = var_attrMap0["class"];
+      { const var_attrContentEscaped3 = xss(var_mapContains_class2, context="attribute", hint=var_attrName_class1);
+        { const var_shouldDisplayAttr4 = var_attrContentEscaped3||"false"==var_mapContains_class2;
           if (var_shouldDisplayAttr4 == true) {
             out(" ");
             out(var_attrName_class1);
@@ -78,10 +78,10 @@ out("<input");
       }
     }
   }
-  { const var_attrName_lang7 = 'lang';
-    { const var_mapContains_lang8 = var_attrMap0['lang'];
-      { const var_attrContentEscaped9 = xss(var_mapContains_lang8, context='attribute', hint=var_attrName_lang7);
-        { const var_shouldDisplayAttr10 = var_attrContentEscaped9||'false'==var_mapContains_lang8;
+  { const var_attrName_lang7 = "lang";
+    { const var_mapContains_lang8 = var_attrMap0["lang"];
+      { const var_attrContentEscaped9 = xss(var_mapContains_lang8, context="attribute", hint=var_attrName_lang7);
+        { const var_shouldDisplayAttr10 = var_attrContentEscaped9||"false"==var_mapContains_lang8;
           if (var_shouldDisplayAttr10 == true) {
             out(" ");
             out(var_attrName_lang7);
@@ -103,15 +103,15 @@ out("<input");
     }
   }
   out(" type=\"text\"");
-  { const var_ignoredAttributes13 = {class: true, lang: true, type: true, };
+  { const var_ignoredAttributes13 = {"class":{"_hasParens":false,"_value":true,"_text":true},"lang":{"_hasParens":false,"_value":true,"_text":true},"type":{"_hasParens":false,"_value":true,"_text":true}};
     for ((var_attrIndex16,var_attrName14) in var_attrMap0) {
-      { const var_attrNameEscaped15 = xss(var_attrName14, context='attributeName');
+      { const var_attrNameEscaped15 = xss(var_attrName14, context="attributeName");
         if (var_attrNameEscaped15 == true) {
           { const var_isIgnoredAttr17 = var_ignoredAttributes13[var_attrName14];
             if (var_isIgnoredAttr17 == false) {
               { const var_attrContent18 = var_attrMap0[var_attrName14];
-                { const var_attrContentEscaped19 = xss(var_attrContent18, context='attribute', hint=var_attrNameEscaped15);
-                  { const var_shouldDisplayAttr20 = var_attrContentEscaped19||'false'==var_attrContent18;
+                { const var_attrContentEscaped19 = xss(var_attrContent18, context="attribute", hint=var_attrNameEscaped15);
+                  { const var_shouldDisplayAttr20 = var_attrContentEscaped19||"false"==var_attrContent18;
                     if (var_shouldDisplayAttr20 == true) {
                       out(" ");
                       out(var_attrNameEscaped15);

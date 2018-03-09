@@ -21,17 +21,10 @@ const Conditional = require('../parser/commands/Conditional');
 const OutputVariable = require('../parser/commands/OutputVariable');
 const Loop = require('../parser/commands/Loop');
 
-const DebugVisitor = require('../parser/htl/DebugVisitor');
 const ExpressionNode = require('../parser/htl/nodes/ExpressionNode');
 
 const Runtime = require('./Runtime');
 const ExpressionEvaluator = require('./ExpressionEvaluator');
-
-function expression2text(expression) {
-    const v = new DebugVisitor();
-    expression.accept(v);
-    return v.result;
-}
 
 class Block {
 

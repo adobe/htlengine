@@ -20,18 +20,7 @@ const VariableBinding = require('./VariableBinding');
 const Conditional = require('./Conditional');
 const Loop = require('./Loop');
 const OutputVariable = require('./OutputVariable');
-
-const DebugVisitor = require('../htl/DebugVisitor');
-const ExpressionNode = require('../htl/nodes/ExpressionNode');
-
-function expression2text(expression) {
-    if (expression instanceof ExpressionNode) {
-        const v = new DebugVisitor();
-        expression.accept(v);
-        return v.result;
-    }
-    return expression;
-}
+const ExpressionFormatter = require('../../compiler/ExpressionFormatter');
 
 function escapeJavaString(s) {
     return JSON.stringify(s);
@@ -63,12 +52,12 @@ module.exports = class DebugCommandVisitor {
         }
 
         else if (cmd instanceof VariableBinding.Start) {
-            const exp = expression2text(cmd.expression);
+            const exp = ExpressionFormatter.format(cmd.expression);
             this.out(`{ const ${cmd.variableName} = ${exp};`);
             this._indent++;
         }
         else if (cmd instanceof VariableBinding.Global) {
-            const exp = expression2text(cmd.expression);
+            const exp = ExpressionFormatter.format(cmd.expression);
             this.out(`global.${cmd.variableName} = ${exp};`);
         }
         else if (cmd instanceof VariableBinding.End) {
@@ -76,7 +65,7 @@ module.exports = class DebugCommandVisitor {
             this.out('}');
         }
         else if (cmd instanceof Conditional.Start) {
-            const exp = expression2text(cmd.expectedTruthValue);
+            const exp = ExpressionFormatter.format(cmd.expectedTruthValue);
             this.out(`if (${cmd.variableName} == ${exp}) {`);
             this._indent++;
         }

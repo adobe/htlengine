@@ -5,12 +5,12 @@
     <li>${item}</li>
 </ul>
 ---
-{ const var_collectionVar0 = properties['fruits'];
+{ const var_collectionVar0 = properties["fruits"];
   { const var_size1 = len:var_collectionVar0;
     if (var_size1 == true) {
       out("<ul>");
       for ((var_index2,item) in var_collectionVar0) {
-        { const itemList = {index: var_index2, count: var_index2+1, first: var_index2==0, middle: !var_index2==0||var_index2==var_size1-1, last: var_index2==var_size1-1, odd: var_index2%2==0, even: var_index2%2==1, };
+        { const itemList = {"index":{"_hasParens":false,"_name":"var_index2"},"count":{"_hasParens":false,"_operator":{"sym":"+"},"_target":{"_hasParens":false,"_name":"var_index2"},"_rightOperand":{"_hasParens":false,"_value":1,"_text":1}},"first":{"_hasParens":false,"_operator":{"sym":"=="},"_target":{"_hasParens":false,"_name":"var_index2"},"_rightOperand":{"_hasParens":false,"_value":0,"_text":0}},"middle":{"_hasParens":false,"_operator":{"sym":"!"},"_target":{"_hasParens":false,"_operator":{"sym":"||"},"_target":{"_hasParens":false,"_operator":{"sym":"=="},"_target":{"_hasParens":false,"_name":"var_index2"},"_rightOperand":{"_hasParens":false,"_value":0,"_text":0}},"_rightOperand":{"_hasParens":false,"_operator":{"sym":"=="},"_target":{"_hasParens":false,"_name":"var_index2"},"_rightOperand":{"_hasParens":false,"_operator":{"sym":"-"},"_target":{"_hasParens":false,"_name":"var_size1"},"_rightOperand":{"_hasParens":false,"_value":1,"_text":1}}}}},"last":{"_hasParens":false,"_operator":{"sym":"=="},"_target":{"_hasParens":false,"_name":"var_index2"},"_rightOperand":{"_hasParens":false,"_operator":{"sym":"-"},"_target":{"_hasParens":false,"_name":"var_size1"},"_rightOperand":{"_hasParens":false,"_value":1,"_text":1}}},"odd":{"_hasParens":false,"_operator":{"sym":"=="},"_target":{"_hasParens":false,"_operator":{"sym":"%"},"_target":{"_hasParens":false,"_name":"var_index2"},"_rightOperand":{"_hasParens":false,"_value":2,"_text":2}},"_rightOperand":{"_hasParens":false,"_value":0,"_text":0}},"even":{"_hasParens":false,"_operator":{"sym":"=="},"_target":{"_hasParens":false,"_operator":{"sym":"%"},"_target":{"_hasParens":false,"_name":"var_index2"},"_rightOperand":{"_hasParens":false,"_value":2,"_text":2}},"_rightOperand":{"_hasParens":false,"_value":1,"_text":1}}};
           out("\n    <li>");
           { const var_3 = item;
             out(var_3);

@@ -11,8 +11,7 @@ Hello, World
 #
 Hello, ${world}.
 ---
-{ const var_0 = 'Hello, '+world+'.
-';
+{ const var_0 = "Hello, "+world+".\n";
   out(var_0);
 }
 ===
@@ -23,7 +22,7 @@ Hello, Earth.
 <p data-sly-text="${'Hello, world.'}">This text would never be shown.</p>
 ---
 out("<p>");
-{ const var_textContent0 = xss('Hello, world.', context='text');
+{ const var_textContent0 = xss("Hello, world.", context="text");
   out(var_textContent0);
 }
 { const always_false = false;
@@ -40,7 +39,7 @@ out("</p>\n");
 <p data-sly-text="${properties.title}">This text would never be shown.</p>
 ---
 out("<p>");
-{ const var_textContent0 = xss(properties['title'], context='text');
+{ const var_textContent0 = xss(properties["title"], context="text");
   out(var_textContent0);
 }
 { const always_false = false;
@@ -56,8 +55,7 @@ out("</p>\n");
 #
 Fruits: ${['Apple', 'Banana', 'Orange'] @ join='*'}
 ---
-{ const var_0 = 'Fruits: '+join(['Apple', 'Banana', 'Orange'], join='*')+'
-';
+{ const var_0 = "Fruits: "+join(["Apple", "Banana", "Orange"], join="*")+"\n";
   out(var_0);
 }
 ===
@@ -67,8 +65,7 @@ Fruits: Apple*Banana*Orange
 #
 Fruits: ${properties.fruits @ join=properties.comma}
 ---
-{ const var_0 = 'Fruits: '+join(properties['fruits'], join=properties['comma'])+'
-';
+{ const var_0 = "Fruits: "+join(properties["fruits"], join=properties["comma"])+"\n";
   out(var_0);
 }
 ===
