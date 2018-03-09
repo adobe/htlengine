@@ -311,7 +311,7 @@ module.exports = class MarkupHandler {
 
         this._emitAttributeStart(name);   //write("attrName");
         plugin.beforeAttributeValue(stream, name, node);
-        stream.write(new Conditional.Start(new Identifier(attrValue))); // if (attrValue)
+        stream.write(new Conditional.Start(new BinaryOperation(BinaryOperator.STRICT_NEQ, new Identifier(attrValue), BooleanConstant.TRUE),false)); // if (attrValue !== true)
         this._emitAttributeValueStart(quoteChar); // write("='");
         if (!alreadyEscaped) {
             stream.write(new OutputVariable(attrContent)); //write(attrContent)

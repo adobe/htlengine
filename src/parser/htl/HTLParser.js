@@ -36,6 +36,9 @@ module.exports = class HTLParser {
      * @return {Interpolation} The parsed interpolation.
      */
     parse(input) {
+        if (input === null) {
+            input = '';
+        }
         const chars = new antlr4.InputStream(input);
         const lexer = new SightlyLexer(chars);
         const tokens = new antlr4.CommonTokenStream(lexer);

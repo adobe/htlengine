@@ -127,7 +127,7 @@ class SingleAttributePlugin extends Plugin {
     }
 
     _emitWrite(stream) {
-        stream.write(new Conditional.Start(new Identifier(this.attrValue), false));
+        stream.write(new Conditional.Start(new BinaryOperation(BinaryOperator.STRICT_NEQ, new Identifier(this.attrValue), BooleanConstant.TRUE),false));
         stream.write(new OutText('="'));
         stream.write(new OutputVariable(this.escapedAttrValue));
         stream.write(new OutText('"'));
@@ -229,7 +229,7 @@ class MultiAttributePlugin extends Plugin {
         stream.write(new OutText(" "));
         stream.write(new OutputVariable(attrNameVar));
 
-        stream.write(new Conditional.Start(new Identifier(attrContentVar)));
+        stream.write(new Conditional.Start(new BinaryOperation(BinaryOperator.STRICT_NEQ, new Identifier(attrContentVar), BooleanConstant.TRUE),false));
         stream.write(new OutText("=\""));
         stream.write(new OutputVariable(escapedContent));
         stream.write(new OutText("\""));

@@ -100,6 +100,10 @@ function filterAttributeName(name) {
 }
 
 function escapeAttributeValue(input, mContext) {
+    if (typeof input === 'boolean') {
+        return input;
+    }
+
     if (isUriAttribute(mContext.attributeName)) {
         return xss.getValidHref(input);
     } else {

@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-const Plugin = require('./Plugin');
+const PluginProxy = require('./PluginProxy');
 
 
 /**
@@ -28,7 +28,7 @@ module.exports = class ElementContext {
         this._tagName = tagName;
         this._attributes = [];
         this._isSlyTag = 'sly' === tagName.toLowerCase();
-        this._plugin = new Plugin();
+        this._plugin = new PluginProxy();
     }
 
     addAttribute(name, value, quoteChar) {
@@ -60,8 +60,7 @@ module.exports = class ElementContext {
     }
 
     addPlugin(p) {
-        // todo: composite plugin
-        this._plugin = p;
+        this._plugin.add(p);
     }
 
     get plugin() {

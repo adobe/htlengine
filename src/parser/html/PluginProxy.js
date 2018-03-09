@@ -15,17 +15,29 @@
  * limitations under the License.
  *
  */
-module.exports = {
-    'properties': {
-        'myValues': "some data value",
-        'myClass': 'super-green'
-    },
-    'foobar': {
-        'id': 'foo',
-        'class': 'bar',
-        'lang': ''
-    },
-    attrs: {
-        'checked': true
+const Plugin = require('./Plugin');
+
+module.exports = class PluginProxy {
+
+    constructor() {
+        this._plugins = [];
+    }
+
+    add(plugin) {
+        this._plugins.push(plugin);
+    }
+
+    _delegate(fn, args) {
+        this._plugins.forEach((p) => {
+            p[fn].apply(p, args);
+        });
     }
 };
+
+Object.getOwnPropertyNames(Plugin.prototype).filter(function (p) {
+    return p.startsWith('before') || p.startsWith('after') || p.startsWith('on');
+}).forEach((fn) => {
+    module.exports.prototype[fn] = function() {
+        this._delegate(fn, arguments);
+    }
+});

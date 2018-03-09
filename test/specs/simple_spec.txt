@@ -153,4 +153,10 @@ foo,
 
 <!-- Page title: Hello, world. -->
 #
+### multiple plugins
+#
+<div class="foo" data-sly-attribute.class="${'bar'}" data-sly-text="${'Hello, World'}">This is not shown</div>
+===
+<div class="bar">Hello, World</div>
+#
 ###

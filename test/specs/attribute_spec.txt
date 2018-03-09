@@ -8,7 +8,7 @@ out("<div");
   { const var_attrValueEscaped_data-values1 = xss(var_attrValue_data-values0, context="attribute", hint="data-values");
     if (var_attrValueEscaped_data-values1||"false"==var_attrValue_data-values0) {
       out(" data-values");
-      if (var_attrValue_data-values0) {
+      if (var_attrValue_data-values0!=true) {
         out("=\"");
         out(var_attrValueEscaped_data-values1);
         out("\"");
@@ -56,7 +56,7 @@ out("<input");
         if (var_attrContentEscaped3||"false"==var_mapContains_class2) {
           out(" ");
           out(var_attrName_class1);
-          if (var_mapContains_class2) {
+          if (var_mapContains_class2!=true) {
             out("=\"");
             out(var_attrContentEscaped3);
             out("\"");
@@ -74,7 +74,7 @@ out("<input");
         if (var_attrContentEscaped6||"false"==var_mapContains_lang5) {
           out(" ");
           out(var_attrName_lang4);
-          if (var_mapContains_lang5) {
+          if (var_mapContains_lang5!=true) {
             out("=\"");
             out(var_attrContentEscaped6);
             out("\"");
@@ -97,7 +97,7 @@ out("<input");
                 if (var_attrContentEscaped12||"false"==var_attrContent11) {
                   out(" ");
                   out(var_attrNameEscaped9);
-                  if (var_attrContent11) {
+                  if (var_attrContent11!=true) {
                     out("=\"");
                     out(var_attrContentEscaped12);
                     out("\"");
@@ -115,5 +115,50 @@ out("/>\n");
 ===
 <input class="bar" type="text" id="foo"/>
 #
-###
+### left to right
 #
+<div class="bar1" data-sly-attribute.class="bar2" data-sly-attribute="${foobar}"></div>
+<div data-sly-attribute="${foobar}" data-sly-attribute.class="bar2" id="foo2"></div>
+===
+<div class="bar" id="foo"></div>
+<div id="foo2" class="bar2"></div>
+#
+### Empty string values lead to the removal of the attribute:
+#
+<div lang="${''}"></div>
+<div lang="en" data-sly-attribute.lang></div>
+<div lang="en" data-sly-attribute.lang=""></div>
+<div lang="en" data-sly-attribute.lang="${''}"></div>
+<div lang="en" data-sly-attribute="${foobar}"></div>
+===
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div id="foo" class="bar"></div>
+#
+### empty attributes are left as they are if no data-sly-attribute applies to them
+#
+<div title="" data-sly-attribute="${foobar}"></div>
+===
+<div title="" id="foo" class="bar"></div>
+#
+### Boolean values allow to control the display of boolean attributes:
+#
+<input checked="${true}"/>
+<input data-sly-attribute.checked="${true}"/>
+<input checked="${false}"/>
+<input data-sly-attribute.checked="${false}"/>
+<input checked="${'true'}"/>
+<input checked="${'false'}"/>
+<input data-sly-attribute="${attrs}"/>
+===
+<input checked/>
+<input checked/>
+<input/>
+<input/>
+<input checked="true"/>
+<input checked="false"/>
+<input checked/>
+#
+###
