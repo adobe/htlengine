@@ -30,6 +30,7 @@ module.exports = class Compiler {
     constructor() {
         this._dir = '.';
         this._runtimeGlobals = [];
+        this._runtimeGlobal = 'resource';
         this._includeRuntime = false;
     }
 
@@ -38,11 +39,16 @@ module.exports = class Compiler {
         return this;
     }
 
-    withRuntimeGlobal(global) {
-        if (Array.isArray(global)) {
-            this._runtimeGlobals = this._runtimeGlobals.concat(global);
+    withRuntimeGlobalName(name) {
+        this._runtimeGlobal = name;
+        return this;
+    }
+
+    withRuntimeVar(name) {
+        if (Array.isArray(name)) {
+            this._runtimeGlobals = this._runtimeGlobals.concat(name);
         } else {
-            this._runtimeGlobals.push(global);
+            this._runtimeGlobals.push(name);
         }
         return this;
     }
@@ -61,6 +67,9 @@ module.exports = class Compiler {
         this._runtimeGlobals.forEach(g => {
             global.push(`        let ${g} = runtime.globals.${g};\n`)
         });
+        if (this._runtimeGlobal) {
+            global.push(`        const ${this._runtimeGlobal} = runtime.globals;\n`)
+        }
 
         const code = new JSCodeGenVisitor()
             .withIndent('    ')

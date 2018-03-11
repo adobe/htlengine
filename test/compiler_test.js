@@ -74,7 +74,7 @@ describe('Compiler Tests', function() {
 
             const compiler = new Compiler()
                 .withOutputDirectory(outputDir)
-                .withRuntimeGlobal(Object.keys(payload));
+                .withRuntimeVar(Object.keys(payload));
 
             describe(name, function() {
                 let idx = 0;

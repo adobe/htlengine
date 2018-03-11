@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-const Runtime = require('./src/runtime/Runtime');
+const Runtime = require('htlengine/src/runtime/Runtime');
 
 function run(runtime) {
 
@@ -35,9 +35,9 @@ function run(runtime) {
     })();
 }
 
-module.exports = function main(resource) {
+module.exports.main = function main(resource) {
     const runtime = new Runtime();
     runtime.setGlobal(resource);
     run(runtime);
-    return runtime.stream;
+    return { body: runtime.stream };
 };

@@ -22,7 +22,7 @@ module.exports = function(resource, template) {
     const compiler = new Compiler()
         .withOutputDirectory('.')
         .includeRuntime(true)
-        .withRuntimeGlobal(Object.keys(resource));
+        .withRuntimeVar(Object.keys(resource));
 
     const filename = compiler.compile(template, './out.js');
     const service = require(filename);
