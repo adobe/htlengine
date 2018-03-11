@@ -16,31 +16,20 @@
  *
  */
 
-const ExpressionNode = require('./ExpressionNode');
-module.exports = class TernaryOperation extends ExpressionNode {
+const Command = require('./Command');
 
-    /**
-     *
-     * @param {ExpressionNode} condition Condition expression
-     * @param {ExpressionNode} thenBranch Then branch expression
-     * @param {ExpressionNode} elseBranch Else branch expression
-     */
-    constructor(condition, thenBranch, elseBranch) {
+module.exports = class Comment extends Command {
+
+    constructor(text) {
         super();
-        this._condition = condition;
-        this._thenBranch = thenBranch;
-        this._elseBranch = elseBranch;
+        this._text = text;
     }
 
-    get condition() {
-        return this._condition;
+    get text() {
+        return this._text;
     }
 
-    get thenBranch() {
-        return this._thenBranch;
-    }
-
-    get elseBranch() {
-        return this._elseBranch;
+    append(text) {
+        this._text += text;
     }
 };

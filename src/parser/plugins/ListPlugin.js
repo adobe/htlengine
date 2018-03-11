@@ -20,6 +20,7 @@ const VariableBinding = require('../commands/VariableBinding');
 const Conditional = require('../commands/Conditional');
 const Loop = require('../commands/Loop');
 const NumericConstant = require('../htl/nodes/NumericConstant');
+const PropertyAccess = require('../htl/nodes/PropertyAccess');
 const MapLiteral = require('../htl/nodes/MapLiteral');
 const BinaryOperation = require('../htl/nodes/BinaryOperation');
 const BinaryOperator = require('../htl/nodes/BinaryOperator');
@@ -48,15 +49,16 @@ function _parityCheck(numericExpression, expected) {
 
 function _buildStatusObj(indexVar, sizeVar) {
     const indexId = new Identifier(indexVar);
-    const firstExpr = new BinaryOperation(BinaryOperator.EQ, indexId, NumericConstant.ZERO);
-    const lastExpr = new BinaryOperation(BinaryOperator.EQ, indexId, new BinaryOperation(BinaryOperator.SUB, new Identifier(sizeVar), NumericConstant.ONE));
-
+    const lastValue = new BinaryOperation(BinaryOperator.SUB, new Identifier(sizeVar), NumericConstant.ONE);
     return new MapLiteral({
         [INDEX]: indexId,
         [COUNT]: new BinaryOperation(BinaryOperator.ADD, indexId, NumericConstant.ONE),
-        [FIRST]: firstExpr,
-        [MIDDLE]: new UnaryOperation(UnaryOperator.NOT, new BinaryOperation(BinaryOperator.OR, firstExpr, lastExpr)),
-        [LAST]: lastExpr,
+        [FIRST]: new BinaryOperation(BinaryOperator.EQ, indexId, NumericConstant.ZERO),
+        [MIDDLE]: new BinaryOperation(BinaryOperator.AND,
+            new BinaryOperation(BinaryOperator.GT, indexId, NumericConstant.ZERO),
+            new BinaryOperation(BinaryOperator.LT, indexId, lastValue)
+        ),
+        [LAST]: new BinaryOperation(BinaryOperator.EQ, indexId, lastValue),
         [ODD]: _parityCheck(indexId, NumericConstant.ZERO),
         [EVEN]: _parityCheck(indexId, NumericConstant.ONE),
     });

@@ -21,8 +21,6 @@ const Conditional = require('../parser/commands/Conditional');
 const OutputVariable = require('../parser/commands/OutputVariable');
 const Loop = require('../parser/commands/Loop');
 
-const ExpressionNode = require('../parser/htl/nodes/ExpressionNode');
-
 const Runtime = require('./Runtime');
 const ExpressionEvaluator = require('./ExpressionEvaluator');
 

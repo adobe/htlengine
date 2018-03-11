@@ -27,13 +27,14 @@ const ExpressionNode = require('../parser/htl/nodes/ExpressionNode');
 const Interpolation = require('../parser/htl/nodes/Interpolation');
 const Identifier = require('../parser/htl/nodes/Identifier');
 const BinaryOperation = require('../parser/htl/nodes/BinaryOperation');
+const MultiOperation = require('../parser/htl/nodes/MultiOperation');
 const UnaryOperation = require('../parser/htl/nodes/UnaryOperation');
 const TernaryOperation = require('../parser/htl/nodes/TernaryOperation');
 const RuntimeCall = require('../parser/htl/nodes/RuntimeCall');
 
-const format = require('../utils/format');
-const format_uri = require('../utils/format_uri');
-const format_xss = require('../utils/format_xss');
+const format = require('../runtime/format');
+const format_uri = require('../runtime/format_uri');
+const format_xss = require('../runtime/format_xss');
 
 function exec(name, value, options) {
     if (name === 'join') {
@@ -107,6 +108,15 @@ module.exports = class ExpressionEvaluator {
             const op0 = node.leftOperand.accept(this);
             const op1 = node.rightOperand.accept(this);
             return node.operator.calc(op0, op1);
+        }
+
+        if (node instanceof MultiOperation) {
+            let op0 = null;
+            node.operands.forEach((op,idx) => {
+                const op1 = op.accept(this);
+                op0 = idx === 0 ? op1 : node.operator.calc(op0, op1)
+            });
+            return op0;
         }
 
         if (node instanceof TernaryOperation) {

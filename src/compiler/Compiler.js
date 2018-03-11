@@ -15,18 +15,67 @@
  * limitations under the License.
  *
  */
+const fs = require('fs');
+const path = require('path');
+
+const TemplateParser = require('../parser/html/TemplateParser');
+const ThrowingErrorListener = require('../parser/htl/ThrowingErrorListener');
+const JSCodeGenVisitor = require('./JSCodeGenVisitor');
+
+const DEFAULT_TEMPLATE = 'JSCodeTemplate.js';
+const RUNTIME_TEMPLATE = 'JSRuntimeTemplate.js';
 
 module.exports = class Compiler {
 
-    compile(source) {
+    constructor() {
+        this._dir = '.';
+        this._runtimeGlobals = [];
+        this._includeRuntime = false;
+    }
 
-        const service = function service(resource) {
-            const engine = require('htlengine/src/main');
-            return engine(resource, source.code);
-        };
+    withOutputDirectory(dir) {
+        this._dir = dir;
+        return this;
+    }
 
-        source = JSON.stringify({code: source});
+    withRuntimeGlobal(global) {
+        if (Array.isArray(global)) {
+            this._runtimeGlobals = this._runtimeGlobals.concat(global);
+        } else {
+            this._runtimeGlobals.push(global);
+        }
+        return this;
+    }
 
-        return `const source=${source};\n` + service;
+    includeRuntime(include) {
+        this._includeRuntime = include;
+        return this;
+    }
+
+    compile(source, name) {
+        const commands = new TemplateParser()
+            .withErrorListener(ThrowingErrorListener.INSTANCE)
+            .parse(source);
+
+        const global = [];
+        this._runtimeGlobals.forEach(g => {
+            global.push(`        let ${g} = runtime.globals.${g};\n`)
+        });
+
+        const code = new JSCodeGenVisitor()
+            .withIndent('    ')
+            .indent()
+            .process(commands)
+            .code;
+
+        const codeTemplate = this._includeRuntime ? RUNTIME_TEMPLATE : DEFAULT_TEMPLATE;
+        let template = fs.readFileSync(path.join(__dirname, codeTemplate), 'utf-8');
+        template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, global.join(''));
+        template = template.replace(/^\s*\/\/\s*CODE\s*$/m, code);
+
+        const filename = path.resolve(this._dir, name);
+        fs.writeFileSync(filename, template);
+
+        return filename;
     }
 };

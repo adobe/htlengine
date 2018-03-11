@@ -11,7 +11,7 @@ $ yarn install
 currently not very cool. just passes the given file into the HTML parser and outputs the tree again.
 
 ```bash
-$ node src/cli.js test/simple.html
+$ node src/cli.js test/simple2.html
 ```
 
 ## test

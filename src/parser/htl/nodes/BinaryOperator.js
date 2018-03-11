@@ -139,6 +139,7 @@ module.exports = Object.freeze({
      */
     ADD: {
         sym: '+',
+        isNumeric: true,
         calc: (left, right) => {
             return Number(left) + Number(right);
         }
@@ -149,6 +150,7 @@ module.exports = Object.freeze({
      */
     SUB: {
         sym: '-',
+        isNumeric: true,
         calc: (left, right) => {
             return Number(left) - Number(right);
         }
@@ -159,6 +161,7 @@ module.exports = Object.freeze({
      */
     MUL: {
         sym: '*',
+        isNumeric: true,
         calc: (left, right) => {
             return Number(left) * Number(right);
         }
@@ -169,6 +172,7 @@ module.exports = Object.freeze({
      */
     DIV: {
         sym: '/',
+        isNumeric: true,
         calc: (left, right) => {
             return Number(left) / Number(right);
         }
@@ -179,6 +183,7 @@ module.exports = Object.freeze({
      */
     I_DIV: {
         sym: '/',
+        isNumeric: true,
         calc: (left, right) => {
             return Math.floor(Number.parseInt(left, 10) / Number.parseInt(right, 10));
         }
@@ -189,6 +194,7 @@ module.exports = Object.freeze({
      */
     REM: {
         sym: '%',
+        isNumeric: true,
         calc: (left, right) => {
             return Number(left) % Number(right);
         }

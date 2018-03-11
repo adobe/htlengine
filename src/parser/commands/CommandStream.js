@@ -15,7 +15,6 @@
  * limitations under the License.
  *
  */
-const VariableBinding = require('./VariableBinding');
 const Conditional = require('./Conditional');
 const BooleanConstant = require('../htl/nodes/BooleanConstant');
 const OutText = require('./OutText');

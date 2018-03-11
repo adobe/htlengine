@@ -337,7 +337,6 @@ module.exports = class MarkupHandler {
         if (plainText != null) {
             this._out(plainText);
         } else {
-            // outExprNode(expressionWrapper.transform(interpolation, context, ExpressionContext.TEXT).getRoot());
             const node = this._transformer.transform(interpolation, markupContext, ExpressionContext.TEXT).root;
             const variable = this._symbolGenerator.next();
             this._stream.write(new VariableBinding.Start(variable, node));

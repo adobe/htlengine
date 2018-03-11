@@ -15,32 +15,29 @@
  * limitations under the License.
  *
  */
+const Runtime = require('./src/runtime/Runtime');
 
-const ExpressionNode = require('./ExpressionNode');
-module.exports = class TernaryOperation extends ExpressionNode {
+function run(runtime) {
 
-    /**
-     *
-     * @param {ExpressionNode} condition Condition expression
-     * @param {ExpressionNode} thenBranch Then branch expression
-     * @param {ExpressionNode} elseBranch Else branch expression
-     */
-    constructor(condition, thenBranch, elseBranch) {
-        super();
-        this._condition = condition;
-        this._thenBranch = thenBranch;
-        this._elseBranch = elseBranch;
-    }
+    const lengthOf = function(c) {
+        return Array.isArray(c) ? c.length : Object.keys(c).length;
+    };
 
-    get condition() {
-        return this._condition;
-    }
+    const out = runtime.out.bind(runtime);
+    const exec = runtime.exec.bind(runtime);
+    const xss = runtime.xss.bind(runtime);
 
-    get thenBranch() {
-        return this._thenBranch;
-    }
+    (function run() {
 
-    get elseBranch() {
-        return this._elseBranch;
-    }
+        // RUNTIME_GLOBALS
+
+        // CODE
+    })();
+}
+
+module.exports = function main(resource) {
+    const runtime = new Runtime();
+    runtime.setGlobal(resource);
+    run(runtime);
+    return runtime.stream;
 };

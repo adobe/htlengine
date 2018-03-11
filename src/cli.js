@@ -32,6 +32,10 @@ const resource = {
     'nav': {
         foo: 'This is foo. '
     },
+    'test': 'This is a test',
+    'qttMin': 4,
+    'qttMax': 4,
+    'expression': 'this is an expression.',
     'it': {
         "html": "foo barty!",
         "title": "Hello, world!",

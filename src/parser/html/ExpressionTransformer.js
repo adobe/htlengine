@@ -19,6 +19,7 @@
 const StringConstant = require('../htl/nodes/StringConstant');
 const Expression = require('../htl/nodes/Expression');
 const BinaryOperation = require('../htl/nodes/BinaryOperation');
+const MultiOperation = require('../htl/nodes/MultiOperation');
 const BinaryOperator = require('../htl/nodes/BinaryOperator');
 const OptionHandler = require('../htl/OptionHandler');
 
@@ -26,11 +27,10 @@ function _join(nodes) {
     if (nodes.length === 0) {
         return StringConstant.EMPTY;
     }
-    let root = nodes[0];
-    for (let i = 1; i< nodes.length; i++) {
-        root = new BinaryOperation(BinaryOperator.CONCATENATE, root, nodes[i]);
+    if (nodes.length === 1) {
+        return nodes[0];
     }
-    return root;
+    return new MultiOperation(BinaryOperator.CONCATENATE, nodes);
 }
 
 module.exports = class ExpressionTransformer {

@@ -15,7 +15,6 @@
  * limitations under the License.
  *
  */
-
 module.exports = class Scope {
 
     constructor(parent) {

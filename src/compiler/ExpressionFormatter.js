@@ -26,7 +26,9 @@ const Interpolation = require('../parser/htl/nodes/Interpolation');
 const Identifier = require('../parser/htl/nodes/Identifier');
 const MapLiteral = require('../parser/htl/nodes/MapLiteral');
 const BinaryOperation = require('../parser/htl/nodes/BinaryOperation');
+const MultiOperation = require('../parser/htl/nodes/MultiOperation');
 const UnaryOperation = require('../parser/htl/nodes/UnaryOperation');
+const UnaryOperator = require('../parser/htl/nodes/UnaryOperator');
 const TernaryOperation = require('../parser/htl/nodes/TernaryOperation');
 const RuntimeCall = require('../parser/htl/nodes/RuntimeCall');
 const ExpressionNode = require('../parser/htl/nodes/ExpressionNode');
@@ -74,15 +76,36 @@ module.exports = class ExpressionFormatter {
             this.result += ']';
         }
         else if (node instanceof PropertyAccess) {
-            node.target.accept(this);
-            this.result += '[';
-            node.property.accept(this);
-            this.result += ']';
+            if (node.target) {
+                node.target.accept(this);
+            }
+            const property = node.property instanceof ExpressionNode ? '' : node.property;
+            if (property) {
+                this.result += property;
+            } else {
+                this.result += '[';
+                node.property.accept(this);
+                this.result += ']';
+            }
         }
         else if (node instanceof BinaryOperation) {
+            const fn = node.operator.isNumeric ? 'Number' : '';
+            this.result += `${fn}(`;
             node.leftOperand.accept(this);
-            this.result += node.operator.sym;
+            this.result += `) ${node.operator.sym} ${fn}(`;
             node.rightOperand.accept(this);
+            this.result += ')';
+        }
+        else if (node instanceof MultiOperation) {
+            const fn = node.operator.isNumeric ? 'Number' : '';
+            node.operands.forEach((op, idx) => {
+                if (idx > 0) {
+                    this.result += ` ${node.operator.sym} `;
+                }
+                this.result += `${fn}(`;
+                op.accept(this);
+                this.result += ')';
+            });
         }
         else if (node instanceof TernaryOperation) {
             node.condition.accept(this);
@@ -92,8 +115,18 @@ module.exports = class ExpressionFormatter {
             node.elseBranch.accept(this);
         }
         else if (node instanceof UnaryOperation) {
-            this.result += node.operator.sym;
-            node.target.accept(this);
+            if (node.operator === UnaryOperator.LENGTH) {
+                this.result += 'lengthOf(';
+                node.target.accept(this);
+                this.result += ')';
+            } else if (node.operator === UnaryOperator.NOT && node.target instanceof ArrayLiteral) {
+                this.result += '!';
+                node.target.accept(this);
+                this.result += '.length';
+            } else {
+                this.result += node.operator.sym;
+                node.target.accept(this);
+            }
         }
         else if (node instanceof Expression) {
             this.result += '${';
@@ -126,26 +159,32 @@ module.exports = class ExpressionFormatter {
             this.result += node.value;
         }
         else if (node instanceof NullLiteral) {
-            // nop
+            this.result += 'null';
         }
         else if (node instanceof RuntimeCall) {
-            this.result += node.functionName + '(';
+            // special handling for xss. todo: make more generic
+            if (node.functionName === 'xss') {
+                this.result += `${node.functionName}(`;
+            } else {
+                this.result += `exec("${node.functionName}", `;
+            }
             node.expression.accept(this);
+            this.result += ', {';
             Object.keys(node.args).forEach(key => {
-                this.result += `, ${key}=`;
+                this.result += `${key}:`;
                 node.args[key].accept(this);
+                this.result += ',';
             });
-            this.result += ')';
+            this.result += '})';
         }
         else if (node instanceof MapLiteral) {
-            this.result += JSON.stringify(node.map);
-            // this.result += '{';
-            // Object.keys(node.map).forEach((key) => {
-            //     this.result += key + ': ';
-            //     node.map[key].accept(this);
-            //     this.result += ', ';
-            // });
-            // this.result += '}';
+            this.result += '{';
+            Object.keys(node.map).forEach((key) => {
+                this.result += `"${key}": `;
+                node.map[key].accept(this);
+                this.result += ', ';
+            });
+            this.result += '}';
         }
         else {
             throw new Error('unexpected node: ' + node.constructor.name);

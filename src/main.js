@@ -15,25 +15,17 @@
  * limitations under the License.
  *
  */
-const ThrowingErrorListener = require('./parser/htl/ThrowingErrorListener');
-const TemplateParser = require('./parser/html/TemplateParser');
-const Interpreter = require('./interpreter/Interpreter');
-const Runtime = require('../src/interpreter/Runtime');
+const Compiler = require('./compiler/Compiler');
 
 module.exports = function(resource, template) {
 
-    const runtime = new Runtime();
-    runtime.scope.putAll(resource);
+    const compiler = new Compiler()
+        .withOutputDirectory('.')
+        .includeRuntime(true)
+        .withRuntimeGlobal(Object.keys(resource));
 
-    const commands = new TemplateParser()
-        .withErrorListener(ThrowingErrorListener.INSTANCE)
-        .parse(template);
-
-    return new Interpreter()
-        .withRuntime(runtime)
-        .withCommands(commands)
-        .run()
-        .result;
-
+    const filename = compiler.compile(template, './out.js');
+    const service = require(filename);
+    return service(resource);
 };
 
