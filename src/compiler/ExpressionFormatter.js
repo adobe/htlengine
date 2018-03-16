@@ -163,19 +163,24 @@ module.exports = class ExpressionFormatter {
         }
         else if (node instanceof RuntimeCall) {
             // special handling for xss. todo: make more generic
-            if (node.functionName === 'xss') {
+            let delim = '';
+            if (node.functionName === 'xss' || node.functionName === 'listInfo') {
                 this.result += `${node.functionName}(`;
             } else {
-                this.result += `exec("${node.functionName}", `;
+                this.result += `exec("${node.functionName}"`;
+                delim = ', ';
             }
-            node.expression.accept(this);
-            this.result += ', {';
-            Object.keys(node.args).forEach(key => {
-                this.result += `${key}:`;
-                node.args[key].accept(this);
-                this.result += ',';
+            if (node.expression) {
+                this.result += delim;
+                node.expression.accept(this);
+                delim = ', ';
+            }
+            node.args.forEach(arg => {
+                this.result += delim;
+                arg.accept(this);
+                delim = ', ';
             });
-            this.result += '})';
+            this.result += ')';
         }
         else if (node instanceof MapLiteral) {
             this.result += '{';

@@ -39,10 +39,7 @@ const BLACKLIST_ATTRIBUTE = /^(style|(on.*))$/;
 function escapeNodeWithHint(ctx, node, markupContext, hint) {
     if (hint != null) {
         //todo: this is not the indicated way to escape via XSS. Correct after modifying the compiler context API
-        return new RuntimeCall('xss', node, {
-            'context': new StringConstant(markupContext),
-            'hint': hint
-        });
+        return new RuntimeCall('xss', node, [new StringConstant(markupContext), hint]);
     }
     return ctx.adjustToContext(new Expression(node), markupContext, ExpressionContext.ATTRIBUTE).root;
 }

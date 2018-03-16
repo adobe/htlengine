@@ -10,7 +10,7 @@
     if (var_size1) {
       out("<ul>");
       for ((var_index2,item) in var_collectionVar0) {
-        { const itemList = {"index": var_index2, "count": Number(var_index2) + Number(1), "first": (var_index2) == (0), "middle": ((var_index2) > (0)) && ((var_index2) < (Number(var_size1) - Number(1))), "last": (var_index2) == (Number(var_size1) - Number(1)), "odd": (Number(var_index2) % Number(2)) == (0), "even": (Number(var_index2) % Number(2)) == (1), };
+        { const itemList = listInfo(var_index2, var_size1);
           out("\n    <li>");
           { const var_3 = item;
             out(var_3);

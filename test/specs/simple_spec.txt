@@ -22,7 +22,7 @@ Hello, Earth.
 <p data-sly-text="${'Hello, world.'}">This text would never be shown.</p>
 ---
 out("<p>");
-{ const var_textContent0 = xss("Hello, world.", {context:"text",});
+{ const var_textContent0 = xss("Hello, world.", "text");
   out(var_textContent0);
 }
 if (false) {
@@ -37,7 +37,7 @@ out("</p>\n");
 <p data-sly-text="${properties.title}">This text would never be shown.</p>
 ---
 out("<p>");
-{ const var_textContent0 = xss(properties["title"], {context:"text",});
+{ const var_textContent0 = xss(properties["title"], "text");
   out(var_textContent0);
 }
 if (false) {
@@ -51,7 +51,7 @@ out("</p>\n");
 #
 Fruits: ${['Apple', 'Banana', 'Orange'] @ join='*'}
 ---
-{ const var_0 = ("Fruits: ") + (exec("join", ["Apple", "Banana", "Orange"], {join:"*",})) + ("\n");
+{ const var_0 = ("Fruits: ") + (exec("join", ["Apple", "Banana", "Orange"], "*")) + ("\n");
   out(var_0);
 }
 ===
@@ -61,7 +61,7 @@ Fruits: Apple*Banana*Orange
 #
 Fruits: ${properties.fruits @ join=properties.comma}
 ---
-{ const var_0 = ("Fruits: ") + (exec("join", properties["fruits"], {join:properties["comma"],})) + ("\n");
+{ const var_0 = ("Fruits: ") + (exec("join", properties["fruits"], properties["comma"])) + ("\n");
   out(var_0);
 }
 ===

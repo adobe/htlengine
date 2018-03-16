@@ -5,7 +5,7 @@
 ---
 out("<div");
 { const var_attrValue_data_values0 = properties["myValues"];
-  { const var_attrValueEscaped_data_values1 = xss(var_attrValue_data_values0, {context:"attribute",hint:"data-values",});
+  { const var_attrValueEscaped_data_values1 = xss(var_attrValue_data_values0, "attribute", "data-values");
     if ((var_attrValueEscaped_data_values1) || (("false") == (var_attrValue_data_values0))) {
       out(" data-values");
       if ((var_attrValue_data_values0) !== (true)) {
@@ -52,7 +52,7 @@ out("<input");
 { const var_attrMap0 = foobar;
   { const var_attrName_class1 = "class";
     { const var_mapContains_class2 = var_attrMap0["class"];
-      { const var_attrContentEscaped3 = xss(var_mapContains_class2, {context:"attribute",hint:var_attrName_class1,});
+      { const var_attrContentEscaped3 = xss(var_mapContains_class2, "attribute", var_attrName_class1);
         if ((var_attrContentEscaped3) || (("false") == (var_mapContains_class2))) {
           out(" ");
           out(var_attrName_class1);
@@ -70,7 +70,7 @@ out("<input");
   }
   { const var_attrName_lang4 = "lang";
     { const var_mapContains_lang5 = var_attrMap0["lang"];
-      { const var_attrContentEscaped6 = xss(var_mapContains_lang5, {context:"attribute",hint:var_attrName_lang4,});
+      { const var_attrContentEscaped6 = xss(var_mapContains_lang5, "attribute", var_attrName_lang4);
         if ((var_attrContentEscaped6) || (("false") == (var_mapContains_lang5))) {
           out(" ");
           out(var_attrName_lang4);
@@ -89,11 +89,11 @@ out("<input");
   out(" type=\"text\"");
   { const var_ignoredAttributes7 = {"class": true, "lang": true, "type": true, };
     for ((var_attrIndex10,var_attrName8) in var_attrMap0) {
-      { const var_attrNameEscaped9 = xss(var_attrName8, {context:"attributeName",});
+      { const var_attrNameEscaped9 = xss(var_attrName8, "attributeName");
         if (var_attrNameEscaped9) {
           if (!var_ignoredAttributes7[var_attrName8]) {
             { const var_attrContent11 = var_attrMap0[var_attrName8];
-              { const var_attrContentEscaped12 = xss(var_attrContent11, {context:"attribute",hint:var_attrNameEscaped9,});
+              { const var_attrContentEscaped12 = xss(var_attrContent11, "attribute", var_attrNameEscaped9);
                 if ((var_attrContentEscaped12) || (("false") == (var_attrContent11))) {
                   out(" ");
                   out(var_attrNameEscaped9);

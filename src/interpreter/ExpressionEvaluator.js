@@ -31,36 +31,13 @@ const MultiOperation = require('../parser/htl/nodes/MultiOperation');
 const UnaryOperation = require('../parser/htl/nodes/UnaryOperation');
 const TernaryOperation = require('../parser/htl/nodes/TernaryOperation');
 const RuntimeCall = require('../parser/htl/nodes/RuntimeCall');
-
-const format = require('../runtime/format');
-const format_uri = require('../runtime/format_uri');
-const format_xss = require('../runtime/format_xss');
-
-function exec(name, value, options) {
-    if (name === 'join') {
-        const delim = options.join || ', ';
-        return value.join(delim);
-    }
-    if (name === 'format') {
-        return format(value, options.format);
-    }
-    if (name === 'uriManipulation') {
-        return format_uri(value, options);
-    }
-    if (name === 'xss') {
-        // if (value instanceof Array) {
-        //     value = value.join(',');
-        // }
-        return format_xss(value, options.context);
-    }
-
-    throw new Error('Unknown runtime call: ' + name);
-}
+const Runtime = require('../runtime/Runtime');
 
 module.exports = class ExpressionEvaluator {
 
     constructor(scope) {
         this._scope = scope;
+        this._runtime = new Runtime();
     }
 
     evaluate(node) {
@@ -155,12 +132,14 @@ module.exports = class ExpressionEvaluator {
         }
 
         if (node instanceof RuntimeCall) {
-            const args = {};
-            Object.keys(node.args).forEach(key => {
-                const arg = node.args[key];
-                args[key] = (arg instanceof ExpressionNode) ? arg.accept(this) : arg;
+            const args = [node.functionName];
+            if (node.expression) {
+                args.push(node.expression.accept(this));
+            }
+            node.args.forEach(arg => {
+                args.push(arg.accept(this));
             });
-            return exec(node.functionName, node.expression.accept(this), args);
+            return this._runtime.exec.apply(this._runtime, args);
         }
 
         if (node instanceof NumericConstant) {
@@ -180,7 +159,11 @@ module.exports = class ExpressionEvaluator {
         }
 
         if (node instanceof MapLiteral) {
-            return node.map;
+            const map = {};
+            Object.keys(node.map).forEach(k => {
+                map[k] = node.map[k].accept(this);
+            });
+            return map;
         }
 
         throw new Error('unexpected node: ' + node.constructor.name);

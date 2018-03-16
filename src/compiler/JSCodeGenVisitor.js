@@ -86,16 +86,14 @@ module.exports = class JSCodeGenVitor {
 
         else if (cmd instanceof VariableBinding.Start) {
             const exp = ExpressionFormatter.format(cmd.expression);
-            this._out(`{ const ${cmd.variableName} = ${exp};`);
-            this.indent();
+            this._out(`const ${cmd.variableName} = ${exp};`);
         }
         else if (cmd instanceof VariableBinding.Global) {
             const exp = ExpressionFormatter.format(cmd.expression);
             this._out(`${cmd.variableName} = ${exp};`);
         }
         else if (cmd instanceof VariableBinding.End) {
-            this.outdent();
-            this._out('}');
+            // nop
         }
         else if (cmd instanceof Conditional.Start) {
             const exp = ExpressionFormatter.format(cmd.expression);

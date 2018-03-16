@@ -19,54 +19,13 @@ const Plugin = require('../html/Plugin');
 const VariableBinding = require('../commands/VariableBinding');
 const Conditional = require('../commands/Conditional');
 const Loop = require('../commands/Loop');
-const NumericConstant = require('../htl/nodes/NumericConstant');
-const PropertyAccess = require('../htl/nodes/PropertyAccess');
-const MapLiteral = require('../htl/nodes/MapLiteral');
-const BinaryOperation = require('../htl/nodes/BinaryOperation');
-const BinaryOperator = require('../htl/nodes/BinaryOperator');
+const RuntimeCall = require('../htl/nodes/RuntimeCall');
 const UnaryOperation = require('../htl/nodes/UnaryOperation');
 const UnaryOperator = require('../htl/nodes/UnaryOperator');
 const Identifier = require('../htl/nodes/Identifier');
 
-const INDEX = 'index';
-const COUNT = 'count';
-const FIRST = 'first';
-const MIDDLE = 'middle';
-const LAST = 'last';
-const ODD = 'odd';
-const EVEN = 'even';
-
 const ITEM_LOOP_STATUS_SUFFIX = "List";
 const DEFAULT_LIST_ITEM_VAR_NAME = "item";
-
-function _parityCheck(numericExpression, expected) {
-    return new BinaryOperation(
-        BinaryOperator.EQ,
-        new BinaryOperation(BinaryOperator.REM, numericExpression, NumericConstant.TWO),
-        expected
-    );
-}
-
-function _buildStatusObj(indexVar, sizeVar) {
-    const indexId = new Identifier(indexVar);
-    const lastValue = new BinaryOperation(BinaryOperator.SUB, new Identifier(sizeVar), NumericConstant.ONE);
-    return new MapLiteral({
-        [INDEX]: indexId,
-        [COUNT]: new BinaryOperation(BinaryOperator.ADD, indexId, NumericConstant.ONE),
-        [FIRST]: new BinaryOperation(BinaryOperator.EQ, indexId, NumericConstant.ZERO),
-        [MIDDLE]: new BinaryOperation(BinaryOperator.AND,
-            new BinaryOperation(BinaryOperator.GT, indexId, NumericConstant.ZERO),
-            new BinaryOperation(BinaryOperator.LT, indexId, lastValue)
-        ),
-        [LAST]: new BinaryOperation(BinaryOperator.EQ, indexId, lastValue),
-        [ODD]: _parityCheck(indexId, NumericConstant.ZERO),
-        [EVEN]: _parityCheck(indexId, NumericConstant.ONE),
-    });
-}
-
-function itemLoopStatusVariable(itemVariable) {
-    return itemVariable + ITEM_LOOP_STATUS_SUFFIX;
-}
 
 module.exports = class ListPlugin extends Plugin {
 
@@ -86,10 +45,12 @@ module.exports = class ListPlugin extends Plugin {
 
     beforeChildren(stream) {
         const itemVariable = this._decodeItemVariable();
-        const loopStatusVar = itemLoopStatusVariable(itemVariable);
+        const loopStatusVar = itemVariable + ITEM_LOOP_STATUS_SUFFIX;
         const indexVariable = this._pluginContext.generateVariable("index");
         stream.write(new Loop.Start(this._listVariable, itemVariable, indexVariable));
-        stream.write(new VariableBinding.Start(loopStatusVar, _buildStatusObj(indexVariable, this._collectionSizeVar)));
+        stream.write(new VariableBinding.Start(loopStatusVar,
+            new RuntimeCall('listInfo', null, [new Identifier(indexVariable), new Identifier(this._collectionSizeVar)])
+        ));
     }
 
     afterChildren(stream) {

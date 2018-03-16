@@ -32,7 +32,7 @@ module.exports = class RuntimeCall extends ExpressionNode {
         super();
         this._functionName = functionName;
         this._expression = expression;
-        this._args = args;
+        this._args = args || [];
     }
 
     get functionName() {

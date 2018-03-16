@@ -49,25 +49,44 @@ module.exports = class Runtime {
         }
     }
 
-    xss(value, options) {
-        return format_xss(value, options.context);
+    listInfo(idx, size) {
+        idx = Number(idx);
+        size = Number(size);
+        const count = idx + 1;
+        return {
+            'index': idx,
+            'count': count,
+            'first': idx === 0,
+            'middle': idx > 0 && count < size,
+            'last': count === size,
+            'odd': idx % 2 === 0,
+            'even': idx % 2 === 1
+        }
     }
 
-    exec(name, value, options) {
+    xss(value, context, hint) {
+        return format_xss(value, context, hint);
+    }
+
+    exec(name, value, arg0, arg1) {
         if (name === 'join') {
-            return value.join(options.join || ', ');
+            return value.join(arg0 || ', ');
         }
 
         if (name === 'format') {
-            return format(value, options.format);
+            return format(value, arg0);
         }
 
         if (name === 'uriManipulation') {
-            return format_uri(value, options);
+            return format_uri(value, arg0);
         }
 
         if (name === 'xss') {
-            this.xss(value, options);
+            return this.xss(value, arg0, arg1);
+        }
+
+        if (name === 'listInfo') {
+            return this.listInfo(value, arg0);
         }
 
         throw new Error('Unknown runtime call: ' + name);

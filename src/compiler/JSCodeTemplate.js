@@ -24,6 +24,7 @@ module.exports = function main(runtime) {
     const out = runtime.out.bind(runtime);
     const exec = runtime.exec.bind(runtime);
     const xss = runtime.xss.bind(runtime);
+    const listInfo = runtime.listInfo.bind(runtime);
 
     (function run() {
 
