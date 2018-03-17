@@ -24,7 +24,7 @@ module.exports = class TestPlugin extends Plugin {
 
     beforeElement(stream, tagName) {
         const ctx = this.pluginContext;
-        let variableName = this._decodeVariableName();
+        let variableName = this._signature.getVariableName(null);
         this._useGlobalBinding = variableName != null;
         if (variableName == null) {
             variableName = ctx.generateVariable("testVariable");
@@ -43,14 +43,6 @@ module.exports = class TestPlugin extends Plugin {
         if (!this._useGlobalBinding) {
             stream.write(VariableBinding.END);
         }
-    }
-
-    _decodeVariableName() {
-        const args = this._signature.arguments;
-        if (args.length > 0) {
-            return args[0];
-        }
-        return null;
     }
 
 };

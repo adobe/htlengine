@@ -47,4 +47,13 @@ module.exports = class PluginSignature {
         return new PluginSignature(parts[0], parts.slice(1));
     }
 
+    getVariableName(defaultValue) {
+        const args = this._arguments;
+        if (args.length > 0) {
+            return args[0];
+        }
+        return defaultValue;
+    }
+
+
 };

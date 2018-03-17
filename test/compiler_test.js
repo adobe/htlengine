@@ -86,8 +86,10 @@ describe('Compiler Tests', function() {
                     const filename = compiler.compile(test.input, `${name}_${idx}.js`);
                     if ('output' in test) {
                         it(`${idx}. Generates output for '${test.name}' correctly.`, function() {
-                            const runtime = new Runtime();
-                            runtime.setGlobal(payload);
+                            const runtime = new Runtime()
+                                .withUseDirectory(path.join(__dirname, 'specs'))
+                                .setGlobal(payload);
+
                             const service = require(filename);
                             service(runtime);
                             const output = runtime.stream;

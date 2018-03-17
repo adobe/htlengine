@@ -19,12 +19,14 @@
 const format = require('../runtime/format');
 const format_uri = require('../runtime/format_uri');
 const format_xss = require('../runtime/format_xss');
+const path = require("path");
 
 module.exports = class Runtime {
 
     constructor() {
         this._stream = '';
         this._globals = {};
+        this._useDir = '.';
     }
 
     out(text) {
@@ -39,6 +41,11 @@ module.exports = class Runtime {
         return this._globals;
     }
 
+    withUseDirectory(dir) {
+        this._useDir = dir;
+        return this;
+    }
+
     setGlobal(name, obj) {
         if (obj === undefined) {
             Object.keys(name).forEach((k) => {
@@ -47,6 +54,7 @@ module.exports = class Runtime {
         } else {
             this._globals[name] = obj;
         }
+        return this;
     }
 
     listInfo(idx, size) {
@@ -62,6 +70,15 @@ module.exports = class Runtime {
             'odd': idx % 2 === 0,
             'even': idx % 2 === 1
         }
+    }
+
+    use(uri, options) {
+        const Mod = require(path.resolve(this._useDir, uri));
+        const mod = new Mod();
+        Object.keys(options).forEach(k => {
+            mod[k] = options[k];
+        });
+        return mod.use();
     }
 
     xss(value, context, hint) {
@@ -83,6 +100,10 @@ module.exports = class Runtime {
 
         if (name === 'xss') {
             return this.xss(value, arg0, arg1);
+        }
+
+        if (name === 'use') {
+            return this.use(value, arg0);
         }
 
         if (name === 'listInfo') {

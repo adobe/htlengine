@@ -42,6 +42,7 @@ const TextPlugin = require('../plugins/TextPlugin');
 const ListPlugin = require('../plugins/ListPlugin');
 const TestPlugin = require('../plugins/TestPlugin');
 const AttributePlugin = require('../plugins/AttributePlugin');
+const UsePlugin = require('../plugins/UsePlugin');
 const Plugin = require('./Plugin');
 
 const SLY_COMMENT_PREFIX = "<!--/*";
@@ -372,6 +373,9 @@ module.exports = class MarkupHandler {
         }
         if (name === 'attribute') {
             return AttributePlugin;
+        }
+        if (name === 'use') {
+            return UsePlugin;
         }
         return Plugin;
         // throw new Error(`None of the registered plugins can handle the data-sly-${name} block element.`);

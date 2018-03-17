@@ -1,0 +1,20 @@
+#
+### sightly use function
+#
+<div data-sly-use.page="use_spec/test_page.js">Hello ${page.title}.</div>
+===
+<div>Hello Jupiter.</div>
+#
+### passing params
+#
+<div data-sly-use.page="${'use_spec/test_page.js' @ value1='Moon', value2='Europa'}">${page.subTitle}</div>
+===
+<div>Moon: Europa</div>
+#
+### using functions
+#
+<div data-sly-use.page="${'use_spec/test_page.js' @ radius='70000'}">Surface Area: ${page.area}</div>
+===
+<div>Surface Area: 61575216010.35994</div>
+#
+###
