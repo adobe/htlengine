@@ -27,18 +27,20 @@ function run(runtime) {
     const exec = runtime.exec.bind(runtime);
     const xss = runtime.xss.bind(runtime);
     const listInfo = runtime.listInfo.bind(runtime);
+    const use = runtime.use.bind(runtime);
 
-    (function run() {
+    return runtime.run(function*() {
 
         // RUNTIME_GLOBALS
 
         // CODE
-    })();
+    });
 }
 
 module.exports.main = function main(resource) {
     const runtime = new Runtime();
     runtime.setGlobal(resource);
-    run(runtime);
-    return { body: runtime.stream };
+    return run(runtime).then(() => {
+        return { body: runtime.stream };
+    });
 };

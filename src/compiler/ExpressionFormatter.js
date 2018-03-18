@@ -166,6 +166,8 @@ module.exports = class ExpressionFormatter {
             let delim = '';
             if (node.functionName === 'xss' || node.functionName === 'listInfo') {
                 this.result += `${node.functionName}(`;
+            } else if (node.functionName === 'use') {
+                this.result += 'yield use(';
             } else {
                 this.result += `exec("${node.functionName}"`;
                 delim = ', ';

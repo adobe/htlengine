@@ -15,22 +15,14 @@
  * limitations under the License.
  *
  */
-module.exports = function main(runtime) {
+module.exports = class MyUseClass {
 
-    const lengthOf = function(c) {
-        return Array.isArray(c) ? c.length : Object.keys(c).length;
-    };
-
-    const out = runtime.out.bind(runtime);
-    const exec = runtime.exec.bind(runtime);
-    const xss = runtime.xss.bind(runtime);
-    const listInfo = runtime.listInfo.bind(runtime);
-    const use = runtime.use.bind(runtime);
-
-    return runtime.run(function*() {
-
-        // RUNTIME_GLOBALS
-
-        // CODE
-    });
+    use() {
+        return new Promise(resolve => {
+            setTimeout(resolve({
+                title: 'Saturn'
+            }), 200);
+        });
+    }
 };
+

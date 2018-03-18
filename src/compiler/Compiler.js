@@ -65,10 +65,10 @@ module.exports = class Compiler {
 
         const global = [];
         this._runtimeGlobals.forEach(g => {
-            global.push(`        let ${g} = runtime.globals.${g};\n`)
+            global.push(`        let ${g} = runtime.globals.${g};\n`);
         });
         if (this._runtimeGlobal) {
-            global.push(`        const ${this._runtimeGlobal} = runtime.globals;\n`)
+            global.push(`        const ${this._runtimeGlobal} = runtime.globals;\n`);
         }
 
         const code = new JSCodeGenVisitor()

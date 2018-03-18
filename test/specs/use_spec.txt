@@ -17,4 +17,10 @@
 ===
 <div>Surface Area: 61575216010.35994</div>
 #
+### using async use classes
+#
+<div data-sly-use.page="use_spec/test_page_async.js">Hello ${page.title}.</div>
+===
+<div>Hello Saturn.</div>
+#
 ###

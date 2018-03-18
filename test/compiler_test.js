@@ -83,18 +83,19 @@ describe('Compiler Tests', function() {
                     if (!test.input) {
                         return;
                     }
-                    const filename = compiler.compile(test.input, `${name}_${idx}.js`);
+                    const copiledFilename = compiler.compile(test.input, `${name}_${idx}.js`);
                     if ('output' in test) {
-                        it(`${idx}. Generates output for '${test.name}' correctly.`, function() {
+                        it(`${idx}. Generates output for '${test.name}' correctly.`, function(done) {
                             const runtime = new Runtime()
                                 .withUseDirectory(path.join(__dirname, 'specs'))
                                 .setGlobal(payload);
 
-                            const service = require(filename);
-                            service(runtime);
-                            const output = runtime.stream;
-
-                            assert.equal(output, test.output);
+                            const service = require(copiledFilename);
+                            service(runtime).then(() => {
+                                const output = runtime.stream;
+                                assert.equal(output, test.output);
+                                done();
+                            }).catch(done);
                         });
                     }
                     idx++;

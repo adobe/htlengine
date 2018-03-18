@@ -19,7 +19,8 @@
 const format = require('../runtime/format');
 const format_uri = require('../runtime/format_uri');
 const format_xss = require('../runtime/format_xss');
-const path = require("path");
+const path = require('path');
+const co = require('co');
 
 module.exports = class Runtime {
 
@@ -39,6 +40,10 @@ module.exports = class Runtime {
 
     get globals() {
         return this._globals;
+    }
+
+    run(fn) {
+        return co(fn);
     }
 
     withUseDirectory(dir) {

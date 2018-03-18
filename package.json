@@ -7,6 +7,7 @@
   "repository": "git@github.com:tripodsan/project-helix.git",
   "dependencies": {
     "antlr4": "^4.7.1",
+    "co": "^4.6.0",
     "lodash": "^4.17.5",
     "node-esapi": "0.0.1",
     "sanitizer": "^0.1.3",
