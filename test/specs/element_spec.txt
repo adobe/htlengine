@@ -1,0 +1,111 @@
+#
+### sightly element replacement
+#
+<div data-sly-element="${'h1'}">Hello, world.</div>
+===
+<h1>Hello, world.</h1>
+#
+### ignore forbidden element
+#
+<div data-sly-element="${'script'}">Hello, world.</div>
+===
+<div>Hello, world.</div>
+#
+### empty element
+#
+<div data-sly-element="${''}">Hello, world.</div>
+===
+<div>Hello, world.</div>
+#
+### self closing
+#
+<foo data-sly-element="${'br'}"/>
+===
+<br/>
+#
+###
+#
+<sly data-sly-list=${properties.allowed}><error data-sly-element="${item}" />
+</sly>
+===
+<section/>
+<nav/>
+<article/>
+<aside/>
+<h1/>
+<h2/>
+<h3/>
+<h4/>
+<h5/>
+<h6/>
+<header/>
+<footer/>
+<address/>
+<main/>
+<p/>
+<pre/>
+<blockquote/>
+<ol/>
+<li/>
+<dl/>
+<dt/>
+<dd/>
+<figure/>
+<figcaption/>
+<div/>
+<a/>
+<em/>
+<strong/>
+<small/>
+<s/>
+<cite/>
+<q/>
+<dfn/>
+<div/>
+<data/>
+<time/>
+<code/>
+<var/>
+<samp/>
+<kbd/>
+<sub/>
+<sup/>
+<i/>
+<b/>
+<u/>
+<mark/>
+<ruby/>
+<rt/>
+<rp/>
+<bdi/>
+<bdo/>
+<span/>
+<br/>
+<wbr/>
+<ins/>
+<del/>
+<table/>
+<caption/>
+<colgroup/>
+<col/>
+<tbody/>
+<thead/>
+<tfoot/>
+<tr/>
+<td/>
+<th/>
+
+#
+### forbidden
+#
+<sly data-sly-list=${properties.forbidden}><error data-sly-element="${item}" />
+</sly>
+===
+<div/>
+<div/>
+<div/>
+<div/>
+
+#
+###
+

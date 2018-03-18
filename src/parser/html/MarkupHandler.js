@@ -37,17 +37,18 @@ const OutputVariable = require('../commands/OutputVariable');
 const PluginSignature = require('./PluginSignature');
 const PluginContext = require('./PluginContext');
 
-// plugins: todo: move to registry
-const TextPlugin = require('../plugins/TextPlugin');
-const ListPlugin = require('../plugins/ListPlugin');
-const TestPlugin = require('../plugins/TestPlugin');
-const AttributePlugin = require('../plugins/AttributePlugin');
-const UsePlugin = require('../plugins/UsePlugin');
-const Plugin = require('./Plugin');
+const PLUGINS = {
+    text: require('../plugins/TextPlugin'),
+    list: require('../plugins/ListPlugin'),
+    repeat: require('../plugins/ListPlugin'),
+    test: require('../plugins/TestPlugin'),
+    attribute: require('../plugins/AttributePlugin'),
+    use: require('../plugins/UsePlugin'),
+    element: require('../plugins/ElementPlugin')
+};
 
-const SLY_COMMENT_PREFIX = "<!--/*";
-const SLY_COMMENT_SUFFIX = "*/-->";
-
+const SLY_COMMENT_PREFIX = '<!--/*';
+const SLY_COMMENT_SUFFIX = '*/-->';
 
 module.exports = class MarkupHandler {
 
@@ -361,23 +362,7 @@ module.exports = class MarkupHandler {
     }
 
     _lookupPlugin(name) {
-        // todo properly
-        if (name === 'text') {
-            return TextPlugin;
-        }
-        if (name === 'list' || name === 'repeat') {
-            return ListPlugin;
-        }
-        if (name === 'test') {
-            return TestPlugin;
-        }
-        if (name === 'attribute') {
-            return AttributePlugin;
-        }
-        if (name === 'use') {
-            return UsePlugin;
-        }
-        return Plugin;
+        return PLUGINS[name] || Plugin;
         // throw new Error(`None of the registered plugins can handle the data-sly-${name} block element.`);
     }
 

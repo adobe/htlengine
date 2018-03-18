@@ -165,6 +165,9 @@ module.exports = class ExpressionEvaluator {
             });
             return map;
         }
+        if (typeof node === 'string') {
+            return node;
+        }
 
         throw new Error('unexpected node: ' + node.constructor.name);
     }
