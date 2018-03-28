@@ -29,6 +29,7 @@ module.exports = class Compiler {
 
     constructor() {
         this._dir = '.';
+        this._outfile = '';
         this._runtimeGlobals = [];
         this._runtimeGlobal = 'resource';
         this._includeRuntime = false;
@@ -36,6 +37,11 @@ module.exports = class Compiler {
 
     withOutputDirectory(dir) {
         this._dir = dir;
+        return this;
+    }
+
+    withOutputFile(outFile) {
+        this._outfile = outFile;
         return this;
     }
 
@@ -58,7 +64,13 @@ module.exports = class Compiler {
         return this;
     }
 
+    compileFile(filename, name) {
+        // todo: async support
+        return this.compile(fs.readFileSync(filename, 'utf-8'), name || filename);
+    }
+
     compile(source, name) {
+        // todo: async support
         const commands = new TemplateParser()
             .withErrorListener(ThrowingErrorListener.INSTANCE)
             .parse(source);
@@ -82,7 +94,7 @@ module.exports = class Compiler {
         template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, global.join(''));
         template = template.replace(/^\s*\/\/\s*CODE\s*$/m, code);
 
-        const filename = path.resolve(this._dir, name);
+        const filename = this._outfile || path.resolve(this._dir, name);
         fs.writeFileSync(filename, template);
 
         return filename;

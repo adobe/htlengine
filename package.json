@@ -2,7 +2,7 @@
   "name": "htlengine",
   "version": "1.0.0",
   "description": "Javascript Based HTL (Sightly) parser",
-  "main": "src/main.js",
+  "main": "src/index.js",
   "license": "Apache-2.0",
   "repository": "git@github.com:tripodsan/project-helix.git",
   "dependencies": {
