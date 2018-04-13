@@ -137,7 +137,7 @@ module.exports = function format_uri(uri, opts) {
     }
     const addQuery = opts[ADD_QUERY];
     if (addQuery) {
-        const merged = {...u.query(true), ...addQuery};
+        const merged = Object.assign(u.query(true), addQuery);
         u.query(merged);
     }
     const removeQuery = opts[REMOVE_QUERY];
