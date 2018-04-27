@@ -31,5 +31,5 @@ $ yarn build
 ### prerequisites
 
 ```bash
-$ brew install antlr4
+$ brew install antlr
 ```
