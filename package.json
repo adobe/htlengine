@@ -1,5 +1,5 @@
 {
-  "name": "htlengine",
+  "name": "@adobe/htlengine",
   "version": "1.0.0",
   "description": "Javascript Based HTL (Sightly) parser",
   "main": "src/index.js",
