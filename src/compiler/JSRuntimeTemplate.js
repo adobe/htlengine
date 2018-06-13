@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-const Runtime = require('htlengine/src/runtime/Runtime');
+const Runtime = require('@adobe/htlengine/src/runtime/Runtime');
 
 function run(runtime) {
 
