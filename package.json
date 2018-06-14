@@ -4,7 +4,7 @@
   "description": "Javascript Based HTL (Sightly) parser",
   "main": "src/index.js",
   "license": "Apache-2.0",
-  "repository": "git@github.com:tripodsan/project-helix.git",
+  "repository": "https://github.com/adobe/htlengine",
   "dependencies": {
     "antlr4": "^4.7.1",
     "co": "^4.6.0",
