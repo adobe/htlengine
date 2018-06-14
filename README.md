@@ -1,4 +1,4 @@
-# HTL Parser for Javascript
+# [HTL](https://github.com/Adobe-Marketing-Cloud/htl-spec) Parser for Javascript
 
 ## Build
 
