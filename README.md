@@ -1,6 +1,6 @@
-# [HTL](https://github.com/Adobe-Marketing-Cloud/htl-spec) Engine for Javascript
+# HTL Engine for Javascript
 
-This engine can parse HTL scripts and builds a command stream. The command stream can either be intepreted or used to generate code. This project provides a Javascript (ES6) generator and runtime which allows to execute the scripts and use-classes.
+This engine can parse [HTL](https://github.com/Adobe-Marketing-Cloud/htl-spec) scripts and builds a command stream. The command stream can either be intepreted or used to generate code. This project provides a Javascript (ES6) generator and runtime which allows to execute the scripts and use-classes.
 
 ## Install
 
