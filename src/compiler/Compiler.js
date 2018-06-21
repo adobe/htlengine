@@ -66,10 +66,15 @@ module.exports = class Compiler {
 
     compileFile(filename, name) {
         // todo: async support
-        return this.compile(fs.readFileSync(filename, 'utf-8'), name || filename);
+        return this.compileToFile(fs.readFileSync(filename, 'utf-8'), name || filename);
     }
 
-    compile(source, name) {
+    /**
+     * Compiles the given HTL source code into JavaScript, which is returned as a string
+     * @param {String} source the HTL source code
+     * @returns {String} the resulting Javascript
+     */
+    compileToString(source) {
         // todo: async support
         const commands = new TemplateParser()
             .withErrorListener(ThrowingErrorListener.INSTANCE)
@@ -94,9 +99,33 @@ module.exports = class Compiler {
         template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, global.join(''));
         template = template.replace(/^\s*\/\/\s*CODE\s*$/m, code);
 
+        return template;
+    }
+
+    /**
+     * Compiles the given source string and saves the result, overwriting the
+     * file name.
+     * @param {String} source HTL template code
+     * @param {String} name file name to save results
+     * @returns {String} the full name of the resulting file
+     */
+    compileToFile(source, name) {
+        const template = this.compileToString(source);
+
         const filename = this._outfile || path.resolve(this._dir, name);
         fs.writeFileSync(filename, template);
 
         return filename;
+    }
+
+    /**
+     * Compiles the given source string and saves the result, overwriting the
+     * file name.
+     * @param {String} source HTL template code
+     * @param {String} name file name to save results
+     * @returns {String} the full name of the resulting file
+     */
+    compile(source, name) {
+        return this.compileToFile(source, name);
     }
 };
