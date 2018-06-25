@@ -19,43 +19,41 @@ const Command = require('./Command');
 
 module.exports = {
 
-    Start: class Start extends Command {
-
-        constructor(variableName, expression) {
-            super();
-            this._variableName = variableName;
-            this._expression = expression;
-        }
-
-        get variableName() {
-            return this._variableName;
-        }
-
-        get expression() {
-            return this._expression;
-        }
-    },
-
-    End: class End extends Command {
-
-    },
-
-    Global: class Global extends Command {
-
-        constructor(variableName, expression) {
-            super();
-            this._variableName = variableName;
-            this._expression = expression;
-        }
-
-        get variableName() {
-            return this._variableName;
-        }
-
-        get expression() {
-            return this._expression;
-        }
+  Start: class Start extends Command {
+    constructor(variableName, expression) {
+      super();
+      this._variableName = variableName;
+      this._expression = expression;
     }
+
+    get variableName() {
+      return this._variableName;
+    }
+
+    get expression() {
+      return this._expression;
+    }
+  },
+
+  End: class End extends Command {
+
+  },
+
+  Global: class Global extends Command {
+    constructor(variableName, expression) {
+      super();
+      this._variableName = variableName;
+      this._expression = expression;
+    }
+
+    get variableName() {
+      return this._variableName;
+    }
+
+    get expression() {
+      return this._expression;
+    }
+  },
 };
 
 module.exports.END = new module.exports.End();

@@ -16,44 +16,41 @@
  *
  */
 
-const PLUGIN_ATTRIBUTE_PREFIX = "data-sly-";
+const PLUGIN_ATTRIBUTE_PREFIX = 'data-sly-';
 
 module.exports = class PluginSignature {
+  constructor(name, args) {
+    this._name = name;
+    this._arguments = args || [];
+  }
 
-    constructor(name, args) {
-        this._name = name;
-        this._arguments = args || [];
+
+  get name() {
+    return this._name;
+  }
+
+  get arguments() {
+    return this._arguments;
+  }
+
+  static fromAttribute(attributeName) {
+    if (!attributeName.startsWith(PLUGIN_ATTRIBUTE_PREFIX)) {
+      return null;
     }
 
-
-    get name() {
-        return this._name;
+    const fragment = attributeName.substring(9);
+    const parts = fragment.split('.');
+    if (parts.length === 0) {
+      return null;
     }
+    return new PluginSignature(parts[0], parts.slice(1));
+  }
 
-    get arguments() {
-        return this._arguments;
+  getVariableName(defaultValue) {
+    const args = this._arguments;
+    if (args.length > 0) {
+      return args[0];
     }
-
-    static fromAttribute(attributeName) {
-        if (!attributeName.startsWith(PLUGIN_ATTRIBUTE_PREFIX)) {
-            return null;
-        }
-
-        const fragment = attributeName.substring(9);
-        const parts = fragment.split('.');
-        if (parts.length === 0) {
-            return null;
-        }
-        return new PluginSignature(parts[0], parts.slice(1));
-    }
-
-    getVariableName(defaultValue) {
-        const args = this._arguments;
-        if (args.length > 0) {
-            return args[0];
-        }
-        return defaultValue;
-    }
-
-
+    return defaultValue;
+  }
 };

@@ -20,186 +20,153 @@
  */
 module.exports = Object.freeze({
 
-    /**
+  /**
      * Logical conjunction.
      */
-    AND: {
-        sym: '&&',
-        calc: (left, right) => {
-            return left ? right : left;
-        }
-    },
+  AND: {
+    sym: '&&',
+    calc: (left, right) => (left ? right : left),
+  },
 
-    /**
+  /**
      * Logical disjunction.
      */
-    OR: {
-        sym: '||',
-        calc: (left, right) => {
-            return left ? left : right;
-        }
-    },
+  OR: {
+    sym: '||',
+    calc: (left, right) => left || right,
+  },
 
-    /**
+  /**
      * String concatenation.
      */
-    CONCATENATE: {
-        sym: '+',
-        calc: (left, right) => {
-            return String(left).concat(right);
-        }
-    },
+  CONCATENATE: {
+    sym: '+',
+    calc: (left, right) => String(left).concat(right),
+  },
 
-    /**
+  /**
      * Less than.
      */
-    LT: {
-        sym: '<',
-        calc: (left, right) => {
-            return left < right;
-        }
-    },
+  LT: {
+    sym: '<',
+    calc: (left, right) => left < right,
+  },
 
-    /**
+  /**
      * Less or equal.
      */
-    LEQ: {
-        sym: '<=',
-        calc: (left, right) => {
-            return left <= right;
-        }
-    },
+  LEQ: {
+    sym: '<=',
+    calc: (left, right) => left <= right,
+  },
 
-    /**
+  /**
      * Greater than.
      */
-    GT: {
-        sym: '>',
-        calc: (left, right) => {
-            return left > right;
-        }
-    },
+  GT: {
+    sym: '>',
+    calc: (left, right) => left > right,
+  },
 
-    /**
+  /**
      * Greater or equal.
      */
-    GEQ: {
-        sym: '>=',
-        calc: (left, right) => {
-            return left >= right;
-        }
-    },
+  GEQ: {
+    sym: '>=',
+    calc: (left, right) => left >= right,
+  },
 
-    /**
+  /**
      * Equal.
      */
-    EQ: {
-        sym: '==',
-        calc: (left, right) => {
-            /* eslint eqeqeq: 'off' */
-            // noinspection EqualityComparisonWithCoercionJS
-            return left == right;
-        }
-    },
+  EQ: {
+    sym: '==',
+    calc: (left, right) =>
+      /* eslint eqeqeq: 'off' */
+      // noinspection EqualityComparisonWithCoercionJS
+      left == right,
+  },
 
-    /**
+  /**
      * Not equal.
      */
-    NEQ: {
-        sym: '!=',
-        calc: (left, right) => {
-            // noinspection EqualityComparisonWithCoercionJS
-            return left != right;
-        }
+  NEQ: {
+    sym: '!=',
+    calc: (left, right) =>
+      // noinspection EqualityComparisonWithCoercionJS
+      left != right,
+  },
 
-    },
-
-    /**
+  /**
      * Strict version of equality, restricted to just some types.
      */
-    STRICT_EQ: {
-        sym: '===',
-        calc: (left, right) => {
-            return left === right;
-        }
-    },
+  STRICT_EQ: {
+    sym: '===',
+    calc: (left, right) => left === right,
+  },
 
-    /**
+  /**
      * Strict version of the not-equal operator.
      */
-    STRICT_NEQ: {
-        sym: '!==',
-        calc: (left, right) => {
-            return left !== right;
-        }
-    },
+  STRICT_NEQ: {
+    sym: '!==',
+    calc: (left, right) => left !== right,
+  },
 
-    /**
+  /**
      * Addition.
      */
-    ADD: {
-        sym: '+',
-        isNumeric: true,
-        calc: (left, right) => {
-            return Number(left) + Number(right);
-        }
-    },
+  ADD: {
+    sym: '+',
+    isNumeric: true,
+    calc: (left, right) => Number(left) + Number(right),
+  },
 
-    /**
+  /**
      * Difference.
      */
-    SUB: {
-        sym: '-',
-        isNumeric: true,
-        calc: (left, right) => {
-            return Number(left) - Number(right);
-        }
-    },
+  SUB: {
+    sym: '-',
+    isNumeric: true,
+    calc: (left, right) => Number(left) - Number(right),
+  },
 
-    /**
+  /**
      * Multiplication.
      */
-    MUL: {
-        sym: '*',
-        isNumeric: true,
-        calc: (left, right) => {
-            return Number(left) * Number(right);
-        }
-    },
+  MUL: {
+    sym: '*',
+    isNumeric: true,
+    calc: (left, right) => Number(left) * Number(right),
+  },
 
-    /**
+  /**
      * Floating point division.
      */
-    DIV: {
-        sym: '/',
-        isNumeric: true,
-        calc: (left, right) => {
-            return Number(left) / Number(right);
-        }
-    },
+  DIV: {
+    sym: '/',
+    isNumeric: true,
+    calc: (left, right) => Number(left) / Number(right),
+  },
 
-    /**
+  /**
      * Integer division.
      */
-    I_DIV: {
-        sym: '/',
-        isNumeric: true,
-        calc: (left, right) => {
-            return Math.floor(Number.parseInt(left, 10) / Number.parseInt(right, 10));
-        }
-    },
+  I_DIV: {
+    sym: '/',
+    isNumeric: true,
+    calc: (left, right) => Math.floor(Number.parseInt(left, 10) / Number.parseInt(right, 10)),
+  },
 
-    /**
+  /**
      * Reminder.
      */
-    REM: {
-        sym: '%',
-        isNumeric: true,
-        calc: (left, right) => {
-            return Number(left) % Number(right);
-        }
+  REM: {
+    sym: '%',
+    isNumeric: true,
+    calc: (left, right) => Number(left) % Number(right),
 
-    }
+  },
 
 });
 

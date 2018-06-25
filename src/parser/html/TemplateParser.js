@@ -21,26 +21,26 @@ const HTMLParser = require('./HTMLParser');
 
 
 module.exports = class TemplateParser {
-
-    /**
+  /**
      * @param {antlr4.error.ErrorListener} listener Error listener
      * @returns {module.TemplateParser} This parser.
      */
-    withErrorListener(listener) {
-        this._errorListener = listener;
-        return this;
-    }
+  withErrorListener(listener) {
+    this._errorListener = listener;
+    return this;
+  }
 
-    /**
+  /**
      * Parses the input and returns an the generated commands.
      * @param {String} input Input text
      * @return {Command[]} The generated commands
      */
-    parse(input) {
-        const stream = new CommandStream();
-        const handler = new MarkupHandler(stream);
+  // eslint-disable-next-line class-methods-use-this
+  parse(input) {
+    const stream = new CommandStream();
+    const handler = new MarkupHandler(stream);
 
-        HTMLParser.parse(input, handler);
-        return stream.commands;
-    }
+    HTMLParser.parse(input, handler);
+    return stream.commands;
+  }
 };

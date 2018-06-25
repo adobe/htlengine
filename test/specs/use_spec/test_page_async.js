@@ -16,13 +16,13 @@
  *
  */
 module.exports = class MyUseClass {
-
-    use() {
-        return new Promise(resolve => {
-            setTimeout(resolve({
-                title: 'Saturn'
-            }), 200);
-        });
-    }
+  // eslint-disable-next-line class-methods-use-this
+  use() {
+    return new Promise((resolve) => {
+      setTimeout(resolve({
+        title: 'Saturn',
+      }), 200);
+    });
+  }
 };
 

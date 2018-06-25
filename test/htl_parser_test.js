@@ -25,87 +25,91 @@ const HTLParser = require('../src/parser/htl/HTLParser');
 const ThrowingErrorListener = require('../src/parser/htl/ThrowingErrorListener');
 
 function process(input) {
-    const interp = new HTLParser()
-        .withErrorListener(ThrowingErrorListener.INSTANCE)
-        .parse(input);
+  const interp = new HTLParser()
+    .withErrorListener(ThrowingErrorListener.INSTANCE)
+    .parse(input);
 
-    const visitor = new DebugVisitor();
-    visitor.visit(interp);
+  const visitor = new DebugVisitor();
+  visitor.visit(interp);
 
-    return visitor.result;
+  return visitor.result;
 }
 
+/* eslint-disable no-template-curly-in-string */
+
 const TESTS = {
-    'Expressions': [
-        {s: '${myVar}'},
-        {s: '${myObject.key}', r: '${myObject[\'key\']}'},
-        {s: '${myObject[\'key\']}'},
-        {s: '${myObject[keyVar]}'},
-        {s: '${myArray[1]}'},
-        {s: '${myArray[indexVar]}'},
-        {s: '${true}'},
-        {s: '${42}'},
-        {s: '${\'string\'}'},
-        {s: '${"string"}', r: '${\'string\'}'},
-        {s: '${[1, 2, 3, true, \'string\']}'}
-    ],
-    'Logic Operators': [
-        {s: '${varOne && !(varTwo || varThree)}', r: '${varOne&&!(varTwo||varThree)}'},
-        {s: '${!myVar}'},
-        {s: '${varOne && varTwo}', r: '${varOne&&varTwo}'},
-        {s: '${varOne || varTwo}', r: '${varOne||varTwo}'},
-        {s: '${varChoice ? varOne : varTwo}'}
-    ],
-    'Comparison': [
-        {s: '${nullValueOne == nullValueTwo}', r: '${nullValueOne===nullValueTwo}'},
-        {s: '${nullValueOne != nullValueTwo}', r: '${nullValueOne!==nullValueTwo}'},
-        {s: '${stringValueOne == stringValueTwo}', r: '${stringValueOne===stringValueTwo}'},
-        {s: '${stringValueOne != stringValueTwo}', r: '${stringValueOne!==stringValueTwo}'},
-        {s: '${numberValueOne < numberValueTwo}', r: '${numberValueOne<numberValueTwo}'},
-        {s: '${numberValueOne <= numberValueTwo}', r: '${numberValueOne<=numberValueTwo}'},
-        {s: '${numberValueOne == numberValueTwo}', r: '${numberValueOne===numberValueTwo}'},
-        {s: '${numberValueOne >= numberValueTwo}', r: '${numberValueOne>=numberValueTwo}'},
-        {s: '${numberValueOne > numberValueTwo}', r: '${numberValueOne>numberValueTwo}'},
-        {s: '${numberValueOne != numberValueTwo}', r: '${numberValueOne!==numberValueTwo}'},
-        {s: '${booleanValueOne == booleanValueTwo}', r: '${booleanValueOne===booleanValueTwo}'},
-        {s: '${booleanValueOne != booleanValueTwo}', r: '${booleanValueOne!==booleanValueTwo}'},
-        {s: '${enumConstant == \'CONSTANT_NAME\'}', r: '${enumConstant===\'CONSTANT_NAME\'}'}
-    ],
-    'Options': [
-        {s: '${myVar @ optName}'},
-        {s: '${myVar @ optName=myVar}'},
-        {s: '${myVar @ optName=true}'},
-        {s: '${myVar @ optName=42}'},
-        {s: '${myVar @ optName=\'string\'}'},
-        {s: '${myVar @ optName="string"}', r: '${myVar @ optName=\'string\'}'},
-        {s: '${myVar @ optName=[myVar, \'string\']}'},
-        {s: '${myVar @ optName=(varOne && varTwo) || !varThree}', r: '${myVar @ optName=(varOne&&varTwo)||!varThree}'},
-        {s: '${myVar @ optOne, optTwo=myVar, optThree=\'string\', optFour=[myVar, \'string\']}'}
-    ],
-    'Fragments': [
-        {s: 'Hello, ${myVar}.'},
-        {s: ''},
-        {s: 'Hello'},
-        {s: '${myVar} Hello'},
-        {s: 'Foo ${} Bar'}
-    ]
+  Expressions: [
+    { s: '${myVar}' },
+    { s: '${myObject.key}', r: '${myObject[\'key\']}' },
+    { s: '${myObject[\'key\']}' },
+    { s: '${myObject[keyVar]}' },
+    { s: '${myArray[1]}' },
+    { s: '${myArray[indexVar]}' },
+    { s: '${true}' },
+    { s: '${42}' },
+    { s: '${\'string\'}' },
+    { s: '${"string"}', r: '${\'string\'}' },
+    { s: '${[1, 2, 3, true, \'string\']}' },
+  ],
+  'Logic Operators': [
+    { s: '${varOne && !(varTwo || varThree)}', r: '${varOne&&!(varTwo||varThree)}' },
+    { s: '${!myVar}' },
+    { s: '${varOne && varTwo}', r: '${varOne&&varTwo}' },
+    { s: '${varOne || varTwo}', r: '${varOne||varTwo}' },
+    { s: '${varChoice ? varOne : varTwo}' },
+  ],
+  Comparison: [
+    { s: '${nullValueOne == nullValueTwo}', r: '${nullValueOne===nullValueTwo}' },
+    { s: '${nullValueOne != nullValueTwo}', r: '${nullValueOne!==nullValueTwo}' },
+    { s: '${stringValueOne == stringValueTwo}', r: '${stringValueOne===stringValueTwo}' },
+    { s: '${stringValueOne != stringValueTwo}', r: '${stringValueOne!==stringValueTwo}' },
+    { s: '${numberValueOne < numberValueTwo}', r: '${numberValueOne<numberValueTwo}' },
+    { s: '${numberValueOne <= numberValueTwo}', r: '${numberValueOne<=numberValueTwo}' },
+    { s: '${numberValueOne == numberValueTwo}', r: '${numberValueOne===numberValueTwo}' },
+    { s: '${numberValueOne >= numberValueTwo}', r: '${numberValueOne>=numberValueTwo}' },
+    { s: '${numberValueOne > numberValueTwo}', r: '${numberValueOne>numberValueTwo}' },
+    { s: '${numberValueOne != numberValueTwo}', r: '${numberValueOne!==numberValueTwo}' },
+    { s: '${booleanValueOne == booleanValueTwo}', r: '${booleanValueOne===booleanValueTwo}' },
+    { s: '${booleanValueOne != booleanValueTwo}', r: '${booleanValueOne!==booleanValueTwo}' },
+    { s: '${enumConstant == \'CONSTANT_NAME\'}', r: '${enumConstant===\'CONSTANT_NAME\'}' },
+  ],
+  Options: [
+    { s: '${myVar @ optName}' },
+    { s: '${myVar @ optName=myVar}' },
+    { s: '${myVar @ optName=true}' },
+    { s: '${myVar @ optName=42}' },
+    { s: '${myVar @ optName=\'string\'}' },
+    { s: '${myVar @ optName="string"}', r: '${myVar @ optName=\'string\'}' },
+    { s: '${myVar @ optName=[myVar, \'string\']}' },
+    { s: '${myVar @ optName=(varOne && varTwo) || !varThree}', r: '${myVar @ optName=(varOne&&varTwo)||!varThree}' },
+    { s: '${myVar @ optOne, optTwo=myVar, optThree=\'string\', optFour=[myVar, \'string\']}' },
+  ],
+  Fragments: [
+    { s: 'Hello, ${myVar}.' },
+    { s: '' },
+    { s: 'Hello' },
+    { s: '${myVar} Hello' },
+    { s: 'Foo ${} Bar' },
+  ],
 };
+
+/* eslint-enable no-template-curly-in-string */
 
 /**
  * Simple tests that check if the parser can process all the expressions
  */
-describe('HTL Expressions', function() {
-    Object.keys(TESTS).forEach(function(name) {
-        const categ = TESTS[name];
-        describe(name, function() {
-            categ.forEach(function(test) {
-                it('evaluates the expression correctly', function() {
-                    const source = test.s;
-                    const expected = test.r || test.s;
-                    const result = process(source);
-                    assert.equal(result, expected);
-                });
-            });
+describe('HTL Expressions', () => {
+  Object.keys(TESTS).forEach((name) => {
+    const categ = TESTS[name];
+    describe(name, () => {
+      categ.forEach((test) => {
+        it('evaluates the expression correctly', () => {
+          const source = test.s;
+          const expected = test.r || test.s;
+          const result = process(source);
+          assert.equal(result, expected);
         });
+      });
     });
+  });
 });

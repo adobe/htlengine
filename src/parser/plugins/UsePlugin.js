@@ -20,19 +20,14 @@ const VariableBinding = require('../commands/VariableBinding');
 const RuntimeCall = require('../htl/nodes/RuntimeCall');
 const MapLiteral = require('../htl/nodes/MapLiteral');
 
-const DEFAULT_VARIABLE_NAME = "useBean";
+const DEFAULT_VARIABLE_NAME = 'useBean';
 
 module.exports = class UsePlugin extends Plugin {
-
-    constructor(signature, ctx, expression, attributeName) {
-        super(signature, ctx, expression);
-    }
-
-    beforeElement(stream, tagName) {
-        const variableName = this._signature.getVariableName(DEFAULT_VARIABLE_NAME);
-        stream.write(new VariableBinding.Global(variableName,
-            new RuntimeCall('use', this._expression.root, [new MapLiteral(this._expression.options)])
-        ));
-    }
-
+  beforeElement(stream/* , tagName */) {
+    const variableName = this._signature.getVariableName(DEFAULT_VARIABLE_NAME);
+    stream.write(new VariableBinding.Global(
+      variableName,
+      new RuntimeCall('use', this._expression.root, [new MapLiteral(this._expression.options)]),
+    ));
+  }
 };

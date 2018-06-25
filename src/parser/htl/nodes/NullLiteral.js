@@ -17,7 +17,10 @@
  */
 
 const ExpressionNode = require('./ExpressionNode');
-module.exports = class NullLiteral extends ExpressionNode {
-};
 
-module.exports.INSTANCE = new module.exports();
+class NullLiteral extends ExpressionNode {
+}
+
+NullLiteral.INSTANCE = new NullLiteral();
+
+module.exports = NullLiteral;

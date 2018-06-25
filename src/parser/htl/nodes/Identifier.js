@@ -18,20 +18,21 @@
 
 const Atom = require('./Atom');
 
-module.exports = class Identifier extends Atom {
+class Identifier extends Atom {
+  constructor(name) {
+    super();
+    this._name = name;
+  }
 
-    constructor(name) {
-        super();
-        this._name = name;
-    }
+  get name() {
+    return this._name;
+  }
 
-    get name() {
-        return this._name;
-    }
+  get text() {
+    return this._name;
+  }
+}
 
-    get text() {
-        return this._name;
-    }
-};
+Identifier.NULL = new Identifier('null');
 
-module.exports.NULL = new module.exports('null');
+module.exports = Identifier;

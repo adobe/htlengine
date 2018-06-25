@@ -17,53 +17,51 @@
  */
 const PluginProxy = require('./PluginProxy');
 
-
 /**
- * The element context contains the information about the current processed element in the markup handler,
- * @type {module.ElementContext}
+ * The element context contains the information about the current processed element in the markup
+ * handler, @type {module.ElementContext}
  */
 module.exports = class ElementContext {
+  constructor(tagName) {
+    this._tagName = tagName;
+    this._attributes = [];
+    this._isSlyTag = tagName.toLowerCase() === 'sly';
+    this._plugin = new PluginProxy();
+  }
 
-    constructor(tagName) {
-        this._tagName = tagName;
-        this._attributes = [];
-        this._isSlyTag = 'sly' === tagName.toLowerCase();
-        this._plugin = new PluginProxy();
-    }
+  addAttribute(name, value, quoteChar) {
+    this._attributes.push({
+      name,
+      value,
+      quoteChar,
+    });
+  }
 
-    addAttribute(name, value, quoteChar) {
-        this._attributes.push({
-            name,
-            value,
-            quoteChar
-        });
-    }
+  addPluginAttribute(name, signature, expression) {
+    this._attributes.push({
+      name,
+      signature,
+      expression,
+    });
+  }
 
-    addPluginAttribute(name, signature, expression) {
-        this._attributes.push({
-            name,
-            signature,
-            expression
-        });
-    }
+  get tagName() {
+    return this._tagName;
+  }
 
-    get tagName() {
-        return this._tagName;
-    }
+  get isSlyTag() {
+    return this._isSlyTag;
+  }
 
-    get isSlyTag() {
-        return this._isSlyTag;
-    }
+  get attributes() {
+    return this._attributes;
+  }
 
-    get attributes() {
-        return this._attributes;
-    }
+  addPlugin(p) {
+    this._plugin.add(p);
+  }
 
-    addPlugin(p) {
-        this._plugin.add(p);
-    }
-
-    get plugin() {
-        return this._plugin;
-    }
+  get plugin() {
+    return this._plugin;
+  }
 };

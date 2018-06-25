@@ -30,101 +30,98 @@ const Runtime = require('../src/interpreter/Runtime');
 
 
 function process(input) {
-    return new TemplateParser()
-        .withErrorListener(ThrowingErrorListener.INSTANCE)
-        .parse(input);
+  return new TemplateParser()
+    .withErrorListener(ThrowingErrorListener.INSTANCE)
+    .parse(input);
 }
 
 function debugCommands(commands) {
-    const cmdvisitor = new DebugCommandVisitor();
-    commands.forEach((c) => {
-        c.accept(cmdvisitor);
-    });
-
-    console.log(cmdvisitor.result);
-    return cmdvisitor.result;
+  const cmdvisitor = new DebugCommandVisitor();
+  commands.forEach((c) => {
+    c.accept(cmdvisitor);
+  });
+  // eslint-disable-next-line no-console
+  console.log(cmdvisitor.result);
+  return cmdvisitor.result;
 }
 
 function evaluateCommands(commands, runtime) {
-    const result = new Interpreter()
-        .withRuntime(runtime)
-        .withCommands(commands)
-        .run()
-        .result;
-    console.log(result);
-    return result;
+  const { result } = new Interpreter()
+    .withRuntime(runtime)
+    .withCommands(commands)
+    .run();
+  // eslint-disable-next-line no-console
+  console.log(result);
+  return result;
 }
 
 function readTests(filename) {
-    const text = fs.readFileSync(filename, 'utf-8');
-    const lines = text.split(/\r\n|\r|\n/);
+  const text = fs.readFileSync(filename, 'utf-8');
+  const lines = text.split(/\r\n|\r|\n/);
 
-    const tests = [];
-    let test = null;
-    lines.forEach((line) => {
-        if (line === '#') {
-            return;
-        }
-        if (line.startsWith('###')) {
-            test = {
-                name: line.substring(4),
-                input: ''
-            };
-            tests.push(test);
-        } else if (line.startsWith('---')) {
-            test.commands = ''
-        } else if (line.startsWith('===')) {
-            test.output = ''
-        } else if (test && ('output' in test)) {
-            test.output += line + '\n';
-        } else if (test && ('commands' in test)) {
-            test.commands += line + '\n';
-        } else if (test && ('input' in test)) {
-            test.input += line + '\n';
-        }
-    });
-    return tests;
+  const tests = [];
+  let test = null;
+  lines.forEach((line) => {
+    if (line === '#') {
+      return;
+    }
+    if (line.startsWith('###')) {
+      test = {
+        name: line.substring(4),
+        input: '',
+      };
+      tests.push(test);
+    } else if (line.startsWith('---')) {
+      test.commands = '';
+    } else if (line.startsWith('===')) {
+      test.output = '';
+    } else if (test && ('output' in test)) {
+      test.output += `${line}\n`;
+    } else if (test && ('commands' in test)) {
+      test.commands += `${line}\n`;
+    } else if (test && ('input' in test)) {
+      test.input += `${line}\n`;
+    }
+  });
+  return tests;
 }
 
-describe('Interpreter Tests', function() {
+describe('Interpreter Tests', () => {
+  fs.readdirSync('test/specs').forEach((filename) => {
+    if (filename.endsWith('_spec.txt')) {
+      const name = filename.substring(0, filename.length - 9);
+      if (name === 'use') {
+        // todo: interpreter support for use classes
+        return;
+      }
+      // eslint-disable-next-line import/no-dynamic-require,global-require
+      const payload = require(`./specs/${name}_spec.js`);
 
-    fs.readdirSync('test/specs').forEach((filename) => {
-        if (filename.endsWith('_spec.txt')) {
-            const name = filename.substring(0, filename.length - 9);
-            if (name === 'use') {
-                // todo: interpreter support for use classes
-                return;
-            }
-            const payload = require('./specs/' + name + '_spec.js');
+      const runtime = new Runtime();
+      runtime.scope.putAll(payload);
 
-            const runtime = new Runtime();
-            runtime.scope.putAll(payload);
+      const tests = readTests(`test/specs/${filename}`);
 
-            const tests = readTests('test/specs/' + filename);
+      describe(name, () => {
+        tests.forEach((test) => {
+          if (!test.input) {
+            return;
+          }
+          const commands = process(test.input);
 
-            describe(name, function() {
-                tests.forEach(function(test) {
-                    if (!test.input) {
-                        return;
-                    }
-                    const commands = process(test.input);
-
-                    if (test.commands) {
-                        it(`Generates commands for '${test.name}' correctly.`, function() {
-                            assert.equal(debugCommands(commands), test.commands);
-                        });
-                    }
-
-                    if ('output' in test) {
-                        it(`Generates output for '${test.name}' correctly.`, function() {
-                            assert.equal(evaluateCommands(commands, runtime), test.output);
-                        });
-                    }
-                });
+          if (test.commands) {
+            it(`Generates commands for '${test.name}' correctly.`, () => {
+              assert.equal(debugCommands(commands), test.commands);
             });
-        }
-    });
+          }
 
-
-
+          if ('output' in test) {
+            it(`Generates output for '${test.name}' correctly.`, () => {
+              assert.equal(evaluateCommands(commands, runtime), test.output);
+            });
+          }
+        });
+      });
+    }
+  });
 });

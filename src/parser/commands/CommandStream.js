@@ -20,43 +20,42 @@ const BooleanConstant = require('../htl/nodes/BooleanConstant');
 const OutText = require('./OutText');
 
 module.exports = class CommandStream {
+  constructor() {
+    this._commands = [];
+    this._warnings = [];
+    this._wasText = false;
+  }
 
-    constructor() {
-        this._commands = [];
-        this._warnings = [];
-        this._wasText = false;
+  write(command) {
+    const isText = command instanceof OutText;
+    if (isText && this._wasText) {
+      this._commands[this._commands.length - 1].append(command.text);
+      return;
     }
+    this._wasText = isText;
+    this._commands.push(command);
+  }
 
-    write(command) {
-        const isText = command instanceof OutText;
-        if (isText && this._wasText) {
-            this._commands[this._commands.length - 1].append(command.text);
-            return;
-        }
-        this._wasText = isText;
-        this._commands.push(command);
-    }
+  warn(message, code) {
+    this._warnings.push({
+      message,
+      code,
+    });
+  }
 
-    warn(message, code) {
-        this._warnings.push({
-            message: message,
-            code: code
-        })
-    }
+  // eslint-disable-next-line class-methods-use-this
+  close() {
+  }
 
-    close() {
-    }
+  get commands() {
+    return this._commands;
+  }
 
-    get commands() {
-        return this._commands;
-    }
+  beginIgnore() {
+    this.write(new Conditional.Start(BooleanConstant.FALSE));
+  }
 
-    beginIgnore() {
-        this.write(new Conditional.Start(BooleanConstant.FALSE));
-    }
-
-    endIgnore() {
-        this.write(Conditional.END);
-    }
-
+  endIgnore() {
+    this.write(Conditional.END);
+  }
 };

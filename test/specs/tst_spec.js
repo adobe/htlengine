@@ -16,12 +16,12 @@
  *
  */
 module.exports = {
-    'properties': {
-        'true0': 'hello',
-        'true1': 1,
-        'true2': true,
-        'false0': '',
-        'false1': 0,
-        'false2': false,
-    }
+  properties: {
+    true0: 'hello',
+    true1: 1,
+    true2: true,
+    false0: '',
+    false1: 0,
+    false2: false,
+  },
 };

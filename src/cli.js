@@ -23,29 +23,30 @@ const filename = process.argv[2];
 const template = fs.readFileSync(filename, 'utf-8');
 
 const resource = {
-    'world': 'Earth',
-    'properties': {
-        title: 'Hello, world.',
-        fruits: ['Apple', 'Banana', 'Orange'],
-        comma: ', '
-    },
-    'nav': {
-        foo: 'This is foo. '
-    },
-    'test': 'This is a test',
-    'qttMin': 4,
-    'qttMax': 4,
-    'expression': 'this is an expression.',
-    'it': {
-        "html": "foo barty!",
-        "title": "Hello, world!",
-        "children": [
-            "<div>A</div>",
-            "<div>B</div>"
-        ]
-    }
+  world: 'Earth',
+  properties: {
+    title: 'Hello, world.',
+    fruits: ['Apple', 'Banana', 'Orange'],
+    comma: ', ',
+  },
+  nav: {
+    foo: 'This is foo. ',
+  },
+  test: 'This is a test',
+  qttMin: 4,
+  qttMax: 4,
+  expression: 'this is an expression.',
+  it: {
+    html: 'foo barty!',
+    title: 'Hello, world!',
+    children: [
+      '<div>A</div>',
+      '<div>B</div>',
+    ],
+  },
 };
 
 const html = engine(resource, template);
 
+// eslint-disable-next-line no-console
 console.log(html);

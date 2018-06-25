@@ -17,24 +17,24 @@
  */
 
 const ExpressionNode = require('./ExpressionNode');
-module.exports = class UnaryOperation extends ExpressionNode {
 
-    /**
+module.exports = class UnaryOperation extends ExpressionNode {
+  /**
      *
      * @param {BinaryOperator} operator Binary operator
      * @param {ExpressionNode} target Target expression
      */
-    constructor(operator, target) {
-        super();
-        this._operator = operator;
-        this._target = target;
-    }
+  constructor(operator, target) {
+    super();
+    this._operator = operator;
+    this._target = target;
+  }
 
-    get operator() {
-        return this._operator;
-    }
+  get operator() {
+    return this._operator;
+  }
 
-    get target() {
-        return this._target;
-    }
+  get target() {
+    return this._target;
+  }
 };

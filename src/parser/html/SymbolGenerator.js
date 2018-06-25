@@ -15,19 +15,18 @@
  * limitations under the License.
  *
  */
-const DEFAULT_VAR_PREFIX = "var_";
+const DEFAULT_VAR_PREFIX = 'var_';
 
 module.exports = class SymbolGenerator {
+  constructor(prefix) {
+    this._prefix = prefix || DEFAULT_VAR_PREFIX;
+    this._counter = -1;
+  }
 
-    constructor(prefix) {
-        this._prefix = prefix || DEFAULT_VAR_PREFIX;
-        this._counter = 0;
-    }
-
-    next(hint) {
-        const middle = hint ? hint.replace('-', '_') : '';
-        return this._prefix + middle + this._counter++;
-    }
-
+  next(hint) {
+    const middle = hint ? hint.replace('-', '_') : '';
+    this._counter += 1;
+    return this._prefix + middle + this._counter;
+  }
 };
 

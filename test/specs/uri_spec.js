@@ -16,10 +16,10 @@
  *
  */
 module.exports = {
-    "jsuse": {
-        "query": {
-            "q" : "htl",
-            "array" : [1, 2, 3]
-        }
-    }
+  jsuse: {
+    query: {
+      q: 'htl',
+      array: [1, 2, 3],
+    },
+  },
 };

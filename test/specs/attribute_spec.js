@@ -16,16 +16,16 @@
  *
  */
 module.exports = {
-    'properties': {
-        'myValues': "some data value",
-        'myClass': 'super-green'
-    },
-    'foobar': {
-        'id': 'foo',
-        'class': 'bar',
-        'lang': ''
-    },
-    attrs: {
-        'checked': true
-    }
+  properties: {
+    myValues: 'some data value',
+    myClass: 'super-green',
+  },
+  foobar: {
+    id: 'foo',
+    class: 'bar',
+    lang: '',
+  },
+  attrs: {
+    checked: true,
+  },
 };

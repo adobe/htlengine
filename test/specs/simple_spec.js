@@ -16,21 +16,21 @@
  *
  */
 module.exports = {
-    'world': 'Earth',
-    'properties': {
-        title: 'Hello, world.',
-        foo: 'bar',
-        fruits: ['Apple', 'Banana', 'Orange'],
-        comma: ', '
-    },
+  world: 'Earth',
+  properties: {
+    title: 'Hello, world.',
+    foo: 'bar',
+    fruits: ['Apple', 'Banana', 'Orange'],
+    comma: ', ',
+  },
 
-    nullValue1: null,
-    nullValue2: null,
-    stringValue1: 'hello',
-    stringValue2: 'hello',
-    stringValue3: 'world',
-    numberValue1: 1,
-    numberValue2: 1,
-    booleanValue1: true,
-    booleanValue2: true,
+  nullValue1: null,
+  nullValue2: null,
+  stringValue1: 'hello',
+  stringValue2: 'hello',
+  stringValue3: 'world',
+  numberValue1: 1,
+  numberValue2: 1,
+  booleanValue1: true,
+  booleanValue2: true,
 };

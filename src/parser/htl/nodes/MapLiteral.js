@@ -19,33 +19,32 @@
 const ExpressionNode = require('./ExpressionNode');
 
 module.exports = class MapLiteral extends ExpressionNode {
+  constructor(map) {
+    super();
+    this._map = map;
+  }
 
-    constructor(map) {
-        super();
-        this._map = map;
-    }
-
-    /**
+  /**
      * Returns an {@link ExpressionNode} from the backing map.
      *
      * @param {String} key the key under which the node is stored
      * @return {ExpressionNode} the node, if one is stored under that key; {@code null} otherwise
      */
-    getValue(key) {
-        return this._map[key];
-    }
+  getValue(key) {
+    return this._map[key];
+  }
 
-    /**
+  /**
      * Checks if the map contains the property identified by the passed property name.
      *
      * @param {String} name the property name
      * @return {@code true} if the map contains the property, {@code false} otherwise
      */
-    containsKey(name) {
-        return name in this._map;
-    }
+  containsKey(name) {
+    return name in this._map;
+  }
 
-    get map() {
-        return this._map;
-    }
+  get map() {
+    return this._map;
+  }
 };

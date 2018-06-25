@@ -27,83 +27,81 @@ const Compiler = require('../src/compiler/Compiler');
 
 
 function readTests(filename) {
-    const text = fs.readFileSync(filename, 'utf-8');
-    const lines = text.split(/\r\n|\r|\n/);
+  const text = fs.readFileSync(filename, 'utf-8');
+  const lines = text.split(/\r\n|\r|\n/);
 
-    const tests = [];
-    let test = null;
-    lines.forEach((line) => {
-        if (line === '#') {
-            return;
-        }
-        if (line.startsWith('###')) {
-            test = {
-                name: line.substring(4),
-                input: ''
-            };
-            tests.push(test);
-        } else if (line.startsWith('---')) {
-            test.commands = ''
-        } else if (line.startsWith('===')) {
-            test.output = ''
-        } else if (test && ('output' in test)) {
-            test.output += line + '\n';
-        } else if (test && ('commands' in test)) {
-            test.commands += line + '\n';
-        } else if (test && ('input' in test)) {
-            test.input += line + '\n';
-        }
-    });
-    return tests;
+  const tests = [];
+  let test = null;
+  lines.forEach((line) => {
+    if (line === '#') {
+      return;
+    }
+    if (line.startsWith('###')) {
+      test = {
+        name: line.substring(4),
+        input: '',
+      };
+      tests.push(test);
+    } else if (line.startsWith('---')) {
+      test.commands = '';
+    } else if (line.startsWith('===')) {
+      test.output = '';
+    } else if (test && ('output' in test)) {
+      test.output += `${line}\n`;
+    } else if (test && ('commands' in test)) {
+      test.commands += `${line}\n`;
+    } else if (test && ('input' in test)) {
+      test.input += `${line}\n`;
+    }
+  });
+  return tests;
 }
 
-describe('Compiler Tests', function() {
+describe('Compiler Tests', () => {
+  fs.readdirSync('test/specs').forEach((filename) => {
+    if (filename.endsWith('_spec.txt')) {
+      const name = filename.substring(0, filename.length - 9);
+      // eslint-disable-next-line import/no-dynamic-require,global-require
+      const payload = require(`./specs/${name}_spec.js`);
 
-    fs.readdirSync('test/specs').forEach((filename) => {
-        if (filename.endsWith('_spec.txt')) {
-            const name = filename.substring(0, filename.length - 9);
-            const payload = require('./specs/' + name + '_spec.js');
+      const tests = readTests(`test/specs/${filename}`);
+      const outputDir = path.join(__dirname, 'generated');
+      try {
+        fs.mkdirSync(outputDir);
+      } catch (e) {
+        // ignore
+      }
 
-            const tests = readTests('test/specs/' + filename);
-            const outputDir = path.join(__dirname, 'generated');
-            try {
-                fs.mkdirSync(outputDir);
-            } catch (e) {
-                // ignore
-            }
+      const compiler = new Compiler()
+        .withOutputDirectory(outputDir)
+        .withRuntimeVar(Object.keys(payload));
 
-            const compiler = new Compiler()
-                .withOutputDirectory(outputDir)
-                .withRuntimeVar(Object.keys(payload));
+      describe(name, () => {
+        let idx = 0;
 
-            describe(name, function() {
-                let idx = 0;
+        tests.forEach((test) => {
+          if (!test.input) {
+            return;
+          }
+          const copiledFilename = compiler.compile(test.input, `${name}_${idx}.js`);
+          if ('output' in test) {
+            it(`${idx}. Generates output for '${test.name}' correctly.`, (done) => {
+              const runtime = new Runtime()
+                .withUseDirectory(path.join(__dirname, 'specs'))
+                .setGlobal(payload);
 
-                tests.forEach(function(test) {
-                    if (!test.input) {
-                        return;
-                    }
-                    const copiledFilename = compiler.compile(test.input, `${name}_${idx}.js`);
-                    if ('output' in test) {
-                        it(`${idx}. Generates output for '${test.name}' correctly.`, function(done) {
-                            const runtime = new Runtime()
-                                .withUseDirectory(path.join(__dirname, 'specs'))
-                                .setGlobal(payload);
-
-                            const service = require(copiledFilename);
-                            service(runtime).then(() => {
-                                const output = runtime.stream;
-                                assert.equal(output, test.output);
-                                done();
-                            }).catch(done);
-                        });
-                    }
-                    idx++;
-                });
+              // eslint-disable-next-line import/no-dynamic-require,global-require
+              const service = require(copiledFilename);
+              service(runtime).then(() => {
+                const output = runtime.stream;
+                assert.equal(output, test.output);
+                done();
+              }).catch(done);
             });
-        }
-    });
-
-
-
+          }
+          idx += 1;
+        });
+      });
+    }
+  });
 });

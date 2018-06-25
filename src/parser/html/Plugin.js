@@ -16,69 +16,69 @@
  *
  */
 
+/* eslint-disable no-unused-vars,class-methods-use-this */
 
 module.exports = class Plugin {
+  constructor(signature, pluginContext, expression) {
+    this._signature = signature;
+    this._pluginContext = pluginContext;
+    this._expression = expression;
+  }
 
-    constructor(signature, pluginContext, expression) {
-        this._signature = signature;
-        this._pluginContext = pluginContext;
-        this._expression = expression;
-    }
+  isValid() {
+    return true;
+  }
 
-    isValid() {
-        return true;
-    }
+  get pluginContext() {
+    return this._pluginContext;
+  }
 
-    get pluginContext() {
-        return this._pluginContext;
-    }
+  get expression() {
+    return this._expression;
+  }
 
-    get expression() {
-        return this._expression;
-    }
+  beforeElement(stream, tagName) {
+  }
 
-    beforeElement(stream, tagName) {
-    };
+  beforeTagOpen(stream) {
+  }
 
-    beforeTagOpen(stream) {
-    };
+  beforeAttributes(stream) {
+  }
 
-    beforeAttributes(stream) {
-    };
+  beforeAttribute(stream, attributeName) {
+  }
 
-    beforeAttribute(stream, attributeName) {
-    };
+  beforeAttributeValue(stream, attributeName, attributeValue) {
+  }
 
-    beforeAttributeValue(stream, attributeName, attributeValue) {
-    };
+  afterAttributeValue(stream, attributeName) {
+  }
 
-    afterAttributeValue(stream, attributeName) {
-    };
+  afterAttribute(stream, attributeName) {
+  }
 
-    afterAttribute(stream, attributeName) {
-    };
+  onPluginCall(stream, signature, expression) {
+  }
 
-    onPluginCall(stream, signature, expression) {
-    };
+  afterAttributes(stream) {
+  }
 
-    afterAttributes(stream) {
-    };
+  afterTagOpen(stream) {
+  }
 
-    afterTagOpen(stream) {
-    };
+  beforeChildren(stream) {
+  }
 
-    beforeChildren(stream) {
-    };
+  afterChildren(stream) {
+  }
 
-    afterChildren(stream) {
-    };
+  beforeTagClose(stream, isSelfClosing) {
+  }
 
-    beforeTagClose(stream, isSelfClosing) {
-    };
+  afterTagClose(stream, isSelfClosing) {
+  }
 
-    afterTagClose(stream, isSelfClosing) {
-    };
-
-    afterElement(stream) {
-    };
+  afterElement(stream) {
+  }
 };

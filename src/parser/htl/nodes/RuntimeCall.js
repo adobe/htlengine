@@ -18,32 +18,34 @@
 const ExpressionNode = require('./ExpressionNode');
 
 /**
- * A {@code RuntimeCall} is a special expression which provides access to utility functions from the runtime.
+ * A {@code RuntimeCall} is a special expression which provides access to utility functions from the
+ * runtime.
  */
 module.exports = class RuntimeCall extends ExpressionNode {
+  /**
+   * Creates a {@code RuntimeCall} based on a {@code functionName} and an array
+   * of {@code arguments}.
+   *
+   * @param {String} functionName the name of the function identifying the runtime call
+   * @param {ExpressionNode} expression the node this call is applied on
+   * @param {ExpressionNode...} args  the arguments passed to the runtime call
+   */
+  constructor(functionName, expression, args) {
+    super();
+    this._functionName = functionName;
+    this._expression = expression;
+    this._args = args || [];
+  }
 
-    /**
-     * Creates a {@code RuntimeCall} based on a {@code functionName} and an array of {@code arguments}.
-     *
-     * @param {String} functionName the name of the function identifying the runtime call
-     * @param {ExpressionNode...} args  the arguments passed to the runtime call
-     */
-    constructor(functionName, expression, args) {
-        super();
-        this._functionName = functionName;
-        this._expression = expression;
-        this._args = args || [];
-    }
+  get functionName() {
+    return this._functionName;
+  }
 
-    get functionName() {
-        return this._functionName;
-    }
+  get expression() {
+    return this._expression;
+  }
 
-    get expression() {
-        return this._expression;
-    }
-
-    get args() {
-        return this._args;
-    }
+  get args() {
+    return this._args;
+  }
 };

@@ -17,17 +17,17 @@
  */
 
 const ExpressionNode = require('./ExpressionNode');
-module.exports = class ArrayLiteral extends ExpressionNode {
 
-    /**
+module.exports = class ArrayLiteral extends ExpressionNode {
+  /**
      * @param {ExpressionNode[]} items Items
      */
-    constructor(items) {
-        super();
-        this._items = items;
-    }
+  constructor(items) {
+    super();
+    this._items = items;
+  }
 
-    get items() {
-        return this._items;
-    }
+  get items() {
+    return this._items;
+  }
 };

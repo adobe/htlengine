@@ -23,72 +23,60 @@ const OutputVariable = require('./OutputVariable');
 const ExpressionFormatter = require('../../compiler/ExpressionFormatter');
 
 function escapeJavaString(s) {
-    return JSON.stringify(s);
+  return JSON.stringify(s);
 }
 
 const INDENTS = [''];
-for (let i=0; i < 50; i++) {
-    INDENTS[i + 1] = INDENTS[i] + '  ';
+for (let i = 0; i < 50; i += 1) {
+  INDENTS[i + 1] = `${INDENTS[i]}  `;
 }
 
 module.exports = class DebugCommandVisitor {
+  constructor() {
+    this._result = '';
+    this._indent = 0;
+  }
 
-    constructor() {
-        this._result = '';
-        this._indent = 0;
+  out(msg) {
+    this._result += `${INDENTS[this._indent] + msg}\n`;
+  }
+
+  get result() {
+    return this._result;
+  }
+
+  visit(cmd) {
+    if (cmd instanceof OutText) {
+      this.out(`out(${escapeJavaString(cmd.text)});`);
+    } else if (cmd instanceof VariableBinding.Start) {
+      const exp = ExpressionFormatter.format(cmd.expression);
+      this.out(`{ const ${cmd.variableName} = ${exp};`);
+      this._indent += 1;
+    } else if (cmd instanceof VariableBinding.Global) {
+      const exp = ExpressionFormatter.format(cmd.expression);
+      this.out(`global.${cmd.variableName} = ${exp};`);
+    } else if (cmd instanceof VariableBinding.End) {
+      this._indent -= 1;
+      this.out('}');
+    } else if (cmd instanceof Conditional.Start) {
+      const exp = ExpressionFormatter.format(cmd.expression);
+      const neg = cmd.negate ? '!' : '';
+      this.out(`if (${neg}${exp}) {`);
+      this._indent += 1;
+    } else if (cmd instanceof Conditional.End) {
+      this._indent -= 1;
+      this.out('}');
+    } else if (cmd instanceof OutputVariable) {
+      this.out(`out(${cmd.variableName});`);
+    } else if (cmd instanceof Loop.Start) {
+      this.out(`for ((${cmd.indexVariable},${cmd.itemVariable}) in ${cmd.listVariable}) {`);
+      this._indent += 1;
+    } else if (cmd instanceof Loop.End) {
+      this._indent -= 1;
+      this.out('}');
+    } else {
+      throw new Error(`unknown command: ${cmd}`);
     }
-
-    out(msg) {
-        this._result += INDENTS[this._indent] + msg + '\n';
-    }
-
-    get result() {
-        return this._result;
-    }
-
-    visit(cmd) {
-        if (cmd instanceof OutText) {
-            this.out(`out(${escapeJavaString(cmd.text)});`);
-        }
-
-        else if (cmd instanceof VariableBinding.Start) {
-            const exp = ExpressionFormatter.format(cmd.expression);
-            this.out(`{ const ${cmd.variableName} = ${exp};`);
-            this._indent++;
-        }
-        else if (cmd instanceof VariableBinding.Global) {
-            const exp = ExpressionFormatter.format(cmd.expression);
-            this.out(`global.${cmd.variableName} = ${exp};`);
-        }
-        else if (cmd instanceof VariableBinding.End) {
-            this._indent--;
-            this.out('}');
-        }
-        else if (cmd instanceof Conditional.Start) {
-            const exp = ExpressionFormatter.format(cmd.expression);
-            const neg = cmd.negate ? '!' : '';
-            this.out(`if (${neg}${exp}) {`);
-            this._indent++;
-        }
-        else if (cmd instanceof Conditional.End) {
-            this._indent--;
-            this.out('}');
-        }
-        else if (cmd instanceof OutputVariable) {
-            this.out(`out(${cmd.variableName});`);
-        }
-        else if (cmd instanceof Loop.Start) {
-            this.out(`for ((${cmd.indexVariable},${cmd.itemVariable}) in ${cmd.listVariable}) {`);
-            this._indent++;
-        }
-        else if (cmd instanceof Loop.End) {
-            this._indent--;
-            this.out('}');
-        }
-        else {
-            throw new Error('unknown command: ' + cmd);
-        }
-
-    }
+  }
 };
 

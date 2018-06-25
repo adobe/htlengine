@@ -16,13 +16,13 @@
  *
  */
 module.exports = {
-    'properties': {
-        fruits: ['Apple', 'Banana', 'Orange'],
-        emptyList: [],
-        map: {
-            'a': 1,
-            'b': 2,
-            'c': 3
-        }
-    }
+  properties: {
+    fruits: ['Apple', 'Banana', 'Orange'],
+    emptyList: [],
+    map: {
+      a: 1,
+      b: 2,
+      c: 3,
+    },
+  },
 };

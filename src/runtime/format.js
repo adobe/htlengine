@@ -16,13 +16,8 @@
  *
  */
 module.exports = function format(fmt, args) {
-    if (!Array.isArray(args)) {
-        args = [args];
-    }
-    return fmt.replace(/{(\d+)}/g, function(match, number) {
-        return typeof args[number] !== 'undefined'
-            ? args[number]
-            : match
-            ;
-    });
+  const argArray = Array.isArray(args) ? args : [args];
+  return fmt.replace(/{(\d+)}/g, (match, number) => (typeof argArray[number] !== 'undefined'
+    ? argArray[number]
+    : match));
 };

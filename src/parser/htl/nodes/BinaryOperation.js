@@ -17,31 +17,30 @@
  */
 
 const ExpressionNode = require('./ExpressionNode');
+
 module.exports = class BinaryOperation extends ExpressionNode {
-
-
-    /**
+  /**
      *
      * @param {BinaryOperator} operator Operator
      * @param {ExpressionNode} leftOperand Left operand expression
      * @param {ExpressionNode} rightOperand Right operand expression
      */
-    constructor(operator, leftOperand, rightOperand) {
-        super();
-        this._operator = operator;
-        this._target = leftOperand;
-        this._rightOperand = rightOperand;
-    }
+  constructor(operator, leftOperand, rightOperand) {
+    super();
+    this._operator = operator;
+    this._target = leftOperand;
+    this._rightOperand = rightOperand;
+  }
 
-    get operator() {
-        return this._operator;
-    }
+  get operator() {
+    return this._operator;
+  }
 
-    get leftOperand() {
-        return this._target;
-    }
+  get leftOperand() {
+    return this._target;
+  }
 
-    get rightOperand() {
-        return this._rightOperand;
-    }
+  get rightOperand() {
+    return this._rightOperand;
+  }
 };
