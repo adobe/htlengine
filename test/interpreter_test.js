@@ -94,6 +94,10 @@ describe('Interpreter Tests', () => {
         // todo: interpreter support for use classes
         return;
       }
+      if (name === 'resource') {
+        // todo: interpreter support for resource classes
+        return;
+      }
       // eslint-disable-next-line import/no-dynamic-require,global-require
       const payload = require(`./specs/${name}_spec.js`);
 
