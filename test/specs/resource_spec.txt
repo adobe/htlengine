@@ -1,0 +1,8 @@
+#
+### sightly resource function
+#
+<div data-sly-resource="resource_spec/test_page.html"></div>
+===
+<div><span>Resource</span></div>
+#
+###

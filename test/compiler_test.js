@@ -88,6 +88,7 @@ describe('Compiler Tests', () => {
             it(`${idx}. Generates output for '${test.name}' correctly.`, (done) => {
               const runtime = new Runtime()
                 .withUseDirectory(path.join(__dirname, 'specs'))
+                .withResourceDirectory(path.join(__dirname, 'specs'))
                 .setGlobal(payload);
 
               // eslint-disable-next-line import/no-dynamic-require,global-require
