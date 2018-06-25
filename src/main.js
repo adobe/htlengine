@@ -17,15 +17,15 @@
  */
 const Compiler = require('./compiler/Compiler');
 
-module.exports = function(resource, template) {
+module.exports = function main(resource, template) {
+  const compiler = new Compiler()
+    .withOutputDirectory('.')
+    .includeRuntime(true)
+    .withRuntimeVar(Object.keys(resource));
 
-    const compiler = new Compiler()
-        .withOutputDirectory('.')
-        .includeRuntime(true)
-        .withRuntimeVar(Object.keys(resource));
-
-    const filename = compiler.compile(template, './out.js');
-    const service = require(filename);
-    return service(resource);
+  const filename = compiler.compile(template, './out.js');
+  // eslint-disable-next-line import/no-dynamic-require,global-require
+  const service = require(filename);
+  return service(resource);
 };
 

@@ -18,10 +18,10 @@
 const antlr4 = require('antlr4');
 
 class ThrowingErrorListener extends antlr4.error.ErrorListener {
-
-    syntaxError(recognizer, offendingSymbol, line, column, msg, e) {
-        throw new Error('Error: ' + msg);
-    }
+  // eslint-disable-next-line class-methods-use-this
+  syntaxError(recognizer, offendingSymbol, line, column, msg) {
+    throw new Error(`Error: ${msg}`);
+  }
 }
 
 module.exports = ThrowingErrorListener;

@@ -20,44 +20,42 @@
  */
 module.exports = Object.freeze({
 
-    /**
+  /**
      * Evaluates the logical negation of the operand
      */
-    NOT: {
-        sym: '!',
-        calc: (operand) => {
-            if (Array.isArray(operand)) {
-                return !operand.length;
-            }
-            return !operand;
-        }
+  NOT: {
+    sym: '!',
+    calc: (operand) => {
+      if (Array.isArray(operand)) {
+        return !operand.length;
+      }
+      return !operand;
     },
+  },
 
-    /**
+  /**
      * Evaluates whether the operand is a string of only whitespace characters
      */
-    IS_WHITESPACE: {
-        sym: 'ws:',
-        calc: (operand) => {
-            return String(operand).trim().length === 0;
-        }
-    },
+  IS_WHITESPACE: {
+    sym: 'ws:',
+    calc: operand => String(operand).trim().length === 0,
+  },
 
-    /**
+  /**
      * Evaluates the length of a collection
      */
-    LENGTH: {
-        sym: 'len:',
-        calc: (operand) => {
-            if (Array.isArray(operand)) {
-                return operand.length;
-            }
-            if (operand.length && (typeof operand === 'function')) {
-                return operand.length();
-            }
-            return -1;
-        }
-    }
+  LENGTH: {
+    sym: 'len:',
+    calc: (operand) => {
+      if (Array.isArray(operand)) {
+        return operand.length;
+      }
+      if (operand.length && (typeof operand === 'function')) {
+        return operand.length();
+      }
+      return -1;
+    },
+  },
 
 });
 

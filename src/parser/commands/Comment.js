@@ -19,17 +19,16 @@
 const Command = require('./Command');
 
 module.exports = class Comment extends Command {
+  constructor(text) {
+    super();
+    this._text = text;
+  }
 
-    constructor(text) {
-        super();
-        this._text = text;
-    }
+  get text() {
+    return this._text;
+  }
 
-    get text() {
-        return this._text;
-    }
-
-    append(text) {
-        this._text += text;
-    }
+  append(text) {
+    this._text += text;
+  }
 };

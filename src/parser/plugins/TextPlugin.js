@@ -22,19 +22,20 @@ const ExpressionContext = require('../html/ExpressionContext');
 const MarkupContext = require('../html/MarkupContext');
 
 module.exports = class TextPlugin extends Plugin {
+  beforeChildren(stream) {
+    const ctx = this.pluginContext;
+    const variable = ctx.generateVariable('textContent');
+    stream.write(new VariableBinding.Start(
+      variable,
+      ctx.adjustToContext(this.expression, MarkupContext.TEXT, ExpressionContext.TEXT).root,
+    ));
+    stream.write(new OutputVariable(variable));
+    stream.write(VariableBinding.END);
+    stream.beginIgnore();
+  }
 
-    beforeChildren(stream) {
-        const ctx = this.pluginContext;
-        const variable = ctx.generateVariable("textContent");
-        stream.write(new VariableBinding.Start(variable,
-                   ctx.adjustToContext(this.expression, MarkupContext.TEXT, ExpressionContext.TEXT).root));
-        stream.write(new OutputVariable(variable));
-        stream.write(VariableBinding.END);
-        stream.beginIgnore();
-    }
-
-    afterChildren(stream) {
-        stream.endIgnore();
-    }
-
+  // eslint-disable-next-line class-methods-use-this
+  afterChildren(stream) {
+    stream.endIgnore();
+  }
 };

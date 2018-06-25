@@ -17,18 +17,17 @@
  */
 
 /**
- * A {@code Command} represents the type of instruction a certain HTL expression or block element should execute.
+ * A {@code Command} represents the type of instruction a certain HTL expression or block element
+ * should execute.
  * Commands are immutable and can only be processed through a {@link CommandVisitor}.
  */
 module.exports = class Command {
-
-    /**
+  /**
      * Accept a visitor.
      *
      * @param {CommandVisitor} visitor the visitor that will process this command
      */
-    accept(visitor) {
-        visitor.visit(this);
-    }
-
+  accept(visitor) {
+    visitor.visit(this);
+  }
 };

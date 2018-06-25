@@ -24,47 +24,52 @@ const MarkupContext = require('../html/MarkupContext');
 const ExpressionContext = require('../html/ExpressionContext');
 
 module.exports = class ElementPlugin extends Plugin {
+  constructor(signature, pluginContext, expression) {
+    super(signature, pluginContext, expression);
 
-    constructor(signature, pluginContext, expression) {
-        super(signature, pluginContext, expression);
+    this.node = pluginContext.adjustToContext(
+      expression,
+      MarkupContext.ELEMENT_NAME,
+      ExpressionContext.ELEMENT,
+    ).root;
+    this.tagVar = pluginContext.generateVariable('tagVar');
+  }
 
-        this.node = pluginContext.adjustToContext(expression, MarkupContext.ELEMENT_NAME, ExpressionContext.ELEMENT).root;
-        this.tagVar = pluginContext.generateVariable('tagVar');
+  beforeElement(stream/* , tagName */) {
+    stream.write(new VariableBinding.Start(this.tagVar, this.node));
+  }
+
+  beforeTagOpen(stream) {
+    stream.write(new Conditional.Start(this.tagVar));
+    stream.write(new OutText('<'));
+    stream.write(new OutputVariable(this.tagVar));
+    stream.write(Conditional.END);
+    stream.write(new Conditional.Start(this.tagVar, true));
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  beforeAttributes(stream) {
+    stream.write(Conditional.END);
+  }
+
+  beforeTagClose(stream, isSelfClosing) {
+    if (!isSelfClosing) {
+      stream.write(new Conditional.Start(this.tagVar));
+      stream.write(new OutText('</'));
+      stream.write(new OutputVariable(this.tagVar));
+      stream.write(new OutText('>'));
+      stream.write(Conditional.END);
     }
+    stream.write(new Conditional.Start(this.tagVar, true));
+  }
 
-    beforeElement(stream, tagName) {
-            stream.write(new VariableBinding.Start(this.tagVar, this.node));
-        }
+  // eslint-disable-next-line class-methods-use-this
+  afterTagClose(stream/* , isSelfClosing */) {
+    stream.write(Conditional.END);
+  }
 
-    beforeTagOpen(stream) {
-        stream.write(new Conditional.Start(this.tagVar));
-        stream.write(new OutText('<'));
-        stream.write(new OutputVariable(this.tagVar));
-        stream.write(Conditional.END);
-        stream.write(new Conditional.Start(this.tagVar, true));
-    }
-
-    beforeAttributes(stream) {
-        stream.write(Conditional.END);
-    }
-
-    beforeTagClose(stream, isSelfClosing) {
-        if (!isSelfClosing) {
-            stream.write(new Conditional.Start(this.tagVar));
-            stream.write(new OutText('</'));
-            stream.write(new OutputVariable(this.tagVar));
-            stream.write(new OutText('>'));
-            stream.write(Conditional.END);
-        }
-        stream.write(new Conditional.Start(this.tagVar, true));
-    }
-
-    afterTagClose(stream, isSelfClosing) {
-        stream.write(Conditional.END);
-    }
-
-    afterElement(stream) {
-        stream.write(VariableBinding.END);
-    }
-
+  // eslint-disable-next-line class-methods-use-this
+  afterElement(stream) {
+    stream.write(VariableBinding.END);
+  }
 };

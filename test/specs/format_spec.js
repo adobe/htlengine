@@ -16,10 +16,10 @@
  *
  */
 module.exports = {
-    'properties': {
-        assetName: 'Night Sky',
-        current: 3,
-        total: 5,
-        formatter: 'Asset {0} out of {1}'
-    }
+  properties: {
+    assetName: 'Night Sky',
+    current: 3,
+    total: 5,
+    formatter: 'Asset {0} out of {1}',
+  },
 };

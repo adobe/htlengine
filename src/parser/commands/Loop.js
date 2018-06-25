@@ -19,31 +19,30 @@ const Command = require('./Command');
 
 module.exports = {
 
-    Start: class Start extends Command {
-
-        constructor(listVariable, itemVariable, indexVariable) {
-            super();
-            this._listVariable = listVariable;
-            this._itemVariable = itemVariable;
-            this._indexVariable = indexVariable;
-        }
-
-        get listVariable() {
-            return this._listVariable;
-        }
-
-        get itemVariable() {
-            return this._itemVariable;
-        }
-
-        get indexVariable() {
-            return this._indexVariable;
-        }
-    },
-
-    End: class End extends Command {
-
+  Start: class Start extends Command {
+    constructor(listVariable, itemVariable, indexVariable) {
+      super();
+      this._listVariable = listVariable;
+      this._itemVariable = itemVariable;
+      this._indexVariable = indexVariable;
     }
+
+    get listVariable() {
+      return this._listVariable;
+    }
+
+    get itemVariable() {
+      return this._itemVariable;
+    }
+
+    get indexVariable() {
+      return this._indexVariable;
+    }
+  },
+
+  End: class End extends Command {
+
+  },
 
 };
 

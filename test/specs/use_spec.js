@@ -16,7 +16,7 @@
  *
  */
 module.exports = {
-    "properties": {
-        "title": "Hello, world"
-    }
+  properties: {
+    title: 'Hello, world',
+  },
 };

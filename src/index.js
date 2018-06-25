@@ -15,7 +15,9 @@
  * limitations under the License.
  *
  */
+const Compiler = require('./compiler/Compiler.js');
+
 module.exports = Object.freeze({
-    Compiler: require('./compiler/Compiler.js')
+  Compiler,
 });
 

@@ -26,106 +26,104 @@ const DEFAULT_TEMPLATE = 'JSCodeTemplate.js';
 const RUNTIME_TEMPLATE = 'JSRuntimeTemplate.js';
 
 module.exports = class Compiler {
+  constructor() {
+    this._dir = '.';
+    this._outfile = '';
+    this._runtimeGlobals = [];
+    this._runtimeGlobal = 'resource';
+    this._includeRuntime = false;
+  }
 
-    constructor() {
-        this._dir = '.';
-        this._outfile = '';
-        this._runtimeGlobals = [];
-        this._runtimeGlobal = 'resource';
-        this._includeRuntime = false;
+  withOutputDirectory(dir) {
+    this._dir = dir;
+    return this;
+  }
+
+  withOutputFile(outFile) {
+    this._outfile = outFile;
+    return this;
+  }
+
+  withRuntimeGlobalName(name) {
+    this._runtimeGlobal = name;
+    return this;
+  }
+
+  withRuntimeVar(name) {
+    if (Array.isArray(name)) {
+      this._runtimeGlobals = this._runtimeGlobals.concat(name);
+    } else {
+      this._runtimeGlobals.push(name);
     }
+    return this;
+  }
 
-    withOutputDirectory(dir) {
-        this._dir = dir;
-        return this;
-    }
+  includeRuntime(include) {
+    this._includeRuntime = include;
+    return this;
+  }
 
-    withOutputFile(outFile) {
-        this._outfile = outFile;
-        return this;
-    }
+  compileFile(filename, name) {
+    // todo: async support
+    return this.compileToFile(fs.readFileSync(filename, 'utf-8'), name || filename);
+  }
 
-    withRuntimeGlobalName(name) {
-        this._runtimeGlobal = name;
-        return this;
-    }
-
-    withRuntimeVar(name) {
-        if (Array.isArray(name)) {
-            this._runtimeGlobals = this._runtimeGlobals.concat(name);
-        } else {
-            this._runtimeGlobals.push(name);
-        }
-        return this;
-    }
-
-    includeRuntime(include) {
-        this._includeRuntime = include;
-        return this;
-    }
-
-    compileFile(filename, name) {
-        // todo: async support
-        return this.compileToFile(fs.readFileSync(filename, 'utf-8'), name || filename);
-    }
-
-    /**
+  /**
      * Compiles the given HTL source code into JavaScript, which is returned as a string
      * @param {String} source the HTL source code
      * @returns {String} the resulting Javascript
      */
-    compileToString(source) {
-        // todo: async support
-        const commands = new TemplateParser()
-            .withErrorListener(ThrowingErrorListener.INSTANCE)
-            .parse(source);
+  compileToString(source) {
+    // todo: async support
+    const commands = new TemplateParser()
+      .withErrorListener(ThrowingErrorListener.INSTANCE)
+      .parse(source);
 
-        const global = [];
-        this._runtimeGlobals.forEach(g => {
-            global.push(`        let ${g} = runtime.globals.${g};\n`);
-        });
-        if (this._runtimeGlobal) {
-            global.push(`        const ${this._runtimeGlobal} = runtime.globals;\n`);
-        }
-
-        const code = new JSCodeGenVisitor()
-            .withIndent('    ')
-            .indent()
-            .process(commands)
-            .code;
-
-        const codeTemplate = this._includeRuntime ? RUNTIME_TEMPLATE : DEFAULT_TEMPLATE;
-        let template = fs.readFileSync(path.join(__dirname, codeTemplate), 'utf-8');
-        template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, global.join(''));
-        template = template.replace(/^\s*\/\/\s*CODE\s*$/m, code);
-
-        return template;
+    const global = [];
+    this._runtimeGlobals.forEach((g) => {
+      global.push(`        let ${g} = runtime.globals.${g};\n`);
+    });
+    if (this._runtimeGlobal) {
+      global.push(`        const ${this._runtimeGlobal} = runtime.globals;\n`);
     }
 
-    /**
+    const { code } = new JSCodeGenVisitor()
+      .withIndent('    ')
+      .indent()
+      .process(commands);
+
+    const codeTemplate = this._includeRuntime ? RUNTIME_TEMPLATE : DEFAULT_TEMPLATE;
+    let template = fs.readFileSync(path.join(__dirname, codeTemplate), 'utf-8');
+    template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, global.join(''));
+    template = template.replace(/^\s*\/\/\s*CODE\s*$/m, code);
+
+    return template;
+  }
+
+  /**
      * Compiles the given source string and saves the result, overwriting the
      * file name.
      * @param {String} source HTL template code
      * @param {String} name file name to save results
      * @returns {String} the full name of the resulting file
      */
-    compileToFile(source, name) {
-        const template = this.compileToString(source);
+  compileToFile(source, name) {
+    const template = this.compileToString(source);
 
-        const filename = this._outfile || path.resolve(this._dir, name);
-        fs.writeFileSync(filename, template);
+    const filename = this._outfile || path.resolve(this._dir, name);
+    fs.writeFileSync(filename, template);
 
-        return filename;
-    }
+    return filename;
+  }
 
-    /**
+  /**
      * Compiles the given source string and saves the result, overwriting the
      * file name.
      * @param {String} source HTL template code
      * @param {String} name file name to save results
      * @returns {String} the full name of the resulting file
      */
-    compile(source, name) {
-        return this.compileToFile(source, name);
-    }
+  compile(source, name) {
+    return this.compileToFile(source, name);
+  }
 };

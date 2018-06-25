@@ -21,28 +21,26 @@ const Conditional = require('../commands/Conditional');
 const Identifier = require('../htl/nodes/Identifier');
 
 module.exports = class TestPlugin extends Plugin {
-
-    beforeElement(stream, tagName) {
-        const ctx = this.pluginContext;
-        let variableName = this._signature.getVariableName(null);
-        this._useGlobalBinding = variableName != null;
-        if (variableName == null) {
-            variableName = ctx.generateVariable("testVariable");
-        }
-
-        if (this._useGlobalBinding) {
-            stream.write(new VariableBinding.Global(variableName, this.expression.root));
-        } else {
-            stream.write(new VariableBinding.Start(variableName, this.expression.root));
-        }
-        stream.write(new Conditional.Start(new Identifier(variableName)));
+  beforeElement(stream/* , tagName */) {
+    const ctx = this.pluginContext;
+    let variableName = this._signature.getVariableName(null);
+    this._useGlobalBinding = variableName != null;
+    if (variableName == null) {
+      variableName = ctx.generateVariable('testVariable');
     }
 
-    afterElement(stream) {
-        stream.write(Conditional.END);
-        if (!this._useGlobalBinding) {
-            stream.write(VariableBinding.END);
-        }
+    if (this._useGlobalBinding) {
+      stream.write(new VariableBinding.Global(variableName, this.expression.root));
+    } else {
+      stream.write(new VariableBinding.Start(variableName, this.expression.root));
     }
+    stream.write(new Conditional.Start(new Identifier(variableName)));
+  }
 
+  afterElement(stream) {
+    stream.write(Conditional.END);
+    if (!this._useGlobalBinding) {
+      stream.write(VariableBinding.END);
+    }
+  }
 };

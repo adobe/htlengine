@@ -16,17 +16,16 @@
  *
  */
 module.exports = class MyUseClass {
+  use() {
+    const r = Number(this.radius);
 
-    use() {
-        const r = Number(this.radius);
-
-        return {
-            title: 'Jupiter',
-            subTitle: `${this.value1}: ${this.value2}`,
-            get area() {
-                return 4 * Math.PI * r * r;
-            }
-        };
-    }
+    return {
+      title: 'Jupiter',
+      subTitle: `${this.value1}: ${this.value2}`,
+      get area() {
+        return 4 * Math.PI * r * r;
+      },
+    };
+  }
 };
 

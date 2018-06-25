@@ -18,26 +18,23 @@
 const Plugin = require('./Plugin');
 
 module.exports = class PluginProxy {
+  constructor() {
+    this._plugins = [];
+  }
 
-    constructor() {
-        this._plugins = [];
-    }
+  add(plugin) {
+    this._plugins.push(plugin);
+  }
 
-    add(plugin) {
-        this._plugins.push(plugin);
-    }
-
-    _delegate(fn, args) {
-        this._plugins.forEach((p) => {
-            p[fn].apply(p, args);
-        });
-    }
+  _delegate(fn, args) {
+    this._plugins.forEach((p) => {
+      p[fn](...args);
+    });
+  }
 };
 
-Object.getOwnPropertyNames(Plugin.prototype).filter(function (p) {
-    return p.startsWith('before') || p.startsWith('after') || p.startsWith('on');
-}).forEach((fn) => {
-    module.exports.prototype[fn] = function() {
-        this._delegate(fn, arguments);
-    }
+Object.getOwnPropertyNames(Plugin.prototype).filter(p => p.startsWith('before') || p.startsWith('after') || p.startsWith('on')).forEach((fn) => {
+  module.exports.prototype[fn] = function () { // eslint-disable-line func-names
+    this._delegate(fn, arguments); // eslint-disable-line prefer-rest-params
+  };
 });

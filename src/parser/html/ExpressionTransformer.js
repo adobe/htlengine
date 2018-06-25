@@ -18,50 +18,49 @@
 
 const StringConstant = require('../htl/nodes/StringConstant');
 const Expression = require('../htl/nodes/Expression');
-const BinaryOperation = require('../htl/nodes/BinaryOperation');
 const MultiOperation = require('../htl/nodes/MultiOperation');
 const BinaryOperator = require('../htl/nodes/BinaryOperator');
 const OptionHandler = require('../htl/OptionHandler');
 
-function _join(nodes) {
-    if (nodes.length === 0) {
-        return StringConstant.EMPTY;
-    }
-    if (nodes.length === 1) {
-        return nodes[0];
-    }
-    return new MultiOperation(BinaryOperator.CONCATENATE, nodes);
+function join(nodes) {
+  if (nodes.length === 0) {
+    return StringConstant.EMPTY;
+  }
+  if (nodes.length === 1) {
+    return nodes[0];
+  }
+  return new MultiOperation(BinaryOperator.CONCATENATE, nodes);
 }
 
 module.exports = class ExpressionTransformer {
+  transform(interpolation, markupContext, expressionContext) {
+    const nodes = [];
+    const /* HashMap<String, ExpressionNode> */ options = {};
+    interpolation.fragments.forEach((fragment) => {
+      if (fragment.text) {
+        nodes.push(new StringConstant(fragment.text));
+      } else {
+        const xformed = this.adjustToContext(fragment.expression, markupContext, expressionContext);
+        nodes.push(xformed.root);
+        Object.assign(options, xformed.options);
+      }
+    });
 
-    transform(interpolation, markupContext, expressionContext) {
-        const nodes = [];
-        const /*HashMap<String, ExpressionNode>*/ options = {};
-        interpolation.fragments.forEach(fragment => {
-            if (fragment.text) {
-                nodes.push(new StringConstant(fragment.text));
-            } else {
-                const transformed = this.adjustToContext(fragment.expression, markupContext, expressionContext);
-                nodes.push(transformed.root);
-                Object.assign(options, transformed.options);
-            }
-        });
+    const root = join(nodes);
 
-        const root = _join(nodes);
-
-        if (interpolation.length > 1 && options['context']) {
-            //context must not be calculated by merging
-            delete options['context'];
-        }
-        return new Expression(root, options, interpolation.content);
+    if (interpolation.length > 1 && options.context) {
+      // context must not be calculated by merging
+      delete options.context;
     }
+    return new Expression(root, options, interpolation.content);
+  }
 
-    adjustToContext(expression, markupContext, expressionContext) {
-        if (markupContext != null && !expression.options['context']) {
-            expression.options['context'] = new StringConstant(markupContext);
-        }
-        return OptionHandler.INSTANCE.apply(expression, expressionContext);
+  // eslint-disable-next-line class-methods-use-this
+  adjustToContext(expression, markupContext, expressionContext) {
+    const expr = expression;
+    if (markupContext != null && !expr.options.context) {
+      expr.options.context = new StringConstant(markupContext);
     }
-
+    return OptionHandler.apply(expr, expressionContext);
+  }
 };

@@ -17,23 +17,23 @@
  */
 
 const ExpressionNode = require('./ExpressionNode');
-module.exports = class PropertyAccess extends ExpressionNode {
 
-    /**
+module.exports = class PropertyAccess extends ExpressionNode {
+  /**
      * @param {ExpressionNode} target Target expression
      * @param {ExpressionNode} property Property Expression
      */
-    constructor(target, property) {
-        super();
-        this._target = target;
-        this._property = property;
-    }
+  constructor(target, property) {
+    super();
+    this._target = target;
+    this._property = property;
+  }
 
-    get target() {
-        return this._target;
-    }
+  get target() {
+    return this._target;
+  }
 
-    get property() {
-        return this._property;
-    }
+  get property() {
+    return this._property;
+  }
 };

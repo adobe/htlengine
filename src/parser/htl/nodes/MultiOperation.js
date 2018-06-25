@@ -17,23 +17,23 @@
  */
 
 const ExpressionNode = require('./ExpressionNode');
-module.exports = class MultiOperation extends ExpressionNode {
 
-    /**
+module.exports = class MultiOperation extends ExpressionNode {
+  /**
      * @param {BinaryOperator} operator Operator
      * @param {ExpressionNode[]} operands The operands
      */
-    constructor(operator, operands) {
-        super();
-        this._operator = operator;
-        this._operands = operands;
-    }
+  constructor(operator, operands) {
+    super();
+    this._operator = operator;
+    this._operands = operands;
+  }
 
-    get operator() {
-        return this._operator;
-    }
+  get operator() {
+    return this._operator;
+  }
 
-    get operands() {
-        return this._operands;
-    }
+  get operands() {
+    return this._operands;
+  }
 };

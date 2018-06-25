@@ -2,6 +2,10 @@
 
 This project is an Open Development/Inner Source project and welcomes contributions from everyone who finds it useful or lacking.
 
+## Definition Of Terms
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in Helix document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
+
 ## Code Of Conduct
 
 This project adheres to the Adobe [code of conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to cstaub at adobe dot com.
@@ -41,11 +45,9 @@ Each commit message that is not part of a pull request:
 * Should contain the issue ID like `#123`
 * Can contain the tag `[trivial]` for trivial changes that don't relate to an issue
 
-
-
 ## Coding Styleguides
 
-There are no coding style guides... yet.
+Javascript code style should follow the [Airbnb JavaScript Style Guide()](https://github.com/airbnb/javascript)
 
 # How Contributions get Reviewed
 

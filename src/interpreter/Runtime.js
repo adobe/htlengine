@@ -18,28 +18,27 @@
 const Scope = require('./Scope');
 
 module.exports = class Runtime {
+  constructor() {
+    this._global = new Scope();
+    this._scope = new Scope(this._global);
+  }
 
-    constructor() {
-        this._global = new Scope();
-        this._scope = new Scope(this._global);
-    }
+  openScope() {
+    this._scope = new Scope(this._scope);
+    return this._scope;
+  }
 
-    openScope() {
-        this._scope = new Scope(this._scope);
-        return this._scope;
-    }
+  closeScope() {
+    const scope = this._scope;
+    this._scope = scope._parent; // eslint-disable-line no-underscore-dangle
+    return scope;
+  }
 
-    closeScope() {
-        const scope = this._scope;
-        this._scope = scope._parent;
-        return scope;
-    }
+  get scope() {
+    return this._scope;
+  }
 
-    get scope() {
-        return this._scope;
-    }
-
-    get global() {
-        return this._global;
-    }
+  get global() {
+    return this._global;
+  }
 };

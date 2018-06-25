@@ -27,20 +27,21 @@ const CommandStream = require('../src/parser/commands/CommandStream');
 const HTMLParser = require('../src/parser/html/HTMLParser');
 
 function process(input) {
-    const handler = new MarkupHandler(new CommandStream());
-    HTMLParser.parse(input, handler);
-    console.log(handler.result);
-    return handler.result;
+  const handler = new MarkupHandler(new CommandStream());
+  HTMLParser.parse(input, handler);
+  // eslint-disable-next-line no-console
+  console.log(handler.result);
+  return handler.result;
 }
 
 /**
  * Simple tests that check if the parser can process all the expressions
  */
-describe('Simple', function() {
-    it('parses the simple html', function() {
-        const filename = 'test/simple.html';
-        const source = fs.readFileSync(filename, 'utf-8');
-        const result = process(source);
-        assert.equal(result, source);
-    });
+describe('Simple', () => {
+  it('parses the simple html', () => {
+    const filename = 'test/simple.html';
+    const source = fs.readFileSync(filename, 'utf-8');
+    const result = process(source);
+    assert.equal(result, source);
+  });
 });

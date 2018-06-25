@@ -19,6 +19,7 @@
 const ExpressionNode = require('./ExpressionNode');
 
 module.exports = class Atom extends ExpressionNode {
-
-    get text() { }
+  get text() { // eslint-disable-line class-methods-use-this
+    throw new TypeError('Abstract method error');
+  }
 };

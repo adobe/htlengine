@@ -17,59 +17,57 @@
  */
 
 /**
- * A sequence with alternating string fragments and HTL expressions. These result from parsing HTML attributes or string nodes. For
- * instance "Hello ${World}!" would result in 3 fragments: "Hello ", ${World} and "!"
+ * A sequence with alternating string fragments and HTL expressions. These result from parsing HTML
+ * attributes or string nodes.
+ * For instance "Hello ${World}!" would result in 3 fragments: "Hello ", ${World} and "!"
  */
 module.exports = class Interpolation {
+  constructor() {
+    this._fragments = [];
+    this._content = '';
+  }
 
-    constructor() {
-        this._fragments = [];
-        this._content = '';
+  addExpression(expression) {
+    this._fragments.push({
+      expression,
+    });
+  }
+
+  addText(text) {
+    this._fragments.push({
+      text,
+    });
+  }
+
+  get fragments() {
+    return this._fragments;
+  }
+
+  get content() {
+    return this._content;
+  }
+
+  set content(content) {
+    this._content = content;
+  }
+
+  accept(visitor) {
+    return visitor.visit(this);
+  }
+
+  getPlainText() {
+    let text = '';
+    for (let i = 0; i < this._fragments.length; i += 1) {
+      const frag = this._fragments[i];
+      if (frag.expression) {
+        return null;
+      }
+      text += frag.text;
     }
+    return text;
+  }
 
-    addExpression(expression) {
-        this._fragments.push({
-            expression
-        });
-    }
-
-    addText(text) {
-        this._fragments.push({
-            text
-        });
-    }
-
-    get fragments() {
-        return this._fragments;
-    }
-
-    get content() {
-        return this._content;
-    }
-
-    set content(content) {
-        this._content = content;
-    }
-
-    accept(visitor) {
-        return visitor.visit(this);
-    }
-
-    getPlainText() {
-        let text = '';
-        for (let i=0; i<this._fragments.length; i++) {
-            const frag = this._fragments[i];
-            if (frag.expression) {
-                return null;
-            } else {
-                text += frag.text;
-            }
-        }
-        return text;
-    }
-
-    get length() {
-        return this._fragments.length;
-    }
-
+  get length() {
+    return this._fragments.length;
+  }
 };

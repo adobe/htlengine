@@ -16,30 +16,28 @@
  *
  */
 module.exports = class Scope {
+  constructor(parent) {
+    this._props = {};
+    this._parent = parent;
+  }
 
-    constructor(parent) {
-        this._props = {};
-        this._parent = parent;
+  setVariable(name, value) {
+    this._props[name] = value;
+  }
+
+  getVariable(name) {
+    if (name in this._props) {
+      return this._props[name];
     }
-
-    setVariable(name, value) {
-        this._props[name] = value;
+    if (this._parent) {
+      return this._parent.getVariable(name);
     }
+    return null;
+  }
 
-    getVariable(name) {
-        if (name in this._props) {
-            return this._props[name];
-        }
-        if (this._parent) {
-            return this._parent.getVariable(name);
-        }
-        return null;
-    }
-
-    putAll(obj) {
-        Object.keys(obj).forEach((k) => {
-            this.setVariable(k, obj[k]);
-        });
-    }
-
+  putAll(obj) {
+    Object.keys(obj).forEach((k) => {
+      this.setVariable(k, obj[k]);
+    });
+  }
 };

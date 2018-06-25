@@ -18,40 +18,37 @@
 const RuntimeCall = require('../htl/nodes/RuntimeCall');
 
 module.exports = class PluginContext {
+  constructor(symbolGenerator, transformer, stream) {
+    this._symbolGenerator = symbolGenerator;
+    this._transformer = transformer;
+    this._stream = stream;
+  }
 
-    constructor(symbolGenerator, transformer, stream) {
-        this._symbolGenerator = symbolGenerator;
-        this._transformer = transformer;
-        this._stream = stream;
+
+  get symbolGenerator() {
+    return this._symbolGenerator;
+  }
+
+  get transformer() {
+    return this._transformer;
+  }
+
+  get stream() {
+    return this._stream;
+  }
+
+  generateVariable(hint) {
+    return this._symbolGenerator.next(hint);
+  }
+
+  adjustToContext(expression, markupContext, expressionContext) {
+    const { root } = expression;
+    if (root instanceof RuntimeCall) {
+      if (root.functionName === 'xss') {
+        return expression;
+      }
     }
-
-
-    get symbolGenerator() {
-        return this._symbolGenerator;
-    }
-
-    get transformer() {
-        return this._transformer;
-    }
-
-    get stream() {
-        return this._stream;
-    }
-
-    generateVariable(hint) {
-        return this._symbolGenerator.next(hint);
-    }
-
-    adjustToContext(expression, markupContext, expressionContext) {
-        const root = expression.root;
-        if (root instanceof RuntimeCall) {
-            if (root.functionName === 'xss') {
-                return expression;
-            }
-        }
-        return this._transformer.adjustToContext(expression, markupContext, expressionContext);
-    }
-
+    return this._transformer.adjustToContext(expression, markupContext, expressionContext);
+  }
 };
-
 

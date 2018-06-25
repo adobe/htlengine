@@ -15,38 +15,38 @@
  * limitations under the License.
  *
  */
-const MCTX = module.exports = {
-    HTML: 'html',
-    TEXT: 'text',
-    ELEMENT_NAME: 'elementName',
-    ATTRIBUTE_NAME: 'attributeName',
-    ATTRIBUTE: 'attribute',
-    URI: 'uri',
-    SCRIPT_TOKEN: 'scriptToken',
-    SCRIPT_STRING: 'scriptString',
-    SCRIPT_COMMENT: 'scriptComment',
-    SCRIPT_REGEXP: 'scriptRegExp',
-    STYLE_TOKEN: 'styleToken',
-    STYLE_STRING: 'styleString',
-    STYLE_COMMENT: 'styleComment',
-    COMMENT: 'comment',
-    NUMBER: 'number',
-    UNSAFE: 'unsafe'
+const MCTX = {
+  HTML: 'html',
+  TEXT: 'text',
+  ELEMENT_NAME: 'elementName',
+  ATTRIBUTE_NAME: 'attributeName',
+  ATTRIBUTE: 'attribute',
+  URI: 'uri',
+  SCRIPT_TOKEN: 'scriptToken',
+  SCRIPT_STRING: 'scriptString',
+  SCRIPT_COMMENT: 'scriptComment',
+  SCRIPT_REGEXP: 'scriptRegExp',
+  STYLE_TOKEN: 'styleToken',
+  STYLE_STRING: 'styleString',
+  STYLE_COMMENT: 'styleComment',
+  COMMENT: 'comment',
+  NUMBER: 'number',
+  UNSAFE: 'unsafe',
+
+  attributeContext: (name) => {
+    const upName = name.toLowerCase();
+    if (upName === 'src' || upName === 'href') {
+      return MCTX.URI;
+    }
+    return MCTX.ATTRIBUTE;
+  },
 };
 
 const reverse = {};
 Object.keys(MCTX).forEach((k) => {
-    reverse[MCTX[k]] = k;
+  reverse[MCTX[k]] = k;
 });
 
-module.exports.lookup = (k) => {
-    return reverse[k];
-};
+MCTX.lookup = k => reverse[k];
 
-module.exports.attributeContext = (name) => {
-    name = name.toLowerCase();
-    if ("src" === name || "href" === name) {
-        return MCTX.URI;
-    }
-    return MCTX.ATTRIBUTE;
-}
+module.exports = MCTX;
