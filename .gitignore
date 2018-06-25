@@ -1,3 +1,5 @@
+node_modules/
+test/generated/
 out.js
 node_modules
 test/generated
