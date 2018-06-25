@@ -45,6 +45,7 @@ const PLUGINS = {
   test: require('../plugins/TestPlugin'),
   attribute: require('../plugins/AttributePlugin'),
   use: require('../plugins/UsePlugin'),
+  resource: require('../plugins/ResourcePlugin'),
   element: require('../plugins/ElementPlugin'),
 };
 /* eslint-enable global-require */

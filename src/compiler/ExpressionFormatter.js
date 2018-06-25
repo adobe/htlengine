@@ -154,6 +154,8 @@ module.exports = class ExpressionFormatter {
         this.result += `${node.functionName}(`;
       } else if (node.functionName === 'use') {
         this.result += 'yield use(';
+      } else if (node.functionName === 'resource') {
+        this.result += 'yield slyResource(';
       } else {
         this.result += `exec("${node.functionName}"`;
         delim = ', ';

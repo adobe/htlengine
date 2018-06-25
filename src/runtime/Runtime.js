@@ -21,12 +21,14 @@ const formatUri = require('../runtime/format_uri');
 const formatXss = require('../runtime/format_xss');
 const path = require('path');
 const co = require('co');
+const fs = require('fs');
 
 module.exports = class Runtime {
   constructor() {
     this._stream = '';
     this._globals = {};
     this._useDir = '.';
+    this._resourceDir = '.';
   }
 
   out(text) {
@@ -48,6 +50,11 @@ module.exports = class Runtime {
 
   withUseDirectory(dir) {
     this._useDir = dir;
+    return this;
+  }
+
+  withResourceDirectory(dir) {
+    this._resourceDir = dir;
     return this;
   }
 
@@ -89,6 +96,20 @@ module.exports = class Runtime {
     return mod.use();
   }
 
+  resource(uri) {
+    const resourcePath = path.resolve(this._resourceDir, uri);
+
+    return new Promise((resolve, reject) => {
+      fs.readFile(resourcePath, 'utf8', (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    });
+  }
+
   // eslint-disable-next-line class-methods-use-this
   xss(value, context, hint) {
     return formatXss(value, context, hint);
@@ -113,6 +134,10 @@ module.exports = class Runtime {
 
     if (name === 'use') {
       return this.use(value, arg0);
+    }
+
+    if (name === 'resource') {
+      return this.resource(value);
     }
 
     if (name === 'listInfo') {

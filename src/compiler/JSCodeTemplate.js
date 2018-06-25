@@ -26,6 +26,7 @@ module.exports = function main(runtime) {
   const xss = runtime.xss.bind(runtime);
   const listInfo = runtime.listInfo.bind(runtime);
   const use = runtime.use.bind(runtime);
+  const slyResource = runtime.resource.bind(runtime);
 
   return runtime.run(function* () {
 
