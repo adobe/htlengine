@@ -30,7 +30,7 @@ module.exports = class JSCodeGenVitor {
     this._templates = '';
     this._indentLevel = 0;
     this._lastIndentLevel = 0;
-    this._inFunctionBlock = false;
+    this._inTemplateFunction = false;
     this._indents = [];
   }
 
@@ -75,12 +75,12 @@ module.exports = class JSCodeGenVitor {
 
   _out(msg) {
     if (this._indent) {
-      if (this._inFunctionBlock) {
+      if (this._inTemplateFunction) {
         this._templates += `${this._indent + msg}\n`;
       } else {
         this._result += `${this._indent + msg}\n`;
       }
-    } else if (this._inFunctionBlock) {
+    } else if (this._inTemplateFunction) {
       this._templates += msg;
     } else {
       this._result += msg;
@@ -110,7 +110,7 @@ module.exports = class JSCodeGenVitor {
     } else if (cmd instanceof VariableBinding.End) {
       // nop
     } else if (cmd instanceof FunctionBlock.Start) {
-      this._inFunctionBlock = true;
+      this._inTemplateFunction = true;
       this._lastIndentLevel = this._indentLevel;
       this.setIndent(0);
 
@@ -125,7 +125,7 @@ module.exports = class JSCodeGenVitor {
     } else if (cmd instanceof FunctionBlock.End) {
       this.outdent();
       this._out('});');
-      this._inFunctionBlock = false;
+      this._inTemplateFunction = false;
       this.setIndent(this._lastIndentLevel);
     } else if (cmd instanceof Conditional.Start) {
       const exp = ExpressionFormatter.format(cmd.expression);
