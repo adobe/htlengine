@@ -1,0 +1,44 @@
+#
+### sightly call function
+#
+<template data-sly-template.foo><section>Template</section></template>
+<div data-sly-call="${'foo'}"></div>
+===
+
+<section>Template</section>
+#
+### sightly call function with empty attribute value
+#
+<template data-sly-template.foo=""><section>Template</section></template>
+<div data-sly-call="${'foo'}"></div>
+===
+
+<section>Template</section>
+#
+### sightly call function with parameter
+#
+<template data-sly-template.foo="${ @ param }"><section>${param}</section></template>
+<div data-sly-call="${'foo' @ param='Template' }"></div>
+===
+
+<section>Template</section>
+#
+### sightly call function with missing parameter
+#
+<template data-sly-template.foo="${ @ param }"><section>${param}</section></template>
+<div data-sly-call="${'foo'}"></div>
+===
+
+<section></section>
+#
+### sightly call function can be redeclared
+#
+<template data-sly-template.foo="${ @ param }"><section>Template 1</section></template>
+<template data-sly-template.foo="${ @ param }"><section>Template 2</section></template>
+<div data-sly-call="${'foo'}"></div>
+===
+
+
+<section>Template 2</section>
+#
+###
