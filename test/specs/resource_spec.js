@@ -15,32 +15,4 @@
  * limitations under the License.
  *
  */
-/* eslint-disable */
-
-const Runtime = require('@adobe/htlengine/src/runtime/Runtime');
-
-function run(runtime) {
-  const lengthOf = function (c) {
-    return Array.isArray(c) ? c.length : Object.keys(c).length;
-  };
-
-  const out = runtime.out.bind(runtime);
-  const exec = runtime.exec.bind(runtime);
-  const xss = runtime.xss.bind(runtime);
-  const listInfo = runtime.listInfo.bind(runtime);
-  const use = runtime.use.bind(runtime);
-  const slyResource = runtime.resource.bind(runtime);
-
-  return runtime.run(function* () {
-
-    // RUNTIME_GLOBALS
-
-    // CODE
-  });
-}
-
-module.exports.main = function main(resource) {
-  const runtime = new Runtime();
-  runtime.setGlobal(resource);
-  return run(runtime).then(() => ({ body: runtime.stream }));
-};
+module.exports = {};

@@ -15,32 +15,23 @@
  * limitations under the License.
  *
  */
-/* eslint-disable */
+const Plugin = require('../html/Plugin');
+const OutputVariable = require('../commands/OutputVariable');
+const RuntimeCall = require('../htl/nodes/RuntimeCall');
+const VariableBinding = require('../commands/VariableBinding');
 
-const Runtime = require('@adobe/htlengine/src/runtime/Runtime');
+module.exports = class ResourcePlugin extends Plugin {
+  beforeChildren(stream) {
+    const variableName = this.pluginContext.generateVariable('resourceContent');
+    const runtimeCall = new RuntimeCall('resource', this._expression.root);
+    stream.write(new VariableBinding.Global(variableName, runtimeCall));
+    stream.write(new OutputVariable(variableName));
+    stream.write(VariableBinding.END);
+    stream.beginIgnore();
+  }
 
-function run(runtime) {
-  const lengthOf = function (c) {
-    return Array.isArray(c) ? c.length : Object.keys(c).length;
-  };
-
-  const out = runtime.out.bind(runtime);
-  const exec = runtime.exec.bind(runtime);
-  const xss = runtime.xss.bind(runtime);
-  const listInfo = runtime.listInfo.bind(runtime);
-  const use = runtime.use.bind(runtime);
-  const slyResource = runtime.resource.bind(runtime);
-
-  return runtime.run(function* () {
-
-    // RUNTIME_GLOBALS
-
-    // CODE
-  });
-}
-
-module.exports.main = function main(resource) {
-  const runtime = new Runtime();
-  runtime.setGlobal(resource);
-  return run(runtime).then(() => ({ body: runtime.stream }));
+  // eslint-disable-next-line class-methods-use-this
+  afterChildren(stream) {
+    stream.endIgnore();
+  }
 };
