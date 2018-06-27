@@ -380,6 +380,11 @@ module.exports = class MarkupHandler {
 
   // eslint-disable-next-line class-methods-use-this
   _lookupPlugin(name) {
-    return PLUGINS[name];
+    // eslint-disable-next-line no-prototype-builtins
+    if (PLUGINS.hasOwnProperty(name)) {
+      return PLUGINS[name];
+    }
+
+    throw new Error(`Plugin not implemented: ${name}`);
   }
 };
