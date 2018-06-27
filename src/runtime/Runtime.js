@@ -35,7 +35,7 @@ module.exports = class Runtime {
   }
 
   get globals() {
-    return this._templates;
+    return this._globals;
   }
 
   get templates() {
