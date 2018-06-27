@@ -12,10 +12,12 @@
 
 const OutText = require('../parser/commands/OutText');
 const VariableBinding = require('../parser/commands/VariableBinding');
+const FunctionBlock = require('../parser/commands/FunctionBlock');
 const Conditional = require('../parser/commands/Conditional');
 const Loop = require('../parser/commands/Loop');
 const Comment = require('../parser/commands/Comment');
 const OutputVariable = require('../parser/commands/OutputVariable');
+const OutputExpression = require('../parser/commands/OutputExpression');
 const ExpressionFormatter = require('./ExpressionFormatter');
 
 function escapeJavaString(s) {
@@ -25,7 +27,10 @@ function escapeJavaString(s) {
 module.exports = class JSCodeGenVitor {
   constructor() {
     this._result = '';
+    this._templates = '';
     this._indentLevel = 0;
+    this._lastIndentLevel = 0;
+    this._inFunctionBlock = false;
     this._indents = [];
   }
 
@@ -42,8 +47,15 @@ module.exports = class JSCodeGenVitor {
     this._indent = this._indents[++this._indentLevel] || ''; // eslint-disable-line no-plusplus
     return this;
   }
+
   outdent() {
     this._indent = this._indents[--this._indentLevel] || ''; // eslint-disable-line no-plusplus
+    return this;
+  }
+
+  setIndent(n) {
+    this._indentLevel = n;
+    this._indent = this._indents[n] || '';
     return this;
   }
 
@@ -63,7 +75,13 @@ module.exports = class JSCodeGenVitor {
 
   _out(msg) {
     if (this._indent) {
-      this._result += `${this._indent + msg}\n`;
+      if (this._inFunctionBlock) {
+        this._templates += `${this._indent + msg}\n`;
+      } else {
+        this._result += `${this._indent + msg}\n`;
+      }
+    } else if (this._inFunctionBlock) {
+      this._templates += msg;
     } else {
       this._result += msg;
     }
@@ -73,9 +91,16 @@ module.exports = class JSCodeGenVitor {
     return this._result;
   }
 
+  get templates() {
+    return this._templates;
+  }
+
   visit(cmd) {
     if (cmd instanceof OutText) {
       this._out(`out(${escapeJavaString(cmd.text)});`);
+    } else if (cmd instanceof OutputExpression) {
+      const exp = ExpressionFormatter.format(cmd.expression);
+      this._out(`${exp};`);
     } else if (cmd instanceof VariableBinding.Start) {
       const exp = ExpressionFormatter.format(cmd.expression);
       this._out(`const ${cmd.variableName} = ${exp};`);
@@ -84,6 +109,24 @@ module.exports = class JSCodeGenVitor {
       this._out(`${cmd.variableName} = ${exp};`);
     } else if (cmd instanceof VariableBinding.End) {
       // nop
+    } else if (cmd instanceof FunctionBlock.Start) {
+      this._inFunctionBlock = true;
+      this._lastIndentLevel = this._indentLevel;
+      this.setIndent(0);
+
+      const exp = ExpressionFormatter.format(cmd.expression);
+      const functionName = `_template_${exp}`;
+      this._out(`template('${exp}', function ${functionName}() {`);
+      this.indent();
+
+      cmd.arguments.forEach((arg) => {
+        this._out(`const ${arg} = arguments[0]['${arg}'] || '';`);
+      });
+    } else if (cmd instanceof FunctionBlock.End) {
+      this.outdent();
+      this._out('});');
+      this._inFunctionBlock = false;
+      this.setIndent(this._lastIndentLevel);
     } else if (cmd instanceof Conditional.Start) {
       const exp = ExpressionFormatter.format(cmd.expression);
       const neg = cmd.negate ? '!' : '';

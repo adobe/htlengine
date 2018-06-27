@@ -89,6 +89,7 @@ module.exports = class Compiler {
 
     const codeTemplate = this._includeRuntime ? RUNTIME_TEMPLATE : DEFAULT_TEMPLATE;
     let template = fs.readFileSync(path.join(__dirname, codeTemplate), 'utf-8');
+    template = template.replace(/^\s*\/\/\s*TEMPLATES\s*$/m, `\n${templates}`);
     template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, global.join(''));
     template = template.replace(/^\s*\/\/\s*CODE\s*$/m, code);
 

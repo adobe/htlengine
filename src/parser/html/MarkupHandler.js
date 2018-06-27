@@ -40,6 +40,8 @@ const PLUGINS = {
   attribute: require('../plugins/AttributePlugin'),
   use: require('../plugins/UsePlugin'),
   resource: require('../plugins/ResourcePlugin'),
+  template: require('../plugins/TemplatePlugin'),
+  call: require('../plugins/CallPlugin'),
   element: require('../plugins/ElementPlugin'),
 };
 /* eslint-enable global-require */

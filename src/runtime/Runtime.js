@@ -21,6 +21,7 @@ module.exports = class Runtime {
   constructor() {
     this._stream = '';
     this._globals = {};
+    this._templates = {};
     this._useDir = '.';
     this._resourceDir = '.';
   }
@@ -34,7 +35,11 @@ module.exports = class Runtime {
   }
 
   get globals() {
-    return this._globals;
+    return this._templates;
+  }
+
+  get templates() {
+    return this._templates;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -109,6 +114,19 @@ module.exports = class Runtime {
     return formatXss(value, context, hint);
   }
 
+  call(name, args) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (this._templates.hasOwnProperty(name) === false) {
+      throw new Error(`Template called that has not been registered: ${name}`);
+    } else {
+      return this._templates[name].call(this, args);
+    }
+  }
+
+  template(name, callback) {
+    this._templates[name] = callback;
+  }
+
   exec(name, value, arg0, arg1) {
     if (name === 'join') {
       return value.join(arg0 || ', ');
@@ -132,6 +150,10 @@ module.exports = class Runtime {
 
     if (name === 'resource') {
       return this.resource(value);
+    }
+
+    if (name === 'call') {
+      return this.call(value, arg0);
     }
 
     if (name === 'listInfo') {
