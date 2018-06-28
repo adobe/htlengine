@@ -5,7 +5,6 @@ jobs:
     parallelism: 4
     docker:
       # specify the version you desire here
-      # using the clojurescript image because it has node, java, antlr and the openwhisk tools
       - image: circleci/node:8
 
     working_directory: ~/repo
@@ -31,7 +30,7 @@ jobs:
       - run: mkdir -p junit
       - run:
           name: Running Tests
-          command: circleci tests glob test/*.js | circleci tests split | xargs npx mocha
+          command: circleci tests glob test/*.js | circleci tests split | xargs npx mocha --reporter mocha-junit-reporter
           environment:
             MOCHA_FILE: junit/test-results.xml
           when: always
@@ -44,8 +43,7 @@ jobs:
   publish-snapshot:
     docker:
       # specify the version you desire here
-      # using the clojurescript image because it has node, java, antlr and the openwhisk tools
-      - image: trieloff/githop:clojurescript
+      - image: circleci/node:8
 
     working_directory: ~/repo
 
