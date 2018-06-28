@@ -30,7 +30,8 @@ jobs:
       - run: mkdir -p junit
       - run:
           name: Running Tests
-          command: circleci tests glob test/*.js | circleci tests split | xargs npx mocha --reporter mocha-junit-reporter
+          # run tests in parallel: https://circleci.com/docs/2.0/parallelism-faster-jobs/
+          command: circleci tests glob test/*.js | circleci tests split --split-by=timings | xargs npx mocha --reporter mocha-junit-reporter
           environment:
             MOCHA_FILE: junit/test-results.xml
           when: always
