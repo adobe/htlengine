@@ -31,7 +31,7 @@ jobs:
       - run: mkdir -p junit
       - run:
           name: Running Tests
-          command: circleci tests glob test/**/*.java | circleci tests split | xargs npx mocha test --reporter mocha-junit-reporter
+          command: circleci tests glob test/**/*.java | circleci tests split | cat
           environment:
             MOCHA_FILE: junit/test-results.xml
           when: always
