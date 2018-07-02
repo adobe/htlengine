@@ -51,4 +51,14 @@
 <section>Template</section>
 
 #
+### sightly call function receives correct scope
+#
+<sly data-sly-test.param="${'xyz'}"></sly>
+<div data-sly-call="${foo}"></div>
+<template data-sly-template.foo="${ @ param }"><section>${param}</section></template>
+===
+
+<section></section>
+
+#
 ###
