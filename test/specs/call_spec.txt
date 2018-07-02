@@ -25,7 +25,7 @@
 #
 ### sightly call function with missing parameter
 #
-<template data-sly-template.foo="${ @ param }"><section>${param}</section></template>
+<template data-sly-template.foo="${ @ param='Missing parameter' }"><section>${param}</section></template>
 <div data-sly-call="${'foo'}"></div>
 ===
 
@@ -40,5 +40,15 @@
 
 
 <section>Template 2</section>
+#
+### sightly call function in any order
+#
+<div data-sly-call="${'foo'}"></div>
+<div data-sly-call="${foo}"></div>
+<template data-sly-template.foo="${ @ param }"><section>Template</section></template>
+===
+<section>Template</section>
+<section>Template</section>
+
 #
 ###
