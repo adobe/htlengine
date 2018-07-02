@@ -118,6 +118,10 @@ module.exports = class JSCodeGenVitor {
     } else if (cmd instanceof VariableBinding.End) {
       // nop
     } else if (cmd instanceof FunctionBlock.Start) {
+      if (this._inFunctionBlock) {
+        throw new Error('Template cannot be defined in another template');
+      }
+
       this._inFunctionBlock = true;
       this._lastIndentLevel = this._indentLevel;
       this.setIndent(0);
