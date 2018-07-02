@@ -128,7 +128,7 @@ module.exports = class JSCodeGenVitor {
 
       const exp = ExpressionFormatter.format(cmd.expression);
       const functionName = `_template_${exp}`;
-      this._out(`template('${exp}', function ${functionName}() {`);
+      this._out(`template('${exp}', function* ${functionName}() {`);
       this.indent();
 
       cmd.arguments.forEach((arg) => {

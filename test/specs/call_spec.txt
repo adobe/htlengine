@@ -71,4 +71,66 @@
 
 <section>123</section>
 #
+### sightly call function can call itself recursively
+#
+<template data-sly-template.foo="${@ pages}">	
+  <ul data-sly-list="${pages}">
+    <li><span>${item.title}</span><sly data-sly-call="${'foo' @ pages=item.pages}"></sly></li>
+  </ul>
+</template>
+<sly data-sly-use.bar="${'call_spec/recursion_test.js'}" data-sly-call="${foo @ pages=bar.pages}"></sly>
+===
+
+	
+  <ul>
+    <li><span>Page A</span>	
+  <ul>
+    <li><span>Page 1</span>	
+  
+</li>
+  
+    <li><span>Page 2</span>	
+  
+</li>
+  
+    <li><span>Page 3</span>	
+  
+</li>
+  </ul>
+</li>
+  
+    <li><span>Page B</span>	
+  <ul>
+    <li><span>Page 1</span>	
+  
+</li>
+  
+    <li><span>Page 2</span>	
+  
+</li>
+  </ul>
+</li>
+  
+    <li><span>Page C</span>	
+  <ul>
+    <li><span>Page 1</span>	
+  
+</li>
+  
+    <li><span>Page 2</span>	
+  
+</li>
+  
+    <li><span>Page 3</span>	
+  
+</li>
+  
+    <li><span>Page 4</span>	
+  
+</li>
+  </ul>
+</li>
+  </ul>
+
+#
 ###

@@ -117,9 +117,10 @@ module.exports = class Runtime {
   call(name, args) {
     // eslint-disable-next-line no-prototype-builtins
     if (this._templates.hasOwnProperty(name) === false) {
-      throw new Error(`Template called that has not been registered: ${name}`);
+      throw new Error(`Template call that has not been registered: ${name}`);
     } else {
-      return this._templates[name].call(this, args);
+      const callable = this._templates[name].bind(this, args);
+      return co(callable);
     }
   }
 
