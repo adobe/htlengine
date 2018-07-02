@@ -61,4 +61,14 @@
 <section></section>
 
 #
+### sightly call function can call other templates
+#
+<template data-sly-template.foo="${@ a}"><div data-sly-call="${'bar' @ a=a}"></div></template>
+<template data-sly-template.bar="${@ a}"><section>${a}</section></template>
+<div data-sly-call="${'foo' @ a=123}"></div>
+===
+
+
+<section>123</section>
+#
 ###
