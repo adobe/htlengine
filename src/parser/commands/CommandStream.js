@@ -10,6 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
+const FunctionBlock = require('./FunctionBlock');
 const Conditional = require('./Conditional');
 const BooleanConstant = require('../htl/nodes/BooleanConstant');
 const OutText = require('./OutText');
@@ -44,6 +45,14 @@ module.exports = class CommandStream {
 
   get commands() {
     return this._commands;
+  }
+
+  beginFunction(expression, options) {
+    this.write(new FunctionBlock.Start(expression, options));
+  }
+
+  endFunction() {
+    this.write(FunctionBlock.END);
   }
 
   beginIgnore() {

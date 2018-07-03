@@ -40,6 +40,8 @@ const PLUGINS = {
   attribute: require('../plugins/AttributePlugin'),
   use: require('../plugins/UsePlugin'),
   resource: require('../plugins/ResourcePlugin'),
+  template: require('../plugins/TemplatePlugin'),
+  call: require('../plugins/CallPlugin'),
   element: require('../plugins/ElementPlugin'),
 };
 /* eslint-enable global-require */
@@ -380,6 +382,11 @@ module.exports = class MarkupHandler {
 
   // eslint-disable-next-line class-methods-use-this
   _lookupPlugin(name) {
-    return PLUGINS[name];
+    // eslint-disable-next-line no-prototype-builtins
+    if (PLUGINS.hasOwnProperty(name)) {
+      return PLUGINS[name];
+    }
+
+    throw new Error(`Plugin not implemented: ${name}`);
   }
 };

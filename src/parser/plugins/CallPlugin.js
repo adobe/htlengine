@@ -9,4 +9,21 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-module.exports = {};
+const Plugin = require('../html/Plugin');
+const RuntimeCall = require('../htl/nodes/RuntimeCall');
+const OutputExpression = require('../commands/OutputExpression');
+const MapLiteral = require('../htl/nodes/MapLiteral');
+
+module.exports = class CallPlugin extends Plugin {
+  // eslint-disable-next-line class-methods-use-this
+  beforeElement(stream) {
+    stream.beginIgnore();
+  }
+
+  afterElement(stream) {
+    stream.endIgnore();
+
+    const runtimeCall = new RuntimeCall('call', this._expression.root, [new MapLiteral(this._expression.options)]);
+    stream.write(new OutputExpression(runtimeCall));
+  }
+};

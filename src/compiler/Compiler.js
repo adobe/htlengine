@@ -76,19 +76,20 @@ module.exports = class Compiler {
 
     const global = [];
     this._runtimeGlobals.forEach((g) => {
-      global.push(`        let ${g} = runtime.globals.${g};\n`);
+      global.push(`    let ${g} = runtime.globals.${g};\n`);
     });
     if (this._runtimeGlobal) {
-      global.push(`        const ${this._runtimeGlobal} = runtime.globals;\n`);
+      global.push(`    const ${this._runtimeGlobal} = runtime.globals;\n`);
     }
 
-    const { code } = new JSCodeGenVisitor()
-      .withIndent('    ')
+    const { code, templates } = new JSCodeGenVisitor()
+      .withIndent('  ')
       .indent()
       .process(commands);
 
     const codeTemplate = this._includeRuntime ? RUNTIME_TEMPLATE : DEFAULT_TEMPLATE;
     let template = fs.readFileSync(path.join(__dirname, codeTemplate), 'utf-8');
+    template = template.replace(/^\s*\/\/\s*TEMPLATES\s*$/m, `\n${templates}`);
     template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, global.join(''));
     template = template.replace(/^\s*\/\/\s*CODE\s*$/m, code);
 

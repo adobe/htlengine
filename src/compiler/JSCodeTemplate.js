@@ -22,6 +22,10 @@ module.exports = function main(runtime) {
   const listInfo = runtime.listInfo.bind(runtime);
   const use = runtime.use.bind(runtime);
   const slyResource = runtime.resource.bind(runtime);
+  const call = runtime.call.bind(runtime);
+  const template = runtime.template.bind(runtime);
+
+  // TEMPLATES
 
   return runtime.run(function* () {
 

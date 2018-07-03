@@ -9,4 +9,16 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-module.exports = {};
+
+const Command = require('./Command');
+
+module.exports = class OutputExpression extends Command {
+  constructor(expression) {
+    super();
+    this._expression = expression;
+  }
+
+  get expression() {
+    return this._expression;
+  }
+};
