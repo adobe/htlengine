@@ -10,10 +10,6 @@
  * governing permissions and limitations under the License.
  */
 const Plugin = require('../html/Plugin');
-// const MapLiteral = require('../htl/nodes/MapLiteral');
-// const OutputVariable = require('../commands/OutputVariable');
-// const RuntimeCall = require('../htl/nodes/RuntimeCall');
-// const VariableBinding = require('../commands/VariableBinding');
 
 module.exports = class TemplatePlugin extends Plugin {
   // eslint-disable-next-line class-methods-use-this
