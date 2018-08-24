@@ -4,90 +4,90 @@ jobs:
   htlengine:
     parallelism: 4
     docker:
-      # specify the version you desire here
-      - image: circleci/node:8
+    # specify the version you desire here
+    - image: circleci/node:8
 
     working_directory: ~/repo
 
     steps:
-      - checkout
+    - checkout
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v3-dependencies-{{ checksum "package.json" }}
+    # Download and cache dependencies
+    - restore_cache:
+        keys:
+        - v3-dependencies-{{ checksum "package.json" }}
 
-      - run: 
-          name: Install Dependencies
-          command: npm install
+    - run:
+        name: Install Dependencies
+        command: npm install
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v3-dependencies-{{ checksum "package.json" }}
+    - save_cache:
+        paths:
+        - node_modules
+        key: v3-dependencies-{{ checksum "package.json" }}
 
-      # run tests!
-      - run: mkdir -p junit
-      - run:
-          name: Running Tests
-          # run tests in parallel: https://circleci.com/docs/2.0/parallelism-faster-jobs/
-          command: circleci tests glob test/*.js | circleci tests split --split-by=timings | xargs npx mocha --reporter mocha-junit-reporter
-          environment:
-            MOCHA_FILE: junit/test-results.xml
-          when: always
+    # run tests!
+    - run: mkdir -p junit
+    - run:
+        name: Running Tests
+        # run tests in parallel: https://circleci.com/docs/2.0/parallelism-faster-jobs/
+        command: circleci tests glob test/*.js | circleci tests split --split-by=timings | xargs npx mocha --reporter mocha-junit-reporter
+        environment:
+          MOCHA_FILE: junit/test-results.xml
+        when: always
 
-      - store_test_results:
-          path: junit
-      - store_artifacts:
-          path: junit 
+    - store_test_results:
+        path: junit
+    - store_artifacts:
+        path: junit
 
   publish-snapshot:
     docker:
-      # specify the version you desire here
-      - image: circleci/node:8
+    # specify the version you desire here
+    - image: circleci/node:8
 
     working_directory: ~/repo
 
     steps:
-      - checkout
+    - checkout
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v3-dependencies-{{ checksum "package.json" }}
+    # Download and cache dependencies
+    - restore_cache:
+        keys:
+        - v3-dependencies-{{ checksum "package.json" }}
 
-      - run: 
-          name: Install Dependencies
-          command: npm install && npm install mocha-junit-reporter npm-snapshot
+    - run:
+        name: Install Dependencies
+        command: npm install && npm install mocha-junit-reporter npm-snapshot
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v3-dependencies-{{ checksum "package.json" }}
+    - save_cache:
+        paths:
+        - node_modules
+        key: v3-dependencies-{{ checksum "package.json" }}
 
-      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+    - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
 
-      - run: 
-          command: BUILD_TAG=$(./node_modules/.bin/npm-snapshot $CIRCLE_BUILD_NUM) echo 'export BUILD_TAG=$BUILD_TAG' >> $BASH_ENV
+    - run:
+        command: BUILD_TAG=$(./node_modules/.bin/npm-snapshot $CIRCLE_BUILD_NUM) echo 'export BUILD_TAG=$BUILD_TAG' >> $BASH_ENV
 
-      - run: 
-          name: Publish Snapshot
-          command: npm publish --access public --tag next
+    - run:
+        name: Publish Snapshot
+        command: npm publish --access public --tag next
 
-      - store_test_results:
-          path: junit
-      - store_artifacts:
-          path: junit 
+    - store_test_results:
+        path: junit
+    - store_artifacts:
+        path: junit
 
 workflows:
   version: 2
   build:
     jobs:
-      - publish-snapshot:
-           requires:
-               - htlengine
-           filters:
-              branches:
-                only:
-                  - master
-      - htlengine
+    - publish-snapshot:
+        requires:
+        - htlengine
+        filters:
+          branches:
+            only:
+            - master
+    - htlengine
