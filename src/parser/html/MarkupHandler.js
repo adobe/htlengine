@@ -222,7 +222,7 @@ module.exports = class MarkupHandler {
     plugin.beforeAttributeValue(this._stream, name, textValue);
     if (textValue != null) {
       this._emitAttributeValueStart(quoteChar);
-      const quotedTextValue = textValue.replace('"', '&quot;');
+      const quotedTextValue = textValue.replace(/"/g, '&quot;');
       this._out(quotedTextValue);
       this._emitAttributeEnd(quoteChar);
     }

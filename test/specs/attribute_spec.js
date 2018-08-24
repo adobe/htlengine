@@ -14,6 +14,7 @@ module.exports = {
     myValues: 'some data value',
     myClass: 'super-green',
   },
+  quotes: 'Hello, "World!"',
   foobar: {
     id: 'foo',
     class: 'bar',

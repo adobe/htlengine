@@ -175,4 +175,16 @@ out("/>\n");
 ===
 <div class="0"></div>
 #
+### Quotes are escaped
+#
+<div class='"foo" "bar"'></div>
+===
+<div class='&quot;foo&quot; &quot;bar&quot;'></div>
+#
+### Quotes are escaped in variables
+#
+<div class="${quotes}"></div>
+===
+<div class="Hello, &quot;World&#x21;&quot;"></div>
+#
 ###
