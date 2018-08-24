@@ -57,7 +57,7 @@ const OPTIONS = [
  * decided by the filter. The application order of filters is given by filter priority.
  */
 class OptionHandler {
-  static apply(expression, expressionContext) {
+  static filter(expression, expressionContext) {
     let expr = expression;
     OPTIONS.forEach((opt) => {
       if (expr.containsSomeOption(opt.options) && opt.condition(expressionContext)) {

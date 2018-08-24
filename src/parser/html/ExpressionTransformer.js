@@ -55,6 +55,6 @@ module.exports = class ExpressionTransformer {
     if (markupContext != null && !expr.options.context) {
       expr.options.context = new StringConstant(markupContext);
     }
-    return OptionHandler.apply(expr, expressionContext);
+    return OptionHandler.filter(expr, expressionContext);
   }
 };
