@@ -1,0 +1,6 @@
+extraction:
+  javascript:
+    index:
+      filters:
+      - exclude: "src/compiler/JSCodeTemplate.js"
+      - exclude: "src/compiler/JSRuntimeTemplate.js"
