@@ -31,6 +31,6 @@
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
     "mocha-junit-reporter": "^1.17.0",
-    "nyc": "^12.0.2"
+    "nyc": "^13.0.1"
   }
 }
