@@ -16,7 +16,9 @@ module.exports = function main(resource, template) {
   const compiler = new Compiler()
     .withOutputDirectory('.')
     .includeRuntime(true)
-    .withRuntimeVar(Object.keys(resource));
+    .withRuntimeVar(Object.keys(resource))
+    .withMinifyEnabled(true)
+    .withSourceMap(true);
 
   const filename = compiler.compileToFile(template, './out.js');
   // eslint-disable-next-line import/no-dynamic-require,global-require

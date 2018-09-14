@@ -39,7 +39,7 @@ const PARSE_STATE = Object.freeze({
   STRING: 4,
   EXPRESSION_START: 5,
   EXPRESSION: 6,
-  DIRECTIVE: 7
+  DIRECTIVE: 7,
 });
 
 function isWhitespace(c) {
