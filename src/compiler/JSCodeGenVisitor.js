@@ -45,7 +45,7 @@ module.exports = class JSCodeGenVitor {
   }
 
   withSourceMap(enabled) {
-    this._sourceMap = enabled ? [] : null;
+    this._mappings = enabled ? [] : null;
 
     return this;
   }
@@ -83,14 +83,14 @@ module.exports = class JSCodeGenVitor {
     });
 
     commands.forEach((c) => {
-      if (this._sourceMap) {
+      if (this._mappings) {
         const { location } = c;
         if (location) {
-          this._sourceMap.push({
+          this._mappings.push({
             originalLine: location.line,
             originalColumn: location.column,
             generatedLine: this._line,
-            generatedColumn: 0
+            generatedColumn: 0,
           });
         }
       }
@@ -122,8 +122,8 @@ module.exports = class JSCodeGenVitor {
     return this._templates;
   }
 
-  get sourceMap() {
-    return this._sourceMap;
+  get mappings() {
+    return this._mappings;
   }
 
   visit(cmd) {

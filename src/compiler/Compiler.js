@@ -86,18 +86,21 @@ module.exports = class Compiler {
   }
 
   /**
-     * Compiles the given source string and saves the result, overwriting the
-     * file name.
-     * @param {String} source HTL template code
-     * @param {String} name file name to save results
-     * @returns {String} the full name of the resulting file
-     */
+   * Compiles the given source string and saves the result, overwriting the
+   * file name.
+   * @param {String} source HTL template code
+   * @param {String} name file name to save results
+   * @returns {String} the full name of the resulting file
+   */
   compileToFile(source, name) {
-    const template = this.compileToString(source);
+    const { template, sourceMap } = this.compile(source);
 
     const filename = this._outfile || path.resolve(this._dir, name);
     fs.writeFileSync(filename, template);
 
+    if (sourceMap) {
+      fs.writeFileSync(`${filename}.map`, JSON.stringify(sourceMap));
+    }
     return filename;
   }
 
@@ -107,7 +110,7 @@ module.exports = class Compiler {
    *
    * @param {String} source HTL template code
    * @param {String} name file name to save results
-   * @returns {String} the full name of the resulting file
+   * @returns {Object} an object consisting of a generated template and a source map
    */
   compile(source) {
     // todo: async support
@@ -124,7 +127,7 @@ module.exports = class Compiler {
       global.push(`    const ${this._runtimeGlobal} = runtime.globals;\n`);
     }
 
-    const { code, templates, sourceMap } = new JSCodeGenVisitor()
+    const { code, templates, mappings } = new JSCodeGenVisitor()
       .withIndent('  ')
       .withSourceMap(this._sourceMap)
       .indent()
@@ -133,32 +136,31 @@ module.exports = class Compiler {
     const codeTemplate = this._includeRuntime ? RUNTIME_TEMPLATE : DEFAULT_TEMPLATE;
     let template = fs.readFileSync(path.join(__dirname, codeTemplate), 'utf-8');
     template = template.replace(/^\s*\/\/\s*TEMPLATES\s*$/m, `\n${templates}`);
-    template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, global.join(''));
+    template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, `\n${global.join('')}`);
 
-    let map = new SourceMapGenerator({
-    });
-
-    if (sourceMap) {
+    let sourceMap = null;
+    if (mappings) {
+      const generator = new SourceMapGenerator();
       const index = template.search(/^\s*\/\/\s*CODE\s*$/m);
-      if (index) {
-        const lineOffset = template.substring(0, index).split('\n').length + 1;
-        sourceMap.forEach((mapping) => {
-          map.addMapping({
-            generated: {
-              line: mapping.generatedLine + lineOffset,
-              column: mapping.generatedColumn
-            },
-            source: '<internal>',
-            original: {
-              line: mapping.originalLine,
-              column: mapping.originalColumn
-            }
-          });
-        });
-      }
-    }
-    template = template.replace(/^\s*\/\/\s*CODE\s*$/m, code);
+      const offsetLines = index !== -1 ? template.substring(0, index).split('\n').length : 0;
 
-    return { js: template, sourceMap: map.toJSON() };
+      mappings.forEach((mapping) => {
+        generator.addMapping({
+          generated: {
+            line: mapping.generatedLine + offsetLines + 1,
+            column: mapping.generatedColumn,
+          },
+          source: '<internal>',
+          original: {
+            line: mapping.originalLine + 1,
+            column: mapping.originalColumn,
+          },
+        });
+      });
+      sourceMap = generator.toJSON();
+    }
+    template = template.replace(/^\s*\/\/\s*CODE\s*$/m, `\n${code}`);
+
+    return { template, sourceMap };
   }
 };

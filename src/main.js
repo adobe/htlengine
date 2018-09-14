@@ -24,7 +24,9 @@ module.exports = function main(resource, template) {
   const compiler = new Compiler()
     .withOutputDirectory('.')
     .includeRuntime(true)
-    .withRuntimeVar(Object.keys(resource));
+    .withRuntimeVar(Object.keys(resource))
+    .withMinifyEnabled(true)
+    .withSourceMap(true);
 
   let code = compiler.compileToString(template);
   code = code.replace('@adobe/htlengine', './src/index.js');
