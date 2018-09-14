@@ -32,6 +32,7 @@ module.exports = class JSCodeGenVitor {
     this._lastIndentLevel = 0;
     this._inFunctionBlock = false;
     this._indents = [];
+    this._line = 0;
   }
 
   withIndent(delim) {
@@ -40,6 +41,12 @@ module.exports = class JSCodeGenVitor {
     for (let i = 0; i < 50; i += 1) {
       this._indents[i + 1] = this._indents[i] + delim;
     }
+    return this;
+  }
+
+  withSourceMap(enabled) {
+    this._sourceMap = enabled ? [] : null;
+
     return this;
   }
 
@@ -76,6 +83,17 @@ module.exports = class JSCodeGenVitor {
     });
 
     commands.forEach((c) => {
+      if (this._sourceMap) {
+        const { location } = c;
+        if (location) {
+          this._sourceMap.push({
+            originalLine: location.line,
+            originalColumn: location.column,
+            generatedLine: this._line,
+            generatedColumn: 0
+          });
+        }
+      }
       c.accept(this);
     });
     return this;
@@ -93,6 +111,7 @@ module.exports = class JSCodeGenVitor {
     } else {
       this._result += msg;
     }
+    this._line++;
   }
 
   get code() {
@@ -101,6 +120,10 @@ module.exports = class JSCodeGenVitor {
 
   get templates() {
     return this._templates;
+  }
+
+  get sourceMap() {
+    return this._sourceMap;
   }
 
   visit(cmd) {

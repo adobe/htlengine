@@ -72,7 +72,7 @@ module.exports = class MarkupHandler {
     this._stack.push(new ElementContext(tagName));
   }
 
-  onAttribute(name, value, quoteChar) {
+  onAttribute(name, value, quoteChar, line, column) {
     if (value !== null) {
       this._result += ` ${name}=${quoteChar}${value}${quoteChar}`;
     } else {
@@ -82,7 +82,7 @@ module.exports = class MarkupHandler {
     const context = this._stack[this._stack.length - 1];
     const signature = PluginSignature.fromAttribute(name);
     if (signature) {
-      this._handlePlugin(name, signature, value, context);
+      this._handlePlugin(name, signature, value, context, { line, column });
     } else {
       context.addAttribute(name, value, quoteChar);
     }
@@ -143,7 +143,7 @@ module.exports = class MarkupHandler {
     plugin.afterElement(stream);
   }
 
-  onText(text) {
+  onText(text, line, column) {
     this._result += text;
 
     const currentTagName = (this._stack.length === 0 ? '' : this._stack[this._stack.length - 1].tagName).toLowerCase();
@@ -151,7 +151,7 @@ module.exports = class MarkupHandler {
     if (currentTagName === 'script' || currentTagName === 'style') {
       markupContext = MarkupContext.TEXT;
     }
-    this._outText(text, markupContext);
+    this._outText(text, markupContext, { line, column });
   }
 
   onComment(markup) {
@@ -176,14 +176,14 @@ module.exports = class MarkupHandler {
     return this._result;
   }
 
-  _handlePlugin(name, signature, value, context) {
+  _handlePlugin(name, signature, value, context, location = null) {
     const expressionContext = ExpressionContext.getContextForPlugin(signature.name);
     const interpolation = this._htlParser.parse(value);
     const expr = this._transformer.transform(interpolation, null, expressionContext);
 
     const PluginClass = this._lookupPlugin(signature.name);
     const pluginContext = new PluginContext(this._symbolGenerator, this._transformer, this._stream);
-    const plugin = new PluginClass(signature, pluginContext, expr);
+    const plugin = new PluginClass(signature, pluginContext, expr, location);
     if (plugin.isValid()) {
       context.addPlugin(plugin);
       context.addPluginAttribute(name, signature, expr);
@@ -345,7 +345,7 @@ module.exports = class MarkupHandler {
     stream.write(VariableBinding.END); // end scope for attrValue
   }
 
-  _outText(content, markupContext) {
+  _outText(content, markupContext, location) {
     const interpolation = this._htlParser.parse(content);
     if (markupContext == null) {
       // interpolation = requireContext(interpolation); todo
@@ -361,7 +361,7 @@ module.exports = class MarkupHandler {
       ).root;
       const variable = this._symbolGenerator.next();
       this._stream.write(new VariableBinding.Start(variable, node));
-      this._stream.write(new OutputVariable(variable));
+      this._stream.write(new OutputVariable(variable, location));
       this._stream.write(VariableBinding.END);
     }
   }
