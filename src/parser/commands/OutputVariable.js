@@ -13,8 +13,8 @@
 const Command = require('./Command');
 
 module.exports = class OutputVariable extends Command {
-  constructor(variableName) {
-    super();
+  constructor(variableName, location = null) {
+    super(location);
     this._variableName = variableName;
   }
 

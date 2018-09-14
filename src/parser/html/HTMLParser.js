@@ -39,6 +39,7 @@ const PARSE_STATE = Object.freeze({
   STRING: 4,
   EXPRESSION_START: 5,
   EXPRESSION: 6,
+  DIRECTIVE: 7
 });
 
 function isWhitespace(c) {
@@ -50,6 +51,8 @@ module.exports = class HTMLParser {
     this._handler = handler;
     this._tagTokenizer = new TagTokenizer();
     this._buffer = '';
+    this._line = 0;
+    this._column = 0;
   }
 
   static parse(source, handler) {
@@ -79,7 +82,7 @@ module.exports = class HTMLParser {
         case PARSE_STATE.OUTSIDE:
           if (c === '<') {
             if (curr > start) {
-              this._handler.onText(source.substring(start, curr));
+              this._handler.onText(source.substring(start, curr), this._line, this._column);
             }
             start = curr;
             parseState = PARSE_STATE.TAG;
@@ -168,7 +171,7 @@ module.exports = class HTMLParser {
                 parseState = PARSE_STATE.OUTSIDE;
                 this._flushBuffer();
               } else {
-                parseState = PARSE_STATE.TAG;
+                parseState = PARSE_STATE.DIRECTIVE;
                 parseSubState = -1;
                 this._flushBuffer();
               }
@@ -222,7 +225,7 @@ module.exports = class HTMLParser {
             case 0:
               if (c === '<') {
                 if (curr > start) {
-                  this._handler.onText(source.substring(start, curr));
+                  this._handler.onText(source.substring(start, curr), this._line, this._column);
                 }
                 start = curr;
                 parseSubState++;
@@ -319,8 +322,28 @@ module.exports = class HTMLParser {
             parseState = PARSE_STATE.OUTSIDE;
           }
           break;
+        case PARSE_STATE.DIRECTIVE:
+          if (c === '"' || c === '\'') {
+            parseSubState = 1;
+            quoteChar = c;
+            prevParseState = parseState;
+            parseState = PARSE_STATE.STRING;
+          } else if (c === '>') {
+            this._handler.onText(source.substring(start, curr + 1), this._line, this._column);
+            parseState = PARSE_STATE.OUTSIDE;
+            start = curr + 1;
+            parseSubState = 0;
+          }
+          break;
+
         default:
           break;
+      }
+      if (c === '\n') {
+        this._line++;
+        this._column = 0;
+      } else {
+        this._column++;
       }
     }
     if (start < end) {
@@ -334,7 +357,7 @@ module.exports = class HTMLParser {
      */
   _flushBuffer() {
     if (this._buffer.length > 0) {
-      this._handler.onText(this._buffer);
+      this._handler.onText(this._buffer, this._line, this._column);
       this._buffer = '';
     }
   }
@@ -343,7 +366,7 @@ module.exports = class HTMLParser {
      * Process a comment from current and accumulated character data
      */
   _processComment(source) {
-    this._handler.onComment(this._buffer + source);
+    this._handler.onComment(this._buffer + source, this._line, this._column);
     this._buffer = '';
   }
 
@@ -357,7 +380,7 @@ module.exports = class HTMLParser {
     if (!tok.endTag) {
       this._handler.onOpenTagStart(tok.tagName);
       tok.attributes.forEach((attr) => {
-        this._handler.onAttribute(attr.name, attr.value, attr.quoteChar);
+        this._handler.onAttribute(attr.name, attr.value, attr.quoteChar, this._line, this._column);
       });
       this._handler.onOpenTagEnd(tok.endSlash, VOID_ELEMENTS[tok.tagName]);
     } else {

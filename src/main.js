@@ -18,7 +18,7 @@ module.exports = function main(resource, template) {
     .includeRuntime(true)
     .withRuntimeVar(Object.keys(resource));
 
-  const filename = compiler.compile(template, './out.js');
+  const filename = compiler.compileToFile(template, './out.js');
   // eslint-disable-next-line import/no-dynamic-require,global-require
   const service = require(filename);
   return service(resource);
