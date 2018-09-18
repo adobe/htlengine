@@ -10,14 +10,16 @@
  * governing permissions and limitations under the License.
  */
 
-const fs = require('fs');
+/* global describe, it */
 
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
 const engine = require('../src/main');
 
-const filename = process.argv[2];
-const template = fs.readFileSync(filename, 'utf-8');
-
-const resource = {
+const TEMPLATE_SIMPLE_2 = path.resolve(__dirname, './simple2.htl');
+const EXPECTED_SIMPLE_2 = path.resolve(__dirname, './simple2.html');
+const GLOBALS = {
   world: 'Earth',
   properties: {
     title: 'Hello, world.',
@@ -41,7 +43,11 @@ const resource = {
   },
 };
 
-engine(resource, template).then((ret) => {
-  // eslint-disable-next-line no-console
-  console.log(ret.body);
+describe('Engine test', () => {
+  it('Simple htl can be executed', async () => {
+    const template = fs.readFileSync(TEMPLATE_SIMPLE_2, 'utf-8');
+    const expected = fs.readFileSync(EXPECTED_SIMPLE_2, 'utf-8');
+    const ret = await engine(GLOBALS, template);
+    assert.equal(ret.body, expected);
+  });
 });

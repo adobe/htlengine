@@ -33,7 +33,7 @@ function process(input) {
  */
 describe('Simple', () => {
   it('parses the simple html', () => {
-    const filename = 'test/simple.html';
+    const filename = 'test/simple.htm';
     const source = fs.readFileSync(filename, 'utf-8');
     const result = process(source);
     assert.equal(result, source);

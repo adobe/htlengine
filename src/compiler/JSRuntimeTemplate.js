@@ -12,7 +12,7 @@
 
 /* eslint-disable */
 
-const Runtime = require('@adobe/htlengine/src/runtime/Runtime');
+const { Runtime } = require('@adobe/htlengine');
 
 function run(runtime) {
   const lengthOf = function (c) {

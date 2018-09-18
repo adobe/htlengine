@@ -10,17 +10,30 @@
  * governing permissions and limitations under the License.
  */
 
+const fs = require('fs');
+const path = require('path');
 const Compiler = require('./compiler/Compiler');
 
+/**
+ * Simple engine that compiles the given template and executes it.
+ * @param resource the global object to pass into the script
+ * @param template the HTL script
+ * @returns A promise that resolves to the evaluated code.
+ */
 module.exports = function main(resource, template) {
   const compiler = new Compiler()
     .withOutputDirectory('.')
     .includeRuntime(true)
     .withRuntimeVar(Object.keys(resource));
 
-  const filename = compiler.compile(template, './out.js');
+  let code = compiler.compileToString(template);
+  code = code.replace('@adobe/htlengine', './src/index.js');
+
+  const filename = path.resolve(process.cwd(), './out.js');
+  fs.writeFileSync(filename, code, 'utf-8');
+
   // eslint-disable-next-line import/no-dynamic-require,global-require
   const service = require(filename);
-  return service(resource);
+  return service.main(resource);
 };
 
