@@ -24,7 +24,7 @@ function escapeJavaString(s) {
   return JSON.stringify(s);
 }
 
-module.exports = class JSCodeGenVitor {
+module.exports = class JSCodeGenVisitor {
   constructor() {
     this._result = '';
     this._templates = '';
@@ -32,7 +32,8 @@ module.exports = class JSCodeGenVitor {
     this._lastIndentLevel = 0;
     this._inFunctionBlock = false;
     this._indents = [];
-    this._line = 0;
+    this._codeLine = 0;
+    this._templateLine = 0;
   }
 
   withIndent(delim) {
@@ -83,17 +84,6 @@ module.exports = class JSCodeGenVitor {
     });
 
     commands.forEach((c) => {
-      if (this._mappings) {
-        const { location } = c;
-        if (location) {
-          this._mappings.push({
-            originalLine: location.line,
-            originalColumn: location.column,
-            generatedLine: this._line,
-            generatedColumn: 0,
-          });
-        }
-      }
       c.accept(this);
     });
     return this;
@@ -103,15 +93,16 @@ module.exports = class JSCodeGenVitor {
     if (this._indent) {
       if (this._inFunctionBlock) {
         this._templates += `${this._indent + msg}\n`;
+        this._templateLine++;
       } else {
         this._result += `${this._indent + msg}\n`;
+        this._codeLine++;
       }
     } else if (this._inFunctionBlock) {
       this._templates += msg;
     } else {
       this._result += msg;
     }
-    this._line++;
   }
 
   get code() {
@@ -127,6 +118,19 @@ module.exports = class JSCodeGenVitor {
   }
 
   visit(cmd) {
+    if (this._mappings) {
+      const { location } = cmd;
+      if (location) {
+        this._mappings.push({
+          inFunctionBlock: this._inFunctionBlock,
+          originalLine: location.line,
+          originalColumn: location.column,
+          generatedLine: this._inFunctionBlock ? this._templateLine : this._codeLine,
+          generatedColumn: 0
+        });
+      }
+    }
+
     if (cmd instanceof OutText) {
       this._out(`out(${escapeJavaString(cmd.text)});`);
     } else if (cmd instanceof OutputExpression) {

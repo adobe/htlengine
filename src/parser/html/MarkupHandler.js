@@ -23,6 +23,7 @@ const BinaryOperator = require('../htl/nodes/BinaryOperator');
 const BooleanConstant = require('../htl/nodes/BooleanConstant');
 const StringConstant = require('../htl/nodes/StringConstant');
 const RuntimeCall = require('../htl/nodes/RuntimeCall');
+const MultiOperation = require('../htl/nodes/MultiOperation');
 
 const OutText = require('../commands/OutText');
 const VariableBinding = require('../commands/VariableBinding');
@@ -84,7 +85,7 @@ module.exports = class MarkupHandler {
     if (signature) {
       this._handlePlugin(name, signature, value, context, { line, column });
     } else {
-      context.addAttribute(name, value, quoteChar);
+      context.addAttribute(name, value, quoteChar, { line, column });
     }
   }
 
@@ -176,7 +177,7 @@ module.exports = class MarkupHandler {
     return this._result;
   }
 
-  _handlePlugin(name, signature, value, context, location = null) {
+  _handlePlugin(name, signature, value, context, location) {
     const expressionContext = ExpressionContext.getContextForPlugin(signature.name);
     const interpolation = this._htlParser.parse(value);
     const expr = this._transformer.transform(interpolation, null, expressionContext);
@@ -192,16 +193,16 @@ module.exports = class MarkupHandler {
 
   _emitAttributes(context, plugin) {
     context.attributes.forEach((attr) => {
-      const { name: attrName, value } = attr;
+      const { name: attrName, value, location } = attr;
       if (attr.signature) {
         plugin.onPluginCall(this._stream, attr.signature, attr.expression);
       } else if (value == null || typeof value === 'string') {
-        this._emitAttribute(attrName, value, attr.quoteChar, plugin);
+        this._emitAttribute(attrName, value, attr.quoteChar, plugin, location);
       }
     });
   }
 
-  _emitAttribute(name, value, quoteChar, plugin) {
+  _emitAttribute(name, value, quoteChar, plugin, location) {
     plugin.beforeAttribute(this._stream, name);
     if (value == null) {
       this._emitSimpleTextAttribute(name, null, quoteChar, plugin);
@@ -211,7 +212,7 @@ module.exports = class MarkupHandler {
       if (plainText !== null) {
         this._emitSimpleTextAttribute(name, plainText, quoteChar, plugin);
       } else {
-        this._emitExpressionAttribute(name, interpolation, quoteChar, plugin);
+        this._emitExpressionAttribute(name, interpolation, quoteChar, plugin, location);
       }
     }
     plugin.afterAttribute(this._stream, name);
@@ -229,12 +230,12 @@ module.exports = class MarkupHandler {
     plugin.afterAttributeValue(this._stream, name);
   }
 
-  _emitExpressionAttribute(name, interpolation, quoteChar, plugin) {
+  _emitExpressionAttribute(name, interpolation, quoteChar, plugin, location) {
     // interpolation = attributeChecked(name, interpolation); todo!
     if (interpolation.length === 1) {
-      this._emitSingleFragment(name, interpolation, quoteChar, plugin);
+      this._emitSingleFragment(name, interpolation, quoteChar, plugin, location);
     } else {
-      this._emitMultipleFragment(name, interpolation, quoteChar, plugin);
+      this._emitMultipleFragment(name, interpolation, quoteChar, plugin, location);
     }
   }
 
@@ -252,7 +253,7 @@ module.exports = class MarkupHandler {
     this._out(quote);
   }
 
-  _emitMultipleFragment(name, interpolation, quoteChar, plugin) {
+  _emitMultipleFragment(name, interpolation, quoteChar, plugin, location) {
     // Simplified algorithm for attribute output, which works when the interpolation is not of
     // size 1. In this case we are certain that the attribute value cannot be the boolean value
     // true, so we can skip this test altogether
@@ -268,7 +269,7 @@ module.exports = class MarkupHandler {
       BinaryOperator.OR,
       new Identifier(attrContent),
       new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrContent)),
-    )));
+    )), false, location);
     this._emitAttributeStart(name);
     plugin.beforeAttributeValue(stream, name, expression.root);
     this._emitAttributeValueStart(quoteChar);
@@ -279,7 +280,7 @@ module.exports = class MarkupHandler {
     stream.write(VariableBinding.END);
   }
 
-  _emitSingleFragment(name, interpolation, quoteChar, plugin) {
+  _emitSingleFragment(name, interpolation, quoteChar, plugin, location) {
     const stream = this._stream;
     const valueExpression = this._transformer.transform(
       interpolation,
@@ -320,7 +321,7 @@ module.exports = class MarkupHandler {
         new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrValue)),
       );
     }
-    stream.write(new Conditional.Start(shouldDisplayExp)); // if (attrContent)
+    stream.write(new Conditional.Start(shouldDisplayExp, false, location)); // if (attrContent)
 
     this._emitAttributeStart(name); // write("attrName");
     plugin.beforeAttributeValue(stream, name, node);
@@ -359,6 +360,20 @@ module.exports = class MarkupHandler {
         markupContext,
         ExpressionContext.TEXT,
       ).root;
+
+      // increase line number in passed location for any preceding strings containing line feeds
+      if (location && node instanceof MultiOperation) {
+        for (const op of node.operands) {
+          if (op instanceof StringConstant) {
+            const linefeeds = op.text.split('\n').length - 1;
+            location.line += linefeeds;
+          } else {
+            // no more strings so we have our final line number
+            break;
+          }
+        }
+      }
+
       const variable = this._symbolGenerator.next();
       this._stream.write(new VariableBinding.Start(variable, node));
       this._stream.write(new OutputVariable(variable, location));

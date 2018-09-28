@@ -16,7 +16,7 @@
  * Commands are immutable and can only be processed through a {@link CommandVisitor}.
  */
 module.exports = class Command {
-  constructor(location = null) {
+  constructor(location) {
     this._location = location;
   }
 

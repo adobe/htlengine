@@ -53,6 +53,7 @@ module.exports = class HTMLParser {
     this._buffer = '';
     this._line = 0;
     this._column = 0;
+    this._startPos = { line: 0, column: 0 };
   }
 
   static parse(source, handler) {
@@ -82,7 +83,8 @@ module.exports = class HTMLParser {
         case PARSE_STATE.OUTSIDE:
           if (c === '<') {
             if (curr > start) {
-              this._handler.onText(source.substring(start, curr), this._line, this._column);
+              this._handler.onText(source.substring(start, curr), this._startPos.line, this._startPos.column);
+              this._startPos = { line: this._line, column: this._column };
             }
             start = curr;
             parseState = PARSE_STATE.TAG;
@@ -130,9 +132,10 @@ module.exports = class HTMLParser {
                 prevParseState = parseState;
                 parseState = PARSE_STATE.STRING;
               } else if (c === '>') {
-                parseState = this._processTag(source.substring(start, curr + 1))
+                parseState = this._processTag(source.substring(start, curr + 1), this._startPos.line, this._startPos.column)
                   ? PARSE_STATE.SCRIPT
                   : PARSE_STATE.OUTSIDE;
+                this._startPos = { line: this._line, column: this._column + 1 };
                 start = curr + 1;
                 parseSubState = 0;
               } else if (isWhitespace(c)) {
@@ -145,9 +148,10 @@ module.exports = class HTMLParser {
                 prevParseState = parseState;
                 parseState = PARSE_STATE.STRING;
               } else if (c === '>') {
-                parseState = this._processTag(source.substring(start, curr + 1))
+                parseState = this._processTag(source.substring(start, curr + 1), this._startPos.line, this._startPos.column)
                   ? PARSE_STATE.SCRIPT
                   : PARSE_STATE.OUTSIDE;
+                this._startPos = { line: this._line, column: this._column + 1 };
                 start = curr + 1;
                 parseSubState = 0;
               }
@@ -209,7 +213,8 @@ module.exports = class HTMLParser {
             case 4:
               if (c === '>') {
                 parseState = PARSE_STATE.OUTSIDE;
-                this._processComment(source.substring(start, curr + 1));
+                this._processComment(source.substring(start, curr + 1), this._startPos.line, this._startPos.column);
+                this._startPos = { line: this._line, column: this._column + 1 };
                 start = curr + 1;
               } else {
                 parseSubState = 2;
@@ -225,7 +230,8 @@ module.exports = class HTMLParser {
             case 0:
               if (c === '<') {
                 if (curr > start) {
-                  this._handler.onText(source.substring(start, curr), this._line, this._column);
+                  this._handler.onText(source.substring(start, curr), this._startPos.line, this._startPos.column);
+                  this._startPos = { line: this._line, column: this._column };
                 }
                 start = curr;
                 parseSubState++;
@@ -329,7 +335,8 @@ module.exports = class HTMLParser {
             prevParseState = parseState;
             parseState = PARSE_STATE.STRING;
           } else if (c === '>') {
-            this._handler.onText(source.substring(start, curr + 1), this._line, this._column);
+            this._handler.onDocType(source.substring(start, curr + 1), this._startPos.line, this._startPos.column);
+            this._startPos = { line: this._line, column: this._column + 1 };
             parseState = PARSE_STATE.OUTSIDE;
             start = curr + 1;
             parseSubState = 0;
@@ -357,7 +364,8 @@ module.exports = class HTMLParser {
      */
   _flushBuffer() {
     if (this._buffer.length > 0) {
-      this._handler.onText(this._buffer, this._line, this._column);
+      this._handler.onText(this._buffer, this._startPos.line, this._startPos.column);
+      this._startPos = { line: this._line, column: this._column };
       this._buffer = '';
     }
   }
@@ -365,22 +373,22 @@ module.exports = class HTMLParser {
   /**
      * Process a comment from current and accumulated character data
      */
-  _processComment(source) {
-    this._handler.onComment(this._buffer + source, this._line, this._column);
+  _processComment(source, line, column) {
+    this._handler.onComment(this._buffer + source, line, column);
     this._buffer = '';
   }
 
   /**
      * Decompose a tag and feed it to the document handler.
      */
-  _processTag(source) {
+  _processTag(source, line, column) {
     const snippet = this._buffer + source;
     this._buffer = '';
-    const tok = this._tagTokenizer.tokenize(snippet, 0, snippet.length);
+    const tok = this._tagTokenizer.tokenize(snippet, 0, snippet.length, line, column);
     if (!tok.endTag) {
-      this._handler.onOpenTagStart(tok.tagName);
+      this._handler.onOpenTagStart(tok.tagName, line, column);
       tok.attributes.forEach((attr) => {
-        this._handler.onAttribute(attr.name, attr.value, attr.quoteChar, this._line, this._column);
+        this._handler.onAttribute(attr.name, attr.value, attr.quoteChar, attr.line, attr.column);
       });
       this._handler.onOpenTagEnd(tok.endSlash, VOID_ELEMENTS[tok.tagName]);
     } else {

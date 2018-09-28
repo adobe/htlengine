@@ -29,7 +29,6 @@ module.exports = class Compiler {
     this._runtimeGlobals = [];
     this._runtimeGlobal = 'resource';
     this._includeRuntime = false;
-    this._minify = false;
   }
 
   withOutputDirectory(dir) {
@@ -63,11 +62,6 @@ module.exports = class Compiler {
 
   withSourceMap(sourceMap) {
     this._sourceMap = sourceMap;
-    return this;
-  }
-
-  withMinifyEnabled(minify) {
-    this._minify = minify;
     return this;
   }
 
@@ -116,7 +110,6 @@ module.exports = class Compiler {
     // todo: async support
     const commands = new TemplateParser()
       .withErrorListener(ThrowingErrorListener.INSTANCE)
-      .withMinifyEnabled(this._minify)
       .parse(source);
 
     const global = [];
@@ -135,19 +128,24 @@ module.exports = class Compiler {
 
     const codeTemplate = this._includeRuntime ? RUNTIME_TEMPLATE : DEFAULT_TEMPLATE;
     let template = fs.readFileSync(path.join(__dirname, codeTemplate), 'utf-8');
+
+    let index = template.search(/^\s*\/\/\s*TEMPLATES\s*$/m);
+    const templatesOffset = index !== -1 ? template.substring(0, index).split('\n').length : 0;
     template = template.replace(/^\s*\/\/\s*TEMPLATES\s*$/m, `\n${templates}`);
+
     template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, `\n${global.join('')}`);
+
+    index = template.search(/^\s*\/\/\s*CODE\s*$/m);
+    const codeOffset = index !== -1 ? template.substring(0, index).split('\n').length : 0;
+    template = template.replace(/^\s*\/\/\s*CODE\s*$/m, `\n${code}`);
 
     let sourceMap = null;
     if (mappings) {
       const generator = new SourceMapGenerator();
-      const index = template.search(/^\s*\/\/\s*CODE\s*$/m);
-      const offsetLines = index !== -1 ? template.substring(0, index).split('\n').length : 0;
-
       mappings.forEach((mapping) => {
         generator.addMapping({
           generated: {
-            line: mapping.generatedLine + offsetLines + 1,
+            line: mapping.generatedLine + (mapping.inFunctionBlock ? templatesOffset : codeOffset) + 1,
             column: mapping.generatedColumn,
           },
           source: '<internal>',
@@ -159,8 +157,6 @@ module.exports = class Compiler {
       });
       sourceMap = generator.toJSON();
     }
-    template = template.replace(/^\s*\/\/\s*CODE\s*$/m, `\n${code}`);
-
     return { template, sourceMap };
   }
 };

@@ -25,7 +25,6 @@ module.exports = function main(resource, template) {
     .withOutputDirectory('.')
     .includeRuntime(true)
     .withRuntimeVar(Object.keys(resource))
-    .withMinifyEnabled(true)
     .withSourceMap(true);
 
   let code = compiler.compileToString(template);
