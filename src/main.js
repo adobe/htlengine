@@ -17,7 +17,6 @@ module.exports = function main(resource, template) {
     .withOutputDirectory('.')
     .includeRuntime(true)
     .withRuntimeVar(Object.keys(resource))
-    .withMinifyEnabled(true)
     .withSourceMap(true);
 
   const filename = compiler.compileToFile(template, './out.js');

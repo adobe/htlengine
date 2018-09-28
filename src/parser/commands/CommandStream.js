@@ -16,28 +16,16 @@ const BooleanConstant = require('../htl/nodes/BooleanConstant');
 const OutText = require('./OutText');
 
 module.exports = class CommandStream {
-  constructor(minify = false) {
+  constructor() {
     this._commands = [];
     this._warnings = [];
     this._wasText = false;
-    this._minify = minify;
   }
 
   write(command) {
     const isText = command instanceof OutText;
     if (isText) {
-      if (!this._minify) {
-        const lines = command.text.split(/(\n)/);
-        lines.forEach((line) => {
-          if (this._wasText) {
-            this._commands[this._commands.length - 1].append(line);
-          } else {
-            this.commands.push(new OutText(line));
-          }
-          this._wasText = line !== '\n';
-        });
-        return;
-      } else if (this._wasText) {
+      if (this._wasText) {
         this._commands[this._commands.length - 1].append(command.text);
         return;
       }

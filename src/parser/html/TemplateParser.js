@@ -26,22 +26,13 @@ module.exports = class TemplateParser {
   }
 
   /**
-   * @param {boolean} minify whether to minify the static output
-   * @returns {module.TemplateParser} This parser.
-   */
-  withMinifyEnabled(minify) {
-    this._minify = minify;
-    return this;
-  }
-
-  /**
      * Parses the input and returns an the generated commands.
      * @param {String} input Input text
      * @return {Command[]} The generated commands
      */
   // eslint-disable-next-line class-methods-use-this
   parse(input) {
-    const stream = new CommandStream(this._minify);
+    const stream = new CommandStream();
     const handler = new MarkupHandler(stream);
 
     HTMLParser.parse(input, handler);
