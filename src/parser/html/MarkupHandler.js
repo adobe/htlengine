@@ -152,10 +152,10 @@ module.exports = class MarkupHandler {
     if (currentTagName === 'script' || currentTagName === 'style') {
       markupContext = MarkupContext.TEXT;
     }
-    this._outText(text, markupContext, { line, column });
+    this._outText(text, markupContext, line, column);
   }
 
-  onComment(markup) {
+  onComment(markup, line, column) {
     this._result += markup;
 
     const trimmed = markup ? markup.trim() : '';
@@ -163,14 +163,14 @@ module.exports = class MarkupHandler {
       && trimmed.endsWith(SLY_COMMENT_SUFFIX);
 
     if (!isSlyComment) {
-      this._outText(markup, MarkupContext.COMMENT);
+      this._outText(markup, MarkupContext.COMMENT, line, column);
     }
   }
 
-  onDocType(markup) {
+  onDocType(markup, line, column) {
     this._result += markup;
 
-    this._outText(markup, MarkupContext.TEXT);
+    this._outText(markup, MarkupContext.TEXT, line, column);
   }
 
   get result() {
@@ -269,7 +269,7 @@ module.exports = class MarkupHandler {
       BinaryOperator.OR,
       new Identifier(attrContent),
       new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrContent)),
-    )), false, location);
+    ), false, location));
     this._emitAttributeStart(name);
     plugin.beforeAttributeValue(stream, name, expression.root);
     this._emitAttributeValueStart(quoteChar);
@@ -346,7 +346,9 @@ module.exports = class MarkupHandler {
     stream.write(VariableBinding.END); // end scope for attrValue
   }
 
-  _outText(content, markupContext, location) {
+  _outText(content, markupContext, line, column) {
+    const location = { line, column };
+
     const interpolation = this._htlParser.parse(content);
     if (markupContext == null) {
       // interpolation = requireContext(interpolation); todo
@@ -362,16 +364,15 @@ module.exports = class MarkupHandler {
       ).root;
 
       // increase line number in passed location for any preceding strings containing line feeds
-      if (location && node instanceof MultiOperation) {
-        for (const op of node.operands) {
+      if (node instanceof MultiOperation) {
+        node.operands.every((op) => {
           if (op instanceof StringConstant) {
-            const linefeeds = op.text.split('\n').length - 1;
-            location.line += linefeeds;
-          } else {
-            // no more strings so we have our final line number
-            break;
+            location.line += op.text.split('\n').length - 1;
+            return true;
           }
-        }
+          // no more strings so we have our final line number
+          return false;
+        });
       }
 
       const variable = this._symbolGenerator.next();

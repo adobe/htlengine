@@ -212,11 +212,11 @@ module.exports = class TagTokenizer {
         default:
           throw new Error('Unexpected parse state');
       }
-      if (c == '\n') {
-        this.line++;
+      if (c === '\n') {
+        this.line += 1;
         this.column = 0;
       } else {
-        this.column++;
+        this.column += 1;
       }
     }
     return this;
@@ -239,7 +239,14 @@ module.exports = class TagTokenizer {
      */
   _attributeEnded() {
     if (this.attName.length > 0) {
-      this.attributes.push(new Attribute(this.attName, this.attValue, this.quoteChar, this.line, this.column));
+      const attr = new Attribute(
+        this.attName,
+        this.attValue,
+        this.quoteChar,
+        this.line,
+        this.column,
+      );
+      this.attributes.push(attr);
       this.attName = '';
       this.quoteChar = '';
     }

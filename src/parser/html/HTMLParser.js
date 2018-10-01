@@ -83,7 +83,8 @@ module.exports = class HTMLParser {
         case PARSE_STATE.OUTSIDE:
           if (c === '<') {
             if (curr > start) {
-              this._handler.onText(source.substring(start, curr), this._startPos.line, this._startPos.column);
+              const text = source.substring(start, curr);
+              this._handler.onText(text, this._startPos.line, this._startPos.column);
               this._startPos = { line: this._line, column: this._column };
             }
             start = curr;
@@ -132,7 +133,8 @@ module.exports = class HTMLParser {
                 prevParseState = parseState;
                 parseState = PARSE_STATE.STRING;
               } else if (c === '>') {
-                parseState = this._processTag(source.substring(start, curr + 1), this._startPos.line, this._startPos.column)
+                const text = source.substring(start, curr + 1);
+                parseState = this._processTag(text, this._startPos.line, this._startPos.column)
                   ? PARSE_STATE.SCRIPT
                   : PARSE_STATE.OUTSIDE;
                 this._startPos = { line: this._line, column: this._column + 1 };
@@ -148,7 +150,8 @@ module.exports = class HTMLParser {
                 prevParseState = parseState;
                 parseState = PARSE_STATE.STRING;
               } else if (c === '>') {
-                parseState = this._processTag(source.substring(start, curr + 1), this._startPos.line, this._startPos.column)
+                const text = source.substring(start, curr + 1);
+                parseState = this._processTag(text, this._startPos.line, this._startPos.column)
                   ? PARSE_STATE.SCRIPT
                   : PARSE_STATE.OUTSIDE;
                 this._startPos = { line: this._line, column: this._column + 1 };
@@ -213,7 +216,8 @@ module.exports = class HTMLParser {
             case 4:
               if (c === '>') {
                 parseState = PARSE_STATE.OUTSIDE;
-                this._processComment(source.substring(start, curr + 1), this._startPos.line, this._startPos.column);
+                const text = source.substring(start, curr + 1);
+                this._processComment(text, this._startPos.line, this._startPos.column);
                 this._startPos = { line: this._line, column: this._column + 1 };
                 start = curr + 1;
               } else {
@@ -230,7 +234,8 @@ module.exports = class HTMLParser {
             case 0:
               if (c === '<') {
                 if (curr > start) {
-                  this._handler.onText(source.substring(start, curr), this._startPos.line, this._startPos.column);
+                  const text = source.substring(start, curr);
+                  this._handler.onText(text, this._startPos.line, this._startPos.column);
                   this._startPos = { line: this._line, column: this._column };
                 }
                 start = curr;
@@ -335,7 +340,8 @@ module.exports = class HTMLParser {
             prevParseState = parseState;
             parseState = PARSE_STATE.STRING;
           } else if (c === '>') {
-            this._handler.onDocType(source.substring(start, curr + 1), this._startPos.line, this._startPos.column);
+            const text = source.substring(start, curr + 1);
+            this._handler.onDocType(text, this._startPos.line, this._startPos.column);
             this._startPos = { line: this._line, column: this._column + 1 };
             parseState = PARSE_STATE.OUTSIDE;
             start = curr + 1;
