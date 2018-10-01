@@ -36,7 +36,11 @@ module.exports = class ListPlugin extends Plugin {
       this._collectionSizeVar,
       new UnaryOperation(UnaryOperator.LENGTH, new Identifier(this._listVariable)),
     ));
-    stream.write(new Conditional.Start(new Identifier(this._collectionSizeVar), false, this.location));
+    stream.write(new Conditional.Start(
+      new Identifier(this._collectionSizeVar),
+      false,
+      this.location,
+    ));
   }
 
   beforeChildren(stream) {

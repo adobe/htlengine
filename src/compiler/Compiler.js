@@ -145,7 +145,8 @@ module.exports = class Compiler {
       mappings.forEach((mapping) => {
         generator.addMapping({
           generated: {
-            line: mapping.generatedLine + (mapping.inFunctionBlock ? templatesOffset : codeOffset) + 1,
+            line: mapping.generatedLine +
+              (mapping.inFunctionBlock ? templatesOffset : codeOffset) + 1,
             column: mapping.generatedColumn,
           },
           source: '<internal>',

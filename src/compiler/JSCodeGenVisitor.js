@@ -93,10 +93,10 @@ module.exports = class JSCodeGenVisitor {
     if (this._indent) {
       if (this._inFunctionBlock) {
         this._templates += `${this._indent + msg}\n`;
-        this._templateLine++;
+        this._templateLine += 1;
       } else {
         this._result += `${this._indent + msg}\n`;
-        this._codeLine++;
+        this._codeLine += 1;
       }
     } else if (this._inFunctionBlock) {
       this._templates += msg;
@@ -126,7 +126,7 @@ module.exports = class JSCodeGenVisitor {
           originalLine: location.line,
           originalColumn: location.column,
           generatedLine: this._inFunctionBlock ? this._templateLine : this._codeLine,
-          generatedColumn: 0
+          generatedColumn: 0,
         });
       }
     }
