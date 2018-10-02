@@ -76,7 +76,7 @@ module.exports = class Compiler {
    * @returns {String} the resulting Javascript
    */
   compileToString(source) {
-    return this.compile(source).js;
+    return this.compile(source).template;
   }
 
   /**
@@ -130,13 +130,13 @@ module.exports = class Compiler {
     let template = fs.readFileSync(path.join(__dirname, codeTemplate), 'utf-8');
 
     let index = template.search(/^\s*\/\/\s*TEMPLATES\s*$/m);
-    const templatesOffset = index !== -1 ? template.substring(0, index).split('\n').length : 0;
+    const templatesOffset = index !== -1 ? template.substring(0, index).match(/\n/g).length + 1 : 0;
     template = template.replace(/^\s*\/\/\s*TEMPLATES\s*$/m, `\n${templates}`);
 
     template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, `\n${global.join('')}`);
 
     index = template.search(/^\s*\/\/\s*CODE\s*$/m);
-    const codeOffset = index !== -1 ? template.substring(0, index).split('\n').length : 0;
+    const codeOffset = index !== -1 ? template.substring(0, index).match(/\n/g).length + 1 : 0;
     template = template.replace(/^\s*\/\/\s*CODE\s*$/m, `\n${code}`);
 
     let sourceMap = null;

@@ -39,7 +39,7 @@ module.exports = class ListPlugin extends Plugin {
     stream.write(new Conditional.Start(
       new Identifier(this._collectionSizeVar),
       false,
-      this.location,
+      this._location,
     ));
   }
 
