@@ -15,8 +15,8 @@ const Command = require('./Command');
 module.exports = {
 
   Start: class Start extends Command {
-    constructor(expression, negate) {
-      super();
+    constructor(expression, negate, location) {
+      super(location);
       this._expression = expression;
       this._negate = negate;
     }

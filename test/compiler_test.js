@@ -67,6 +67,7 @@ describe('Compiler Tests', () => {
       }
 
       const compiler = new Compiler()
+        .withSourceMap(true)
         .withOutputDirectory(outputDir)
         .withRuntimeVar(Object.keys(payload));
 
@@ -77,7 +78,7 @@ describe('Compiler Tests', () => {
           if (!test.input) {
             return;
           }
-          const copiledFilename = compiler.compile(test.input, `${name}_${idx}.js`);
+          const copiledFilename = compiler.compileToFile(test.input, `${name}_${idx}.js`);
           if ('output' in test) {
             it(`${idx}. Generates output for '${test.name}' correctly.`, (done) => {
               const runtime = new Runtime()

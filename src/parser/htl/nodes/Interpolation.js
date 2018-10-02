@@ -21,13 +21,13 @@ module.exports = class Interpolation {
     this._content = '';
   }
 
-  addExpression(expression) {
+  addExpression(expression, token) {
     this._fragments.push({
       expression,
     });
   }
 
-  addText(text) {
+  addText(text, token) {
     this._fragments.push({
       text,
     });
