@@ -67,9 +67,9 @@ describe('Compiler Tests', () => {
       }
 
       const compiler = new Compiler()
-        .withSourceMap(true)
         .withOutputDirectory(outputDir)
-        .withRuntimeVar(Object.keys(payload));
+        .withRuntimeVar(Object.keys(payload))
+        .withSourceMap(true);
 
       describe(name, () => {
         let idx = 0;
