@@ -23,10 +23,11 @@ const ITEM_LOOP_STATUS_SUFFIX = 'List';
 const DEFAULT_LIST_ITEM_VAR_NAME = 'item';
 
 module.exports = class ListPlugin extends Plugin {
-  constructor(signature, pluginContext, expression) {
+  constructor(signature, pluginContext, expression, location) {
     super(signature, pluginContext, expression);
     this._listVariable = pluginContext.generateVariable('collectionVar');
     this._collectionSizeVar = pluginContext.generateVariable('size');
+    this._location = location;
   }
 
   beforeElement(stream/* , tagName */) {
@@ -35,7 +36,11 @@ module.exports = class ListPlugin extends Plugin {
       this._collectionSizeVar,
       new UnaryOperation(UnaryOperator.LENGTH, new Identifier(this._listVariable)),
     ));
-    stream.write(new Conditional.Start(new Identifier(this._collectionSizeVar)));
+    stream.write(new Conditional.Start(
+      new Identifier(this._collectionSizeVar),
+      false,
+      this._location,
+    ));
   }
 
   beforeChildren(stream) {

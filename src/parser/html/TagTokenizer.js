@@ -33,10 +33,12 @@ class Attribute {
   /**
    * Create a new <code>Value</code> instance
    */
-  constructor(name, value, quoteChar) {
+  constructor(name, value, quoteChar, line, column) {
     this.name = name;
     this.value = value;
     this.quoteChar = quoteChar;
+    this.line = line;
+    this.column = column;
   }
 }
 
@@ -52,13 +54,15 @@ module.exports = class TagTokenizer {
     this.quoteChar = '';
     this.endTag = false;
     this.endSlash = false;
+    this.line = 0;
+    this.column = 0;
   }
 
   /**
      * Scan characters passed to this parser
      */
-  tokenize(buf, off, len) {
-    this._reset();
+  tokenize(buf, off, len, line, column) {
+    this._reset(line, column);
 
     let parseState = START;
     for (let i = 0; i < len; i += 1) {
@@ -208,6 +212,12 @@ module.exports = class TagTokenizer {
         default:
           throw new Error('Unexpected parse state');
       }
+      if (c === '\n') {
+        this.line += 1;
+        this.column = 0;
+      } else {
+        this.column += 1;
+      }
     }
     return this;
   }
@@ -215,11 +225,13 @@ module.exports = class TagTokenizer {
   /**
      * Reset the internal state of the tokenizer
      */
-  _reset() {
+  _reset(line, column) {
     this.tagName = '';
     this.attributes = [];
     this.endTag = false;
     this.endSlash = false;
+    this.line = line;
+    this.column = column;
   }
 
   /**
@@ -227,7 +239,14 @@ module.exports = class TagTokenizer {
      */
   _attributeEnded() {
     if (this.attName.length > 0) {
-      this.attributes.push(new Attribute(this.attName, this.attValue, this.quoteChar));
+      const attr = new Attribute(
+        this.attName,
+        this.attValue,
+        this.quoteChar,
+        this.line,
+        this.column,
+      );
+      this.attributes.push(attr);
       this.attName = '';
       this.quoteChar = '';
     }

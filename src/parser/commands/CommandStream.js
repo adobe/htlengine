@@ -24,9 +24,11 @@ module.exports = class CommandStream {
 
   write(command) {
     const isText = command instanceof OutText;
-    if (isText && this._wasText) {
-      this._commands[this._commands.length - 1].append(command.text);
-      return;
+    if (isText) {
+      if (this._wasText) {
+        this._commands[this._commands.length - 1].append(command.text);
+        return;
+      }
     }
     this._wasText = isText;
     this._commands.push(command);

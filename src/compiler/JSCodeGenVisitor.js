@@ -24,7 +24,7 @@ function escapeJavaString(s) {
   return JSON.stringify(s);
 }
 
-module.exports = class JSCodeGenVitor {
+module.exports = class JSCodeGenVisitor {
   constructor() {
     this._result = '';
     this._templates = '';
@@ -32,6 +32,8 @@ module.exports = class JSCodeGenVitor {
     this._lastIndentLevel = 0;
     this._inFunctionBlock = false;
     this._indents = [];
+    this._codeLine = 0;
+    this._templateLine = 0;
   }
 
   withIndent(delim) {
@@ -40,6 +42,12 @@ module.exports = class JSCodeGenVitor {
     for (let i = 0; i < 50; i += 1) {
       this._indents[i + 1] = this._indents[i] + delim;
     }
+    return this;
+  }
+
+  withSourceMap(enabled) {
+    this._mappings = enabled ? [] : null;
+
     return this;
   }
 
@@ -85,8 +93,10 @@ module.exports = class JSCodeGenVitor {
     if (this._indent) {
       if (this._inFunctionBlock) {
         this._templates += `${this._indent + msg}\n`;
+        this._templateLine += 1;
       } else {
         this._result += `${this._indent + msg}\n`;
+        this._codeLine += 1;
       }
     } else if (this._inFunctionBlock) {
       this._templates += msg;
@@ -103,7 +113,24 @@ module.exports = class JSCodeGenVitor {
     return this._templates;
   }
 
+  get mappings() {
+    return this._mappings;
+  }
+
   visit(cmd) {
+    if (this._mappings) {
+      const { location } = cmd;
+      if (location) {
+        this._mappings.push({
+          inFunctionBlock: this._inFunctionBlock,
+          originalLine: location.line,
+          originalColumn: location.column,
+          generatedLine: this._inFunctionBlock ? this._templateLine : this._codeLine,
+          generatedColumn: 0,
+        });
+      }
+    }
+
     if (cmd instanceof OutText) {
       this._out(`out(${escapeJavaString(cmd.text)});`);
     } else if (cmd instanceof OutputExpression) {

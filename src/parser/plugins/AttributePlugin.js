@@ -48,7 +48,7 @@ function decodeAttributeName(signature) {
 }
 
 class SingleAttributePlugin extends Plugin {
-  constructor(signature, ctx, expression, attributeName) {
+  constructor(signature, ctx, expression, attributeName, location) {
     super(signature, ctx, expression);
     this.writeAtEnd = true;
     this.beforeCall = true;
@@ -61,6 +61,7 @@ class SingleAttributePlugin extends Plugin {
     if (!expression.containsOption('context')) {
       this.contentNode = escapeNodeWithHint(ctx, this.contentNode, MarkupContext.ATTRIBUTE, new StringConstant(attributeName));
     }
+    this.location = location;
   }
 
   beforeAttribute(stream, attributeName) {
@@ -116,7 +117,7 @@ class SingleAttributePlugin extends Plugin {
       BinaryOperator.OR,
       new Identifier(this.escapedAttrValue),
       new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, this.attrValueNode),
-    )));
+    ), false, this.location));
   }
 
   _emitWrite(stream) {
@@ -136,13 +137,14 @@ class SingleAttributePlugin extends Plugin {
 }
 
 class MultiAttributePlugin extends Plugin {
-  constructor(signature, ctx, expression) {
+  constructor(signature, ctx, expression, location) {
     super(signature, ctx, expression);
 
     this.attrMap = expression.root;
     this.attrMapVar = ctx.generateVariable('attrMap');
     this.beforeCall = true;
     this.ignored = {};
+    this.location = location;
   }
 
   beforeAttributes(stream) {
@@ -216,7 +218,7 @@ class MultiAttributePlugin extends Plugin {
       BinaryOperator.OR,
       new Identifier(escapedContent),
       new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrContentVar)),
-    )));
+    ), false, this.location));
     stream.write(new OutText(' '));
     stream.write(new OutputVariable(attrNameVar));
 
@@ -244,15 +246,15 @@ class MultiAttributePlugin extends Plugin {
 }
 
 module.exports = class AttributePlugin extends Plugin {
-  constructor(signature, ctx, expression) {
+  constructor(signature, ctx, expression, location) {
     super(signature, ctx, expression);
     const attributeName = decodeAttributeName(signature);
     this.writeAtEnd = true;
     this.beforeCall = true;
     this.attributeName = attributeName;
     this.delegate = attributeName == null
-      ? new MultiAttributePlugin(signature, ctx, expression)
-      : new SingleAttributePlugin(signature, ctx, expression, attributeName);
+      ? new MultiAttributePlugin(signature, ctx, expression, location)
+      : new SingleAttributePlugin(signature, ctx, expression, attributeName, location);
   }
 
   isValid() {

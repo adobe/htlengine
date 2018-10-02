@@ -1,5 +1,6 @@
 node_modules/
 test/generated/
 out.js
+out.js.map
 .nyc_output
 coverage

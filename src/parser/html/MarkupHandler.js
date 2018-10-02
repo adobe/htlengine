@@ -23,6 +23,7 @@ const BinaryOperator = require('../htl/nodes/BinaryOperator');
 const BooleanConstant = require('../htl/nodes/BooleanConstant');
 const StringConstant = require('../htl/nodes/StringConstant');
 const RuntimeCall = require('../htl/nodes/RuntimeCall');
+const MultiOperation = require('../htl/nodes/MultiOperation');
 
 const OutText = require('../commands/OutText');
 const VariableBinding = require('../commands/VariableBinding');
@@ -72,7 +73,7 @@ module.exports = class MarkupHandler {
     this._stack.push(new ElementContext(tagName));
   }
 
-  onAttribute(name, value, quoteChar) {
+  onAttribute(name, value, quoteChar, line, column) {
     if (value !== null) {
       this._result += ` ${name}=${quoteChar}${value}${quoteChar}`;
     } else {
@@ -82,9 +83,9 @@ module.exports = class MarkupHandler {
     const context = this._stack[this._stack.length - 1];
     const signature = PluginSignature.fromAttribute(name);
     if (signature) {
-      this._handlePlugin(name, signature, value, context);
+      this._handlePlugin(name, signature, value, context, { line, column });
     } else {
-      context.addAttribute(name, value, quoteChar);
+      context.addAttribute(name, value, quoteChar, { line, column });
     }
   }
 
@@ -143,7 +144,7 @@ module.exports = class MarkupHandler {
     plugin.afterElement(stream);
   }
 
-  onText(text) {
+  onText(text, line, column) {
     this._result += text;
 
     const currentTagName = (this._stack.length === 0 ? '' : this._stack[this._stack.length - 1].tagName).toLowerCase();
@@ -151,10 +152,10 @@ module.exports = class MarkupHandler {
     if (currentTagName === 'script' || currentTagName === 'style') {
       markupContext = MarkupContext.TEXT;
     }
-    this._outText(text, markupContext);
+    this._outText(text, markupContext, line, column);
   }
 
-  onComment(markup) {
+  onComment(markup, line, column) {
     this._result += markup;
 
     const trimmed = markup ? markup.trim() : '';
@@ -162,28 +163,28 @@ module.exports = class MarkupHandler {
       && trimmed.endsWith(SLY_COMMENT_SUFFIX);
 
     if (!isSlyComment) {
-      this._outText(markup, MarkupContext.COMMENT);
+      this._outText(markup, MarkupContext.COMMENT, line, column);
     }
   }
 
-  onDocType(markup) {
+  onDocType(markup, line, column) {
     this._result += markup;
 
-    this._outText(markup, MarkupContext.TEXT);
+    this._outText(markup, MarkupContext.TEXT, line, column);
   }
 
   get result() {
     return this._result;
   }
 
-  _handlePlugin(name, signature, value, context) {
+  _handlePlugin(name, signature, value, context, location) {
     const expressionContext = ExpressionContext.getContextForPlugin(signature.name);
     const interpolation = this._htlParser.parse(value);
     const expr = this._transformer.transform(interpolation, null, expressionContext);
 
     const PluginClass = this._lookupPlugin(signature.name);
     const pluginContext = new PluginContext(this._symbolGenerator, this._transformer, this._stream);
-    const plugin = new PluginClass(signature, pluginContext, expr);
+    const plugin = new PluginClass(signature, pluginContext, expr, location);
     if (plugin.isValid()) {
       context.addPlugin(plugin);
       context.addPluginAttribute(name, signature, expr);
@@ -192,16 +193,16 @@ module.exports = class MarkupHandler {
 
   _emitAttributes(context, plugin) {
     context.attributes.forEach((attr) => {
-      const { name: attrName, value } = attr;
+      const { name: attrName, value, location } = attr;
       if (attr.signature) {
         plugin.onPluginCall(this._stream, attr.signature, attr.expression);
       } else if (value == null || typeof value === 'string') {
-        this._emitAttribute(attrName, value, attr.quoteChar, plugin);
+        this._emitAttribute(attrName, value, attr.quoteChar, plugin, location);
       }
     });
   }
 
-  _emitAttribute(name, value, quoteChar, plugin) {
+  _emitAttribute(name, value, quoteChar, plugin, location) {
     plugin.beforeAttribute(this._stream, name);
     if (value == null) {
       this._emitSimpleTextAttribute(name, null, quoteChar, plugin);
@@ -211,7 +212,7 @@ module.exports = class MarkupHandler {
       if (plainText !== null) {
         this._emitSimpleTextAttribute(name, plainText, quoteChar, plugin);
       } else {
-        this._emitExpressionAttribute(name, interpolation, quoteChar, plugin);
+        this._emitExpressionAttribute(name, interpolation, quoteChar, plugin, location);
       }
     }
     plugin.afterAttribute(this._stream, name);
@@ -229,12 +230,12 @@ module.exports = class MarkupHandler {
     plugin.afterAttributeValue(this._stream, name);
   }
 
-  _emitExpressionAttribute(name, interpolation, quoteChar, plugin) {
+  _emitExpressionAttribute(name, interpolation, quoteChar, plugin, location) {
     // interpolation = attributeChecked(name, interpolation); todo!
     if (interpolation.length === 1) {
-      this._emitSingleFragment(name, interpolation, quoteChar, plugin);
+      this._emitSingleFragment(name, interpolation, quoteChar, plugin, location);
     } else {
-      this._emitMultipleFragment(name, interpolation, quoteChar, plugin);
+      this._emitMultipleFragment(name, interpolation, quoteChar, plugin, location);
     }
   }
 
@@ -252,7 +253,7 @@ module.exports = class MarkupHandler {
     this._out(quote);
   }
 
-  _emitMultipleFragment(name, interpolation, quoteChar, plugin) {
+  _emitMultipleFragment(name, interpolation, quoteChar, plugin, location) {
     // Simplified algorithm for attribute output, which works when the interpolation is not of
     // size 1. In this case we are certain that the attribute value cannot be the boolean value
     // true, so we can skip this test altogether
@@ -268,7 +269,7 @@ module.exports = class MarkupHandler {
       BinaryOperator.OR,
       new Identifier(attrContent),
       new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrContent)),
-    )));
+    ), false, location));
     this._emitAttributeStart(name);
     plugin.beforeAttributeValue(stream, name, expression.root);
     this._emitAttributeValueStart(quoteChar);
@@ -279,7 +280,7 @@ module.exports = class MarkupHandler {
     stream.write(VariableBinding.END);
   }
 
-  _emitSingleFragment(name, interpolation, quoteChar, plugin) {
+  _emitSingleFragment(name, interpolation, quoteChar, plugin, location) {
     const stream = this._stream;
     const valueExpression = this._transformer.transform(
       interpolation,
@@ -320,7 +321,7 @@ module.exports = class MarkupHandler {
         new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrValue)),
       );
     }
-    stream.write(new Conditional.Start(shouldDisplayExp)); // if (attrContent)
+    stream.write(new Conditional.Start(shouldDisplayExp, false, location)); // if (attrContent)
 
     this._emitAttributeStart(name); // write("attrName");
     plugin.beforeAttributeValue(stream, name, node);
@@ -345,7 +346,9 @@ module.exports = class MarkupHandler {
     stream.write(VariableBinding.END); // end scope for attrValue
   }
 
-  _outText(content, markupContext) {
+  _outText(content, markupContext, line, column) {
+    const location = { line, column };
+
     const interpolation = this._htlParser.parse(content);
     if (markupContext == null) {
       // interpolation = requireContext(interpolation); todo
@@ -359,9 +362,22 @@ module.exports = class MarkupHandler {
         markupContext,
         ExpressionContext.TEXT,
       ).root;
+
+      // increase line number in passed location for any preceding strings containing line feeds
+      if (node instanceof MultiOperation) {
+        node.operands.every((op) => {
+          if (op instanceof StringConstant) {
+            location.line += op.text.split('\n').length - 1;
+            return true;
+          }
+          // no more strings so we have our final line number
+          return false;
+        });
+      }
+
       const variable = this._symbolGenerator.next();
       this._stream.write(new VariableBinding.Start(variable, node));
-      this._stream.write(new OutputVariable(variable));
+      this._stream.write(new OutputVariable(variable, location));
       this._stream.write(VariableBinding.END);
     }
   }

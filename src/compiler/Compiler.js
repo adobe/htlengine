@@ -17,6 +17,8 @@ const TemplateParser = require('../parser/html/TemplateParser');
 const ThrowingErrorListener = require('../parser/htl/ThrowingErrorListener');
 const JSCodeGenVisitor = require('./JSCodeGenVisitor');
 
+const { SourceMapGenerator } = require('source-map');
+
 const DEFAULT_TEMPLATE = 'JSCodeTemplate.js';
 const RUNTIME_TEMPLATE = 'JSRuntimeTemplate.js';
 
@@ -58,17 +60,53 @@ module.exports = class Compiler {
     return this;
   }
 
+  withSourceMap(sourceMap) {
+    this._sourceMap = sourceMap;
+    return this;
+  }
+
   compileFile(filename, name) {
     // todo: async support
     return this.compileToFile(fs.readFileSync(filename, 'utf-8'), name || filename);
   }
 
   /**
-     * Compiles the given HTL source code into JavaScript, which is returned as a string
-     * @param {String} source the HTL source code
-     * @returns {String} the resulting Javascript
-     */
+   * Compiles the given HTL source code into JavaScript, which is returned as a string
+   * @param {String} source the HTL source code
+   * @returns {String} the resulting Javascript
+   */
   compileToString(source) {
+    return this.compile(source).template;
+  }
+
+  /**
+   * Compiles the given source string and saves the result, overwriting the
+   * file name.
+   * @param {String} source HTL template code
+   * @param {String} name file name to save results
+   * @returns {String} the full name of the resulting file
+   */
+  compileToFile(source, name) {
+    const { template, sourceMap } = this.compile(source);
+
+    const filename = this._outfile || path.resolve(this._dir, name);
+    fs.writeFileSync(filename, template);
+
+    if (sourceMap) {
+      fs.writeFileSync(`${filename}.map`, JSON.stringify(sourceMap));
+    }
+    return filename;
+  }
+
+  /**
+   * Compiles the given source string and returns the generated JS
+   * and sourceMap in an object.
+   *
+   * @param {String} source HTL template code
+   * @param {String} name file name to save results
+   * @returns {Object} an object consisting of a generated template and a source map
+   */
+  compile(source) {
     // todo: async support
     const commands = new TemplateParser()
       .withErrorListener(ThrowingErrorListener.INSTANCE)
@@ -82,44 +120,44 @@ module.exports = class Compiler {
       global.push(`    const ${this._runtimeGlobal} = runtime.globals;\n`);
     }
 
-    const { code, templates } = new JSCodeGenVisitor()
+    const { code, templates, mappings } = new JSCodeGenVisitor()
       .withIndent('  ')
+      .withSourceMap(this._sourceMap)
       .indent()
       .process(commands);
 
     const codeTemplate = this._includeRuntime ? RUNTIME_TEMPLATE : DEFAULT_TEMPLATE;
     let template = fs.readFileSync(path.join(__dirname, codeTemplate), 'utf-8');
+
+    let index = template.search(/^\s*\/\/\s*TEMPLATES\s*$/m);
+    const templatesOffset = index !== -1 ? template.substring(0, index).match(/\n/g).length + 1 : 0;
     template = template.replace(/^\s*\/\/\s*TEMPLATES\s*$/m, `\n${templates}`);
-    template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, global.join(''));
-    template = template.replace(/^\s*\/\/\s*CODE\s*$/m, code);
 
-    return template;
-  }
+    template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, `\n${global.join('')}`);
 
-  /**
-     * Compiles the given source string and saves the result, overwriting the
-     * file name.
-     * @param {String} source HTL template code
-     * @param {String} name file name to save results
-     * @returns {String} the full name of the resulting file
-     */
-  compileToFile(source, name) {
-    const template = this.compileToString(source);
+    index = template.search(/^\s*\/\/\s*CODE\s*$/m);
+    const codeOffset = index !== -1 ? template.substring(0, index).match(/\n/g).length + 1 : 0;
+    template = template.replace(/^\s*\/\/\s*CODE\s*$/m, `\n${code}`);
 
-    const filename = this._outfile || path.resolve(this._dir, name);
-    fs.writeFileSync(filename, template);
-
-    return filename;
-  }
-
-  /**
-     * Compiles the given source string and saves the result, overwriting the
-     * file name.
-     * @param {String} source HTL template code
-     * @param {String} name file name to save results
-     * @returns {String} the full name of the resulting file
-     */
-  compile(source, name) {
-    return this.compileToFile(source, name);
+    let sourceMap = null;
+    if (mappings) {
+      const generator = new SourceMapGenerator();
+      mappings.forEach((mapping) => {
+        generator.addMapping({
+          generated: {
+            line: mapping.generatedLine +
+              (mapping.inFunctionBlock ? templatesOffset : codeOffset) + 1,
+            column: mapping.generatedColumn,
+          },
+          source: '<internal>',
+          original: {
+            line: mapping.originalLine + 1,
+            column: mapping.originalColumn,
+          },
+        });
+      });
+      sourceMap = generator.toJSON();
+    }
+    return { template, sourceMap };
   }
 };

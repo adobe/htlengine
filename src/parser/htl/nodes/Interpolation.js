@@ -21,13 +21,15 @@ module.exports = class Interpolation {
     this._content = '';
   }
 
-  addExpression(expression) {
+  // eslint-disable-next-line no-unused-vars
+  addExpression(expression, token) {
     this._fragments.push({
       expression,
     });
   }
 
-  addText(text) {
+  // eslint-disable-next-line no-unused-vars
+  addText(text, token) {
     this._fragments.push({
       text,
     });
