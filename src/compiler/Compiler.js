@@ -29,6 +29,7 @@ module.exports = class Compiler {
     this._runtimeGlobals = [];
     this._runtimeGlobal = 'resource';
     this._includeRuntime = false;
+    this._modHTLEngine = '@adobe/htlengine';
   }
 
   withOutputDirectory(dir) {
@@ -52,6 +53,11 @@ module.exports = class Compiler {
     } else {
       this._runtimeGlobals.push(name);
     }
+    return this;
+  }
+
+  withRuntimeHTLEngine(mod) {
+    this._modHTLEngine = mod;
     return this;
   }
 
@@ -128,6 +134,10 @@ module.exports = class Compiler {
 
     const codeTemplate = this._includeRuntime ? RUNTIME_TEMPLATE : DEFAULT_TEMPLATE;
     let template = fs.readFileSync(path.join(__dirname, codeTemplate), 'utf-8');
+
+    if (this._includeRuntime) {
+      template = template.replace(/MOD_HTLENGINE/, this._modHTLEngine);
+    }
 
     let index = template.search(/^\s*\/\/\s*TEMPLATES\s*$/m);
     const templatesOffset = index !== -1 ? template.substring(0, index).match(/\n/g).length + 1 : 0;
