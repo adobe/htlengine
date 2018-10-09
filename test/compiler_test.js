@@ -43,7 +43,7 @@ function readTests(filename) {
     } else if (line.startsWith('===')) {
       test.output = '';
     } else if (line.startsWith('^^^')) {
-      test.mappedOutput = [];
+      test.mappedOutput = '';
     } else if (test && ('mappedOutput' in test)) {
       test.mappedOutput += `${line}\n`;
     } else if (test && ('output' in test)) {
