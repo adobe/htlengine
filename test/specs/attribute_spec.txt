@@ -19,6 +19,8 @@ out("<div");
 out("></div>\n");
 ===
 <div data-values="some data value"></div>
+^^^
+    if ((var_attrValueEscaped_data_values1) || (("false") == (var_attrValue_data_values0))) {
 #
 ### replace single attribute
 #

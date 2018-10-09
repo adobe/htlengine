@@ -16,6 +16,8 @@ const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 
+const { SourceMapConsumer } = require('source-map/source-map.js');
+
 const Runtime = require('../src/runtime/Runtime');
 const Compiler = require('../src/compiler/Compiler');
 
@@ -40,6 +42,10 @@ function readTests(filename) {
       test.commands = '';
     } else if (line.startsWith('===')) {
       test.output = '';
+    } else if (line.startsWith('^^^')) {
+      test.mappedOutput = [];
+    } else if (test && ('mappedOutput' in test)) {
+      test.mappedOutput += `${line}\n`;
     } else if (test && ('output' in test)) {
       test.output += `${line}\n`;
     } else if (test && ('commands' in test)) {
@@ -78,7 +84,7 @@ describe('Compiler Tests', () => {
           if (!test.input) {
             return;
           }
-          const copiledFilename = compiler.compileToFile(test.input, `${name}_${idx}.js`);
+          const compiledFilename = compiler.compileToFile(test.input, `${name}_${idx}.js`);
           if ('output' in test) {
             it(`${idx}. Generates output for '${test.name}' correctly.`, (done) => {
               const runtime = new Runtime()
@@ -87,12 +93,44 @@ describe('Compiler Tests', () => {
                 .setGlobal(payload);
 
               // eslint-disable-next-line import/no-dynamic-require,global-require
-              const service = require(copiledFilename);
+              const service = require(compiledFilename);
               service(runtime).then(() => {
                 const output = runtime.stream;
                 assert.equal(output, test.output);
                 done();
               }).catch(done);
+            });
+          }
+
+          if ('mappedOutput' in test) {
+            const mapFilename = `${compiledFilename}.map`;
+            it(`${idx}. Maps lines for '${test.name}' correctly.`, (done) => {
+              fs.readFile(mapFilename, 'utf8', (err1, map) => {
+                if (err1) {
+                  throw err1;
+                }
+                fs.readFile(compiledFilename, 'utf8', (err2, js) => {
+                  if (err2) {
+                    throw err2;
+                  }
+                  let mappedOutput = '';
+                  const lines = js.split('\n');
+                  const sourceMap = JSON.parse(map);
+                  SourceMapConsumer.with(sourceMap, null, (consumer) => {
+                    consumer.eachMapping((mapping) => {
+                      const lineNumber = mapping.generatedLine - 1;
+                      if (lineNumber < 0 || lineNumber >= lines.length) {
+                        assert(false); // outside generated file
+                      }
+                      mappedOutput += `${lines[lineNumber]}\n`;
+                    });
+                    consumer.destroy();
+
+                    assert.equal(test.mappedOutput, mappedOutput);
+                    done();
+                  }).catch(done);
+                });
+              });
             });
           }
           idx += 1;
