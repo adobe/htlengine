@@ -12,9 +12,12 @@
 
 /* global describe, it */
 
+// built-in modules
 const assert = require('assert');
-const fs = require('fs');
 const path = require('path');
+// declared dependencies
+const fse = require('fs-extra');
+// local modules
 const engine = require('../src/main');
 
 const TEMPLATE_SIMPLE_2 = path.resolve(__dirname, './simple2.htl');
@@ -43,10 +46,10 @@ const GLOBALS = {
   },
 };
 
-describe('Engine test', () => {
+describe('Engine test', async () => {
   it('Simple htl can be executed', async () => {
-    const template = fs.readFileSync(TEMPLATE_SIMPLE_2, 'utf-8');
-    const expected = fs.readFileSync(EXPECTED_SIMPLE_2, 'utf-8');
+    const template = await fse.readFile(TEMPLATE_SIMPLE_2, 'utf-8');
+    const expected = await fse.readFile(EXPECTED_SIMPLE_2, 'utf-8');
     const ret = await engine(GLOBALS, template);
     assert.equal(ret.body, expected);
   });

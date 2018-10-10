@@ -12,12 +12,14 @@
 
 /* global describe, it */
 
+// built-in modules
 const assert = require('assert');
-const fs = require('fs');
 const path = require('path');
+// declared dependencies
+const fse = require('fs-extra');
+// local modules
 const pkgJson = require('../package.json');
 const Compiler = require('../src/compiler/Compiler');
-
 
 const TEMPLATE_SIMPLE_2 = path.resolve(__dirname, './simple2.htl');
 const EXPECTED_SIMPLE_2 = path.resolve(__dirname, './simple2.html');
@@ -56,12 +58,12 @@ describe('Runtime Tests', () => {
       .withOutputFile(path.resolve(outputDir, 'runtime_test_script_1.js'))
       .withRuntimeVar(Object.keys(GLOBALS));
 
-    const filename = compiler.compileFile(TEMPLATE_SIMPLE_2);
+    const filename = await compiler.compileFile(TEMPLATE_SIMPLE_2);
 
     // eslint-disable-next-line import/no-dynamic-require,global-require
     const { main } = require(filename);
 
     const { body } = await main(GLOBALS);
-    assert.equal(body, fs.readFileSync(EXPECTED_SIMPLE_2, 'utf-8'));
+    assert.equal(body, await fse.readFile(EXPECTED_SIMPLE_2, 'utf-8'));
   });
 });
