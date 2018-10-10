@@ -105,32 +105,25 @@ describe('Compiler Tests', () => {
           if ('mappedOutput' in test) {
             const mapFilename = `${compiledFilename}.map`;
             it(`${idx}. Maps lines for '${test.name}' correctly.`, (done) => {
-              fs.readFile(mapFilename, 'utf8', (err1, map) => {
-                if (err1) {
-                  throw err1;
-                }
-                fs.readFile(compiledFilename, 'utf8', (err2, js) => {
-                  if (err2) {
-                    throw err2;
-                  }
-                  let mappedOutput = '';
-                  const lines = js.split('\n');
-                  const sourceMap = JSON.parse(map);
-                  SourceMapConsumer.with(sourceMap, null, (consumer) => {
-                    consumer.eachMapping((mapping) => {
-                      const lineNumber = mapping.generatedLine - 1;
-                      if (lineNumber < 0 || lineNumber >= lines.length) {
-                        assert(false); // outside generated file
-                      }
-                      mappedOutput += `${lines[lineNumber]}\n`;
-                    });
-                    consumer.destroy();
+              const map = fs.readFileSync(mapFilename, 'utf8');
+              const js = fs.readFileSync(compiledFilename, 'utf8');
 
-                    assert.equal(test.mappedOutput, mappedOutput);
-                    done();
-                  }).catch(done);
+              let mappedOutput = '';
+              const lines = js.split('\n');
+              const sourceMap = JSON.parse(map);
+              SourceMapConsumer.with(sourceMap, null, (consumer) => {
+                consumer.eachMapping((mapping) => {
+                  const lineNumber = mapping.generatedLine - 1;
+                  if (lineNumber < 0 || lineNumber >= lines.length) {
+                    assert.fail(`mapped line number ${lineNumber} outside generated file (0, ${lines.length})`);
+                  }
+                  mappedOutput += `${lines[lineNumber]}\n`;
                 });
-              });
+                consumer.destroy();
+
+                assert.equal(test.mappedOutput, mappedOutput);
+                done();
+              }).catch(done);
             });
           }
           idx += 1;
