@@ -76,7 +76,7 @@ module.exports = class Compiler {
   /**
    * Compiles the specified source file and saves the result, overwriting the
    * file name.
-   * 
+   *
    * @async
    * @param {String} source HTL template code
    * @param {String} name file name to save results
@@ -88,7 +88,7 @@ module.exports = class Compiler {
 
   /**
    * Compiles the given HTL source code into JavaScript, which is returned as a string
-   * 
+   *
    * @async
    * @param {String} source the HTL source code
    * @returns {Promise<String>} the resulting Javascript
@@ -100,7 +100,7 @@ module.exports = class Compiler {
   /**
    * Compiles the given source string and saves the result, overwriting the
    * file name.
-   * 
+   *
    * @async
    * @param {String} source HTL template code
    * @param {String} name file name to save results
