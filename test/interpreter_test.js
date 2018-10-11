@@ -12,16 +12,17 @@
 
 /* global describe, it */
 
+// built-in modules
 const assert = require('assert');
-const fs = require('fs');
-
+// declared dependencies
+const fse = require('fs-extra');
+// local modules
 const ThrowingErrorListener = require('../src/parser/htl/ThrowingErrorListener');
 
 const TemplateParser = require('../src/parser/html/TemplateParser');
 const DebugCommandVisitor = require('../src/parser/commands/DebugCommandVisitor');
 const Interpreter = require('../src/interpreter/Interpreter');
 const Runtime = require('../src/interpreter/Runtime');
-
 
 function process(input) {
   return new TemplateParser()
@@ -49,8 +50,8 @@ function evaluateCommands(commands, runtime) {
   return result;
 }
 
-function readTests(filename) {
-  const text = fs.readFileSync(filename, 'utf-8');
+async function readTests(filename) {
+  const text = await fse.readFile(filename, 'utf-8');
   const lines = text.split(/\r\n|\r|\n/);
 
   const tests = [];
@@ -80,8 +81,8 @@ function readTests(filename) {
   return tests;
 }
 
-describe('Interpreter Tests', () => {
-  fs.readdirSync('test/specs').forEach((filename) => {
+describe('Interpreter Tests', async () => {
+  (await fse.readdir('test/specs')).forEach(async (filename) => {
     if (filename.endsWith('_spec.txt')) {
       const name = filename.substring(0, filename.length - 9);
       if (name === 'use') {
@@ -102,7 +103,7 @@ describe('Interpreter Tests', () => {
       const runtime = new Runtime();
       runtime.scope.putAll(payload);
 
-      const tests = readTests(`test/specs/${filename}`);
+      const tests = await readTests(`test/specs/${filename}`);
 
       describe(name, () => {
         tests.forEach((test) => {

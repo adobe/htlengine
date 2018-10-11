@@ -12,9 +12,11 @@
 
 /* global describe, it */
 
+// built-in modules
 const assert = require('assert');
-const fs = require('fs');
-
+// declared dependencies
+const fse = require('fs-extra');
+// local modules
 const MarkupHandler = require('../src/parser/html/MarkupHandler');
 const CommandStream = require('../src/parser/commands/CommandStream');
 
@@ -32,9 +34,9 @@ function process(input) {
  * Simple tests that check if the parser can process all the expressions
  */
 describe('Simple', () => {
-  it('parses the simple html', () => {
+  it('parses the simple html', async () => {
     const filename = 'test/simple.htm';
-    const source = fs.readFileSync(filename, 'utf-8');
+    const source = await fse.readFile(filename, 'utf-8');
     const result = process(source);
     assert.equal(result, source);
   });

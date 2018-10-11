@@ -12,16 +12,17 @@
 
 /* global describe, it */
 
+// built-in modules
 const assert = require('assert');
-const fs = require('fs');
 const path = require('path');
-
+// declared dependencies
+const fse = require('fs-extra');
+// local modules
 const Runtime = require('../src/runtime/Runtime');
 const Compiler = require('../src/compiler/Compiler');
 
-
-function readTests(filename) {
-  const text = fs.readFileSync(filename, 'utf-8');
+async function readTests(filename) {
+  const text = await fse.readFile(filename, 'utf-8');
   const lines = text.split(/\r\n|\r|\n/);
 
   const tests = [];
@@ -51,17 +52,17 @@ function readTests(filename) {
   return tests;
 }
 
-describe('Compiler Tests', () => {
-  fs.readdirSync('test/specs').forEach((filename) => {
+describe('Compiler Tests', async () => {
+  (await fse.readdir('test/specs')).forEach(async (filename) => {
     if (filename.endsWith('_spec.txt')) {
       const name = filename.substring(0, filename.length - 9);
       // eslint-disable-next-line import/no-dynamic-require,global-require
       const payload = require(`./specs/${name}_spec.js`);
 
-      const tests = readTests(`test/specs/${filename}`);
+      const tests = await readTests(`test/specs/${filename}`);
       const outputDir = path.join(__dirname, 'generated');
       try {
-        fs.mkdirSync(outputDir);
+        await fse.mkdir(outputDir);
       } catch (e) {
         // ignore
       }
@@ -74,11 +75,11 @@ describe('Compiler Tests', () => {
       describe(name, () => {
         let idx = 0;
 
-        tests.forEach((test) => {
+        tests.forEach(async (test) => {
           if (!test.input) {
             return;
           }
-          const copiledFilename = compiler.compileToFile(test.input, `${name}_${idx}.js`);
+          const copiledFilename = await compiler.compileToFile(test.input, `${name}_${idx}.js`);
           if ('output' in test) {
             it(`${idx}. Generates output for '${test.name}' correctly.`, (done) => {
               const runtime = new Runtime()

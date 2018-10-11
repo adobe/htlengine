@@ -10,9 +10,11 @@
  * governing permissions and limitations under the License.
  */
 
-const fs = require('fs');
+// built-in modules
 const path = require('path');
-
+// declared dependencies
+const fse = require('fs-extra');
+// local modules
 const TemplateParser = require('../parser/html/TemplateParser');
 const ThrowingErrorListener = require('../parser/htl/ThrowingErrorListener');
 const JSCodeGenVisitor = require('./JSCodeGenVisitor');
@@ -71,35 +73,47 @@ module.exports = class Compiler {
     return this;
   }
 
-  compileFile(filename, name) {
-    // todo: async support
-    return this.compileToFile(fs.readFileSync(filename, 'utf-8'), name || filename);
+  /**
+   * Compiles the specified source file and saves the result, overwriting the
+   * file name.
+   * 
+   * @async
+   * @param {String} source HTL template code
+   * @param {String} name file name to save results
+   * @returns {Promise<String>} the full name of the resulting file
+   */
+  async compileFile(filename, name) {
+    return this.compileToFile(await fse.readFile(filename, 'utf-8'), name || filename);
   }
 
   /**
    * Compiles the given HTL source code into JavaScript, which is returned as a string
+   * 
+   * @async
    * @param {String} source the HTL source code
-   * @returns {String} the resulting Javascript
+   * @returns {Promise<String>} the resulting Javascript
    */
-  compileToString(source) {
-    return this.compile(source).template;
+  async compileToString(source) {
+    return (await this.compile(source)).template;
   }
 
   /**
    * Compiles the given source string and saves the result, overwriting the
    * file name.
+   * 
+   * @async
    * @param {String} source HTL template code
    * @param {String} name file name to save results
-   * @returns {String} the full name of the resulting file
+   * @returns {Promise<String>} the full name of the resulting file
    */
-  compileToFile(source, name) {
-    const { template, sourceMap } = this.compile(source);
+  async compileToFile(source, name) {
+    const { template, sourceMap } = await this.compile(source);
 
     const filename = this._outfile || path.resolve(this._dir, name);
-    fs.writeFileSync(filename, template);
+    await fse.writeFile(filename, template);
 
     if (sourceMap) {
-      fs.writeFileSync(`${filename}.map`, JSON.stringify(sourceMap));
+      await fse.writeFile(`${filename}.map`, JSON.stringify(sourceMap));
     }
     return filename;
   }
@@ -108,12 +122,12 @@ module.exports = class Compiler {
    * Compiles the given source string and returns the generated JS
    * and sourceMap in an object.
    *
+   * @async
    * @param {String} source HTL template code
    * @param {String} name file name to save results
-   * @returns {Object} an object consisting of a generated template and a source map
+   * @returns {Promise<Object>} An object consisting of a generated template and a source map
    */
-  compile(source) {
-    // todo: async support
+  async compile(source) {
     const commands = new TemplateParser()
       .withErrorListener(ThrowingErrorListener.INSTANCE)
       .parse(source);
@@ -133,7 +147,7 @@ module.exports = class Compiler {
       .process(commands);
 
     const codeTemplate = this._includeRuntime ? RUNTIME_TEMPLATE : DEFAULT_TEMPLATE;
-    let template = fs.readFileSync(path.join(__dirname, codeTemplate), 'utf-8');
+    let template = await fse.readFile(path.join(__dirname, codeTemplate), 'utf-8');
 
     if (this._includeRuntime) {
       template = template.replace(/MOD_HTLENGINE/, this._modHTLEngine);
