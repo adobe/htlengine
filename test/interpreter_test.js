@@ -10,12 +10,11 @@
  * governing permissions and limitations under the License.
  */
 
-/* global describe, it */
+/* eslint-env mocha */
 
 // built-in modules
 const assert = require('assert');
-// declared dependencies
-const fse = require('fs-extra');
+const fs = require('fs');
 // local modules
 const ThrowingErrorListener = require('../src/parser/htl/ThrowingErrorListener');
 
@@ -50,8 +49,8 @@ function evaluateCommands(commands, runtime) {
   return result;
 }
 
-async function readTests(filename) {
-  const text = await fse.readFile(filename, 'utf-8');
+function readTests(filename) {
+  const text = fs.readFileSync(filename, 'utf-8');
   const lines = text.split(/\r\n|\r|\n/);
 
   const tests = [];
@@ -81,8 +80,8 @@ async function readTests(filename) {
   return tests;
 }
 
-describe('Interpreter Tests', async () => {
-  (await fse.readdir('test/specs')).forEach(async (filename) => {
+describe('Interpreter Tests', () => {
+  fs.readdirSync('test/specs').forEach((filename) => {
     if (filename.endsWith('_spec.txt')) {
       const name = filename.substring(0, filename.length - 9);
       if (name === 'use') {
@@ -103,7 +102,7 @@ describe('Interpreter Tests', async () => {
       const runtime = new Runtime();
       runtime.scope.putAll(payload);
 
-      const tests = await readTests(`test/specs/${filename}`);
+      const tests = readTests(`test/specs/${filename}`);
 
       describe(name, () => {
         tests.forEach((test) => {

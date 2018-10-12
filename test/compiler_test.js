@@ -10,19 +10,18 @@
  * governing permissions and limitations under the License.
  */
 
-/* global describe, it */
+/* eslint-env mocha */
 
 // built-in modules
 const assert = require('assert');
+const fs = require('fs');
 const path = require('path');
-// declared dependencies
-const fse = require('fs-extra');
 // local modules
 const Runtime = require('../src/runtime/Runtime');
 const Compiler = require('../src/compiler/Compiler');
 
-async function readTests(filename) {
-  const text = await fse.readFile(filename, 'utf-8');
+function readTests(filename) {
+  const text = fs.readFileSync(filename, 'utf-8');
   const lines = text.split(/\r\n|\r|\n/);
 
   const tests = [];
@@ -52,17 +51,17 @@ async function readTests(filename) {
   return tests;
 }
 
-describe('Compiler Tests', async () => {
-  (await fse.readdir('test/specs')).forEach(async (filename) => {
+describe('Compiler Tests', () => {
+  fs.readdirSync('test/specs').forEach((filename) => {
     if (filename.endsWith('_spec.txt')) {
       const name = filename.substring(0, filename.length - 9);
       // eslint-disable-next-line import/no-dynamic-require,global-require
       const payload = require(`./specs/${name}_spec.js`);
 
-      const tests = await readTests(`test/specs/${filename}`);
+      const tests = readTests(`test/specs/${filename}`);
       const outputDir = path.join(__dirname, 'generated');
       try {
-        await fse.mkdir(outputDir);
+        fs.mkdirSync(outputDir);
       } catch (e) {
         // ignore
       }
@@ -72,14 +71,11 @@ describe('Compiler Tests', async () => {
         .withRuntimeVar(Object.keys(payload))
         .withSourceMap(true);
 
-      describe(name, () => {
-        let idx = 0;
-
-        tests.forEach(async (test) => {
+      describe(name, async () => {
+        tests.forEach((test, idx) => {
           if (!test.input) {
             return;
           }
-          const copiledFilename = await compiler.compileToFile(test.input, `${name}_${idx}.js`);
           if ('output' in test) {
             it(`${idx}. Generates output for '${test.name}' correctly.`, (done) => {
               const runtime = new Runtime()
@@ -87,16 +83,19 @@ describe('Compiler Tests', async () => {
                 .withResourceDirectory(path.join(__dirname, 'specs'))
                 .setGlobal(payload);
 
+              compiler.compileToFile(test.input, `${name}_${idx}.js`)
+                .then((compiledFilename) => {
               // eslint-disable-next-line import/no-dynamic-require,global-require
-              const service = require(copiledFilename);
-              service(runtime).then(() => {
+                  const service = require(compiledFilename);
+                  return service(runtime);
+                })
+                .then(() => {
                 const output = runtime.stream;
                 assert.equal(output, test.output);
                 done();
               }).catch(done);
             });
           }
-          idx += 1;
         });
       });
     }
