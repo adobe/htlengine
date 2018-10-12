@@ -14,7 +14,7 @@ This engine can parse [HTL](https://github.com/Adobe-Marketing-Cloud/htl-spec) s
 ## Install
 
 ```bash
-npm i --save @adobe/htlengine
+npm add @adobe/htlengine
 ```
 
 ## Build
@@ -36,12 +36,12 @@ node src/cli.js test/simple2.html
 You can also use the API directly:
 
 ```javascript
-const Compiler = require("@adobe/htlengine/src/compiler/Compiler");
+const { Compiler } = require('@adobe/htlengine');
 
 const compiler = new Compiler()
-      .withOutputDirectory("")
+      .withOutputDirectory('')
       .includeRuntime(true)
-      .withRuntimeGlobalName("it");
+      .withRuntimeGlobalName('it');
 
 const js = await compiler.compileToString(code);
 // the result can be saved as a file or eval'd
