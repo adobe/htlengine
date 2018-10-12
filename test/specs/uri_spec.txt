@@ -12,6 +12,8 @@ https://example.com/path/page.html
 //example.com/path/page.html
 //example.com/path/page.html
 //example.com/path/page.html
+^^^
+    out(var_0);
 #
 ### domain
 #
@@ -26,6 +28,8 @@ http://example.org/path/page.html
 http:///path/page.html
 http://www.example.org/path/page.html
 http:///path/page.html
+^^^
+    out(var_0);
 #
 ### path
 #
@@ -50,6 +54,8 @@ http://example.com/that/two.selector.html/suffix?key=value#fragment
 http://example.com/.selector.html/suffix?key=value#fragment
 http://example.com/this/one.selector.html/suffix?key=value#fragment
 http://example.com/this/one.selector.html/suffix?key=value#fragment
+^^^
+    out(var_0);
 #
 ### selectors
 #
@@ -70,6 +76,8 @@ path/page.woo.html
 path/page.woo.html
 path/page.html
 path/page.html
+^^^
+    out(var_0);
 #
 ### extension
 ${'path/page' @ extension='html'}
@@ -87,6 +95,8 @@ path/page.html/suffix
 path/page.html?key=value
 path/page.html#fragment
 path/page
+^^^
+    out(var_0);
 #
 ### suffix
 ${'path/page.html' @ suffix='my/suffix'}
@@ -104,6 +114,8 @@ path/page.html/my/suffix#fragment
 path/page.html/prepended/suffix
 path/page.html/suffix/appended
 path/page.html
+^^^
+    out(var_0);
 #
 ### query
 ${'http://www.example.org/search' @ query=jsuse.query, context='uri'}
@@ -117,6 +129,8 @@ http://www.example.org/search?s=1&q=htl&array=1&array=2&array=3
 http://www.example.org/search?s=1
 http://www.example.org/search
 http://www.example.org/search
+^^^
+    out(var_0);
 #
 ### fragment
 #
@@ -127,4 +141,6 @@ ${'path/page#one' @ fragment}
 path/page#fragment
 path/page#two
 path/page
+^^^
+    out(var_0);
 #

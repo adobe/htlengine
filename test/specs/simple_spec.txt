@@ -16,6 +16,8 @@ Hello, ${world}.
 }
 ===
 Hello, Earth.
+^^^
+    out(var_0);
 #
 ### sly-text with simple string
 #
@@ -56,6 +58,8 @@ Fruits: ${['Apple', 'Banana', 'Orange'] @ join='*'}
 }
 ===
 Fruits: Apple*Banana*Orange
+^^^
+    out(var_0);
 #
 ### join filter test with variables
 #
@@ -66,6 +70,8 @@ Fruits: ${properties.fruits @ join=properties.comma}
 }
 ===
 Fruits: Apple, Banana, Orange
+^^^
+    out(var_0);
 #
 ### string OR
 #
@@ -76,6 +82,8 @@ ${'string constant' || properties.pageTitle || properties.title}
 Hello, world.
 bar
 string constant
+^^^
+    out(var_0);
 #
 ### comparison
 #
@@ -108,6 +116,8 @@ false
 true
 false
 true
+^^^
+    out(var_0);
 #
 ### boolean casting
 #
@@ -124,6 +134,8 @@ true
 true
 false
 false
+^^^
+    out(var_0);
 #
 ### string casting
 #
@@ -142,6 +154,8 @@ false
 true,false
 foo,bar
 foo,
+^^^
+    out(var_0);
 #
 ### comments
 #
@@ -152,11 +166,15 @@ foo,
 <!-- This is normal HTML comment -->
 
 <!-- Page title: Hello, world. -->
+^^^
+    out(var_0);
 #
 ### multiple plugins
 #
 <div class="foo" data-sly-attribute.class="${'bar'}" data-sly-text="${'Hello, World'}">This is not shown</div>
 ===
 <div class="bar">Hello, World</div>
+^^^
+    if ((var_attrValueEscaped_class1) || (("false") == (var_attrValue_class0))) {
 #
 ###
