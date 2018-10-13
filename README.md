@@ -3,6 +3,7 @@
 This engine can parse [HTL](https://github.com/Adobe-Marketing-Cloud/htl-spec) scripts and builds a command stream. The command stream can either be intepreted or used to generate code. This project provides a Javascript (ES6) generator and runtime which allows to execute the scripts and use-classes.
 
 ## Status
+
 [![codecov](https://img.shields.io/codecov/c/github/adobe/htlengine.svg)](https://codecov.io/gh/adobe/htlengine)
 [![CircleCI](https://img.shields.io/circleci/project/github/adobe/htlengine.svg)](https://circleci.com/gh/adobe/htlengine)
 [![GitHub license](https://img.shields.io/github/license/adobe/htlengine.svg)](https://github.com/adobe/htlengine/blob/master/LICENSE.txt)
@@ -13,13 +14,13 @@ This engine can parse [HTL](https://github.com/Adobe-Marketing-Cloud/htl-spec) s
 ## Install
 
 ```bash
-$ npm i --save @adobe/htlengine
+npm add @adobe/htlengine
 ```
 
 ## Build
 
 ```bash
-$ yarn install
+yarn install
 ```
 
 ## run
@@ -27,7 +28,7 @@ $ yarn install
 currently not very cool. just passes the given file into the HTML parser and outputs the tree again.
 
 ```bash
-$ node src/cli.js test/simple2.html
+node src/cli.js test/simple2.html
 ```
 
 ## API
@@ -35,14 +36,14 @@ $ node src/cli.js test/simple2.html
 You can also use the API directly:
 
 ```javascript
-const Compiler = require("@adobe/htlengine/src/compiler/Compiler");
+const { Compiler } = require('@adobe/htlengine');
 
 const compiler = new Compiler()
-      .withOutputDirectory("")
+      .withOutputDirectory('')
       .includeRuntime(true)
-      .withRuntimeGlobalName("it");
+      .withRuntimeGlobalName('it');
 
-compiler.compileToString(code);
+const js = await compiler.compileToString(code);
 // the result can be saved as a file or eval'd
 ```
 
@@ -51,17 +52,17 @@ compiler.compileToString(code);
 The tests are more comprehensive. They validate if the the HTL expressions are parsed and re-created using the generated parse tree.
 
 ```bash
-$ yarn test
+yarn test
 ```
 
 ## rebuild antlr4 generated source
 
 ```bash
-$ yarn build
+yarn build
 ```
 
 ### prerequisites
 
 ```bash
-$ brew install antlr
+brew install antlr
 ```

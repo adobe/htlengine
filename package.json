@@ -1,6 +1,6 @@
 {
   "name": "@adobe/htlengine",
-  "version": "1.0.5-pre.0",
+  "version": "2.0.1-pre.1",
   "description": "Javascript Based HTL (Sightly) parser",
   "main": "src/index.js",
   "license": "Apache-2.0",
@@ -8,6 +8,7 @@
   "dependencies": {
     "antlr4": "^4.7.1",
     "co": "^4.6.0",
+    "fs-extra": "^7.0.0",
     "lodash": "^4.17.5",
     "node-esapi": "0.0.1",
     "sanitizer": "^0.1.3",

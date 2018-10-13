@@ -10,17 +10,18 @@
  * governing permissions and limitations under the License.
  */
 
-/* global describe, it */
+/* eslint-env mocha */
 
+// built-in modules
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 
 const { SourceMapConsumer } = require('source-map/source-map.js');
 
+// local modules
 const Runtime = require('../src/runtime/Runtime');
 const Compiler = require('../src/compiler/Compiler');
-
 
 function readTests(filename) {
   const text = fs.readFileSync(filename, 'utf-8');
@@ -57,6 +58,27 @@ function readTests(filename) {
   return tests;
 }
 
+async function checkMap(compiledFilename, expectedOutput) {
+  const js = fs.readFileSync(compiledFilename, 'utf8');
+  const map = fs.readFileSync(`${compiledFilename}.map`, 'utf8');
+
+  let mappedOutput = '';
+  const lines = js.split('\n');
+  const sourceMap = JSON.parse(map);
+  SourceMapConsumer.with(sourceMap, null, (consumer) => {
+    consumer.eachMapping((mapping) => {
+      const lineNumber = mapping.generatedLine - 1;
+      if (lineNumber < 0 || lineNumber >= lines.length) {
+        assert.fail(`mapped line number ${lineNumber} outside generated file (0, ${lines.length})`);
+      }
+      mappedOutput += `${lines[lineNumber]}\n`;
+    });
+    consumer.destroy();
+  }).then(() => {
+    assert.equal(expectedOutput, mappedOutput);
+  });
+}
+
 describe('Compiler Tests', () => {
   fs.readdirSync('test/specs').forEach((filename) => {
     if (filename.endsWith('_spec.txt')) {
@@ -77,14 +99,11 @@ describe('Compiler Tests', () => {
         .withRuntimeVar(Object.keys(payload))
         .withSourceMap(true);
 
-      describe(name, () => {
-        let idx = 0;
-
-        tests.forEach((test) => {
+      describe(name, async () => {
+        tests.forEach((test, idx) => {
           if (!test.input) {
             return;
           }
-          const compiledFilename = compiler.compileToFile(test.input, `${name}_${idx}.js`);
           if ('output' in test) {
             it(`${idx}. Generates output for '${test.name}' correctly.`, (done) => {
               const runtime = new Runtime()
@@ -92,6 +111,8 @@ describe('Compiler Tests', () => {
                 .withResourceDirectory(path.join(__dirname, 'specs'))
                 .setGlobal(payload);
 
+              compiler.compileToFile(test.input, `${name}_${idx}.js`)
+                .then((compiledFilename) => {
               // eslint-disable-next-line import/no-dynamic-require,global-require
               const service = require(compiledFilename);
               service(runtime).then(() => {
@@ -101,32 +122,15 @@ describe('Compiler Tests', () => {
               }).catch(done);
             });
           }
-
           if ('mappedOutput' in test) {
-            const mapFilename = `${compiledFilename}.map`;
             it(`${idx}. Maps lines for '${test.name}' correctly.`, (done) => {
-              const map = fs.readFileSync(mapFilename, 'utf8');
-              const js = fs.readFileSync(compiledFilename, 'utf8');
-
-              let mappedOutput = '';
-              const lines = js.split('\n');
-              const sourceMap = JSON.parse(map);
-              SourceMapConsumer.with(sourceMap, null, (consumer) => {
-                consumer.eachMapping((mapping) => {
-                  const lineNumber = mapping.generatedLine - 1;
-                  if (lineNumber < 0 || lineNumber >= lines.length) {
-                    assert.fail(`mapped line number ${lineNumber} outside generated file (0, ${lines.length})`);
-                  }
-                  mappedOutput += `${lines[lineNumber]}\n`;
-                });
-                consumer.destroy();
-
-                assert.equal(test.mappedOutput, mappedOutput);
-                done();
-              }).catch(done);
+              compiler.compileToFile(test.input, `${name}_${idx}.js`)
+                .then((compiledFilename) => {
+                  checkMap(compiledFilename, test.mappedOutput);
+                  done();
+                }).catch(done);
             });
           }
-          idx += 1;
         });
       });
     }

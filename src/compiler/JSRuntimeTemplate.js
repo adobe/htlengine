@@ -11,8 +11,7 @@
  */
 
 /* eslint-disable */
-
-const { Runtime } = require('@adobe/htlengine');
+const { Runtime } = require('MOD_HTLENGINE');
 
 function run(runtime) {
   const lengthOf = function (c) {
@@ -38,8 +37,11 @@ function run(runtime) {
   });
 }
 
-module.exports.main = function main(resource) {
+module.exports.main = async function main(resource) {
   const runtime = new Runtime();
   runtime.setGlobal(resource);
-  return run(runtime).then(() => ({ body: runtime.stream }));
+  await run(runtime);
+  return {
+    body: runtime.stream
+  };
 };

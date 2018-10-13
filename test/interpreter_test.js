@@ -10,18 +10,18 @@
  * governing permissions and limitations under the License.
  */
 
-/* global describe, it */
+/* eslint-env mocha */
 
+// built-in modules
 const assert = require('assert');
 const fs = require('fs');
-
+// local modules
 const ThrowingErrorListener = require('../src/parser/htl/ThrowingErrorListener');
 
 const TemplateParser = require('../src/parser/html/TemplateParser');
 const DebugCommandVisitor = require('../src/parser/commands/DebugCommandVisitor');
 const Interpreter = require('../src/interpreter/Interpreter');
 const Runtime = require('../src/interpreter/Runtime');
-
 
 function process(input) {
   return new TemplateParser()

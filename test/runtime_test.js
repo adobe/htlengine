@@ -18,7 +18,8 @@ const path = require('path');
 // declared dependencies
 const fse = require('fs-extra');
 // local modules
-const engine = require('../src/main');
+const pkgJson = require('../package.json');
+const Compiler = require('../src/compiler/Compiler');
 
 const TEMPLATE_SIMPLE_2 = path.resolve(__dirname, './simple2.htl');
 const EXPECTED_SIMPLE_2 = path.resolve(__dirname, './simple2.html');
@@ -46,11 +47,23 @@ const GLOBALS = {
   },
 };
 
-describe('Engine test', async () => {
-  it('Simple htl can be executed', async () => {
-    const template = await fse.readFile(TEMPLATE_SIMPLE_2, 'utf-8');
-    const expected = await fse.readFile(EXPECTED_SIMPLE_2, 'utf-8');
-    const ret = await engine(GLOBALS, template);
-    assert.equal(ret.body, expected);
+describe('Runtime Tests', () => {
+  it('Executes a script', async () => {
+    const outputDir = path.join(__dirname, 'generated');
+
+    const compiler = new Compiler()
+      .withOutputDirectory(outputDir)
+      .includeRuntime(true)
+      .withRuntimeHTLEngine(path.resolve(__dirname, '../', pkgJson.main))
+      .withOutputFile(path.resolve(outputDir, 'runtime_test_script_1.js'))
+      .withRuntimeVar(Object.keys(GLOBALS));
+
+    const filename = await compiler.compileFile(TEMPLATE_SIMPLE_2);
+
+    // eslint-disable-next-line import/no-dynamic-require,global-require
+    const { main } = require(filename);
+
+    const { body } = await main(GLOBALS);
+    assert.equal(body, await fse.readFile(EXPECTED_SIMPLE_2, 'utf-8'));
   });
 });
