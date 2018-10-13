@@ -58,27 +58,6 @@ function readTests(filename) {
   return tests;
 }
 
-async function checkMap(compiledFilename, expectedOutput) {
-  const js = fs.readFileSync(compiledFilename, 'utf8');
-  const map = fs.readFileSync(`${compiledFilename}.map`, 'utf8');
-
-  let mappedOutput = '';
-  const lines = js.split('\n');
-  const sourceMap = JSON.parse(map);
-  SourceMapConsumer.with(sourceMap, null, (consumer) => {
-    consumer.eachMapping((mapping) => {
-      const lineNumber = mapping.generatedLine - 1;
-      if (lineNumber < 0 || lineNumber >= lines.length) {
-        assert.fail(`mapped line number ${lineNumber} outside generated file (0, ${lines.length})`);
-      }
-      mappedOutput += `${lines[lineNumber]}\n`;
-    });
-    consumer.destroy();
-  }).then(() => {
-    assert.equal(expectedOutput, mappedOutput);
-  });
-}
-
 describe('Compiler Tests', () => {
   fs.readdirSync('test/specs').forEach((filename) => {
     if (filename.endsWith('_spec.txt')) {
@@ -125,11 +104,25 @@ describe('Compiler Tests', () => {
           }
           if ('mappedOutput' in test) {
             it(`${idx}. Maps lines for '${test.name}' correctly.`, (done) => {
-              compiler.compileToFile(test.input, `${name}_${idx}.js`)
-                .then((compiledFilename) => {
-                  checkMap(compiledFilename, test.mappedOutput);
-                  done();
-                }).catch(done);
+              compiler.compile(test.input)
+                .then(({ template, sourceMap }) => {
+                  const lines = template.split('\n');
+
+                  let mappedOutput = '';
+                  SourceMapConsumer.with(sourceMap, null, (consumer) => {
+                    consumer.eachMapping((mapping) => {
+                      const lineNumber = mapping.generatedLine - 1;
+                      if (lineNumber < 0 || lineNumber >= lines.length) {
+                        assert.fail(`mapped line number ${lineNumber} outside generated file (0, ${lines.length})`);
+                      }
+                      mappedOutput += `${lines[lineNumber]}\n`;
+                    });
+                    consumer.destroy();
+                  }).then(() => {
+                    assert.equal(test.mappedOutput, mappedOutput);
+                    done();
+                  }).catch(done);
+                });
             });
           }
         });
