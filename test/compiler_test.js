@@ -113,13 +113,14 @@ describe('Compiler Tests', () => {
 
               compiler.compileToFile(test.input, `${name}_${idx}.js`)
                 .then((compiledFilename) => {
-              // eslint-disable-next-line import/no-dynamic-require,global-require
-              const service = require(compiledFilename);
-              service(runtime).then(() => {
-                const output = runtime.stream;
-                assert.equal(output, test.output);
-                done();
-              }).catch(done);
+                  // eslint-disable-next-line import/no-dynamic-require,global-require
+                  const service = require(compiledFilename);
+                  service(runtime).then(() => {
+                    const output = runtime.stream;
+                    assert.equal(output, test.output);
+                    done();
+                  }).catch(done);
+                });
             });
           }
           if ('mappedOutput' in test) {
