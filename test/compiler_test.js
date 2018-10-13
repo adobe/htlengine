@@ -107,18 +107,17 @@ describe('Compiler Tests', () => {
               compiler.compile(test.input)
                 .then(({ template, sourceMap }) => {
                   const lines = template.split('\n');
-
-                  let mappedOutput = '';
-                  SourceMapConsumer.with(sourceMap, null, (consumer) => {
+                  return SourceMapConsumer.with(sourceMap, null, (consumer) => {
+                    let result = '';
                     consumer.eachMapping((mapping) => {
                       const lineNumber = mapping.generatedLine - 1;
                       if (lineNumber < 0 || lineNumber >= lines.length) {
                         assert.fail(`mapped line number ${lineNumber} outside generated file (0, ${lines.length})`);
                       }
-                      mappedOutput += `${lines[lineNumber]}\n`;
+                      result += `${lines[lineNumber]}\n`;
                     });
-                    consumer.destroy();
-                  }).then(() => {
+                    return result;
+                  }).then((mappedOutput) => {
                     assert.equal(test.mappedOutput, mappedOutput);
                     done();
                   }).catch(done);
