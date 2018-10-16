@@ -22,6 +22,8 @@
 ===
 
 <section>Template</section>
+^^^
+    out(var_0);
 #
 ### sightly call function with missing parameter
 #
@@ -30,6 +32,8 @@
 ===
 
 <section></section>
+^^^
+    out(var_0);
 #
 ### sightly call function can be redeclared
 #
@@ -60,6 +64,8 @@
 
 <section></section>
 
+^^^
+    out(var_0);
 #
 ### sightly call function can call other templates
 #
@@ -70,6 +76,8 @@
 
 
 <section>123</section>
+^^^
+    out(var_0);
 #
 ### sightly call function can call itself recursively
 #
@@ -132,5 +140,8 @@
 </li>
   </ul>
 
+^^^
+    if (var_size1) {
+        out(var_3);
 #
 ###

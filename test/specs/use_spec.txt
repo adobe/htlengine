@@ -4,23 +4,31 @@
 <div data-sly-use.page="use_spec/test_page.js">Hello ${page.title}.</div>
 ===
 <div>Hello Jupiter.</div>
+^^^
+    out(var_0);
 #
 ### passing params
 #
 <div data-sly-use.page="${'use_spec/test_page.js' @ value1='Moon', value2='Europa'}">${page.subTitle}</div>
 ===
 <div>Moon: Europa</div>
+^^^
+    out(var_0);
 #
 ### using functions
 #
 <div data-sly-use.page="${'use_spec/test_page.js' @ radius='70000'}">Surface Area: ${page.area}</div>
 ===
 <div>Surface Area: 61575216010.35994</div>
+^^^
+    out(var_0);
 #
 ### using async use classes
 #
 <div data-sly-use.page="use_spec/test_page_async.js">Hello ${page.title}.</div>
 ===
 <div>Hello Saturn.</div>
+^^^
+    out(var_0);
 #
 ###

@@ -117,18 +117,28 @@ module.exports = class JSCodeGenVisitor {
     return this._mappings;
   }
 
+  _addMapping(location) {
+    if (!location) {
+      return;
+    }
+    const lastmapping = this._mappings[this._mappings.length - 1];
+    if (lastmapping && lastmapping.originalLine === location.line) {
+      // skip multiple mappings for the same original line, as
+      // IDEs wouldn't probably know how to distinguish them
+      return;
+    }
+    this._mappings.push({
+      inFunctionBlock: this._inFunctionBlock,
+      originalLine: location.line,
+      originalColumn: location.column,
+      generatedLine: this._inFunctionBlock ? this._templateLine : this._codeLine,
+      generatedColumn: 0,
+    });
+  }
+
   visit(cmd) {
     if (this._mappings) {
-      const { location } = cmd;
-      if (location) {
-        this._mappings.push({
-          inFunctionBlock: this._inFunctionBlock,
-          originalLine: location.line,
-          originalColumn: location.column,
-          generatedLine: this._inFunctionBlock ? this._templateLine : this._codeLine,
-          generatedColumn: 0,
-        });
-      }
+      this._addMapping(cmd.location);
     }
 
     if (cmd instanceof OutText) {

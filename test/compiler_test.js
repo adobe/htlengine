@@ -16,6 +16,9 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
+
+const { SourceMapConsumer } = require('source-map/source-map.js');
+
 // local modules
 const Runtime = require('../src/runtime/Runtime');
 const Compiler = require('../src/compiler/Compiler');
@@ -40,6 +43,10 @@ function readTests(filename) {
       test.commands = '';
     } else if (line.startsWith('===')) {
       test.output = '';
+    } else if (line.startsWith('^^^')) {
+      test.mappedOutput = '';
+    } else if (test && ('mappedOutput' in test)) {
+      test.mappedOutput += `${line}\n`;
     } else if (test && ('output' in test)) {
       test.output += `${line}\n`;
     } else if (test && ('commands' in test)) {
@@ -85,15 +92,36 @@ describe('Compiler Tests', () => {
 
               compiler.compileToFile(test.input, `${name}_${idx}.js`)
                 .then((compiledFilename) => {
-              // eslint-disable-next-line import/no-dynamic-require,global-require
+                  // eslint-disable-next-line import/no-dynamic-require,global-require
                   const service = require(compiledFilename);
-                  return service(runtime);
-                })
-                .then(() => {
-                const output = runtime.stream;
-                assert.equal(output, test.output);
-                done();
-              }).catch(done);
+                  service(runtime).then(() => {
+                    const output = runtime.stream;
+                    assert.equal(output, test.output);
+                    done();
+                  }).catch(done);
+                });
+            });
+          }
+          if ('mappedOutput' in test) {
+            it(`${idx}. Maps lines for '${test.name}' correctly.`, (done) => {
+              compiler.compile(test.input)
+                .then(({ template, sourceMap }) => {
+                  const lines = template.split('\n');
+                  return SourceMapConsumer.with(sourceMap, null, (consumer) => {
+                    let result = '';
+                    consumer.eachMapping((mapping) => {
+                      const lineNumber = mapping.generatedLine - 1;
+                      if (lineNumber < 0 || lineNumber >= lines.length) {
+                        assert.fail(`mapped line number ${lineNumber} outside generated file (0, ${lines.length})`);
+                      }
+                      result += `${lines[lineNumber]}\n`;
+                    });
+                    return result;
+                  }).then((mappedOutput) => {
+                    assert.equal(test.mappedOutput, mappedOutput);
+                    done();
+                  }).catch(done);
+                });
             });
           }
         });

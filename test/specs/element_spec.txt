@@ -95,6 +95,8 @@
 <td/>
 <th/>
 
+^^^
+    if (var_size1) {
 #
 ### forbidden
 #
@@ -106,6 +108,8 @@
 <div/>
 <div/>
 
+^^^
+    if (var_size1) {
 #
 ###
 

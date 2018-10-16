@@ -35,6 +35,8 @@ if (mytest) {
 ===
 <div>It is true!</div>
 It was: hello
+^^^
+    out(var_0);
 #
 ### recursive test: true - true
 #

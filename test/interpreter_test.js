@@ -69,6 +69,10 @@ function readTests(filename) {
       test.commands = '';
     } else if (line.startsWith('===')) {
       test.output = '';
+    } else if (line.startsWith('^^^')) {
+      test.mappedOutput = '';
+    } else if (test && ('mappedOutput' in test)) {
+      // ignored, not used
     } else if (test && ('output' in test)) {
       test.output += `${line}\n`;
     } else if (test && ('commands' in test)) {
