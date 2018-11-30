@@ -35,7 +35,7 @@ function process(input) {
  */
 describe('Simple', () => {
   it('parses the simple html', async () => {
-    const filename = 'test/simple.htm';
+    const filename = 'test/templates/simple.htm';
     const source = await fse.readFile(filename, 'utf-8');
     const result = process(source);
     assert.equal(result, source);

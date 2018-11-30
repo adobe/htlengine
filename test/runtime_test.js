@@ -21,8 +21,8 @@ const fse = require('fs-extra');
 const pkgJson = require('../package.json');
 const Compiler = require('../src/compiler/Compiler');
 
-const TEMPLATE_SIMPLE_2 = path.resolve(__dirname, './simple2.htl');
-const EXPECTED_SIMPLE_2 = path.resolve(__dirname, './simple2.html');
+const TEMPLATE_SIMPLE_2 = path.resolve(__dirname, 'templates', 'simple2.htl');
+const EXPECTED_SIMPLE_2 = path.resolve(__dirname, 'templates', 'simple2.html');
 const GLOBALS = {
   world: 'Earth',
   properties: {
@@ -64,6 +64,27 @@ describe('Runtime Tests', () => {
     const { main } = require(filename);
 
     const { body } = await main(GLOBALS);
+    assert.equal(body, await fse.readFile(EXPECTED_SIMPLE_2, 'utf-8'));
+  });
+
+  it('Can set custom template', async () => {
+    const outputDir = path.join(__dirname, 'generated');
+
+    const customTemplate = await fse.readFile(path.resolve(__dirname, 'templates', 'custom_template.js'), 'utf-8');
+    const compiler = new Compiler()
+      .withOutputDirectory(outputDir)
+      .includeRuntime(true)
+      .withRuntimeHTLEngine(path.resolve(__dirname, '../', pkgJson.main))
+      .withOutputFile(path.resolve(outputDir, 'runtime_test_script_2.js'))
+      .withRuntimeVar(Object.keys(GLOBALS))
+      .withCodeTemplate(customTemplate);
+
+    const filename = await compiler.compileFile(TEMPLATE_SIMPLE_2);
+
+    // eslint-disable-next-line import/no-dynamic-require,global-require
+    const { main } = require(filename);
+
+    const body = await main(GLOBALS);
     assert.equal(body, await fse.readFile(EXPECTED_SIMPLE_2, 'utf-8'));
   });
 });

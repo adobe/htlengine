@@ -32,6 +32,7 @@ module.exports = class Compiler {
     this._runtimeGlobal = 'resource';
     this._includeRuntime = false;
     this._modHTLEngine = '@adobe/htlengine';
+    this._codeTemplate = null;
   }
 
   withOutputDirectory(dir) {
@@ -70,6 +71,11 @@ module.exports = class Compiler {
 
   withSourceMap(sourceMap) {
     this._sourceMap = sourceMap;
+    return this;
+  }
+
+  withCodeTemplate(tmpl) {
+    this._codeTemplate = tmpl;
     return this;
   }
 
@@ -146,8 +152,11 @@ module.exports = class Compiler {
       .indent()
       .process(commands);
 
-    const codeTemplate = this._includeRuntime ? RUNTIME_TEMPLATE : DEFAULT_TEMPLATE;
-    let template = await fse.readFile(path.join(__dirname, codeTemplate), 'utf-8');
+    let template = this._codeTemplate;
+    if (!template) {
+      const codeTemplate = this._includeRuntime ? RUNTIME_TEMPLATE : DEFAULT_TEMPLATE;
+      template = await fse.readFile(path.join(__dirname, codeTemplate), 'utf-8');
+    }
 
     if (this._includeRuntime) {
       template = template.replace(/MOD_HTLENGINE/, this._modHTLEngine);

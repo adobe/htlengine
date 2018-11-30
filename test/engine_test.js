@@ -20,8 +20,8 @@ const fse = require('fs-extra');
 // local modules
 const engine = require('../src/main');
 
-const TEMPLATE_SIMPLE_2 = path.resolve(__dirname, './simple2.htl');
-const EXPECTED_SIMPLE_2 = path.resolve(__dirname, './simple2.html');
+const TEMPLATE_SIMPLE_2 = path.resolve(__dirname, 'templates', 'simple2.htl');
+const EXPECTED_SIMPLE_2 = path.resolve(__dirname, 'templates', 'simple2.html');
 const GLOBALS = {
   world: 'Earth',
   properties: {
