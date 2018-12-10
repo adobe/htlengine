@@ -159,7 +159,8 @@ module.exports = class Compiler {
     }
 
     if (this._includeRuntime) {
-      template = template.replace(/MOD_HTLENGINE/, JSON.stringify(this._modHTLEngine));
+      let engine = JSON.stringify(this._modHTLEngine).slice(1, -1);
+      template = template.replace(/MOD_HTLENGINE/, engine);
     }
 
     let index = template.search(/^\s*\/\/\s*TEMPLATES\s*$/m);
