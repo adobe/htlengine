@@ -159,7 +159,7 @@ module.exports = class Compiler {
     }
 
     if (this._includeRuntime) {
-      template = template.replace(/MOD_HTLENGINE/, this._modHTLEngine);
+      template = template.replace(/MOD_HTLENGINE/, this._modHTLEngine.replace(/\\/g, '\\\\'));
     }
 
     let index = template.search(/^\s*\/\/\s*TEMPLATES\s*$/m);
