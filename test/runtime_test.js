@@ -54,7 +54,7 @@ describe('Runtime Tests', () => {
     const compiler = new Compiler()
       .withOutputDirectory(outputDir)
       .includeRuntime(true)
-      .withRuntimeHTLEngine(path.resolve(__dirname, '../', pkgJson.main))
+      .withRuntimeHTLEngine(path.resolve(__dirname, '..', pkgJson.main))
       .withOutputFile(path.resolve(outputDir, 'runtime_test_script_1.js'))
       .withRuntimeVar(Object.keys(GLOBALS));
 
@@ -74,7 +74,7 @@ describe('Runtime Tests', () => {
     const compiler = new Compiler()
       .withOutputDirectory(outputDir)
       .includeRuntime(true)
-      .withRuntimeHTLEngine(path.resolve(__dirname, '../', pkgJson.main))
+      .withRuntimeHTLEngine(path.resolve(__dirname, '..', pkgJson.main))
       .withOutputFile(path.resolve(outputDir, 'runtime_test_script_2.js'))
       .withRuntimeVar(Object.keys(GLOBALS))
       .withCodeTemplate(customTemplate);
