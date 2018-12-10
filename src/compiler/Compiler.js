@@ -159,7 +159,7 @@ module.exports = class Compiler {
     }
 
     if (this._includeRuntime) {
-      let engine = JSON.stringify(this._modHTLEngine).slice(1, -1);
+      const engine = JSON.stringify(this._modHTLEngine).slice(1, -1);
       template = template.replace(/MOD_HTLENGINE/, engine);
     }
 
