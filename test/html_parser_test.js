@@ -14,30 +14,48 @@
 
 // built-in modules
 const assert = require('assert');
+const path = require('path');
 // declared dependencies
 const fse = require('fs-extra');
 // local modules
 const MarkupHandler = require('../src/parser/html/MarkupHandler');
 const CommandStream = require('../src/parser/commands/CommandStream');
-
 const HTMLParser = require('../src/parser/html/HTMLParser');
+const TestHandler = require('./TestHandler');
 
-function process(input) {
-  const handler = new MarkupHandler(new CommandStream());
-  HTMLParser.parse(input, handler);
-  // eslint-disable-next-line no-console
-  console.log(handler.result);
-  return handler.result;
-}
+/**
+ * Simple tests that check if the parser can parse html
+ */
+describe('HTML Parsing', () => {
+  const TEST_FILES = ['simple.htm', '400kb.htm', '700kb.htm'];
+
+  TEST_FILES.forEach((filename) => {
+    it(`parses ${filename}`, async () => {
+      const filePath = path.resolve(__dirname, 'templates', filename);
+      const source = await fse.readFile(filePath, 'utf-8');
+
+      const handler = new TestHandler();
+      HTMLParser.parse(source, handler);
+      assert.equal(handler.result, source);
+    });
+  });
+});
 
 /**
  * Simple tests that check if the parser can process all the expressions
  */
-describe('Simple', () => {
-  it('parses the simple html', async () => {
-    const filename = 'test/templates/simple.htm';
-    const source = await fse.readFile(filename, 'utf-8');
-    const result = process(source);
-    assert.equal(result, source);
+describe('HTML Parsing and Processing', () => {
+  // todo: enable large tests once performance issues are addressed
+  const TEST_FILES = ['simple.htm'/* , '400kb.htm', '700kb.htm' */];
+
+  TEST_FILES.forEach((filename) => {
+    it(`parses and processes ${filename}`, async () => {
+      const filePath = path.resolve(__dirname, 'templates', filename);
+      const source = await fse.readFile(filePath, 'utf-8');
+
+      const handler = new MarkupHandler(new CommandStream());
+      HTMLParser.parse(source, handler);
+      assert.equal(handler.result, source);
+    }).timeout(30000);
   });
 });
