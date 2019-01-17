@@ -19,10 +19,12 @@ module.exports = class Interpolation {
   constructor() {
     this._fragments = [];
     this._content = '';
+    this._isPlainText = true;
   }
 
   // eslint-disable-next-line no-unused-vars
   addExpression(expression, token) {
+    this._isPlainText = false;
     this._fragments.push({
       expression,
     });
@@ -52,13 +54,12 @@ module.exports = class Interpolation {
   }
 
   getPlainText() {
+    if (!this._isPlainText) {
+      return null;
+    }
     let text = '';
     for (let i = 0; i < this._fragments.length; i += 1) {
-      const frag = this._fragments[i];
-      if (frag.expression) {
-        return null;
-      }
-      text += frag.text;
+      text += this._fragments[i].text;
     }
     return text;
   }

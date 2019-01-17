@@ -57,8 +57,7 @@ describe('Engine test', async () => {
 
 describe('Engine Performance test', async () => {
   // todo: enable large tests once performance issues are addressed
-  // const TEST_FILES = ['simple2.html', '400kb.htm', '700kb.htm'];
-  const TEST_FILES = ['simple2.html'];
+  const TEST_FILES = ['simple2.html', '400kb.htm', '700kb.htm'];
 
   TEST_FILES.forEach((filename) => {
     it(`produces htl output for ${filename}`, async () => {

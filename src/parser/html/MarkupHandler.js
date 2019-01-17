@@ -184,7 +184,7 @@ module.exports = class MarkupHandler {
     plugin.beforeAttribute(this._stream, name);
     if (value == null) {
       this._emitSimpleTextAttribute(name, null, quoteChar, plugin);
-    } else if (value.startsWith('${')) {
+    } else if (value.indexOf('${') >= 0) {
       const interpolation = this._htlParser.parse(value);
       const plainText = interpolation.getPlainText();
       if (plainText !== null) {
@@ -327,8 +327,13 @@ module.exports = class MarkupHandler {
   }
 
   _outText(content, markupContext, line, column) {
-    const location = { line, column };
+    // skip HTL parser if no HTL expression in content
+    if (!content || content.indexOf('${') < 0) {
+      this._out(content);
+      return;
+    }
 
+    const location = { line, column };
     const interpolation = this._htlParser.parse(content);
     if (markupContext == null) {
       // interpolation = requireContext(interpolation); todo
