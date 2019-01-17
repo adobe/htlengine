@@ -59,7 +59,6 @@ module.exports = class MarkupHandler {
   }
 
   onDocumentStart() {
-    this._result = '';
     this._stack = [];
   }
 
@@ -68,18 +67,13 @@ module.exports = class MarkupHandler {
   }
 
   onOpenTagStart(tagName) {
-    this._result += `<${tagName}`;
-
     this._stack.push(new ElementContext(tagName));
+
+    const tag = tagName.toLowerCase();
+    this._inScriptOrStyle = tag === 'script' || tag === 'style';
   }
 
   onAttribute(name, value, quoteChar, line, column) {
-    if (value !== null) {
-      this._result += ` ${name}=${quoteChar}${value}${quoteChar}`;
-    } else {
-      this._result += ` ${name}`;
-    }
-
     const context = this._stack[this._stack.length - 1];
     const signature = PluginSignature.fromAttribute(name);
     if (signature) {
@@ -91,11 +85,10 @@ module.exports = class MarkupHandler {
 
   onOpenTagEnd(isEmpty, isVoid) {
     const markup = isEmpty ? '/>' : '>';
-    this._result += markup;
-
     const context = this._stack[this._stack.length - 1];
     const { plugin } = context;
     const stream = this._stream;
+    this._inScriptOrStyle = false; // we never have nesting script or style tags.
 
     plugin.beforeElement(stream, context.tagName);
     if (context.isSlyTag) {
@@ -120,7 +113,6 @@ module.exports = class MarkupHandler {
 
   onCloseTag(tagName, isVoid) {
     if (!isVoid) {
-      this._result += `</${tagName}>`;
       this._onEndTag(false, isVoid);
     }
   }
@@ -145,19 +137,11 @@ module.exports = class MarkupHandler {
   }
 
   onText(text, line, column) {
-    this._result += text;
-
-    const currentTagName = (this._stack.length === 0 ? '' : this._stack[this._stack.length - 1].tagName).toLowerCase();
-    let markupContext = null;
-    if (currentTagName === 'script' || currentTagName === 'style') {
-      markupContext = MarkupContext.TEXT;
-    }
+    const markupContext = this._inScriptOrStyle ? MarkupContext.TEXT : null;
     this._outText(text, markupContext, line, column);
   }
 
   onComment(markup, line, column) {
-    this._result += markup;
-
     const trimmed = markup ? markup.trim() : '';
     const isSlyComment = trimmed.startsWith(SLY_COMMENT_PREFIX)
       && trimmed.endsWith(SLY_COMMENT_SUFFIX);
@@ -168,13 +152,7 @@ module.exports = class MarkupHandler {
   }
 
   onDocType(markup, line, column) {
-    this._result += markup;
-
     this._outText(markup, MarkupContext.TEXT, line, column);
-  }
-
-  get result() {
-    return this._result;
   }
 
   _handlePlugin(name, signature, value, context, location) {
@@ -206,7 +184,7 @@ module.exports = class MarkupHandler {
     plugin.beforeAttribute(this._stream, name);
     if (value == null) {
       this._emitSimpleTextAttribute(name, null, quoteChar, plugin);
-    } else {
+    } else if (value.startsWith('${')) {
       const interpolation = this._htlParser.parse(value);
       const plainText = interpolation.getPlainText();
       if (plainText !== null) {
@@ -214,6 +192,8 @@ module.exports = class MarkupHandler {
       } else {
         this._emitExpressionAttribute(name, interpolation, quoteChar, plugin, location);
       }
+    } else {
+      this._emitSimpleTextAttribute(name, value, quoteChar, plugin);
     }
     plugin.afterAttribute(this._stream, name);
   }
