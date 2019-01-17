@@ -37,6 +37,8 @@ module.exports = async function main(resource, template) {
   await fse.writeFile(filename, code, 'utf-8');
 
   // eslint-disable-next-line import/no-dynamic-require,global-require
+  delete require.cache[require.resolve(filename)];
+  // eslint-disable-next-line import/no-dynamic-require,global-require
   const service = require(filename);
   return service.main(resource);
 };
