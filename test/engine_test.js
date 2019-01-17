@@ -54,3 +54,18 @@ describe('Engine test', async () => {
     assert.equal(ret.body, expected);
   });
 });
+
+describe('Engine Performance test', async () => {
+  // todo: enable large tests once performance issues are addressed
+  // const TEST_FILES = ['simple2.html', '400kb.htm', '700kb.htm'];
+  const TEST_FILES = ['simple2.html'];
+
+  TEST_FILES.forEach((filename) => {
+    it(`produces htl output for ${filename}`, async () => {
+      const filePath = path.resolve(__dirname, 'templates', filename);
+      const source = await fse.readFile(filePath, 'utf-8');
+      const result = await engine(GLOBALS, source);
+      assert.equal(result.body, source);
+    }).timeout(30000);
+  });
+});
