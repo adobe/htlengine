@@ -1,0 +1,15 @@
+.circleci
+.github
+.gitignore
+.nyc_output
+.lgtm.yml
+out.js
+.DS_Store
+.snyk
+.vscode
+.idea
+.releaserc.js
+logs
+greenkeeper.json
+test
+coverage
