@@ -152,4 +152,3 @@ module.exports = function formatUri(uri, opts) {
   u.path(u.path() + selectorString + extension + suffix);
   return u.normalizePath().toString();
 };
-

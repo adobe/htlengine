@@ -128,14 +128,14 @@ const _URL_UNQUOTED = `[^"^'^\\(^\\)^[${_NON_ASCII}]]*`;
 /** http://www.w3.org/TR/css-syntax-3/#url-token-diagram */
 const _URL = `url\\((?:(?:${_URL_UNQUOTED})|(?:${_STRING}))\\)`;
 /** composite regular expression for style token validation */
-const _CSS_TOKEN = `(?:${_NUMBER})` +
-  `|(?:${_DIMENSION})` +
-  `|(?:${_PERCENT})` +
-  `|(?:${_HEX_DIGITS})` +
-  `|(?:${_IDENTIFIER})` +
-  `|(?:${_STRING})` +
-  `|(?:${_FUNCTION})` +
-  `|(?:${_URL})`;
+const _CSS_TOKEN = `(?:${_NUMBER})`
+  + `|(?:${_DIMENSION})`
+  + `|(?:${_PERCENT})`
+  + `|(?:${_HEX_DIGITS})`
+  + `|(?:${_IDENTIFIER})`
+  + `|(?:${_STRING})`
+  + `|(?:${_FUNCTION})`
+  + `|(?:${_URL})`;
 
 /* eslint-enable no-underscore-dangle */
 

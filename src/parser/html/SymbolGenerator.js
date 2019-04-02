@@ -24,4 +24,3 @@ module.exports = class SymbolGenerator {
     return this._prefix + middle + this._counter;
   }
 };
-

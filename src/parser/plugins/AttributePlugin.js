@@ -261,10 +261,10 @@ module.exports = class AttributePlugin extends Plugin {
     if (this.attributeName == null || !BLACKLIST_ATTRIBUTE.test(this.attributeName)) {
       return true;
     }
-    const warningMessage =
-            `Sensible attribute (${this.attributeName}) detected: event attributes (on*) and the style attribute ` +
-            'cannot be generated with the data-sly-attribute block element; if you need to output a dynamic value for ' +
-            'this attribute then use an expression with an appropriate context.';
+    const warningMessage = ''
+            + `Sensible attribute (${this.attributeName}) detected: event attributes (on*) and the style attribute `
+            + 'cannot be generated with the data-sly-attribute block element; if you need to output a dynamic value for '
+            + 'this attribute then use an expression with an appropriate context.';
     this.pluginContext.stream.warn(warningMessage, this.expression.rawText);
     return false;
   }

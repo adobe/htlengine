@@ -39,6 +39,7 @@ module.exports = class InterpretingCommandVisitor {
     this._runtime = runtime;
     return this;
   }
+
   withCommands(commands) {
     this._commands = commands;
     return this;
@@ -150,4 +151,3 @@ module.exports = class InterpretingCommandVisitor {
     }
   }
 };
-

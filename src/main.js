@@ -42,4 +42,3 @@ module.exports = async function main(resource, template) {
   const service = require(filename);
   return service.main(resource);
 };
-

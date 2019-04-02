@@ -10,12 +10,12 @@
  * governing permissions and limitations under the License.
  */
 
-const format = require('../runtime/format');
-const formatUri = require('../runtime/format_uri');
-const formatXss = require('../runtime/format_xss');
 const path = require('path');
 const co = require('co');
 const fs = require('fs');
+const format = require('../runtime/format');
+const formatUri = require('../runtime/format_uri');
+const formatXss = require('../runtime/format_xss');
 
 module.exports = class Runtime {
   constructor() {

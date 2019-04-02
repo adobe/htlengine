@@ -201,4 +201,3 @@ module.exports = class JSCodeGenVisitor {
     }
   }
 };
-

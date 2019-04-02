@@ -45,4 +45,3 @@ module.exports = class PluginContext {
     return this._transformer.adjustToContext(expression, markupContext, expressionContext);
   }
 };
-

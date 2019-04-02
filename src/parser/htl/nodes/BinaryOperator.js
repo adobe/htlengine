@@ -77,8 +77,7 @@ module.exports = Object.freeze({
   EQ: {
     sym: '==',
     calc: (left, right) =>
-      /* eslint eqeqeq: 'off' */
-      // noinspection EqualityComparisonWithCoercionJS
+      // eslint-disable-next-line implicit-arrow-linebreak,eqeqeq
       left == right,
   },
 
@@ -88,7 +87,7 @@ module.exports = Object.freeze({
   NEQ: {
     sym: '!=',
     calc: (left, right) =>
-      // noinspection EqualityComparisonWithCoercionJS
+      // eslint-disable-next-line eqeqeq,implicit-arrow-linebreak
       left != right,
   },
 
@@ -162,6 +161,4 @@ module.exports = Object.freeze({
     calc: (left, right) => Number(left) % Number(right),
 
   },
-
 });
-

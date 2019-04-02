@@ -14,12 +14,12 @@
 const path = require('path');
 // declared dependencies
 const fse = require('fs-extra');
+const { SourceMapGenerator } = require('source-map');
 // local modules
 const TemplateParser = require('../parser/html/TemplateParser');
 const ThrowingErrorListener = require('../parser/htl/ThrowingErrorListener');
 const JSCodeGenVisitor = require('./JSCodeGenVisitor');
 
-const { SourceMapGenerator } = require('source-map');
 
 const DEFAULT_TEMPLATE = 'JSCodeTemplate.js';
 const RUNTIME_TEMPLATE = 'JSRuntimeTemplate.js';
@@ -179,8 +179,8 @@ module.exports = class Compiler {
       mappings.forEach((mapping) => {
         generator.addMapping({
           generated: {
-            line: mapping.generatedLine +
-              (mapping.inFunctionBlock ? templatesOffset : codeOffset) + 1,
+            line: mapping.generatedLine
+              + (mapping.inFunctionBlock ? templatesOffset : codeOffset) + 1,
             column: mapping.generatedColumn,
           },
           source: '<internal>',
