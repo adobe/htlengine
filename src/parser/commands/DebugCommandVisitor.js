@@ -42,7 +42,7 @@ module.exports = class DebugCommandVisitor {
 
   visit(cmd) {
     if (cmd instanceof OutText) {
-      this.out(`out(${escapeJavaString(cmd.text)});`);
+      this.out(`$.out(${escapeJavaString(cmd.text)});`);
     } else if (cmd instanceof VariableBinding.Start) {
       const exp = ExpressionFormatter.format(cmd.expression);
       this.out(`{ const ${cmd.variableName} = ${exp};`);
@@ -62,7 +62,7 @@ module.exports = class DebugCommandVisitor {
       this._indent -= 1;
       this.out('}');
     } else if (cmd instanceof OutputVariable) {
-      this.out(`out(${cmd.variableName});`);
+      this.out(`$.out(${cmd.variableName});`);
     } else if (cmd instanceof Loop.Start) {
       this.out(`for ((${cmd.indexVariable},${cmd.itemVariable}) in ${cmd.listVariable}) {`);
       this._indent += 1;

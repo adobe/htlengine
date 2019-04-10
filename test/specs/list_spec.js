@@ -18,5 +18,6 @@ module.exports = {
       b: 2,
       c: 3,
     },
+    'jcr:content': ['Apple', 'Banana', 'Orange'],
   },
 };

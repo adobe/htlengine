@@ -2,7 +2,7 @@
 ### sightly call function
 #
 <template data-sly-template.foo><section>Template</section></template>
-<div data-sly-call="${'foo'}"></div>
+<div data-sly-call="${foo}"></div>
 ===
 
 <section>Template</section>
@@ -10,7 +10,7 @@
 ### sightly call function with empty attribute value
 #
 <template data-sly-template.foo=""><section>Template</section></template>
-<div data-sly-call="${'foo'}"></div>
+<div data-sly-call="${foo}"></div>
 ===
 
 <section>Template</section>
@@ -18,28 +18,44 @@
 ### sightly call function with parameter
 #
 <template data-sly-template.foo="${ @ param }"><section>${param}</section></template>
-<div data-sly-call="${'foo' @ param='Template' }"></div>
+<div data-sly-call="${foo @ param='Template' }"></div>
 ===
 
 <section>Template</section>
 ^^^
-    out(var_0);
+    $.out(var_0);
+#
+### sightly call function with colon in name
+#
+<template data-sly-template.foo:bar="${ @ param }"><section>${param}</section></template>
+<div data-sly-call="${foo:bar @ param='Template' }"></div>
+===
+
+<section>Template</section>
+#
+### sightly call function with parameter with colon
+#
+<template data-sly-template.foo="${ @ jcr:title }"><section>${jcr:title}</section></template>
+<div data-sly-call="${foo @ jcr:title='Template' }"></div>
+===
+
+<section>Template</section>
 #
 ### sightly call function with missing parameter
 #
 <template data-sly-template.foo="${ @ param='Missing parameter' }"><section>${param}</section></template>
-<div data-sly-call="${'foo'}"></div>
+<div data-sly-call="${foo}"></div>
 ===
 
 <section></section>
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ### sightly call function can be redeclared
 #
 <template data-sly-template.foo="${ @ param }"><section>Template 1</section></template>
 <template data-sly-template.foo="${ @ param }"><section>Template 2</section></template>
-<div data-sly-call="${'foo'}"></div>
+<div data-sly-call="${foo}"></div>
 ===
 
 
@@ -47,11 +63,9 @@
 #
 ### sightly call function in any order
 #
-<div data-sly-call="${'foo'}"></div>
 <div data-sly-call="${foo}"></div>
 <template data-sly-template.foo="${ @ param }"><section>Template</section></template>
 ===
-<section>Template</section>
 <section>Template</section>
 
 #
@@ -65,83 +79,83 @@
 <section></section>
 
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ### sightly call function can call other templates
 #
-<template data-sly-template.foo="${@ a}"><div data-sly-call="${'bar' @ a=a}"></div></template>
+<template data-sly-template.foo="${@ a}"><div data-sly-call="${bar @ a=a}"></div></template>
 <template data-sly-template.bar="${@ a}"><section>${a}</section></template>
-<div data-sly-call="${'foo' @ a=123}"></div>
+<div data-sly-call="${foo @ a=123}"></div>
 ===
 
 
 <section>123</section>
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ### sightly call function can call itself recursively
 #
-<template data-sly-template.foo="${@ pages}">	
-  <ul data-sly-list="${pages}">
-    <li><span>${item.title}</span><sly data-sly-call="${'foo' @ pages=item.pages}"></sly></li>
-  </ul>
+<template data-sly-template.foo="${@ pages}">
+<ul data-sly-list="${pages}">
+<li><span>${item.title}</span><sly data-sly-call="${foo @ pages=item.pages}"></sly></li>
+</ul>
 </template>
 <sly data-sly-use.bar="${'call_spec/recursion_test.js'}" data-sly-call="${foo @ pages=bar.pages}"></sly>
 ===
 
-	
-  <ul>
-    <li><span>Page A</span>	
-  <ul>
-    <li><span>Page 1</span>	
-  
+
+<ul>
+<li><span>Page A</span>
+<ul>
+<li><span>Page 1</span>
+
 </li>
-  
-    <li><span>Page 2</span>	
-  
+
+<li><span>Page 2</span>
+
 </li>
-  
-    <li><span>Page 3</span>	
-  
+
+<li><span>Page 3</span>
+
 </li>
-  </ul>
+</ul>
 </li>
-  
-    <li><span>Page B</span>	
-  <ul>
-    <li><span>Page 1</span>	
-  
+
+<li><span>Page B</span>
+<ul>
+<li><span>Page 1</span>
+
 </li>
-  
-    <li><span>Page 2</span>	
-  
+
+<li><span>Page 2</span>
+
 </li>
-  </ul>
+</ul>
 </li>
-  
-    <li><span>Page C</span>	
-  <ul>
-    <li><span>Page 1</span>	
-  
+
+<li><span>Page C</span>
+<ul>
+<li><span>Page 1</span>
+
 </li>
-  
-    <li><span>Page 2</span>	
-  
+
+<li><span>Page 2</span>
+
 </li>
-  
-    <li><span>Page 3</span>	
-  
+
+<li><span>Page 3</span>
+
 </li>
-  
-    <li><span>Page 4</span>	
-  
+
+<li><span>Page 4</span>
+
 </li>
-  </ul>
+</ul>
 </li>
-  </ul>
+</ul>
 
 ^^^
     if (var_size1) {
-        out(var_3);
+        $.out(var_3);
 #
 ###

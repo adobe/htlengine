@@ -11,7 +11,7 @@ Asset Night Sky
 Asset 3 out of 5
 Asset 3 out of 5
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ### todo: number formats
 #

@@ -15,7 +15,6 @@ const VariableBinding = require('../parser/commands/VariableBinding');
 const FunctionBlock = require('../parser/commands/FunctionBlock');
 const Conditional = require('../parser/commands/Conditional');
 const Loop = require('../parser/commands/Loop');
-const Comment = require('../parser/commands/Comment');
 const OutputVariable = require('../parser/commands/OutputVariable');
 const OutputExpression = require('../parser/commands/OutputExpression');
 const ExpressionFormatter = require('./ExpressionFormatter');
@@ -68,21 +67,6 @@ module.exports = class JSCodeGenVisitor {
   }
 
   process(commands) {
-    const definedVariables = [];
-
-    // first define the globals so they are accessible from any block below
-    commands.forEach((c) => {
-      if (c instanceof VariableBinding.Global) {
-        this._out(`let ${c.variableName};`);
-      } else if (c instanceof FunctionBlock.Start) {
-        // Prevent the variable from being re-defined
-        if (definedVariables.includes(c.expression) === false) {
-          this._out(`let ${c.expression} = '${c.expression}';`);
-          definedVariables.push(c.expression);
-        }
-      }
-    });
-
     commands.forEach((c) => {
       c.accept(this);
     });
@@ -142,7 +126,7 @@ module.exports = class JSCodeGenVisitor {
     }
 
     if (cmd instanceof OutText) {
-      this._out(`out(${escapeJavaString(cmd.text)});`);
+      this._out(`$.out(${escapeJavaString(cmd.text)});`);
     } else if (cmd instanceof OutputExpression) {
       const exp = ExpressionFormatter.format(cmd.expression);
       this._out(`${exp};`);
@@ -151,7 +135,7 @@ module.exports = class JSCodeGenVisitor {
       this._out(`const ${cmd.variableName} = ${exp};`);
     } else if (cmd instanceof VariableBinding.Global) {
       const exp = ExpressionFormatter.format(cmd.expression);
-      this._out(`${cmd.variableName} = ${exp};`);
+      this._out(`${ExpressionFormatter.escapeVariable(cmd.variableName)} = ${exp};`);
     } else if (cmd instanceof VariableBinding.End) {
       // nop
     } else if (cmd instanceof FunctionBlock.Start) {
@@ -164,12 +148,12 @@ module.exports = class JSCodeGenVisitor {
       this.setIndent(0);
 
       const exp = ExpressionFormatter.format(cmd.expression);
-      const functionName = `_template_${exp}`;
-      this._out(`template('${exp}', function* ${functionName}() {`);
+      const functionName = `_template_${ExpressionFormatter.escapeVariable(exp)}`;
+      this._out(`$.template('${exp}', function* ${functionName}() {`);
       this.indent();
 
       cmd.arguments.forEach((arg) => {
-        this._out(`const ${arg} = arguments[0]['${arg}'] || '';`);
+        this._out(`const ${ExpressionFormatter.escapeVariable(arg)} = arguments[0]['${arg}'] || '';`);
       });
     } else if (cmd instanceof FunctionBlock.End) {
       this.outdent();
@@ -185,17 +169,14 @@ module.exports = class JSCodeGenVisitor {
       this.outdent();
       this._out('}');
     } else if (cmd instanceof OutputVariable) {
-      this._out(`out(${cmd.variableName});`);
+      this._out(`$.out(${cmd.variableName});`);
     } else if (cmd instanceof Loop.Start) {
-      // this._out(`for (${cmd.indexVariable},${cmd.itemVariable}) in ${cmd.listVariable}) {`);
       this._out(`for (const ${cmd.indexVariable} of Object.keys(${cmd.listVariable})) {`);
       this.indent();
       this._out(`const ${cmd.itemVariable} = Array.isArray(${cmd.listVariable}) ? ${cmd.listVariable}[${cmd.indexVariable}] : ${cmd.indexVariable};`);
     } else if (cmd instanceof Loop.End) {
       this.outdent();
       this._out('}');
-    } else if (cmd instanceof Comment) {
-      this._out(`/* ${cmd.text} */`);
     } else {
       throw new Error(`unknown command: ${cmd}`);
     }

@@ -6,16 +6,16 @@
 ---
 { const var_testVariable0 = properties["false0"];
   if (var_testVariable0) {
-    out("<div>nope</div>");
+    $.out("<div>nope</div>");
   }
 }
-out("\n");
+$.out("\n");
 { const var_testVariable1 = properties["true0"];
   if (var_testVariable1) {
-    out("<div>yeah!</div>");
+    $.out("<div>yeah!</div>");
   }
 }
-out("\n");
+$.out("\n");
 ===
 
 <div>yeah!</div>
@@ -27,16 +27,16 @@ It was: ${mytest}
 ---
 global.mytest = properties["true0"];
 if (mytest) {
-  out("<div>It is true!</div>");
+  $.out("<div>It is true!</div>");
 }
 { const var_0 = ("\nIt was: ") + (mytest) + ("\n");
-  out(var_0);
+  $.out(var_0);
 }
 ===
 <div>It is true!</div>
 It was: hello
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ### recursive test: true - true
 #
@@ -55,5 +55,21 @@ It was: hello
 <div data-sly-test="${properties.false1}">Title: <b data-sly-test="${properties.true1}">Bold!</b></test>
 ===
 
+#
+### test with global variable
+#
+<div data-sly-test.out="${properties.true0}">It is true!</div>
+It was: ${out}
+===
+<div>It is true!</div>
+It was: hello
+#
+### test with variable with colon
+#
+<div data-sly-test.is:out="${properties.true0}">It is true!</div>
+It was: ${is:out}
+===
+<div>It is true!</div>
+It was: hello
 #
 ###

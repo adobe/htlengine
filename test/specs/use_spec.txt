@@ -5,7 +5,7 @@
 ===
 <div>Hello Jupiter.</div>
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ### passing params
 #
@@ -13,7 +13,13 @@
 ===
 <div>Moon: Europa</div>
 ^^^
-    out(var_0);
+    $.out(var_0);
+#
+### passing params with colon
+#
+<div data-sly-use.page="${'use_spec/test_page.js' @ jcr:title='Space Report'}">${page.title}</div>
+===
+<div>Space Report</div>
 #
 ### using functions
 #
@@ -21,7 +27,13 @@
 ===
 <div>Surface Area: 61575216010.35994</div>
 ^^^
-    out(var_0);
+    $.out(var_0);
+#
+### using functions with colon
+#
+<div data-sly-use.page="${'use_spec/test_page.js'}">etag: ${page.jcr:etag}</div>
+===
+<div>etag: 1234</div>
 #
 ### using async use classes
 #
@@ -29,6 +41,6 @@
 ===
 <div>Hello Saturn.</div>
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ###
