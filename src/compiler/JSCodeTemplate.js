@@ -12,18 +12,17 @@
 
 /* eslint-disable */
 module.exports = function main(runtime) {
-  const lengthOf = function (c) {
-    return Array.isArray(c) ? c.length : Object.keys(c).length;
+  const $ = {
+    lengthOf: c => Array.isArray(c) ? c.length : Object.keys(c).length,
+    out: runtime.out.bind(runtime),
+    exec: runtime.exec.bind(runtime),
+    xss: runtime.xss.bind(runtime),
+    listInfo: runtime.listInfo.bind(runtime),
+    use: runtime.use.bind(runtime),
+    slyResource: runtime.resource.bind(runtime),
+    call: runtime.call.bind(runtime),
+    template: runtime.template.bind(runtime),
   };
-
-  const out = runtime.out.bind(runtime);
-  const exec = runtime.exec.bind(runtime);
-  const xss = runtime.xss.bind(runtime);
-  const listInfo = runtime.listInfo.bind(runtime);
-  const use = runtime.use.bind(runtime);
-  const slyResource = runtime.resource.bind(runtime);
-  const call = runtime.call.bind(runtime);
-  const template = runtime.template.bind(runtime);
 
   // TEMPLATES
 

@@ -13,7 +13,9 @@ module.exports = {
   properties: {
     myValues: 'some data value',
     myClass: 'super-green',
+    'jcr:content': 'the content',
   },
+  'jcr:content': 'hello again',
   quotes: 'Hello, "World!"',
   foobar: {
     id: 'foo',

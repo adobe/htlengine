@@ -14,70 +14,13 @@ const Atom = require('./Atom');
 
 class StringConstant extends Atom {
   static parse(str) {
-    let sb = '';
-    const end = str.length - 2;
-    for (let i = 1; i <= end; i += 1) {
-      let ch = str[i];
-      if (ch === '\\') {
-        const nextChar = i === end ? '\\' : str[i + 1];
-
-        // Octal escape?
-        if (nextChar >= '0' && nextChar <= '7') {
-          let code = `${nextChar}`;
-          i += 1;
-          if (i < end && str[i + 1] >= '0' && str[i + 1] <= '7') {
-            code += str[i + 1];
-            i += 1;
-            if (i < end && str[i + 1] >= '0' && str[i + 1] <= '7') {
-              code += str[i + 1];
-              i += 1;
-            }
-          }
-          sb.append(Number.parseInt(code, 8));
-        } else {
-          switch (nextChar) {
-            case '\\':
-              ch = '\\';
-              break;
-            case 'b':
-              ch = '\b';
-              break;
-            case 'f':
-              ch = '\f';
-              break;
-            case 'n':
-              ch = '\n';
-              break;
-            case 'r':
-              ch = '\r';
-              break;
-            case 't':
-              ch = '\t';
-              break;
-            case '"':
-              ch = '"';
-              break;
-            case '\'':
-              ch = '\'';
-              break;
-            // Hex Unicode: u????
-            case 'u':
-              if (i >= str.length - 6) {
-                ch = 'u';
-                break;
-              }
-              sb += String.fromCharCode(Number.parseInt(str.substr(i, 4), 16));
-              i += 4;
-              break;
-            default:
-              // nop
-          }
-          i += 1;
-        }
-      }
-      sb += ch;
+    if (str[0] === '\'') {
+      const sb = str.substring(1, str.length - 1)
+        .replace(/[^\\]"/g, '\\"')
+        .replace('\\\'', '\'');
+      return new StringConstant(JSON.parse(`{"s":"${sb}"}`).s);
     }
-    return new StringConstant(sb);
+    return new StringConstant(JSON.parse(`{"s":${str}}`).s);
   }
 
   constructor(text) {

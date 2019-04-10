@@ -33,7 +33,7 @@ options {
     const PropertyAccess = require('../htl/nodes/PropertyAccess');
     const Expression = require('../htl/nodes/Expression');
     const Interpolation = require('../htl/nodes/Interpolation');
-    const Identifier = require('../htl/nodes/Identifier');
+    const PropertyIdentifier = require('../htl/nodes/PropertyIdentifier');
     const BinaryOperator = require('../htl/nodes/BinaryOperator');
     const BinaryOperation = require('../htl/nodes/BinaryOperation');
     const UnaryOperator = require('../htl/nodes/UnaryOperator');
@@ -87,7 +87,7 @@ binaryOp returns [ExpressionNode node] //is there any priority precedence betwee
     :   left=comparisonTerm { $node = $left.node; }
         (operator right=comparisonTerm { $node = new BinaryOperation($operator.op, $node, $right.node); })*
     ;
-    
+
 operator returns [BinaryOperator op]
     :    AND_OP { $op = BinaryOperator.AND; } | OR_OP { $op = BinaryOperator.OR; }
     ;
@@ -135,7 +135,7 @@ valueList returns [List<ExpressionNode> values]
 
 atom returns [Atom node]
     :    stringConst { $node = $stringConst.node; }
-    |    ID { $node = new Identifier($ID.text); }
+    |    ID { $node = new PropertyIdentifier($ID.text); }
     |    numText=(FLOAT | INT) { $node = new NumericConstant($numText.text); }
     |    boolText=BOOL_CONSTANT { $node = new BooleanConstant($boolText.text); }
     ;

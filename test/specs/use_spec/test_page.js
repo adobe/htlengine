@@ -14,10 +14,13 @@ module.exports = class MyUseClass {
     const r = Number(this.radius);
 
     return {
-      title: 'Jupiter',
+      title: this['jcr:title'] || 'Jupiter',
       subTitle: `${this.value1}: ${this.value2}`,
       get area() {
         return 4 * Math.PI * r * r;
+      },
+      get 'jcr:etag'() {
+        return '1234';
       },
     };
   }

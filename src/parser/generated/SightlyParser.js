@@ -1,15 +1,3 @@
-/*
- * Copyright 2018 Adobe. All rights reserved.
- * This file is licensed to you under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License. You may obtain a copy
- * of the License at http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
- * OF ANY KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
- */
-
 // Generated from src/parser/grammar/SightlyParser.g4 by ANTLR 4.7.1
 // jshint ignore: start
 var antlr4 = require('antlr4/index');
@@ -24,7 +12,7 @@ var SightlyParserListener = require('./SightlyParserListener').SightlyParserList
     const PropertyAccess = require('../htl/nodes/PropertyAccess');
     const Expression = require('../htl/nodes/Expression');
     const Interpolation = require('../htl/nodes/Interpolation');
-    const Identifier = require('../htl/nodes/Identifier');
+    const PropertyIdentifier = require('../htl/nodes/PropertyIdentifier');
     const BinaryOperator = require('../htl/nodes/BinaryOperator');
     const BinaryOperation = require('../htl/nodes/BinaryOperation');
     const UnaryOperator = require('../htl/nodes/UnaryOperator');
@@ -1877,7 +1865,7 @@ SightlyParser.prototype.atom = function() {
             this.enterOuterAlt(localctx, 2);
             this.state = 209;
             localctx._ID = this.match(SightlyParser.ID);
-             localctx.node =  new Identifier((localctx._ID===null ? null : localctx._ID.text)) 
+             localctx.node =  new PropertyIdentifier((localctx._ID===null ? null : localctx._ID.text)) 
             break;
         case SightlyParser.INT:
         case SightlyParser.FLOAT:

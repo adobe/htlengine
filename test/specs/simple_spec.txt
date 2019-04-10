@@ -3,7 +3,7 @@
 #
 Hello, World
 ---
-out("Hello, World\n");
+$.out("Hello, World\n");
 ===
 Hello, World
 #
@@ -12,25 +12,25 @@ Hello, World
 Hello, ${world}.
 ---
 { const var_0 = ("Hello, ") + (world) + (".\n");
-  out(var_0);
+  $.out(var_0);
 }
 ===
 Hello, Earth.
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ### sly-text with simple string
 #
 <p data-sly-text="${'Hello, world.'}">This text would never be shown.</p>
 ---
-out("<p>");
-{ const var_textContent0 = xss("Hello, world.", "text");
-  out(var_textContent0);
+$.out("<p>");
+{ const var_textContent0 = $.xss("Hello, world.", "text");
+  $.out(var_textContent0);
 }
 if (false) {
-  out("This text would never be shown.");
+  $.out("This text would never be shown.");
 }
-out("</p>\n");
+$.out("</p>\n");
 ===
 <p>Hello, world.</p>
 #
@@ -38,14 +38,14 @@ out("</p>\n");
 #
 <p data-sly-text="${properties.title}">This text would never be shown.</p>
 ---
-out("<p>");
-{ const var_textContent0 = xss(properties["title"], "text");
-  out(var_textContent0);
+$.out("<p>");
+{ const var_textContent0 = $.xss(properties["title"], "text");
+  $.out(var_textContent0);
 }
 if (false) {
-  out("This text would never be shown.");
+  $.out("This text would never be shown.");
 }
-out("</p>\n");
+$.out("</p>\n");
 ===
 <p>Hello, world.</p>
 #
@@ -53,25 +53,25 @@ out("</p>\n");
 #
 Fruits: ${['Apple', 'Banana', 'Orange'] @ join='*'}
 ---
-{ const var_0 = ("Fruits: ") + (exec("join", ["Apple", "Banana", "Orange"], "*")) + ("\n");
-  out(var_0);
+{ const var_0 = ("Fruits: ") + ($.exec("join", ["Apple", "Banana", "Orange"], "*")) + ("\n");
+  $.out(var_0);
 }
 ===
 Fruits: Apple*Banana*Orange
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ### join filter test with variables
 #
 Fruits: ${properties.fruits @ join=properties.comma}
 ---
-{ const var_0 = ("Fruits: ") + (exec("join", properties["fruits"], properties["comma"])) + ("\n");
-  out(var_0);
+{ const var_0 = ("Fruits: ") + ($.exec("join", properties["fruits"], properties["comma"])) + ("\n");
+  $.out(var_0);
 }
 ===
 Fruits: Apple, Banana, Orange
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ### string OR
 #
@@ -83,7 +83,7 @@ Hello, world.
 bar
 string constant
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ### comparison
 #
@@ -117,7 +117,7 @@ true
 false
 true
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ### boolean casting
 #
@@ -135,7 +135,7 @@ true
 false
 false
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ### string casting
 #
@@ -155,7 +155,7 @@ true,false
 foo,bar
 foo,
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ### comments
 #
@@ -167,7 +167,7 @@ foo,
 
 <!-- Page title: Hello, world. -->
 ^^^
-    out(var_0);
+    $.out(var_0);
 #
 ### multiple plugins
 #
@@ -176,5 +176,11 @@ foo,
 <div class="bar">Hello, World</div>
 ^^^
     if ((var_attrValueEscaped_class1) || (("false") == (var_attrValue_class0))) {
+#
+### string constant test
+#
+<div>${'\\\"\''}</div>
+===
+<div>\"'</div>
 #
 ###

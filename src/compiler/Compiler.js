@@ -19,7 +19,7 @@ const { SourceMapGenerator } = require('source-map');
 const TemplateParser = require('../parser/html/TemplateParser');
 const ThrowingErrorListener = require('../parser/htl/ThrowingErrorListener');
 const JSCodeGenVisitor = require('./JSCodeGenVisitor');
-
+const ExpressionFormatter = require('./ExpressionFormatter');
 
 const DEFAULT_TEMPLATE = 'JSCodeTemplate.js';
 const RUNTIME_TEMPLATE = 'JSRuntimeTemplate.js';
@@ -140,7 +140,7 @@ module.exports = class Compiler {
 
     const global = [];
     this._runtimeGlobals.forEach((g) => {
-      global.push(`    let ${g} = runtime.globals.${g};\n`);
+      global.push(`    let ${ExpressionFormatter.escapeVariable(g)} = runtime.globals[${JSON.stringify(g)}];\n`);
     });
     if (this._runtimeGlobal) {
       global.push(`    const ${this._runtimeGlobal} = runtime.globals;\n`);

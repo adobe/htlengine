@@ -99,7 +99,7 @@ describe('Compiler Tests', () => {
                     assert.equal(output, test.output);
                     done();
                   }).catch(done);
-                });
+                }).catch(done);
             });
           }
           if ('mappedOutput' in test) {

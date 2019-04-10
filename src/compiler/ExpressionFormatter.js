@@ -19,6 +19,7 @@ const PropertyAccess = require('../parser/htl/nodes/PropertyAccess');
 const Expression = require('../parser/htl/nodes/Expression');
 const Interpolation = require('../parser/htl/nodes/Interpolation');
 const Identifier = require('../parser/htl/nodes/Identifier');
+const PropertyIdentifier = require('../parser/htl/nodes/PropertyIdentifier');
 const MapLiteral = require('../parser/htl/nodes/MapLiteral');
 const BinaryOperation = require('../parser/htl/nodes/BinaryOperation');
 const MultiOperation = require('../parser/htl/nodes/MultiOperation');
@@ -33,6 +34,10 @@ const ExpressionNode = require('../parser/htl/nodes/ExpressionNode');
  * @type {module.DebugVisitor}
  */
 module.exports = class ExpressionFormatter {
+  static escapeVariable(ident) {
+    return ident.replace(':', '$');
+  }
+
   static format(expression) {
     if (expression instanceof ExpressionNode) {
       const v = new ExpressionFormatter();
@@ -104,7 +109,7 @@ module.exports = class ExpressionFormatter {
       node.elseBranch.accept(this);
     } else if (node instanceof UnaryOperation) {
       if (node.operator === UnaryOperator.LENGTH) {
-        this.result += 'lengthOf(';
+        this.result += '$.lengthOf(';
         node.target.accept(this);
         this.result += ')';
       } else if (node.operator === UnaryOperator.NOT && node.target instanceof ArrayLiteral) {
@@ -132,8 +137,10 @@ module.exports = class ExpressionFormatter {
         }
       });
       this.result += '}';
+    } else if (node instanceof PropertyIdentifier) {
+      this.result += ExpressionFormatter.escapeVariable(node.name);
     } else if (node instanceof Identifier) {
-      this.result += node.name;
+      this.result += ExpressionFormatter.escapeVariable(node.name);
     } else if (node instanceof NumericConstant) {
       this.result += node.value;
     } else if (node instanceof StringConstant) {
@@ -146,15 +153,21 @@ module.exports = class ExpressionFormatter {
       // special handling for xss. todo: make more generic
       let delim = '';
       if (node.functionName === 'xss' || node.functionName === 'listInfo') {
-        this.result += `${node.functionName}(`;
+        this.result += `$.${node.functionName}(`;
       } else if (node.functionName === 'use') {
-        this.result += 'yield use(';
+        this.result += 'yield $.use(';
       } else if (node.functionName === 'call') {
-        this.result += 'yield call(';
+        this.result += 'yield $.call(';
+        // this is quite some hack. since the spec assumes that the `template` is registered as a
+        // global variable, we need to de-promote it to a constant instead
+        if (node.expression instanceof PropertyIdentifier) {
+          // eslint-disable-next-line no-param-reassign,no-underscore-dangle
+          node._expression = new StringConstant(node.expression.name);
+        }
       } else if (node.functionName === 'resource') {
-        this.result += 'yield slyResource(';
+        this.result += 'yield $.slyResource(';
       } else {
-        this.result += `exec("${node.functionName}"`;
+        this.result += `$.exec("${node.functionName}"`;
         delim = ', ';
       }
       if (node.expression) {

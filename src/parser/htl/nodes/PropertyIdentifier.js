@@ -10,19 +10,9 @@
  * governing permissions and limitations under the License.
  */
 
-const Command = require('./Command');
+const Identifier = require('./Identifier');
 
-module.exports = class Comment extends Command {
-  constructor(text) {
-    super();
-    this._text = text;
-  }
+class PropertyIdentifier extends Identifier {
+}
 
-  get text() {
-    return this._text;
-  }
-
-  append(text) {
-    this._text += text;
-  }
-};
+module.exports = PropertyIdentifier;
