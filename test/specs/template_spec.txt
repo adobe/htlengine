@@ -1,0 +1,22 @@
+#
+### use external template lib and invoke 1 template
+#
+<div data-sly-use.lib="template_spec/templateLib.html" data-sly-call="${lib.one}"></div>
+===
+blah 1
+#
+### use external template lib and invoke template 2
+#
+<div data-sly-call="${lib.two}"></div>
+<sly data-sly-use.lib="template_spec/templateLib.html"></sly>
+===
+blah 2
+
+#
+### use external template lib and invoke template with args
+#
+<div data-sly-use.lib="template_spec/templateLib.html" data-sly-call="${lib.any @ jcr:title='Hello, world.'}"></div>
+===
+blah Hello, world.
+#
+###

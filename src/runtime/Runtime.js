@@ -114,18 +114,31 @@ module.exports = class Runtime {
     return formatXss(value, context, hint);
   }
 
-  call(name, args) {
-    // eslint-disable-next-line no-prototype-builtins
-    if (this._templates.hasOwnProperty(name) === false) {
-      throw new Error(`Template call that has not been registered: ${name}`);
-    } else {
-      const callable = this._templates[name].bind(this, args);
-      return co(callable);
+  call(fn, args) {
+    if (!fn) {
+      throw new Error('Template call that has not been registered.');
     }
+    const callable = fn.bind(this, args);
+    return co(callable);
   }
 
   template(name, callback) {
-    this._templates[name] = callback;
+    if (!name) {
+      // this is called to retrieve the template map, so that it looks like the template is
+      // like a function reference
+      return this._templates;
+    }
+
+    return name.split('.').reduce((prev, seg, idx, arr) => {
+      if (idx === arr.length - 1) {
+        // eslint-disable-next-line no-param-reassign
+        prev[seg] = callback;
+      } else {
+        // eslint-disable-next-line no-param-reassign
+        prev[seg] = prev[seg] || {};
+      }
+      return prev[seg];
+    }, this._templates);
   }
 
   exec(name, value, arg0, arg1) {

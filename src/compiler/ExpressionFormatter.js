@@ -157,13 +157,7 @@ module.exports = class ExpressionFormatter {
       } else if (node.functionName === 'use') {
         this.result += 'yield $.use(';
       } else if (node.functionName === 'call') {
-        this.result += 'yield $.call(';
-        // this is quite some hack. since the spec assumes that the `template` is registered as a
-        // global variable, we need to de-promote it to a constant instead
-        if (node.expression instanceof PropertyIdentifier) {
-          // eslint-disable-next-line no-param-reassign,no-underscore-dangle
-          node._expression = new StringConstant(node.expression.name);
-        }
+        this.result += 'yield $.call($.template().';
       } else if (node.functionName === 'resource') {
         this.result += 'yield $.slyResource(';
       } else {

@@ -147,8 +147,8 @@ module.exports = class JSCodeGenVisitor {
       this._lastIndentLevel = this._indentLevel;
       this.setIndent(0);
 
-      const exp = ExpressionFormatter.format(cmd.expression);
-      const functionName = `_template_${ExpressionFormatter.escapeVariable(exp)}`;
+      const exp = ExpressionFormatter.escapeVariable(ExpressionFormatter.format(cmd.expression));
+      const functionName = `_template_${exp.replace('.', '_')}`;
       this._out(`$.template('${exp}', function* ${functionName}() {`);
       this.indent();
 

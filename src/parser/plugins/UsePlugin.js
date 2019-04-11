@@ -12,14 +12,27 @@
 
 const Plugin = require('../html/Plugin');
 const VariableBinding = require('../commands/VariableBinding');
+const TemplateReference = require('../commands/TemplateReference');
 const RuntimeCall = require('../htl/nodes/RuntimeCall');
 const MapLiteral = require('../htl/nodes/MapLiteral');
+const StringConstant = require('../htl/nodes/StringConstant');
 
 const DEFAULT_VARIABLE_NAME = 'useBean';
 
 module.exports = class UsePlugin extends Plugin {
   beforeElement(stream/* , tagName */) {
     const variableName = this._signature.getVariableName(DEFAULT_VARIABLE_NAME);
+
+    // check for template reference. currently only static external templates supported,
+    // as we can't compile them during runtime.
+    if (this._expression.root instanceof StringConstant) {
+      const lib = this._expression.root.text;
+      if (lib.endsWith('.htl') || lib.endsWith('.html')) {
+        // stream.write(new VariableBinding.Global(variableName, new MapLiteral({})));
+        stream.write(new TemplateReference(variableName, lib));
+        return;
+      }
+    }
     stream.write(new VariableBinding.Global(
       variableName,
       new RuntimeCall('use', this._expression.root, [new MapLiteral(this._expression.options)]),

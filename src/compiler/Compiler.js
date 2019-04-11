@@ -20,6 +20,8 @@ const TemplateParser = require('../parser/html/TemplateParser');
 const ThrowingErrorListener = require('../parser/htl/ThrowingErrorListener');
 const JSCodeGenVisitor = require('./JSCodeGenVisitor');
 const ExpressionFormatter = require('./ExpressionFormatter');
+const TemplateReference = require('../parser/commands/TemplateReference');
+const FunctionBlock = require('../parser/commands/FunctionBlock');
 
 const DEFAULT_TEMPLATE = 'JSCodeTemplate.js';
 const RUNTIME_TEMPLATE = 'JSRuntimeTemplate.js';
@@ -84,12 +86,12 @@ module.exports = class Compiler {
    * file name.
    *
    * @async
-   * @param {String} source HTL template code
+   * @param {String} filename HTL template source file
    * @param {String} name file name to save results
    * @returns {Promise<String>} the full name of the resulting file
    */
   async compileFile(filename, name) {
-    return this.compileToFile(await fse.readFile(filename, 'utf-8'), name || filename);
+    return this.compileToFile(await fse.readFile(filename, 'utf-8'), name || filename, path.dirname(filename));
   }
 
   /**
@@ -97,10 +99,11 @@ module.exports = class Compiler {
    *
    * @async
    * @param {String} source the HTL source code
+   * @param {String} baseDir the base directory to resolve file references
    * @returns {Promise<String>} the resulting Javascript
    */
-  async compileToString(source) {
-    return (await this.compile(source)).template;
+  async compileToString(source, baseDir) {
+    return (await this.compile(source, baseDir)).template;
   }
 
   /**
@@ -110,10 +113,11 @@ module.exports = class Compiler {
    * @async
    * @param {String} source HTL template code
    * @param {String} name file name to save results
+   * @param {String} baseDir the base directory to resolve file references
    * @returns {Promise<String>} the full name of the resulting file
    */
-  async compileToFile(source, name) {
-    const { template, sourceMap } = await this.compile(source);
+  async compileToFile(source, name, baseDir) {
+    const { template, sourceMap } = await this.compile(source, baseDir);
 
     const filename = this._outfile || path.resolve(this._dir, name);
     await fse.writeFile(filename, template);
@@ -125,18 +129,66 @@ module.exports = class Compiler {
   }
 
   /**
+   * Parses the source and returns the command stream. It resolves any static linked templates
+   * recursively.
+   *
+   * @param {String} source the HTL template code
+   * @param {String} baseDir the base directory to resolve file references
+   * @returns The command stream.
+   */
+  async _parse(source, baseDir) {
+    const commands = new TemplateParser()
+      .withErrorListener(ThrowingErrorListener.INSTANCE)
+      .parse(source);
+
+    // find any templates and inject them into the stream
+    for (let i = 0; i < commands.length; i += 1) {
+      const c = commands[i];
+      if (c instanceof TemplateReference) {
+        // remove from command array
+        const templatePath = path.resolve(baseDir, c.filename);
+        // eslint-disable-next-line no-await-in-loop
+        const template = await fse.readFile(templatePath, 'utf-8');
+        // eslint-disable-next-line no-await-in-loop
+        const templateCommands = await this._parse(template, path.dirname(templatePath));
+
+        // prefix all templates with the variable name of the use class and discard commands
+        // outside functions.
+        let inside = false;
+        for (let j = 0; j < templateCommands.length; j += 1) {
+          const cmd = templateCommands[j];
+          if (cmd instanceof FunctionBlock.Start) {
+            inside = true;
+            // eslint-disable-next-line no-underscore-dangle
+            cmd._expression = `${c.name}.${cmd._expression}`;
+          } else if (cmd instanceof FunctionBlock.End) {
+            inside = false;
+          } else if (!inside) {
+            // eslint-disable-next-line no-plusplus
+            templateCommands.splice(j--, 1);
+          }
+        }
+
+        // finally merge the template functions into the commands stream
+        commands.splice(i, 1, ...templateCommands);
+        i += templateCommands.length - 1;
+      }
+    }
+    return commands;
+  }
+
+  /**
    * Compiles the given source string and returns the generated JS
    * and sourceMap in an object.
    *
    * @async
    * @param {String} source HTL template code
-   * @param {String} name file name to save results
+   * @param {String} [baseDir] the base directory to resolve dependencies.
+   *                           defaults to the output directory.
    * @returns {Promise<Object>} An object consisting of a generated template and a source map
    */
-  async compile(source) {
-    const commands = new TemplateParser()
-      .withErrorListener(ThrowingErrorListener.INSTANCE)
-      .parse(source);
+  async compile(source, baseDir) {
+    const commands = await this._parse(source, baseDir || this._dir);
 
     const global = [];
     this._runtimeGlobals.forEach((g) => {
