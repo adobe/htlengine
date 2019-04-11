@@ -96,7 +96,7 @@ describe('Interpreter Tests', () => {
         // todo: interpreter support for resource classes
         return;
       }
-      if (name === 'call') {
+      if (name === 'call' || name === 'template') {
         // todo: interpreter support for call classes
         return;
       }

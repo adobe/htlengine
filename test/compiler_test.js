@@ -62,6 +62,7 @@ describe('Compiler Tests', () => {
   fs.readdirSync('test/specs').forEach((filename) => {
     if (filename.endsWith('_spec.txt')) {
       const name = filename.substring(0, filename.length - 9);
+
       // eslint-disable-next-line import/no-dynamic-require,global-require
       const payload = require(`./specs/${name}_spec.js`);
 
@@ -90,7 +91,7 @@ describe('Compiler Tests', () => {
                 .withResourceDirectory(path.join(__dirname, 'specs'))
                 .setGlobal(payload);
 
-              compiler.compileToFile(test.input, `${name}_${idx}.js`)
+              compiler.compileToFile(test.input, `${name}_${idx}.js`, path.join(__dirname, 'specs'))
                 .then((compiledFilename) => {
                   // eslint-disable-next-line import/no-dynamic-require,global-require
                   const service = require(compiledFilename);
