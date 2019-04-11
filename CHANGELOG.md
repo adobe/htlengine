@@ -1,3 +1,10 @@
+## [2.1.4](https://github.com/adobe/htlengine/compare/v2.1.3...v2.1.4) (2019-04-11)
+
+
+### Bug Fixes
+
+* **compiler:** Support for identifiers with colon character and isolate global variables from user d ([f13ed75](https://github.com/adobe/htlengine/commit/f13ed75)), closes [#15](https://github.com/adobe/htlengine/issues/15)
+
 ## [2.1.3](https://github.com/adobe/htlengine/compare/v2.1.2...v2.1.3) (2019-04-09)
 
 
