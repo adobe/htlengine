@@ -1,3 +1,10 @@
+## [2.1.5](https://github.com/adobe/htlengine/compare/v2.1.4...v2.1.5) (2019-04-11)
+
+
+### Bug Fixes
+
+* **compiler:** use statement cannot load external templates ([b8482a3](https://github.com/adobe/htlengine/commit/b8482a3)), closes [#47](https://github.com/adobe/htlengine/issues/47)
+
 ## [2.1.4](https://github.com/adobe/htlengine/compare/v2.1.3...v2.1.4) (2019-04-11)
 
 
