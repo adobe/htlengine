@@ -1,3 +1,10 @@
+## [2.1.6](https://github.com/adobe/htlengine/compare/v2.1.5...v2.1.6) (2019-04-19)
+
+
+### Bug Fixes
+
+* package.json & package-lock.json to reduce vulnerabilities ([#51](https://github.com/adobe/htlengine/issues/51)) ([1cf9a6f](https://github.com/adobe/htlengine/commit/1cf9a6f))
+
 ## [2.1.5](https://github.com/adobe/htlengine/compare/v2.1.4...v2.1.5) (2019-04-11)
 
 
