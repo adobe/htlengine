@@ -22,7 +22,9 @@ const pkgJson = require('../package.json');
 const Compiler = require('../src/compiler/Compiler');
 
 const TEMPLATE_SIMPLE_2 = path.resolve(__dirname, 'templates', 'simple2.htl');
+const TEMPLATE_XSS = path.resolve(__dirname, 'templates', 'xss.htl');
 const EXPECTED_SIMPLE_2 = path.resolve(__dirname, 'templates', 'simple2.html');
+const EXPECTED_XSS = path.resolve(__dirname, 'templates', 'xss.html');
 const GLOBALS = {
   world: 'Earth',
   properties: {
@@ -38,13 +40,31 @@ const GLOBALS = {
   qttMax: 4,
   expression: 'this is an expression.',
   it: {
-    html: 'foo barty!',
     title: 'Hello, world!',
     children: [
       '<div>A</div>',
       '<div>B</div>',
     ],
   },
+  /* eslint-disable no-script-url, no-tabs */
+  xss: {
+    aTag: '<a href="javascript:alert(0)">XSS Link</a>',
+    url1: 'javascript:alert(0)',
+    url2: 'javascript://%0Dalert(0)', // js comment & return char
+    url3: 'javascript:/*--><script>alert(0);</script>', // js comment & break out of html tag
+    url4: 'javascript:alert(String.fromCharCode(48))', // avoiding quotes
+    breakAttr: '"><script>alert(0);</script>', // break out of html tag
+    eventHandler: 'alert(0)',
+    imgTag1: '<img src="javascript:alert(0)"/>',
+    imgTag2: '<img src="fake.jpg" onerror="alert(0)"/>',
+    imgTag3: '<img src=`javascript:alert(0)`/>', // grave accent quotes
+    imgTag4: '<img src="java	script:alert(0)"/>', // embedded tab
+    imgTag5: '<img src="java#x0A;script:alert(0)"/>', // embedded encoded tab
+    scriptTag1: '<script>alert(0);</script>',
+    scriptTag2: '<script src="http://do.not.serve/this.js"></script>',
+    scriptTag3: '<script src="//do.not.serve/this.js"></script>', // protocol resolution bypass
+  },
+  /* eslint-enable no-script-url, no-tabs */
 };
 
 describe('Runtime Tests', () => {
@@ -86,5 +106,24 @@ describe('Runtime Tests', () => {
 
     const body = await main(GLOBALS);
     assert.equal(body, await fse.readFile(EXPECTED_SIMPLE_2, 'utf-8'));
+  });
+
+  it('Protects against XSS', async () => {
+    const outputDir = path.join(__dirname, 'generated');
+
+    const compiler = new Compiler()
+      .withOutputDirectory(outputDir)
+      .includeRuntime(true)
+      .withRuntimeHTLEngine(path.resolve(__dirname, '..', pkgJson.main))
+      .withOutputFile(path.resolve(outputDir, 'runtime_test_script_3.js'))
+      .withRuntimeVar(Object.keys(GLOBALS));
+
+    const filename = await compiler.compileFile(TEMPLATE_XSS);
+
+    // eslint-disable-next-line import/no-dynamic-require,global-require
+    const { main } = require(filename);
+
+    const { body } = await main(GLOBALS);
+    assert.equal(body, await fse.readFile(EXPECTED_XSS, 'utf-8'));
   });
 });

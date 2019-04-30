@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright 2019 Adobe. All rights reserved.
+  ~ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License. You may obtain a copy
+  ~ of the License at http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software distributed under
+  ~ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+  ~ OF ANY KIND, either express or implied. See the License for the specific language
+  ~ governing permissions and limitations under the License.
+  -->
+<html>
+<head>
+    <title>Hello, world!</title>
+    <meta charset="utf-8"/>
+</head>
+<body>
+  <ul>
+    <li><a href="javascript&#x3a;alert&#x28;0&#x29;">XSS Link</a></li>
+    <li><a href="javascript&#x3a;alert&#x28;0&#x29;" name="Foo">XSS Link</a></li>
+    <li><a href="javascript&#x3a;&#x2F;&#x2F;&#xA;alert&#x28;0&#x29;">XSS Link</a></li>
+    <li><a href="javascript&#x3a;alert&#x28;String&#x2E;fromCharCode&#x28;48&#x29;&#x29;">XSS Link</a></li>
+    <li><a href="#" onclick="alert&#x28;0&#x29;">XSS Link</a></li>
+    <li><img src="javascript&#x3a;alert&#x28;0&#x29;"/></li>
+    <li><img src="fake.jpg" onerror="alert&#x28;0&#x29;"/></li>
+    <li><img src="javascript&#x3a;alert&#x28;0&#x29;"/></li>
+    <li><img src="java&#x0A;script&#x3a;alert&#x28;0&#x29;"/></li>
+    <li><img src="java&#x0A;script&#x3a;alert&#x28;0&#x29;"/></li>
+    <li><img src="fake.jpg" onerror="alert&#x28;0&#x29;"/></li>
+  </ul>
+  <form action="&quot;&gt;&lt;script&gt;alert&#x28;0&#x29;&#x3b;&lt;&#x2f;script&gt;" onsubmit="alert&#x28;0&#x29;">
+    <input name="test" value="&quot;&gt;&lt;script&gt;alert&#x28;0&#x29;&#x3b;&lt;&#x2f;script&gt;"/>
+  </form>
+</body>
+</html>
