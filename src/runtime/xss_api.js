@@ -13,9 +13,13 @@
 'use strict';
 
 const _ = require('lodash');
-const sanitizer = require('sanitizer');
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
 const esapiEncoder = require('node-esapi').encoder();
 const nodeURL = require('url');
+
+const { window } = new JSDOM('');
+const DOMPurify = createDOMPurify(window);
 
 const RESERVED_WORDS = {
   break: true,
@@ -164,7 +168,7 @@ module.exports = {
    * @returns {String}
    */
   filterHTML(input) {
-    return sanitizer.sanitize(input);
+    return DOMPurify.sanitize(input);
   },
 
   /**
