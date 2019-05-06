@@ -13,7 +13,6 @@
 const Plugin = require('../html/Plugin');
 const VariableBinding = require('../commands/VariableBinding');
 const Conditional = require('../commands/Conditional');
-const Identifier = require('../htl/nodes/Identifier');
 
 module.exports = class UnwrapPlugin extends Plugin {
 
