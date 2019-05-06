@@ -38,6 +38,7 @@ const PLUGINS = {
   list: require('../plugins/ListPlugin'),
   repeat: require('../plugins/ListPlugin'),
   test: require('../plugins/TestPlugin'),
+  unwrap: require('../plugins/UnwrapPlugin'),
   attribute: require('../plugins/AttributePlugin'),
   use: require('../plugins/UsePlugin'),
   resource: require('../plugins/ResourcePlugin'),
