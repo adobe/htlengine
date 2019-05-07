@@ -26,6 +26,8 @@ module.exports = class UnwrapPlugin extends Plugin {
       this.variableName = ctx.generateVariable('unwrapCondition');
     }
 
+    this.unwrapTest = new Conditional.Start(this.variableName, true);
+
     if (this._useGlobalBinding) {
       stream.write(new VariableBinding.Global(this.variableName, this.expression.root));
     } else {
@@ -57,7 +59,6 @@ module.exports = class UnwrapPlugin extends Plugin {
 
   testRoot() {
     let testNode = this.expression.root instanceof StringConstant && this.expression.root.text.length == 0;
-    this.unwrapTest = new Conditional.Start(this.variableName, true);
     return testNode ? BooleanConstant.TRUE : this.expression.root;
   }
 };
