@@ -28,17 +28,9 @@ module.exports = class UnwrapPlugin extends Plugin {
 
     if (this._useGlobalBinding) {
       stream.write(new VariableBinding.Global(this.variableName, this.expression.root));
-      this.unwrapTest = new Conditional.Start(this.variableName, false);
     } else {
       stream.write(new VariableBinding.Start(this.variableName, this.testRoot()));
-      this.unwrapTest = new Conditional.Start(this.variableName, true);
     }
-
-    if(this.expression.root instanceof StringConstant) {
-      console.log(this.expression.root.text.length);
-    }
-    console.log(this.testRoot());
-    
   }
 
   beforeTagOpen(stream) {
