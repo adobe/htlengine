@@ -1,28 +1,22 @@
 #
-### unwrap with value and variable
+### use external template lib and invoke 1 template
 #
-<a href="${properties.url}" data-sly-unwrap.unwrapTest="${properties.unwrap}">
-    <span>${properties.title}</span>
-</a>
+<div data-sly-use.lib="template_spec/templateLib.html" data-sly-call="${lib.one}"></div>
 ===
-
-    <span>yes</span>
-
+blah 1
 #
-### unwrap with value no variable
+### use external template lib and invoke template 2
 #
-<a href="${properties.url}" data-sly-unwrap="${properties.unwrap}">
-    <span>${properties.title}</span>
-</a>
+<div data-sly-call="${lib.two}"></div>
+<sly data-sly-use.lib="template_spec/templateLib.html"></sly>
 ===
-
-    <span>yes</span>
+blah 2
 
 #
-### unwrap
+### use external template lib and invoke template with args
 #
-<a href="${properties.url}" data-sly-unwrap><span>${properties.title}</span></a>
+<div data-sly-use.lib="template_spec/templateLib.html" data-sly-call="${lib.any @ jcr:title='Hello, world.'}"></div>
 ===
-<span>yes</span>
+blah Hello, world.
 #
 ###
