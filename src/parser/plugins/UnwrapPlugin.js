@@ -13,30 +13,36 @@
 const Plugin = require('../html/Plugin');
 const VariableBinding = require('../commands/VariableBinding');
 const Conditional = require('../commands/Conditional');
+const BooleanConstant = require('../htl/nodes/BooleanConstant');
+const StringConstant = require('../htl/nodes/StringConstant');
 
 module.exports = class UnwrapPlugin extends Plugin {
 
-  constructor(signature, pluginContext, expression) {
-    super(signature, pluginContext, expression);
-
+  beforeElement(stream/* , tagName */) {
     const ctx = this.pluginContext;
     this.variableName = this._signature.getVariableName(null);
     this._useGlobalBinding = this.variableName != null;
     if (this.variableName == null) {
       this.variableName = ctx.generateVariable('unwrapCondition');
     }
-  }
 
-  beforeElement(stream/* , tagName */) {
     if (this._useGlobalBinding) {
       stream.write(new VariableBinding.Global(this.variableName, this.expression.root));
+      this.unwrapTest = new Conditional.Start(this.variableName, false);
     } else {
-      stream.write(new VariableBinding.Start(this.variableName, this.expression.root));
+      stream.write(new VariableBinding.Start(this.variableName, this.testRoot()));
+      this.unwrapTest = new Conditional.Start(this.variableName, true);
     }
+
+    if(this.expression.root instanceof StringConstant) {
+      console.log(this.expression.root.text.length);
+    }
+    console.log(this.testRoot());
+    
   }
 
   beforeTagOpen(stream) {
-    stream.write(new Conditional.Start(this.variableName, true));
+    stream.write(this.unwrapTest);
   }
 
   afterTagOpen(stream) {
@@ -44,7 +50,7 @@ module.exports = class UnwrapPlugin extends Plugin {
   }
 
   beforeTagClose(stream) {
-    stream.write(new Conditional.Start(this.variableName, true));
+    stream.write(this.unwrapTest);
   }
 
   afterTagClose(stream) {
@@ -55,5 +61,11 @@ module.exports = class UnwrapPlugin extends Plugin {
     if (!this._useGlobalBinding) {
       stream.write(VariableBinding.END);
     }
+  }
+
+  testRoot() {
+    let testNode = this.expression.root instanceof StringConstant && this.expression.root.text.length == 0;
+    this.unwrapTest = new Conditional.Start(this.variableName, true);
+    return testNode ? BooleanConstant.TRUE : this.expression.root;
   }
 };
