@@ -23,5 +23,6 @@
 #
 <a href="${properties.url}" data-sly-unwrap><span>${properties.title}</span></a>
 ===
-<span>yes</span>#
+<span>yes</span>
+#
 ###
