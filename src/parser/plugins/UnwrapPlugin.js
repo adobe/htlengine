@@ -17,7 +17,6 @@ const BooleanConstant = require('../htl/nodes/BooleanConstant');
 const StringConstant = require('../htl/nodes/StringConstant');
 
 module.exports = class UnwrapPlugin extends Plugin {
-
   beforeElement(stream/* , tagName */) {
     const ctx = this.pluginContext;
     this.variableName = this._signature.getVariableName(null);
@@ -39,6 +38,7 @@ module.exports = class UnwrapPlugin extends Plugin {
     stream.write(this.unwrapTest);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   afterTagOpen(stream) {
     stream.write(Conditional.END);
   }
@@ -47,6 +47,7 @@ module.exports = class UnwrapPlugin extends Plugin {
     stream.write(this.unwrapTest);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   afterTagClose(stream) {
     stream.write(Conditional.END);
   }
@@ -58,7 +59,8 @@ module.exports = class UnwrapPlugin extends Plugin {
   }
 
   testRoot() {
-    let testNode = this.expression.root instanceof StringConstant && this.expression.root.text.length == 0;
+    const testNode = this.expression.root instanceof StringConstant
+      && this.expression.root.text.length === 0;
     return testNode ? BooleanConstant.TRUE : this.expression.root;
   }
 };

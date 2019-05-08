@@ -1,3 +1,10 @@
+## [2.1.7](https://github.com/adobe/htlengine/compare/v2.1.6...v2.1.7) (2019-05-07)
+
+
+### Bug Fixes
+
+* **engine:** implement support for data-sly-unwrap ([2956097](https://github.com/adobe/htlengine/commit/2956097)), closes [#55](https://github.com/adobe/htlengine/issues/55)
+
 ## [2.1.6](https://github.com/adobe/htlengine/compare/v2.1.5...v2.1.6) (2019-04-19)
 
 

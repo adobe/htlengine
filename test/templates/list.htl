@@ -1,0 +1,6 @@
+<ul
+    data-sly-list.item="${list.listItems}"
+    data-sly-use.itemTemplate="test/templates/item.htl"
+    class="cmp-list">
+    <li class="cmp-list__item" data-sly-call="${itemTemplate.item @ list = list, item = item}"></li>
+</ul>

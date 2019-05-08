@@ -13,6 +13,6 @@ module.exports = {
   properties: {
     unwrap: true,
     url: 'url',
-    title: 'yes'
+    title: 'yes',
   },
 };
