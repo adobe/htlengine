@@ -5,11 +5,13 @@ ${'Asset {0}' @ format=properties.assetName}
 ${'Asset {0}' @ format=[properties.assetName]}
 ${'Asset {0} out of {1}' @ format=[properties.current, properties.total]}
 ${properties.formatter @ format=[properties.current, properties.total]}
+${properties.date @ format=properties.dateMilliseconds}
 ===
 Asset Night Sky
 Asset Night Sky
 Asset 3 out of 5
 Asset 3 out of 5
+2019-02-16
 ^^^
     $.out(var_0);
 #
