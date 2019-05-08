@@ -24,8 +24,8 @@ const OPTIONS = [
             && expContext !== ExpressionContext.PLUGIN_DATA_SLY_CALL,
   }, {
     fn: 'format',
-    options: ['format'],
-    asArguments: true,
+    options: ['format', 'timezone', 'locale'],
+    asArguments: false,
     condition: expContext => expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
             && expContext !== ExpressionContext.PLUGIN_DATA_SLY_TEMPLATE
             && expContext !== ExpressionContext.PLUGIN_DATA_SLY_CALL,

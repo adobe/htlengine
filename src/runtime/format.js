@@ -11,17 +11,40 @@
  */
 
 const moment = require('moment');
+const numeral = require('numeral');
+require('numeral/locales');
 
-module.exports = function format(fmt, args) {
-  const argArray = Array.isArray(args) ? args : [args];
-  if (!Array.isArray(args)) {
-    const date = moment(parseInt(argArray, 10));
-    if (date.isValid()) {
-      return date.format(fmt);
-    }
+function parseDate(format, locale, timezone) {
+  const date = moment(parseInt(format, 10));
+  if (date.isValid()) {
+    return date.utc(timezone).locale(locale);
   }
 
-  return fmt.replace(/{(\d+)}/g, (match, number) => (typeof argArray[number] !== 'undefined'
-    ? argArray[number]
-    : match));
+  return null;
+}
+
+module.exports = function format(fmt, args) {
+  const PLACEHOLDER_REGEX = /{(\d+)}/g;
+  const NUMBER_FORMAT_REGEX = /^[0-9.,#;$E%()-]*$/gm;
+  const PLACEHOLDER_NUMBER = /#/g;
+  const argArray = Array.isArray(args.format) ? args.format : [args.format];
+  const locale = args.locale ? args.locale : '';
+  const timezone = args.timezone ? args.timezone.replace('GMT', '').replace('UTC', '') : '';
+
+  if (NUMBER_FORMAT_REGEX.test(fmt)) {
+    // apply locale
+    numeral.locale(locale.toLowerCase());
+    const number = numeral(args.format).format(fmt.replace(PLACEHOLDER_NUMBER, '0'));
+    // reset locale
+    numeral.reset();
+    return number;
+  } if (PLACEHOLDER_REGEX.test(fmt)) {
+    return fmt.replace(PLACEHOLDER_REGEX, (match, number) => (typeof argArray[number] !== 'undefined'
+      ? argArray[number]
+      : match));
+  }
+
+  // default to date
+  const date = parseDate(args.format, locale, timezone);
+  return date !== null ? date.format(fmt) : null;
 };
