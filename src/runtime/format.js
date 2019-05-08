@@ -14,13 +14,13 @@ const moment = require('moment');
 
 module.exports = function format(fmt, args) {
   const argArray = Array.isArray(args) ? args : [args];
-  if(!Array.isArray(args)) {
-    let date = moment(parseInt(argArray));
-    if(date.isValid()) {
+  if (!Array.isArray(args)) {
+    const date = moment(parseInt(argArray, 10));
+    if (date.isValid()) {
       return date.format(fmt);
     }
   }
-  
+
   return fmt.replace(/{(\d+)}/g, (match, number) => (typeof argArray[number] !== 'undefined'
     ? argArray[number]
     : match));

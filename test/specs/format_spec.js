@@ -16,6 +16,6 @@ module.exports = {
     total: 5,
     formatter: 'Asset {0} out of {1}',
     date: 'YYYY-MM-DD',
-    dateMilliseconds: 1550252345916
+    dateMilliseconds: 1550252345916,
   },
 };
