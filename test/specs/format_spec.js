@@ -15,7 +15,7 @@ module.exports = {
     current: 3,
     total: 5,
     formatter: 'Asset {0} out of {1}',
-    date: 'YYYY-MM-DD',
+    date: 'YYYY',
     dateMilliseconds: 1550252345916,
   },
 };
