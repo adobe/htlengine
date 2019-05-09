@@ -1,3 +1,10 @@
+## [2.2.1](https://github.com/adobe/htlengine/compare/v2.2.0...v2.2.1) (2019-05-09)
+
+
+### Bug Fixes
+
+* **engine:** do not unwrap call element ([#59](https://github.com/adobe/htlengine/issues/59)) ([8963ead](https://github.com/adobe/htlengine/commit/8963ead)), closes [#58](https://github.com/adobe/htlengine/issues/58)
+
 # [2.2.0](https://github.com/adobe/htlengine/compare/v2.1.7...v2.2.0) (2019-05-09)
 
 
