@@ -15,31 +15,38 @@ const numeral = require('numeral');
 require('numeral/locales');
 
 function parseDate(format, locale, timezone) {
+  const tz = timezone.replace('GMT', '').replace('UTC', '');
   const date = moment(parseInt(format, 10));
+
   if (date.isValid()) {
-    return date.utc(timezone).locale(locale);
+    return date.utc(tz).locale(locale);
   }
 
   return null;
 }
 
 module.exports = function format(fmt, args) {
-  const PLACEHOLDER_REGEX = /{(\d+)}/g;
-  const NUMBER_FORMAT_REGEX = /^[0-9.,#;$E%()-]*$/gm;
-  const PLACEHOLDER_NUMBER = /#/g;
-  const argArray = Array.isArray(args.format) ? args.format : [args.format];
   const locale = args.locale ? args.locale : '';
-  const timezone = args.timezone ? args.timezone.replace('GMT', '').replace('UTC', '') : '';
+  const timezone = args.timezone ? args.timezone : '';
 
-  if (NUMBER_FORMAT_REGEX.test(fmt)) {
+  // test for matching number pattern
+  if (/^[0-9.,#;$E%()-]*$/gm.test(fmt)) {
     // apply locale
-    numeral.locale(locale.toLowerCase());
-    const number = numeral(args.format).format(fmt.replace(PLACEHOLDER_NUMBER, '0'));
-    // reset locale
-    numeral.reset();
-    return number;
-  } if (PLACEHOLDER_REGEX.test(fmt)) {
-    return fmt.replace(PLACEHOLDER_REGEX, (match, number) => (typeof argArray[number] !== 'undefined'
+    try {
+      numeral.locale(locale.toLowerCase());
+      // replace '#' with '0' as is expected by numeral
+      const number = numeral(args.format).format(fmt.replace(/#/g, '0'));
+      return number;
+    } finally {
+      // reset locale
+      numeral.reset();
+    }
+  }
+
+  // test for matching placeholder '{}' pattern
+  if (/{(\d+)}/g.test(fmt)) {
+    const argArray = Array.isArray(args.format) ? args.format : [args.format];
+    return fmt.replace(/{(\d+)}/g, (match, number) => (typeof argArray[number] !== 'undefined'
       ? argArray[number]
       : match));
   }
