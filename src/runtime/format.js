@@ -18,11 +18,7 @@ function parseDate(format, locale, timezone) {
   const tz = timezone.replace('GMT', '').replace('UTC', '');
   const date = moment(parseInt(format, 10));
 
-  if (date.isValid()) {
-    return date.utc(tz).locale(locale);
-  }
-
-  return null;
+  return date.isValid() ? date.utc(tz).locale(locale) : null;
 }
 
 module.exports = function format(fmt, args) {
