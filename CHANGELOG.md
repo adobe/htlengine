@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/adobe/htlengine/compare/v2.1.7...v2.2.0) (2019-05-09)
+
+
+### Features
+
+* **engine:** Adding support for date formatting  ([d4301f8](https://github.com/adobe/htlengine/commit/d4301f8)), closes [#57](https://github.com/adobe/htlengine/issues/57)
+
 ## [2.1.7](https://github.com/adobe/htlengine/compare/v2.1.6...v2.1.7) (2019-05-07)
 
 
