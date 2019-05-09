@@ -1,8 +1,10 @@
 #
 ### use external template lib and invoke 1 template
 #
-<div data-sly-use.lib="template_spec/templateLib.html" data-sly-call="${lib.one}"></div>
+<!--/* use sly tag to suppress outer elements */-->
+<sly data-sly-use.lib="template_spec/templateLib.html" data-sly-call="${lib.one}"></sly>
 ===
+
 blah 1
 #
 ### use external template lib and invoke template 2
@@ -10,13 +12,15 @@ blah 1
 <div data-sly-call="${lib.two}"></div>
 <sly data-sly-use.lib="template_spec/templateLib.html"></sly>
 ===
-blah 2
+<div>blah 2</div>
 
 #
 ### use external template lib and invoke template with args
 #
-<div data-sly-use.lib="template_spec/templateLib.html" data-sly-call="${lib.any @ jcr:title='Hello, world.'}"></div>
+<!--/* use unwrap to suppress out elements */-->
+<div data-sly-unwrap data-sly-use.lib="template_spec/templateLib.html" data-sly-call="${lib.any @ jcr:title='Hello, world.'}"></div>
 ===
+
 blah Hello, world.
 #
 ###
