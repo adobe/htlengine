@@ -5,7 +5,7 @@
 <div data-sly-call="${foo}"></div>
 ===
 
-<section>Template</section>
+<div><section>Template</section></div>
 #
 ### sightly call function with empty attribute value
 #
@@ -13,7 +13,7 @@
 <div data-sly-call="${foo}"></div>
 ===
 
-<section>Template</section>
+<div><section>Template</section></div>
 #
 ### sightly call function with parameter
 #
@@ -21,7 +21,7 @@
 <div data-sly-call="${foo @ param='Template' }"></div>
 ===
 
-<section>Template</section>
+<div><section>Template</section></div>
 ^^^
     $.out(var_0);
 #
@@ -31,7 +31,7 @@
 <div data-sly-call="${foo:bar @ param='Template' }"></div>
 ===
 
-<section>Template</section>
+<div><section>Template</section></div>
 #
 ### sightly call function with parameter with colon
 #
@@ -39,7 +39,7 @@
 <div data-sly-call="${foo @ jcr:title='Template' }"></div>
 ===
 
-<section>Template</section>
+<div><section>Template</section></div>
 #
 ### sightly call function with missing parameter
 #
@@ -47,7 +47,7 @@
 <div data-sly-call="${foo}"></div>
 ===
 
-<section></section>
+<div><section></section></div>
 ^^^
     $.out(var_0);
 #
@@ -59,14 +59,14 @@
 ===
 
 
-<section>Template 2</section>
+<div><section>Template 2</section></div>
 #
 ### sightly call function in any order
 #
 <div data-sly-call="${foo}"></div>
 <template data-sly-template.foo="${ @ param }"><section>Template</section></template>
 ===
-<section>Template</section>
+<div><section>Template</section></div>
 
 #
 ### sightly call function receives correct scope
@@ -76,7 +76,7 @@
 <template data-sly-template.foo="${ @ param }"><section>${param}</section></template>
 ===
 
-<section></section>
+<div><section></section></div>
 
 ^^^
     $.out(var_0);
@@ -89,7 +89,7 @@
 ===
 
 
-<section>123</section>
+<div><div><section>123</section></div></div>
 ^^^
     $.out(var_0);
 #

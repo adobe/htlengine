@@ -15,15 +15,14 @@ const OutputExpression = require('../commands/OutputExpression');
 const MapLiteral = require('../htl/nodes/MapLiteral');
 
 module.exports = class CallPlugin extends Plugin {
-  // eslint-disable-next-line class-methods-use-this
-  beforeElement(stream) {
+  beforeChildren(stream) {
+    const runtimeCall = new RuntimeCall('call', this._expression.root, [new MapLiteral(this._expression.options)]);
+    stream.write(new OutputExpression(runtimeCall));
     stream.beginIgnore();
   }
 
-  afterElement(stream) {
+  // eslint-disable-next-line class-methods-use-this
+  afterChildren(stream) {
     stream.endIgnore();
-
-    const runtimeCall = new RuntimeCall('call', this._expression.root, [new MapLiteral(this._expression.options)]);
-    stream.write(new OutputExpression(runtimeCall));
   }
 };
