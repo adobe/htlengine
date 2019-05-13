@@ -1,3 +1,10 @@
+## [2.2.2](https://github.com/adobe/htlengine/compare/v2.2.1...v2.2.2) (2019-05-13)
+
+
+### Bug Fixes
+
+* **compiler:** rename global object to `global` ([#61](https://github.com/adobe/htlengine/issues/61)) ([8a398f1](https://github.com/adobe/htlengine/commit/8a398f1)), closes [#60](https://github.com/adobe/htlengine/issues/60)
+
 ## [2.2.1](https://github.com/adobe/htlengine/compare/v2.2.0...v2.2.1) (2019-05-09)
 
 
