@@ -108,7 +108,7 @@ describe('Runtime Tests', () => {
     assert.equal(body, await fse.readFile(EXPECTED_SIMPLE_2, 'utf-8'));
   });
 
-  it('Protects against XSS', async () => {
+  it.only('Protects against XSS', async () => {
     const outputDir = path.join(__dirname, 'generated');
 
     const compiler = new Compiler()

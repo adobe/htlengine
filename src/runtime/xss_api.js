@@ -15,7 +15,7 @@
 const _ = require('lodash');
 const sanitizer = require('sanitizer');
 const esapiEncoder = require('node-esapi').encoder();
-const nodeURL = require('url');
+const XRegExp = require('xregexp');
 
 const RESERVED_WORDS = {
   break: true,
@@ -60,6 +60,53 @@ const RESERVED_WORDS = {
   static: true,
 };
 
+/* Building the URL validation RegEx */
+const ALPHA = '(?:\\p{L}\\p{M}*)';
+const HEX_DIGIT = '[A-Fa-f0-9]';
+const PCT_ENCODED = `%${HEX_DIGIT}${HEX_DIGIT}`;
+const UNRESERVED_CHARACTERS = `${ALPHA}|[\\p{N}\\-._~]`;
+const SUB_DELIMS = '[!$&\'()*+,;=]';
+const REG_NAME = `(?:(?:${UNRESERVED_CHARACTERS})*|(?:${PCT_ENCODED})*|(?:${SUB_DELIMS})*)`;
+const PCHAR = `${UNRESERVED_CHARACTERS}|${PCT_ENCODED}|${SUB_DELIMS}|:|@`;
+const DEC_OCTET = '(?:\\p{N}|[\\x31-\\x39]\\p{N}|1\\p{N}{2}|2[\\x30-\\x34]\\p{N}|25[\\x30-\\x35])';
+const H16 = `${HEX_DIGIT}{1,4}`;
+const IPV4_ADDRESS = `${DEC_OCTET}\\.${DEC_OCTET}\\.${DEC_OCTET}\\.${DEC_OCTET}`;
+const LS32 = `(?:${H16}:${H16})|${IPV4_ADDRESS}`;
+const IPV6_ADDRESS = `(?:(?:(?:${H16}:){6}(?:${LS32}))|" +
+        "(?:::(?:${H16}:){5}(?:${LS32}))|" +
+        "(?:(?:${H16}){0,1}::(?:${H16}:){4}(?:${LS32}))|" +
+        "(?:(?:(?:${H16}:){0,1}${H16})?::(?:${H16}:){3}(?:${LS32}))|" +
+        "(?:(?:(?:${H16}:){0,2}${H16})?::(?:${H16}:){2}(?:${LS32}))|" +
+        "(?:(?:(?:${H16}:){0,3}${H16})?::(?:${H16}:){1}(?:${LS32}))|" +
+        "(?:(?:(?:${H16}:){0,4}${H16})?::(?:${LS32}))|" +
+        "(?:(?:(?:${H16}:){0,5}${H16})?::(?:${H16}))|" +
+        "(?:(?:(?:${H16}:){0,6}${H16})?::))`;
+const IP_LITERAL = `\\[${IPV6_ADDRESS}]`;
+const PORT = '[0-9]+';
+const HOST = `(?:${IP_LITERAL}|${IPV4_ADDRESS}|${REG_NAME})`;
+const USER_INFO = `(?:(?:${UNRESERVED_CHARACTERS})|(?:${PCT_ENCODED})|(?:${SUB_DELIMS}))*`;
+const AUTHORITY = `(?:${USER_INFO}@)?${HOST}(?::${PORT})?`;
+const SCHEME_PATTERN = '(?!\\s*javascript)\\p{L}[\\p{L}\\p{N}+.\\-]*';
+const FRAGMENT = `(?:${PCHAR}|\\/|\\?)*`;
+const QUERY = `(?:${PCHAR}|\\/|\\?)*`;
+const SEGMENT_NZ = `(?:${PCHAR})+`;
+const SEGMENT_NZ_NC = `(?:${UNRESERVED_CHARACTERS}|${PCT_ENCODED}|${SUB_DELIMS}|@)+`;
+const PATH_ABEMPTY = `(?:\\/|(\\/${SEGMENT_NZ}\\/?)*)`;
+const PATH_ABSOLUTE = `\\/(?:${SEGMENT_NZ}${PATH_ABEMPTY})?`;
+const PATH_NOSCHEME = `${SEGMENT_NZ_NC}(?:\\/|(\\/${SEGMENT_NZ})*)`;
+const PATH_ROOTLESS = `${SEGMENT_NZ}(?:\\/|(\\/${SEGMENT_NZ})*)`;
+const PATH_EMPTY = '(?:^$)';
+const RELATIVE_PART = `(?:(?:\\/\\/${AUTHORITY}${PATH_ABEMPTY})|
+        (?:${PATH_ABSOLUTE})|
+        (?:${PATH_ROOTLESS}))`;
+const HIER_PART = `(?:(?:\\/\\/${AUTHORITY}${PATH_ABEMPTY})|
+        (?:${PATH_ABSOLUTE})|
+        (?:${PATH_NOSCHEME})|
+        ${PATH_EMPTY})`;
+
+const RELATIVE_REF = `^(?!\\s*javascript(?::|&colon;))${RELATIVE_PART}?(?:\\?${QUERY})?(?:#${FRAGMENT})?$`;
+const URI = `^${SCHEME_PATTERN}:${HIER_PART}(?:\\?${QUERY})?(?:#${FRAGMENT})?$`;
+
 function escapeJSString(input) {
   return esapiEncoder.encodeForJavaScript(input);
 }
@@ -93,11 +140,11 @@ function escapeJSToken(input) {
 }
 
 function sanitizeURL(url) {
-  try {
-    return nodeURL.format(nodeURL.parse(url));
-  } catch (e) {
-    return '';
+  const decodedUrl = decodeURIComponent(url);
+  if (XRegExp(RELATIVE_REF).test(decodedUrl) || XRegExp(URI).test(decodedUrl)) {
+    return url;
   }
+  return '';
 }
 
 // function parseValidNumber(input) {

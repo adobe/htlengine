@@ -17,10 +17,11 @@
 </head>
 <body>
   <ul>
-    <li><a href="javascript&#x3a;alert&#x28;0&#x29;">XSS Link</a></li>
-    <li><a href="javascript&#x3a;alert&#x28;0&#x29;" name="Foo">XSS Link</a></li>
-    <li><a href="javascript&#x3a;&#x2F;&#x2F;&#xA;alert&#x28;0&#x29;">XSS Link</a></li>
-    <li><a href="javascript&#x3a;alert&#x28;String&#x2E;fromCharCode&#x28;48&#x29;&#x29;">XSS Link</a></li>
+    <li><a>XSS Link</a></li>
+    <li><a name="Foo">XSS Link</a></li>
+    <li><a>XSS Link</a></li>
+    <li><a>XSS Link</a></li>
+    <li><a>XSS Link</a></li>
     <li><a href="#" onclick="alert&#x28;0&#x29;">XSS Link</a></li>
     <li><img src="javascript&#x3a;alert&#x28;0&#x29;"/></li>
     <li><img src="fake.jpg" onerror="alert&#x28;0&#x29;"/></li>
