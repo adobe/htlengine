@@ -12,7 +12,7 @@
       for ((var_index2,item) in var_collectionVar0) {
         { const itemList = $.listInfo(var_index2, var_size1);
           $.out("\n    <li>");
-          { const var_3 = item;
+          { const var_3 = $.xss(item, "html");
             $.out(var_3);
           }
           $.out("</li>\n");

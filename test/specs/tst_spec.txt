@@ -29,7 +29,7 @@ global.mytest = properties["true0"];
 if (mytest) {
   $.out("<div>It is true!</div>");
 }
-{ const var_0 = ("\nIt was: ") + (mytest) + ("\n");
+{ const var_0 = ("\nIt was: ") + ($.xss(mytest, "html")) + ("\n");
   $.out(var_0);
 }
 ===

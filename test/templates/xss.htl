@@ -24,6 +24,7 @@
     <li><a href="${xss.url4}">XSS Link</a></li>
     <li><a href="#" onclick="${xss.eventHandler}">XSS Link</a></li>
     <li>${xss.imgTag1}</li>
+    <li>${xss.imgTag1 @ context='unsafe'}</li>
     <li>${xss.imgTag2}</li>
     <li>${xss.imgTag3}</li>
     <li>${xss.imgTag4}</li>

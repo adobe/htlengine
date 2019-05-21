@@ -23,13 +23,17 @@
     <li><a>XSS Link</a></li>
     <li><a>XSS Link</a></li>
     <li><a href="#" onclick="alert&#x28;0&#x29;">XSS Link</a></li>
-    <li><img src="javascript&#x3a;alert&#x28;0&#x29;"/></li>
-    <li><img src="fake.jpg" onerror="alert&#x28;0&#x29;"/></li>
-    <li><img src="javascript&#x3a;alert&#x28;0&#x29;"/></li>
-    <li><img src="java&#x0A;script&#x3a;alert&#x28;0&#x29;"/></li>
-    <li><img src="java&#x0A;script&#x3a;alert&#x28;0&#x29;"/></li>
+    <li><img></li>
+    <li><img src="javascript:alert(0)"/></li>
+    <li><img></li>
+    <li><img></li>
+    <li><img></li>
+    <li><img></li>
     <li><img src="fake.jpg" onerror="alert&#x28;0&#x29;"/></li>
   </ul>
+  
+  
+  
   <form action="&quot;&gt;&lt;script&gt;alert&#x28;0&#x29;&#x3b;&lt;&#x2f;script&gt;" onsubmit="alert&#x28;0&#x29;">
     <input name="test" value="&quot;&gt;&lt;script&gt;alert&#x28;0&#x29;&#x3b;&lt;&#x2f;script&gt;"/>
   </form>

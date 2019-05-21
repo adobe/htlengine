@@ -11,7 +11,7 @@ Hello, World
 #
 Hello, ${world}.
 ---
-{ const var_0 = ("Hello, ") + (world) + (".\n");
+{ const var_0 = ("Hello, ") + ($.xss(world, "html")) + (".\n");
   $.out(var_0);
 }
 ===
@@ -53,7 +53,7 @@ $.out("</p>\n");
 #
 Fruits: ${['Apple', 'Banana', 'Orange'] @ join='*'}
 ---
-{ const var_0 = ("Fruits: ") + ($.exec("join", ["Apple", "Banana", "Orange"], "*")) + ("\n");
+{ const var_0 = ("Fruits: ") + ($.xss($.exec("join", ["Apple", "Banana", "Orange"], "*"), "html")) + ("\n");
   $.out(var_0);
 }
 ===
@@ -65,7 +65,7 @@ Fruits: Apple*Banana*Orange
 #
 Fruits: ${properties.fruits @ join=properties.comma}
 ---
-{ const var_0 = ("Fruits: ") + ($.exec("join", properties["fruits"], properties["comma"])) + ("\n");
+{ const var_0 = ("Fruits: ") + ($.xss($.exec("join", properties["fruits"], properties["comma"]), "html")) + ("\n");
   $.out(var_0);
 }
 ===
