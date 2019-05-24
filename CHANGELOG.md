@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/adobe/htlengine/compare/v2.2.2...v2.3.0) (2019-05-24)
+
+
+### Features
+
+* **xss:** URLs are not correctly sanitized ([9869f7c](https://github.com/adobe/htlengine/commit/9869f7c)), closes [#53](https://github.com/adobe/htlengine/issues/53)
+
 ## [2.2.2](https://github.com/adobe/htlengine/compare/v2.2.1...v2.2.2) (2019-05-13)
 
 
