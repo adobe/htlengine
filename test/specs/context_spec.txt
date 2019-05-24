@@ -52,7 +52,7 @@ HTML &amp; Things &lt;b&gt;are bold&lt;&#x2f;b&gt; or Single &#x27; or double &q
 #
 ${properties.title @ context='uri'}
 ===
-HTML%20&%20Things%20%3Cb%3Eare%20bold%3C/b%3E%20or%20Single%20%27%20or%20double%20%22%20quoted.%3Cscript%3Ealert(%22hello%22);%3C/script%3E
+
 ^^^
     $.out(var_0);
 #

@@ -15,7 +15,8 @@
     "numeral": "^2.0.6",
     "sanitizer": "^0.1.3",
     "source-map": "^0.7.3",
-    "urijs": "^1.19.1"
+    "urijs": "^1.19.1",
+    "xregexp": "^4.2.4"
   },
   "scripts": {
     "build": "antlr4 -Dlanguage=JavaScript -Xexact-output-dir -o src/parser/generated src/parser/grammar/SightlyLexer.g4 src/parser/grammar/SightlyParser.g4 src/parser/grammar/SightlyParser.g4",

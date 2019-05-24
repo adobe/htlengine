@@ -138,7 +138,7 @@ module.exports = class MarkupHandler {
   }
 
   onText(text, line, column) {
-    const markupContext = this._inScriptOrStyle ? MarkupContext.TEXT : null;
+    const markupContext = this._inScriptOrStyle ? MarkupContext.TEXT : MarkupContext.HTML;
     this._outText(text, markupContext, line, column);
   }
 
