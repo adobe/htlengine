@@ -13,6 +13,6 @@ module.exports = {
   properties: {
     title: 'HTML & Things <b>are bold</b> or Single \' or double " quoted.<script>alert("hello");</script>',
     attvalue: '" onload="alert()" "',
-
+    nav: '/SUMMARY',
   },
 };

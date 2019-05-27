@@ -53,6 +53,7 @@ const GLOBALS = {
     url2: 'javascript://%0Dalert(0)', // js comment & return char
     url3: 'javascript:/*--><script>alert(0);</script>', // js comment & break out of html tag
     url4: 'javascript:alert(String.fromCharCode(48))', // avoiding quotes
+    url5: '/foo', // rel part
     breakAttr: '"><script>alert(0);</script>', // break out of html tag
     eventHandler: 'alert(0)',
     imgTag1: '<img src="javascript:alert(0)"/>',

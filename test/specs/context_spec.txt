@@ -56,6 +56,14 @@ ${properties.title @ context='uri'}
 ^^^
     $.out(var_0);
 #
+### path prefix
+#
+${properties.nav}
+<esi:include src="${properties.nav}.nav.html" />
+===
+/SUMMARY
+<esi:include src="/SUMMARY.nav.html"/>
+#
 ### scriptToken
 #
 ${'foo' @ context='scriptToken'}
