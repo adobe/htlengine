@@ -72,15 +72,15 @@ const DEC_OCTET = '(?:\\p{N}|[\\x31-\\x39]\\p{N}|1\\p{N}{2}|2[\\x30-\\x34]\\p{N}
 const H16 = `${HEX_DIGIT}{1,4}`;
 const IPV4_ADDRESS = `${DEC_OCTET}\\.${DEC_OCTET}\\.${DEC_OCTET}\\.${DEC_OCTET}`;
 const LS32 = `(?:${H16}:${H16})|${IPV4_ADDRESS}`;
-const IPV6_ADDRESS = `(?:(?:(?:${H16}:){6}(?:${LS32}))|" +
-        "(?:::(?:${H16}:){5}(?:${LS32}))|" +
-        "(?:(?:${H16}){0,1}::(?:${H16}:){4}(?:${LS32}))|" +
-        "(?:(?:(?:${H16}:){0,1}${H16})?::(?:${H16}:){3}(?:${LS32}))|" +
-        "(?:(?:(?:${H16}:){0,2}${H16})?::(?:${H16}:){2}(?:${LS32}))|" +
-        "(?:(?:(?:${H16}:){0,3}${H16})?::(?:${H16}:){1}(?:${LS32}))|" +
-        "(?:(?:(?:${H16}:){0,4}${H16})?::(?:${LS32}))|" +
-        "(?:(?:(?:${H16}:){0,5}${H16})?::(?:${H16}))|" +
-        "(?:(?:(?:${H16}:){0,6}${H16})?::))`;
+const IPV6_ADDRESS = `(?:(?:(?:${H16}:){6}(?:${LS32}))|`
+        + `(?:::(?:${H16}:){5}(?:${LS32}))|`
+        + `(?:(?:${H16}){0,1}::(?:${H16}:){4}(?:${LS32}))|`
+        + `(?:(?:(?:${H16}:){0,1}${H16})?::(?:${H16}:){3}(?:${LS32}))|`
+        + `(?:(?:(?:${H16}:){0,2}${H16})?::(?:${H16}:){2}(?:${LS32}))|`
+        + `(?:(?:(?:${H16}:){0,3}${H16})?::(?:${H16}:){1}(?:${LS32}))|`
+        + `(?:(?:(?:${H16}:){0,4}${H16})?::(?:${LS32}))|`
+        + `(?:(?:(?:${H16}:){0,5}${H16})?::(?:${H16}))|`
+        + `(?:(?:(?:${H16}:){0,6}${H16})?::))`;
 const IP_LITERAL = `\\[${IPV6_ADDRESS}]`;
 const PORT = '[0-9]+';
 const HOST = `(?:${IP_LITERAL}|${IPV4_ADDRESS}|${REG_NAME})`;
@@ -96,13 +96,8 @@ const PATH_ABSOLUTE = `\\/(?:${SEGMENT_NZ}${PATH_ABEMPTY})?`;
 const PATH_NOSCHEME = `${SEGMENT_NZ_NC}(?:\\/|(\\/${SEGMENT_NZ})*)`;
 const PATH_ROOTLESS = `${SEGMENT_NZ}(?:\\/|(\\/${SEGMENT_NZ})*)`;
 const PATH_EMPTY = '(?:^$)';
-const RELATIVE_PART = `(?:(?:\\/\\/${AUTHORITY}${PATH_ABEMPTY})|
-        (?:${PATH_ABSOLUTE})|
-        (?:${PATH_ROOTLESS}))`;
-const HIER_PART = `(?:(?:\\/\\/${AUTHORITY}${PATH_ABEMPTY})|
-        (?:${PATH_ABSOLUTE})|
-        (?:${PATH_NOSCHEME})|
-        ${PATH_EMPTY})`;
+const RELATIVE_PART = `(?:(?:\\/\\/${AUTHORITY}${PATH_ABEMPTY})|(?:${PATH_ABSOLUTE})|(?:${PATH_ROOTLESS}))`;
+const HIER_PART = `(?:(?:\\/\\/${AUTHORITY}${PATH_ABEMPTY})|(?:${PATH_ABSOLUTE})|(?:${PATH_NOSCHEME})|${PATH_EMPTY})`;
 
 const RELATIVE_REF = `^(?!\\s*javascript(?::|&colon;))${RELATIVE_PART}?(?:\\?${QUERY})?(?:#${FRAGMENT})?$`;
 const URI = `^${SCHEME_PATTERN}:${HIER_PART}(?:\\?${QUERY})?(?:#${FRAGMENT})?$`;

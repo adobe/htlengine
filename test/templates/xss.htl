@@ -37,5 +37,6 @@
   <form action="${xss.breakAttr}" onsubmit="${xss.eventHandler}">
     <input name="test" value="${xss.breakAttr}"/>
   </form>
+  <img src="${xss.url5}/bla.jpg" />
 </body>
 </html>
