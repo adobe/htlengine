@@ -23,7 +23,7 @@
 
 <div><section>Template</section></div>
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
 #
 ### sightly call function with colon in name
 #
@@ -49,7 +49,7 @@
 
 <div><section></section></div>
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
 #
 ### sightly call function can be redeclared
 #
@@ -79,7 +79,7 @@
 <div><section></section></div>
 
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
 #
 ### sightly call function can call other templates
 #
@@ -91,7 +91,7 @@
 
 <div><div><section>123</section></div></div>
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
 #
 ### sightly call function can call itself recursively
 #
@@ -155,7 +155,7 @@
 </ul>
 
 ^^^
-    if (var_size1) {
-        $.out(var_3);
+if (var_size1) {
+        $.dom.append($n, var_3);
 #
 ###

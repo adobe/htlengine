@@ -14,7 +14,8 @@ const Plugin = require('../html/Plugin');
 const VariableBinding = require('../commands/VariableBinding');
 const Conditional = require('../commands/Conditional');
 const OutputVariable = require('../commands/OutputVariable');
-const OutText = require('../commands/OutText');
+const CreateElement = require('../commands/CreateElement');
+const PopElement = require('../commands/PopElement');
 const MarkupContext = require('../html/MarkupContext');
 const ExpressionContext = require('../html/ExpressionContext');
 
@@ -30,14 +31,13 @@ module.exports = class ElementPlugin extends Plugin {
     this.tagVar = pluginContext.generateVariable('tagVar');
   }
 
-  beforeElement(stream/* , tagName */) {
+  beforeElement(stream) {
     stream.write(new VariableBinding.Start(this.tagVar, this.node));
   }
 
-  beforeTagOpen(stream) {
+  beforeTagOpen(stream, isEmpty, isVoid) {
     stream.write(new Conditional.Start(this.tagVar));
-    stream.write(new OutText('<'));
-    stream.write(new OutputVariable(this.tagVar));
+    stream.write(new CreateElement(new OutputVariable(this.tagVar), isEmpty, isVoid));
     stream.write(Conditional.END);
     stream.write(new Conditional.Start(this.tagVar, true));
   }
@@ -47,14 +47,10 @@ module.exports = class ElementPlugin extends Plugin {
     stream.write(Conditional.END);
   }
 
-  beforeTagClose(stream, isSelfClosing) {
-    if (!isSelfClosing) {
-      stream.write(new Conditional.Start(this.tagVar));
-      stream.write(new OutText('</'));
-      stream.write(new OutputVariable(this.tagVar));
-      stream.write(new OutText('>'));
-      stream.write(Conditional.END);
-    }
+  beforeTagClose(stream, isEmpty, isVoid) {
+    stream.write(new Conditional.Start(this.tagVar));
+    stream.write(new PopElement(new OutputVariable(this.tagVar), isEmpty, isVoid));
+    stream.write(Conditional.END);
     stream.write(new Conditional.Start(this.tagVar, true));
   }
 

@@ -47,7 +47,7 @@ module.exports = class TestHandler {
   }
 
   onComment(markup, line, column) {
-    this._result += markup;
+    this._result += `<!--${markup}-->`;
   }
 
   onDocType(markup, line, column) {

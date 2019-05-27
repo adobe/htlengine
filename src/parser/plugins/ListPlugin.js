@@ -30,7 +30,7 @@ module.exports = class ListPlugin extends Plugin {
     this._location = location;
   }
 
-  beforeElement(stream/* , tagName */) {
+  beforeElement(stream) {
     stream.write(new VariableBinding.Start(this._listVariable, this.expression.root));
     stream.write(new VariableBinding.Start(
       this._collectionSizeVar,

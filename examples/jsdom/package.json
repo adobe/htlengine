@@ -1,0 +1,16 @@
+{
+  "name": "htlengine-example-jsom",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Example to use htlengine with JSDOM",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@adobe/htlengine": "file:../../",
+    "jsdom": "^15.1.0"
+  }
+}

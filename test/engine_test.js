@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-/* global describe, it */
+/* eslint-env mocha */
 
 // built-in modules
 const assert = require('assert');
@@ -51,20 +51,18 @@ describe('Engine test', async () => {
     const template = await fse.readFile(TEMPLATE_SIMPLE_2, 'utf-8');
     const expected = await fse.readFile(EXPECTED_SIMPLE_2, 'utf-8');
     const ret = await engine(GLOBALS, template);
-    assert.equal(ret.body, expected);
+    assert.equal(ret, expected);
   });
 });
 
 describe('Engine Performance test', async () => {
-  // todo: enable large tests once performance issues are addressed
   const TEST_FILES = ['simple2.html', '400kb.htm', '700kb.htm'];
-
   TEST_FILES.forEach((filename) => {
     it(`produces htl output for ${filename}`, async () => {
       const filePath = path.resolve(__dirname, 'templates', filename);
       const source = await fse.readFile(filePath, 'utf-8');
       const result = await engine(GLOBALS, source);
-      assert.equal(result.body, source);
+      assert.equal(result, source);
     }).timeout(30000);
   });
 });

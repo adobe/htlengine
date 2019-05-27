@@ -59,10 +59,11 @@ function filterElementName(input) {
 }
 
 module.exports = function formatXss(value, ctx) {
-  if (typeof value === 'boolean' || value === undefined) {
+  const isArray = Array.isArray(value);
+  if (typeof value === 'boolean' || value === undefined || (!isArray && typeof value === 'object')) {
     return value;
   }
-  const stringValue = Array.isArray(value) ? value.join(',') : `${value}`;
+  const stringValue = isArray ? value.join(',') : `${value}`;
 
   switch (ctx) {
     case 'unsafe':

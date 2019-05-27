@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-/* global describe, it */
+/* eslint-env mocha */
 
 // built-in modules
 const assert = require('assert');
@@ -88,8 +88,8 @@ describe('Runtime Tests', () => {
     // eslint-disable-next-line import/no-dynamic-require,global-require
     const { main } = require(filename);
 
-    const { body } = await main(GLOBALS);
-    assert.equal(body, await fse.readFile(EXPECTED_SIMPLE_2, 'utf-8'));
+    const ret = await main(GLOBALS);
+    assert.equal(ret, await fse.readFile(EXPECTED_SIMPLE_2, 'utf-8'));
   });
 
   it('Can set custom template', async () => {
@@ -109,8 +109,8 @@ describe('Runtime Tests', () => {
     // eslint-disable-next-line import/no-dynamic-require,global-require
     const { main } = require(filename);
 
-    const body = await main(GLOBALS);
-    assert.equal(body, await fse.readFile(EXPECTED_SIMPLE_2, 'utf-8'));
+    const ret = await main(GLOBALS);
+    assert.equal(ret, await fse.readFile(EXPECTED_SIMPLE_2, 'utf-8'));
   });
 
   it('Protects against XSS', async () => {
@@ -128,8 +128,8 @@ describe('Runtime Tests', () => {
     // eslint-disable-next-line import/no-dynamic-require,global-require
     const { main } = require(filename);
 
-    const { body } = await main(GLOBALS);
-    assert.equal(body, await fse.readFile(EXPECTED_XSS, 'utf-8'));
+    const ret = await main(GLOBALS);
+    assert.equal(ret, await fse.readFile(EXPECTED_XSS, 'utf-8'));
   });
 
   it('Protects against XSS (unsafe)', async () => {

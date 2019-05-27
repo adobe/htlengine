@@ -14,8 +14,8 @@
 const Plugin = require('../html/Plugin');
 const VariableBinding = require('../commands/VariableBinding');
 const Conditional = require('../commands/Conditional');
-const OutText = require('../commands/OutText');
 const OutputVariable = require('../commands/OutputVariable');
+const AddAttribute = require('../commands/AddAttribute');
 const Loop = require('../commands/Loop');
 const MapLiteral = require('../htl/nodes/MapLiteral');
 const PropertyAccess = require('../htl/nodes/PropertyAccess');
@@ -50,8 +50,6 @@ function decodeAttributeName(signature) {
 class SingleAttributePlugin extends Plugin {
   constructor(signature, ctx, expression, attributeName, location) {
     super(signature, ctx, expression);
-    this.writeAtEnd = true;
-    this.beforeCall = true;
     this.attributeName = attributeName;
     this.attrValue = ctx.generateVariable(`attrValue_${attributeName}`);
     this.attrValueNode = new Identifier(this.attrValue);
@@ -64,75 +62,21 @@ class SingleAttributePlugin extends Plugin {
     this.location = location;
   }
 
-  beforeAttribute(stream, attributeName) {
-    if (attributeName === this.attributeName) {
-      if (this.beforeCall) {
-        this._emitStart(stream);
-      }
-      this.writeAtEnd = false;
-    }
-  }
-
-  beforeAttributeValue(stream, attributeName/* , attributeValue */) {
-    if (attributeName === this.attributeName && this.beforeCall) {
-      this._emitWrite(stream);
-      stream.beginIgnore();
-    }
-  }
-
-  afterAttributeValue(stream, attributeName) {
-    if (attributeName === this.attributeName && this.beforeCall) {
-      stream.endIgnore();
-    }
-  }
-
-  afterAttribute(stream, attributeName) {
-    if (attributeName === this.attributeName && this.beforeCall) {
-      this._emitEnd(stream);
-    }
-  }
-
-  afterAttributes(stream) {
-    if (this.writeAtEnd) {
-      this._emitStart(stream);
-      stream.write(new OutText(` ${this.attributeName}`));
-      this._emitWrite(stream);
-      this._emitEnd(stream);
-    }
-  }
-
-  onPluginCall(stream, signature/* , expression */) {
-    if (signature.name === 'attribute') {
-      const attributeName = decodeAttributeName(signature);
-      if (this.attributeName === attributeName) {
-        this.beforeCall = false;
-      }
-    }
-  }
-
-  _emitStart(stream) {
-    stream.write(new VariableBinding.Start(this.attrValue, this.node));
-    stream.write(new VariableBinding.Start(this.escapedAttrValue, this.contentNode));
-    stream.write(new Conditional.Start(new BinaryOperation(
-      BinaryOperator.OR,
-      new Identifier(this.escapedAttrValue),
-      new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, this.attrValueNode),
-    ), false, this.location));
-  }
-
-  _emitWrite(stream) {
-    stream.write(new Conditional.Start(new BinaryOperation(BinaryOperator.STRICT_NEQ, this.attrValueNode, BooleanConstant.TRUE), false));
-    stream.write(new OutText('="'));
-    stream.write(new OutputVariable(this.escapedAttrValue));
-    stream.write(new OutText('"'));
-    stream.write(Conditional.END);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  _emitEnd(stream) {
-    stream.write(Conditional.END);
-    stream.write(VariableBinding.END);
-    stream.write(VariableBinding.END);
+  beforeElement(stream, elemContext) {
+    // eslint-disable-next-line no-param-reassign
+    elemContext.addCallbackAttribute(this.attributeName, () => {
+      stream.write(new VariableBinding.Start(this.attrValue, this.node));
+      stream.write(new VariableBinding.Start(this.escapedAttrValue, this.contentNode));
+      stream.write(new Conditional.Start(new BinaryOperation(
+        BinaryOperator.OR,
+        new Identifier(this.escapedAttrValue),
+        new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, this.attrValueNode),
+      ), false, this.location));
+      stream.write(new AddAttribute(this.attributeName, new OutputVariable(this.escapedAttrValue)));
+      stream.write(Conditional.END);
+      stream.write(VariableBinding.END);
+      stream.write(VariableBinding.END);
+    });
   }
 }
 
@@ -145,6 +89,10 @@ class MultiAttributePlugin extends Plugin {
     this.beforeCall = true;
     this.ignored = {};
     this.location = location;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  beforeElement(stream, elemContext) {
   }
 
   beforeAttributes(stream) {
@@ -219,14 +167,7 @@ class MultiAttributePlugin extends Plugin {
       new Identifier(escapedContent),
       new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrContentVar)),
     ), false, this.location));
-    stream.write(new OutText(' '));
-    stream.write(new OutputVariable(attrNameVar));
-
-    stream.write(new Conditional.Start(new BinaryOperation(BinaryOperator.STRICT_NEQ, new Identifier(attrContentVar), BooleanConstant.TRUE), false));
-    stream.write(new OutText('="'));
-    stream.write(new OutputVariable(escapedContent));
-    stream.write(new OutText('"'));
-    stream.write(Conditional.END);
+    stream.write(new AddAttribute(new OutputVariable(attrNameVar), new OutputVariable(escapedContent), '"', true));
 
     stream.write(Conditional.END);
     stream.write(VariableBinding.END);
@@ -267,6 +208,11 @@ module.exports = class AttributePlugin extends Plugin {
             + 'this attribute then use an expression with an appropriate context.';
     this.pluginContext.stream.warn(warningMessage, this.expression.rawText);
     return false;
+  }
+
+  beforeElement() {
+    // eslint-disable-next-line prefer-spread,prefer-rest-params
+    this.delegate.beforeElement.apply(this.delegate, arguments);
   }
 
   beforeAttributes() {

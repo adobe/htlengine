@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-/* global describe, it */
+/* eslint-env mocha */
 
 const assert = require('assert');
 const TagTokenizer = require('../src/parser/html/TagTokenizer');

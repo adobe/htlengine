@@ -157,7 +157,7 @@ module.exports = class ExpressionFormatter {
       } else if (node.functionName === 'use') {
         this.result += 'yield $.use(';
       } else if (node.functionName === 'call') {
-        this.result += 'yield $.call($.template().';
+        throw new Error('$.call not supported via expression formatter');
       } else if (node.functionName === 'resource') {
         this.result += 'yield $.slyResource(';
       } else {

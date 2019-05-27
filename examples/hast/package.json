@@ -1,0 +1,19 @@
+{
+  "name": "htlengine-example-hast",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Example to use htlengine with unified / hast",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@adobe/htlengine": "file:../../",
+    "remark-parse": "^6.0.3",
+    "remark-rehype": "^4.0.0",
+    "unified": "^7.1.0",
+    "unified-stream": "^1.0.4"
+  }
+}

@@ -20,7 +20,7 @@ const StringConstant = require('../htl/nodes/StringConstant');
 const DEFAULT_VARIABLE_NAME = 'useBean';
 
 module.exports = class UsePlugin extends Plugin {
-  beforeElement(stream/* , tagName */) {
+  beforeElement(stream) {
     const variableName = this._signature.getVariableName(DEFAULT_VARIABLE_NAME);
 
     // check for template reference. currently only static external templates supported,

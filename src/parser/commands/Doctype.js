@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Deloitte Digital. All rights reserved.
+ * Copyright 2018 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy
  * of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -12,13 +12,23 @@
 
 const Command = require('./Command');
 
-module.exports = class OutputExpression extends Command {
-  constructor(expression) {
-    super();
-    this._expression = expression;
+module.exports = class Doctype extends Command {
+  constructor(name, publicId, systemId, location) {
+    super(location);
+    this._name = name;
+    this._publicId = publicId;
+    this._systemId = systemId;
   }
 
-  get expression() {
-    return this._expression;
+  get name() {
+    return this._name;
+  }
+
+  get publicId() {
+    return this._publicId;
+  }
+
+  get systemId() {
+    return this._systemId;
   }
 };

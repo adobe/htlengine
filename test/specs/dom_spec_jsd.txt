@@ -1,0 +1,74 @@
+#
+### unwrap with value and variable
+#
+<div>${document.footer}</div>
+===
+<div><title>Hello, World</title></div>
+#
+### insert same item several times
+#
+<ul>
+${document.listItem}
+${document.listItem}
+${document.listItem}
+</ul>
+===
+<ul>
+<li>This is foo.</li>
+<li>This is foo.</li>
+<li>This is foo.</li>
+</ul>
+#
+### add body
+#
+<!DOCTYPE html>
+<html>
+<head><title>Hello</title></head>
+${document.body}
+</html>
+===
+<!DOCTYPE html><html>
+
+<head><title>Hello</title></head>
+<body><ul><li>This is foo.</li></ul><p>Hello, world.</p></body>
+</html>
+#
+### add body in body
+#
+<!DOCTYPE html>
+<html>
+<head><title>Hello</title></head>
+<body>
+<div>header</div>
+${document.body}
+<div>footer</div>
+</body>
+</html>
+===
+<!DOCTYPE html><html>
+
+<head><title>Hello</title></head>
+<body>
+<div>header</div>
+<ul><li>This is foo.</li></ul><p>Hello, world.</p>
+<div>footer</div>
+</body>
+</html>
+#
+### add comment
+#
+<!DOCTYPE html>
+<!-- test -->
+<html>
+<head><title>Hello</title></head>
+${document.body1}
+</html>
+===
+<!DOCTYPE html><html>
+<!-- test -->
+
+<head><title>Hello</title></head>
+<body><ul><li>This is foo.</li></ul><p>Hello, world.</p></body>
+</html>
+#
+###

@@ -10,68 +10,45 @@ Hello, World
 ### simple expression
 #
 Hello, ${world}.
----
-{ const var_0 = ("Hello, ") + ($.xss(world, "html")) + (".\n");
-  $.out(var_0);
-}
 ===
 Hello, Earth.
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
+#
+#
+### simple expression in attribute
+#
+<div class="${world}">
+===
+<div class="Earth">
 #
 ### sly-text with simple string
 #
 <p data-sly-text="${'Hello, world.'}">This text would never be shown.</p>
----
-$.out("<p>");
-{ const var_textContent0 = $.xss("Hello, world.", "text");
-  $.out(var_textContent0);
-}
-if (false) {
-  $.out("This text would never be shown.");
-}
-$.out("</p>\n");
 ===
 <p>Hello, world.</p>
 #
 ### sly-text with variable
 #
 <p data-sly-text="${properties.title}">This text would never be shown.</p>
----
-$.out("<p>");
-{ const var_textContent0 = $.xss(properties["title"], "text");
-  $.out(var_textContent0);
-}
-if (false) {
-  $.out("This text would never be shown.");
-}
-$.out("</p>\n");
 ===
 <p>Hello, world.</p>
 #
 ### join filter test
 #
 Fruits: ${['Apple', 'Banana', 'Orange'] @ join='*'}
----
-{ const var_0 = ("Fruits: ") + ($.xss($.exec("join", ["Apple", "Banana", "Orange"], "*"), "html")) + ("\n");
-  $.out(var_0);
-}
 ===
 Fruits: Apple*Banana*Orange
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
 #
 ### join filter test with variables
 #
 Fruits: ${properties.fruits @ join=properties.comma}
----
-{ const var_0 = ("Fruits: ") + ($.xss($.exec("join", properties["fruits"], properties["comma"]), "html")) + ("\n");
-  $.out(var_0);
-}
 ===
 Fruits: Apple, Banana, Orange
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
 #
 ### string OR
 #
@@ -83,7 +60,7 @@ Hello, world.
 bar
 string constant
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
 #
 ### comparison
 #
@@ -117,7 +94,7 @@ true
 false
 true
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
 #
 ### boolean casting
 #
@@ -135,7 +112,7 @@ true
 false
 false
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
 #
 ### string casting
 #
@@ -155,7 +132,7 @@ true,false
 foo,bar
 foo,
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
 #
 ### comments
 #
@@ -166,8 +143,6 @@ foo,
 <!-- This is normal HTML comment -->
 
 <!-- Page title: Hello, world. -->
-^^^
-    $.out(var_0);
 #
 ### multiple plugins
 #

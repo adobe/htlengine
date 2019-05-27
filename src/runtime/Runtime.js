@@ -13,25 +13,20 @@
 const path = require('path');
 const co = require('co');
 const fs = require('fs');
-const format = require('../runtime/format');
-const formatUri = require('../runtime/format_uri');
-const formatXss = require('../runtime/format_xss');
+const format = require('./format');
+const formatUri = require('./format_uri');
+const formatXss = require('./format_xss');
+const HtmlDOMFactory = require('./HtmlDOMFactory');
+const HDOMFactory = require('./HDOMFactory');
+const VDOMFactory = require('./VDOMFactory');
 
 module.exports = class Runtime {
   constructor() {
-    this._stream = '';
     this._globals = {};
     this._templates = {};
     this._useDir = '.';
     this._resourceDir = '.';
-  }
-
-  out(text) {
-    this._stream += text;
-  }
-
-  get stream() {
-    return this._stream;
+    this._dom = new HtmlDOMFactory();
   }
 
   get globals() {
@@ -42,9 +37,22 @@ module.exports = class Runtime {
     return this._templates;
   }
 
+  get dom() {
+    return this._dom;
+  }
+
   // eslint-disable-next-line class-methods-use-this
   run(fn) {
     return co(fn);
+  }
+
+  withDomFactory(domFactory) {
+    if (typeof domFactory === 'function') {
+      this._dom = domFactory(this);
+    } else {
+      this._dom = domFactory;
+    }
+    return this;
   }
 
   withUseDirectory(dir) {
@@ -92,7 +100,7 @@ module.exports = class Runtime {
     Object.keys(options).forEach((k) => {
       mod[k] = options[k];
     });
-    return mod.use();
+    return mod.use(this._globals);
   }
 
   resource(uri) {
@@ -177,3 +185,7 @@ module.exports = class Runtime {
     throw new Error(`Unknown runtime call: ${name}`);
   }
 };
+
+module.exports.VDOMFactory = VDOMFactory;
+module.exports.HDOMFactory = HDOMFactory;
+module.exports.HtmlDOMFactory = HtmlDOMFactory;

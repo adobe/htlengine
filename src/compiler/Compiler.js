@@ -140,6 +140,24 @@ module.exports = class Compiler {
   }
 
   /**
+   * Compiles the given HTL source code into a JavaScript function.
+   *
+   * @async
+   * @param {String} source HTL template code
+   * @param {String} baseDir the base directory to resolve file references
+   * @returns {Promise<Function>} the resulting function
+   */
+  async compileToFunction(source, baseDir) {
+    const js = await this.compileToString(source, baseDir);
+    // poor men's module loader
+    // eslint-disable-next-line no-new-func
+    const template = new Function('module', 'require', js);
+    const module = {};
+    template.call(null, module, require);
+    return module.exports;
+  }
+
+  /**
    * Parses the source and returns the command stream. It resolves any static linked templates
    * recursively.
    *

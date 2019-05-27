@@ -10,30 +10,25 @@
  * governing permissions and limitations under the License.
  */
 
-const Scope = require('./Scope');
+const Command = require('./Command');
 
-module.exports = class Runtime {
-  constructor() {
-    this._global = new Scope();
-    this._scope = new Scope(this._global);
+module.exports = class PushElement extends Command {
+  constructor(name, isEmpty, isVoid) {
+    super();
+    this._name = name;
+    this._isEmpty = isEmpty;
+    this._isVoid = isVoid;
   }
 
-  openScope() {
-    this._scope = new Scope(this._scope);
-    return this._scope;
+  get name() {
+    return this._name;
   }
 
-  closeScope() {
-    const scope = this._scope;
-    this._scope = scope._parent; // eslint-disable-line no-underscore-dangle
-    return scope;
+  get isEmpty() {
+    return this._isEmpty;
   }
 
-  get scope() {
-    return this._scope;
-  }
-
-  get global() {
-    return this._global;
+  get isVoid() {
+    return this._isVoid;
   }
 };
