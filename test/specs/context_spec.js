@@ -14,5 +14,6 @@ module.exports = {
     title: 'HTML & Things <b>are bold</b> or Single \' or double " quoted.<script>alert("hello");</script>',
     attvalue: '" onload="alert()" "',
     nav: '/SUMMARY',
+    abs: 'https://www.primordialsoup.life/index.html',
   },
 };

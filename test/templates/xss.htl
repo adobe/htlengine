@@ -38,5 +38,6 @@
     <input name="test" value="${xss.breakAttr}"/>
   </form>
   <img src="${xss.url5}/bla.jpg" />
+  <img src="${xss.url6}" />
 </body>
 </html>

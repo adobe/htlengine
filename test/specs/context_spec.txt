@@ -64,6 +64,12 @@ ${properties.nav}
 /SUMMARY
 <esi:include src="/SUMMARY.nav.html"/>
 #
+### absolute href
+#
+<a href="${properties.abs}">foo</a>
+===
+<a href="https://www.primordialsoup.life/index.html">foo</a>
+#
 ### scriptToken
 #
 ${'foo' @ context='scriptToken'}
