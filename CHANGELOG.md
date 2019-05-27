@@ -1,3 +1,10 @@
+## [2.3.1](https://github.com/adobe/htlengine/compare/v2.3.0...v2.3.1) (2019-05-27)
+
+
+### Bug Fixes
+
+* **xss:** regression in uri sanitizer ([#65](https://github.com/adobe/htlengine/issues/65)) ([ca9ea37](https://github.com/adobe/htlengine/commit/ca9ea37)), closes [#64](https://github.com/adobe/htlengine/issues/64)
+
 # [2.3.0](https://github.com/adobe/htlengine/compare/v2.2.2...v2.3.0) (2019-05-24)
 
 
