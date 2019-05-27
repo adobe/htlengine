@@ -17,7 +17,7 @@ const BooleanConstant = require('../htl/nodes/BooleanConstant');
 const StringConstant = require('../htl/nodes/StringConstant');
 
 module.exports = class UnwrapPlugin extends Plugin {
-  beforeElement(stream/* , tagName */) {
+  beforeElement(stream/* , elemContext */) {
     const ctx = this.pluginContext;
     this.variableName = this._signature.getVariableName(null);
     this._useGlobalBinding = this.variableName != null;

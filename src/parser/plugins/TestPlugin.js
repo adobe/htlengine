@@ -16,7 +16,7 @@ const Conditional = require('../commands/Conditional');
 const Identifier = require('../htl/nodes/Identifier');
 
 module.exports = class TestPlugin extends Plugin {
-  beforeElement(stream/* , tagName */) {
+  beforeElement(stream) {
     const ctx = this.pluginContext;
     let variableName = this._signature.getVariableName(null);
     this._useGlobalBinding = variableName != null;

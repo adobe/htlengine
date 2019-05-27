@@ -13,15 +13,18 @@
 const OutText = require('../parser/commands/OutText');
 const VariableBinding = require('../parser/commands/VariableBinding');
 const FunctionBlock = require('../parser/commands/FunctionBlock');
+const FunctionCall = require('../parser/commands/FunctionCall');
 const Conditional = require('../parser/commands/Conditional');
 const Loop = require('../parser/commands/Loop');
 const OutputVariable = require('../parser/commands/OutputVariable');
-const OutputExpression = require('../parser/commands/OutputExpression');
+const CreateElement = require('../parser/commands/CreateElement');
+const PushElement = require('../parser/commands/PushElement');
+const PopElement = require('../parser/commands/PopElement');
+const Doctype = require('../parser/commands/Doctype');
+const Comment = require('../parser/commands/Comment');
+const AddAttribute = require('../parser/commands/AddAttribute');
 const ExpressionFormatter = require('./ExpressionFormatter');
-
-function escapeJavaString(s) {
-  return JSON.stringify(s);
-}
+const DomHandler = require('./DomHandler');
 
 module.exports = class JSCodeGenVisitor {
   constructor() {
@@ -33,6 +36,7 @@ module.exports = class JSCodeGenVisitor {
     this._indents = [];
     this._codeLine = 0;
     this._templateLine = 0;
+    this._dom = new DomHandler(this);
   }
 
   withIndent(delim) {
@@ -67,13 +71,15 @@ module.exports = class JSCodeGenVisitor {
   }
 
   process(commands) {
+    this._dom.beginDocument();
     commands.forEach((c) => {
       c.accept(this);
     });
+    this._dom.endDocument();
     return this;
   }
 
-  _out(msg) {
+  out(msg) {
     if (this._indent) {
       if (this._inFunctionBlock) {
         this._templates += `${this._indent + msg}\n`;
@@ -126,57 +132,58 @@ module.exports = class JSCodeGenVisitor {
     }
 
     if (cmd instanceof OutText) {
-      this._out(`$.out(${escapeJavaString(cmd.text)});`);
-    } else if (cmd instanceof OutputExpression) {
-      const exp = ExpressionFormatter.format(cmd.expression);
-      this._out(`${exp};`);
+      this._dom.outText(cmd);
     } else if (cmd instanceof VariableBinding.Start) {
       const exp = ExpressionFormatter.format(cmd.expression);
-      this._out(`const ${cmd.variableName} = ${exp};`);
+      this.out(`const ${cmd.variableName} = ${exp};`);
     } else if (cmd instanceof VariableBinding.Global) {
       const exp = ExpressionFormatter.format(cmd.expression);
-      this._out(`${ExpressionFormatter.escapeVariable(cmd.variableName)} = ${exp};`);
+      this.out(`const ${ExpressionFormatter.escapeVariable(cmd.variableName)} = ${exp};`);
     } else if (cmd instanceof VariableBinding.End) {
       // nop
     } else if (cmd instanceof FunctionBlock.Start) {
       if (this._inFunctionBlock) {
         throw new Error('Template cannot be defined in another template');
       }
-
       this._inFunctionBlock = true;
       this._lastIndentLevel = this._indentLevel;
       this.setIndent(0);
-
-      const exp = ExpressionFormatter.escapeVariable(ExpressionFormatter.format(cmd.expression));
-      const functionName = `_template_${exp.replace('.', '_')}`;
-      this._out(`$.template('${exp}', function* ${functionName}() {`);
-      this.indent();
-
-      cmd.arguments.forEach((arg) => {
-        this._out(`const ${ExpressionFormatter.escapeVariable(arg)} = arguments[0]['${arg}'] || '';`);
-      });
+      this._dom.functionStart(cmd);
     } else if (cmd instanceof FunctionBlock.End) {
-      this.outdent();
-      this._out('});');
+      this._dom.functionEnd(cmd);
       this._inFunctionBlock = false;
       this.setIndent(this._lastIndentLevel);
+    } else if (cmd instanceof FunctionCall) {
+      this._dom.functionCall(cmd);
     } else if (cmd instanceof Conditional.Start) {
       const exp = ExpressionFormatter.format(cmd.expression);
       const neg = cmd.negate ? '!' : '';
-      this._out(`if (${neg}${exp}) {`);
+      this.out(`if (${neg}${exp}) {`);
       this.indent();
     } else if (cmd instanceof Conditional.End) {
       this.outdent();
-      this._out('}');
+      this.out('}');
     } else if (cmd instanceof OutputVariable) {
-      this._out(`$.out(${cmd.variableName});`);
+      this._dom.outVariable(cmd.variableName);
     } else if (cmd instanceof Loop.Start) {
-      this._out(`for (const ${cmd.indexVariable} of Object.keys(${cmd.listVariable})) {`);
+      this.out(`for (const ${cmd.indexVariable} of Object.keys(${cmd.listVariable})) {`);
       this.indent();
-      this._out(`const ${cmd.itemVariable} = Array.isArray(${cmd.listVariable}) ? ${cmd.listVariable}[${cmd.indexVariable}] : ${cmd.indexVariable};`);
+      this.out(`const ${cmd.itemVariable} = Array.isArray(${cmd.listVariable}) ? ${cmd.listVariable}[${cmd.indexVariable}] : ${cmd.indexVariable};`);
     } else if (cmd instanceof Loop.End) {
       this.outdent();
-      this._out('}');
+      this.out('}');
+    } else if (cmd instanceof CreateElement) {
+      this._dom.createElement(cmd);
+    } else if (cmd instanceof PushElement) {
+      this._dom.pushElement(cmd);
+    } else if (cmd instanceof PopElement) {
+      this._dom.popElement(cmd);
+    } else if (cmd instanceof AddAttribute) {
+      this._dom.addAttribute(cmd);
+    } else if (cmd instanceof Doctype) {
+      this._dom.doctype(cmd);
+    } else if (cmd instanceof Comment) {
+      this._dom.comment(cmd);
     } else {
       throw new Error(`unknown command: ${cmd}`);
     }

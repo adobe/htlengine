@@ -10,29 +10,25 @@
  * governing permissions and limitations under the License.
  */
 
-module.exports = class Scope {
-  constructor(parent) {
-    this._props = {};
-    this._parent = parent;
+const Command = require('./Command');
+
+module.exports = class AddAttribute extends Command {
+  constructor(name, value, quoteChar) {
+    super();
+    this._name = name;
+    this._value = value;
+    this._quoteChar = quoteChar || '"';
   }
 
-  setVariable(name, value) {
-    this._props[name] = value;
+  get name() {
+    return this._name;
   }
 
-  getVariable(name) {
-    if (name in this._props) {
-      return this._props[name];
-    }
-    if (this._parent) {
-      return this._parent.getVariable(name);
-    }
-    return null;
+  get value() {
+    return this._value;
   }
 
-  putAll(obj) {
-    Object.keys(obj).forEach((k) => {
-      this.setVariable(k, obj[k]);
-    });
+  get quote() {
+    return this._quoteChar;
   }
 };

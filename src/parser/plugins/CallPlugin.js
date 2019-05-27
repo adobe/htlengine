@@ -10,14 +10,12 @@
  * governing permissions and limitations under the License.
  */
 const Plugin = require('../html/Plugin');
-const RuntimeCall = require('../htl/nodes/RuntimeCall');
-const OutputExpression = require('../commands/OutputExpression');
+const FunctionCall = require('../commands/FunctionCall');
 const MapLiteral = require('../htl/nodes/MapLiteral');
 
 module.exports = class CallPlugin extends Plugin {
   beforeChildren(stream) {
-    const runtimeCall = new RuntimeCall('call', this._expression.root, [new MapLiteral(this._expression.options)]);
-    stream.write(new OutputExpression(runtimeCall));
+    stream.write(new FunctionCall(this._expression.root, new MapLiteral(this._expression.options)));
     stream.beginIgnore();
   }
 

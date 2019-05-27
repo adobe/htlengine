@@ -1,0 +1,131 @@
+#
+### scheme
+#
+${'//example.com/path/page.html' @ scheme='http'}
+${'http://example.com/path/page.html' @ scheme='https'}
+${'//example.com/path/page.html' @ scheme=''}
+${'//example.com/path/page.html' @ scheme}
+${'ftp://example.com/path/page.html' @ scheme=''}
+===
+http://example.com/path/page.html
+https://example.com/path/page.html
+//example.com/path/page.html
+//example.com/path/page.html
+//example.com/path/page.html
+#
+### domain
+#
+${'///path/page.html' @ domain='example.org'}
+${'http:///path/page.html' @ domain='example.org'}
+${'http:///path/page.html'}
+${'http://www.example.com/path/page.html' @ domain='www.example.org'}
+${'http://www.example.com/path/page.html' @ domain=''}
+===
+//example.org/path/page.html
+http://example.org/path/page.html
+http:///path/page.html
+http://www.example.org/path/page.html
+http:///path/page.html
+#
+### path
+#
+${'one' @ appendPath='two'}
+${'/one/' @ appendPath='/two/'}
+${'path' @ prependPath='..'}
+${'path' @ prependPath='/', appendPath='/'}
+${'http://example.com/path/page.html' @ prependPath='foo'}
+${'path/page.selector.html/suffix?key=value#fragment' @ appendPath='appended'}
+${'http://example.com/this/one.selector.html/suffix?key=value#fragment' @ path='that/two'}
+${'http://example.com/this/one.selector.html/suffix?key=value#fragment' @ path='/'}
+${'http://example.com/this/one.selector.html/suffix?key=value#fragment' @ path=''}
+${'http://example.com/this/one.selector.html/suffix?key=value#fragment' @ path}
+===
+one/two
+/one/two/
+../path
+/path/
+http://example.com/foo/path/page.html
+path/page/appended.selector.html/suffix?key=value#fragment
+http://example.com/that/two.selector.html/suffix?key=value#fragment
+http://example.com/.selector.html/suffix?key=value#fragment
+http://example.com/this/one.selector.html/suffix?key=value#fragment
+http://example.com/this/one.selector.html/suffix?key=value#fragment
+#
+### selectors
+#
+${'path/page.woo.foo.html' @ selectors='foo.bar'}
+${'path/page.woo.foo.html' @ selectors=['foo', 'bar']}
+${'path/page.woo.foo.html' @ addSelectors='foo.bar'}
+${'path/page.woo.foo.html' @ addSelectors=['foo', 'bar']}
+${'path/page.woo.foo.html' @ removeSelectors='foo.bar'}
+${'path/page.woo.foo.html' @ removeSelectors=['foo', 'bar']}
+${'path/page.woo.foo.html' @ selectors}
+${'path/page.woo.foo.html' @ selectors=''}
+===
+path/page.foo.bar.html
+path/page.foo.bar.html
+path/page.woo.foo.foo.bar.html
+path/page.woo.foo.foo.bar.html
+path/page.woo.html
+path/page.woo.html
+path/page.html
+path/page.html
+#
+### extension
+${'path/page' @ extension='html'}
+${'path/page.json' @ extension='html'}
+${'path/page.selector.json' @ extension='html'}
+${'path/page.json/suffix' @ extension='html'}
+${'path/page.json?key=value' @ extension='html'}
+${'path/page.json#fragment' @ extension='html'}
+${'path/page.json' @ extension}
+===
+path/page.html
+path/page.html
+path/page.selector.html
+path/page.html/suffix
+path/page.html?key=value
+path/page.html#fragment
+path/page
+#
+### suffix
+${'path/page.html' @ suffix='my/suffix'}
+${'path/page.html/some/suffix' @ suffix='my/suffix'}
+${'path/page.html?key=value' @ suffix='my/suffix'}
+${'path/page.html#fragment' @ suffix='my/suffix'}
+${'path/page.html/suffix' @ prependSuffix='prepended'}
+${'path/page.html/suffix' @ appendSuffix='appended'}
+${'path/page.html/suffix' @ suffix}
+===
+path/page.html/my/suffix
+path/page.html/my/suffix
+path/page.html/my/suffix?key=value
+path/page.html/my/suffix#fragment
+path/page.html/prepended/suffix
+path/page.html/suffix/appended
+path/page.html
+#
+### query
+${'http://www.example.org/search' @ query=jsuse.query, context='uri'}
+${'http://www.example.org/search?s=1' @ addQuery=jsuse.query, context='uri'}
+${'http://www.example.org/search?s=1&q=htl' @ removeQuery='q', context='uri'}
+${'http://www.example.org/search?s=1&q=htl' @ removeQuery=['s', 'q'], context='uri'}
+${'http://www.example.org/search?s=1&q=htl' @ query, context='uri'}
+===
+http://www.example.org/search?q=htl&amp;array=1&amp;array=2&amp;array=3
+http://www.example.org/search?s=1&amp;q=htl&amp;array=1&amp;array=2&amp;array=3
+http://www.example.org/search?s=1
+http://www.example.org/search
+http://www.example.org/search
+#
+### fragment
+#
+${'path/page' @ fragment='fragment'}
+${'path/page#one' @ fragment='two'}
+${'path/page#one' @ fragment}
+===
+path/page#fragment
+path/page#two
+path/page
+#
+###

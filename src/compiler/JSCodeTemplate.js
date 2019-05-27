@@ -11,10 +11,10 @@
  */
 
 /* eslint-disable */
+
 module.exports = function main(runtime) {
   const $ = {
     lengthOf: c => Array.isArray(c) ? c.length : Object.keys(c).length,
-    out: runtime.out.bind(runtime),
     exec: runtime.exec.bind(runtime),
     xss: runtime.xss.bind(runtime),
     listInfo: runtime.listInfo.bind(runtime),
@@ -22,6 +22,7 @@ module.exports = function main(runtime) {
     slyResource: runtime.resource.bind(runtime),
     call: runtime.call.bind(runtime),
     template: runtime.template.bind(runtime),
+    dom: runtime.dom,
   };
 
   // TEMPLATES

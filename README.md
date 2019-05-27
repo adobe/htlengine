@@ -47,6 +47,11 @@ const js = await compiler.compileToString(code);
 // the result can be saved as a file or eval'd
 ```
 
+## examples
+
+- see [HAST Example](./examples/hast/index.js) that uses a [hast](https://github.com/syntax-tree/hast) tree as resource document.
+- see [JSDOM Example](./examples/jsdom/index.js) that uses a [jsdom](https://github.com/jsdom/jsdom) document as resource.
+
 ## test
 
 The tests are more comprehensive. They validate if the the HTL expressions are parsed and re-created using the generated parse tree.

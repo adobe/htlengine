@@ -19,26 +19,33 @@ const PluginProxy = require('./PluginProxy');
 module.exports = class ElementContext {
   constructor(tagName) {
     this._tagName = tagName;
-    this._attributes = [];
+    this._attributes = {};
     this._isSlyTag = tagName.toLowerCase() === 'sly';
     this._plugin = new PluginProxy();
   }
 
   addAttribute(name, value, quoteChar, location) {
-    this._attributes.push({
+    this._attributes[name] = {
       name,
       value,
       quoteChar,
       location,
-    });
+    };
   }
 
   addPluginAttribute(name, signature, expression) {
-    this._attributes.push({
+    this._attributes[name] = {
       name,
       signature,
       expression,
-    });
+    };
+  }
+
+  addCallbackAttribute(name, callback) {
+    this._attributes[name] = {
+      name,
+      callback,
+    };
   }
 
   get tagName() {

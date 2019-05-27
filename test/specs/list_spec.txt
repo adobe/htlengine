@@ -4,25 +4,6 @@
 <ul data-sly-list="${properties.fruits}">
     <li>${item}</li>
 </ul>
----
-{ const var_collectionVar0 = properties["fruits"];
-  { const var_size1 = $.lengthOf(var_collectionVar0);
-    if (var_size1) {
-      $.out("<ul>");
-      for ((var_index2,item) in var_collectionVar0) {
-        { const itemList = $.listInfo(var_index2, var_size1);
-          $.out("\n    <li>");
-          { const var_3 = $.xss(item, "html");
-            $.out(var_3);
-          }
-          $.out("</li>\n");
-        }
-      }
-      $.out("</ul>");
-    }
-  }
-}
-$.out("\n");
 ===
 <ul>
     <li>Apple</li>
@@ -33,7 +14,7 @@ $.out("\n");
 </ul>
 ^^^
     if (var_size1) {
-        $.out(var_3);
+        $.dom.append($n, var_3);
 #
 ### empty list
 #
@@ -44,7 +25,7 @@ $.out("\n");
 
 ^^^
     if (var_size1) {
-        $.out(var_3);
+        $.dom.append($n, var_3);
 #
 ### list variables
 #
@@ -93,7 +74,7 @@ $.out("\n");
 </code>
 ^^^
     if (var_size1) {
-        $.out(var_3);
+        $.dom.append($n, var_3);
 #
 ### list map
 #
@@ -114,8 +95,8 @@ $.out("\n");
 </dl>
 ^^^
     if (var_size1) {
-        $.out(var_3);
-        $.out(var_4);
+        $.dom.append($n, var_3);
+        $.dom.append($n, var_4);
 #
 ### list over property with colon
 #

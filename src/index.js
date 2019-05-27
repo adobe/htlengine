@@ -12,8 +12,10 @@
 
 const Compiler = require('./compiler/Compiler.js');
 const Runtime = require('./runtime/Runtime.js');
+const resly = require('./runtime/resly.js');
 
 module.exports = Object.freeze({
   Compiler,
   Runtime,
+  resly,
 });

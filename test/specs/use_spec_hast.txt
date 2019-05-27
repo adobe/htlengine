@@ -1,0 +1,38 @@
+#
+### sightly use function
+#
+<div data-sly-use.page="use_spec/test_page.js">Hello ${page.title}.</div>
+===
+<div>Hello Jupiter.</div>
+#
+### passing params
+#
+<div data-sly-use.page="${'use_spec/test_page.js' @ value1='Moon', value2='Europa'}">${page.subTitle}</div>
+===
+<div>Moon: Europa</div>
+#
+### passing params with colon
+#
+<div data-sly-use.page="${'use_spec/test_page.js' @ jcr:title='Space Report'}">${page.title}</div>
+===
+<div>Space Report</div>
+#
+### using functions
+#
+<div data-sly-use.page="${'use_spec/test_page.js' @ radius='70000'}">Surface Area: ${page.area}</div>
+===
+<div>Surface Area: 61575216010.35994</div>
+#
+### using functions with colon
+#
+<div data-sly-use.page="${'use_spec/test_page.js'}">etag: ${page.jcr:etag}</div>
+===
+<div>etag: 1234</div>
+#
+### using async use classes
+#
+<div data-sly-use.page="use_spec/test_page_async.js">Hello ${page.title}.</div>
+===
+<div>Hello Saturn.</div>
+#
+###

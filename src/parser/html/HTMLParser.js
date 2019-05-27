@@ -216,7 +216,7 @@ module.exports = class HTMLParser {
             case 4:
               if (c === '>') {
                 parseState = PARSE_STATE.OUTSIDE;
-                const text = source.substring(start, curr + 1);
+                const text = source.substring(start + 4, curr - 2);
                 this._processComment(text, this._startPos.line, this._startPos.column);
                 this._startPos = { line: this._line, column: this._column + 1 };
                 start = curr + 1;

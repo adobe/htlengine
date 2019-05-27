@@ -1,0 +1,28 @@
+#
+### unwrap with value and variable
+#
+<a href="${properties.url}" data-sly-unwrap.unwrapTest="${properties.unwrap}">
+    <span>${properties.title}</span>
+</a>
+===
+
+    <span>yes</span>
+
+#
+### unwrap with value no variable
+#
+<a href="${properties.url}" data-sly-unwrap="${properties.unwrap}">
+    <span>${properties.title}</span>
+</a>
+===
+
+    <span>yes</span>
+
+#
+### unwrap
+#
+<a href="${properties.url}" data-sly-unwrap><span>${properties.title}</span></a>
+===
+<span>yes</span>
+#
+###

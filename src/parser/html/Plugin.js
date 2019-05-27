@@ -31,7 +31,7 @@ module.exports = class Plugin {
     return this._expression;
   }
 
-  beforeElement(stream, tagName) {
+  beforeElement(stream, tagName, elementContext) {
   }
 
   beforeTagOpen(stream) {

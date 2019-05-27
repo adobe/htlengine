@@ -5,7 +5,7 @@
 ===
 <div>Hello Jupiter.</div>
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
 #
 ### passing params
 #
@@ -13,7 +13,7 @@
 ===
 <div>Moon: Europa</div>
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
 #
 ### passing params with colon
 #
@@ -27,7 +27,7 @@
 ===
 <div>Surface Area: 61575216010.35994</div>
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
 #
 ### using functions with colon
 #
@@ -41,6 +41,6 @@
 ===
 <div>Hello Saturn.</div>
 ^^^
-    $.out(var_0);
+$.dom.append($n, var_0);
 #
 ###

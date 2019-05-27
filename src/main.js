@@ -10,35 +10,25 @@
  * governing permissions and limitations under the License.
  */
 
-// built-in modules
-const path = require('path');
-// declared dependencies
-const fse = require('fs-extra');
-// local modules
-const Compiler = require('./compiler/Compiler');
+const { Compiler, Runtime } = require('./index.js');
 
 /**
  * Simple engine that compiles the given template and executes it.
- * @param resource the global object to pass into the script
- * @param template the HTL script
+ * @param {*} resource the global object to pass into the script
+ * @param {string} template the HTL script
  * @returns A promise that resolves to the evaluated code.
  */
 module.exports = async function main(resource, template) {
-  const compiler = new Compiler()
-    .withOutputDirectory('.')
-    .includeRuntime(true)
-    .withRuntimeVar(Object.keys(resource))
-    .withSourceMap(true);
+  // setup the HTL compiler
+  const compiler = new Compiler().withRuntimeVar(Object.keys(resource));
 
-  let code = await compiler.compileToString(template);
-  code = code.replace('@adobe/htlengine', './src/index.js');
+  // compile the script to a executable template function
+  const fn = await compiler.compileToFunction(template);
 
-  const filename = path.resolve(process.cwd(), './out.js');
-  await fse.writeFile(filename, code, 'utf-8');
+  // create the HTL runtime
+  const runtime = new Runtime()
+    .setGlobal(resource);
 
-  // eslint-disable-next-line import/no-dynamic-require,global-require
-  delete require.cache[require.resolve(filename)];
-  // eslint-disable-next-line import/no-dynamic-require,global-require
-  const service = require(filename);
-  return service.main(resource);
+  // finally, execute the template function and return the result
+  return fn(runtime);
 };
