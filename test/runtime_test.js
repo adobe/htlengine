@@ -50,6 +50,7 @@ const GLOBALS = {
   xss: {
     aTag: '<a href="javascript:alert(0)">XSS Link</a>',
     aTag2: '<a href="http://www.valid.url">Non XSS Link</a>',
+    aTag3: '<a title="javascript:alert(0)">Non XSS Link</a>',
     url1: 'javascript:alert(0)',
     url2: 'javascript://%0Dalert(0)', // js comment & return char
     url3: 'javascript:/*--><script>alert(0);</script>', // js comment & break out of html tag
