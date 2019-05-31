@@ -49,6 +49,7 @@ const GLOBALS = {
   /* eslint-disable no-script-url, no-tabs */
   xss: {
     aTag: '<a href="javascript:alert(0)">XSS Link</a>',
+    aTag2: '<a href="http://www.valid.url">Non XSS Link</a>',
     url1: 'javascript:alert(0)',
     url2: 'javascript://%0Dalert(0)', // js comment & return char
     url3: 'javascript:/*--><script>alert(0);</script>', // js comment & break out of html tag
@@ -61,7 +62,7 @@ const GLOBALS = {
     imgTag2: '<img src="fake.jpg" onerror="alert(0)"/>',
     imgTag3: '<img src=`javascript:alert(0)`/>', // grave accent quotes
     imgTag4: '<img src="java	script:alert(0)"/>', // embedded tab
-    imgTag5: '<img src="java#x0A;script:alert(0)"/>', // embedded encoded tab
+    imgTag5: '<img src="java&#x0A;script:alert(0)"/>', // embedded encoded tab
     scriptTag1: '<script>alert(0);</script>',
     scriptTag2: '<script src="http://do.not.serve/this.js"></script>',
     scriptTag3: '<script src="//do.not.serve/this.js"></script>', // protocol resolution bypass

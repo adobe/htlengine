@@ -18,6 +18,7 @@
 <body>
   <ul>
     <li><a>XSS Link</a></li>
+    <li><a href="http://www.valid.url">Non XSS Link</a></li>
     <li><a name="Foo">XSS Link</a></li>
     <li><a>XSS Link</a></li>
     <li><a>XSS Link</a></li>
@@ -25,7 +26,7 @@
     <li><a href="#" onclick="alert&#x28;0&#x29;">XSS Link</a></li>
     <li><img></li>
     <li><img src="javascript:alert(0)"/></li>
-    <li><img></li>
+    <li><img src="fake.jpg"></li>
     <li><img></li>
     <li><img></li>
     <li><img></li>
