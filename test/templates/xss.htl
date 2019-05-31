@@ -19,6 +19,7 @@
   <ul>
     <li>${xss.aTag}</li>
     <li>${xss.aTag2}</li>
+    <li>${xss.aTag3}</li>
     <li><a href="${xss.url1}" name="Foo">XSS Link</a></li>
     <li><a href="${xss.url2}">XSS Link</a></li>
     <li><a href="${xss.url3}">XSS Link</a></li>
