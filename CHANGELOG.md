@@ -1,3 +1,16 @@
+# [3.0.0](https://github.com/adobe/htlengine/compare/v2.3.2...v3.0.0) (2019-06-05)
+
+
+### Features
+
+* **compiler:** allow to set default context ([5c735d0](https://github.com/adobe/htlengine/commit/5c735d0)), closes [#69](https://github.com/adobe/htlengine/issues/69)
+* **runtime:** Add support for DOM variables ([d4bab4c](https://github.com/adobe/htlengine/commit/d4bab4c)), closes [#62](https://github.com/adobe/htlengine/issues/62)
+
+
+### BREAKING CHANGES
+
+* **runtime:** the response from the runtime template is no longer an object, but the generated string or document.
+
 ## [2.3.2](https://github.com/adobe/htlengine/compare/v2.3.1...v2.3.2) (2019-06-05)
 
 
