@@ -57,6 +57,17 @@ module.exports = class MarkupHandler {
     this._htlParser = new HTLParser().withErrorListener(ThrowingErrorListener.INSTANCE);
     this._transformer = new ExpressionTransformer();
     this._symbolGenerator = new SymbolGenerator();
+    this._defaultMarkupContext = MarkupContext.HTML;
+  }
+
+  /**
+   * Sets the default markup context when writing properties to the response.
+   * @param {MarkupContext} context the default context
+   * @return this
+   */
+  withDefaultMarkupContext(context) {
+    this._defaultMarkupContext = context;
+    return this;
   }
 
   onDocumentStart() {
@@ -138,7 +149,7 @@ module.exports = class MarkupHandler {
   }
 
   onText(text, line, column) {
-    const markupContext = this._inScriptOrStyle ? MarkupContext.TEXT : MarkupContext.HTML;
+    const markupContext = this._inScriptOrStyle ? MarkupContext.TEXT : this._defaultMarkupContext;
     this._outText(text, markupContext, line, column);
   }
 
@@ -336,9 +347,6 @@ module.exports = class MarkupHandler {
 
     const location = { line, column };
     const interpolation = this._htlParser.parse(content);
-    if (markupContext == null) {
-      // interpolation = requireContext(interpolation); todo
-    }
     const plainText = interpolation.getPlainText();
     if (plainText != null) {
       this._out(plainText);
