@@ -148,7 +148,7 @@ describe('Runtime Tests', () => {
     // eslint-disable-next-line import/no-dynamic-require,global-require
     const { main } = require(filename);
 
-    const { body } = await main(GLOBALS);
-    assert.equal(body.trim(), (await fse.readFile(EXPECTED_XSS_UNSAFE, 'utf-8')).trim());
+    const ret = await main(GLOBALS);
+    assert.equal(ret.trim(), (await fse.readFile(EXPECTED_XSS_UNSAFE, 'utf-8')).trim());
   });
 });
