@@ -1,3 +1,10 @@
+## [2.3.2](https://github.com/adobe/htlengine/compare/v2.3.1...v2.3.2) (2019-06-05)
+
+
+### Bug Fixes
+
+* **xss:** Allow src/href attributes on images and links ([f99d0a5](https://github.com/adobe/htlengine/commit/f99d0a5)), closes [#66](https://github.com/adobe/htlengine/issues/66)
+
 ## [2.3.1](https://github.com/adobe/htlengine/compare/v2.3.0...v2.3.1) (2019-05-27)
 
 
