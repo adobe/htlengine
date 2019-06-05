@@ -35,6 +35,7 @@ module.exports = class Compiler {
     this._includeRuntime = false;
     this._modHTLEngine = '@adobe/htlengine';
     this._codeTemplate = null;
+    this._defaultMarkupContext = undefined;
   }
 
   withOutputDirectory(dir) {
@@ -78,6 +79,16 @@ module.exports = class Compiler {
 
   withCodeTemplate(tmpl) {
     this._codeTemplate = tmpl;
+    return this;
+  }
+
+  /**
+   * Sets the default markup context when writing properties to the response.
+   * @param {MarkupContext} context the default context
+   * @return this
+   */
+  withDefaultMarkupContext(context) {
+    this._defaultMarkupContext = context;
     return this;
   }
 
@@ -139,6 +150,7 @@ module.exports = class Compiler {
   async _parse(source, baseDir) {
     const commands = new TemplateParser()
       .withErrorListener(ThrowingErrorListener.INSTANCE)
+      .withDefaultMarkupContext(this._defaultMarkupContext)
       .parse(source);
 
     // find any templates and inject them into the stream

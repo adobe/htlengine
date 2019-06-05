@@ -26,6 +26,16 @@ module.exports = class TemplateParser {
   }
 
   /**
+   * Sets the default markup context when writing properties to the response.
+   * @param {MarkupContext} context the default context
+   * @return this
+   */
+  withDefaultMarkupContext(context) {
+    this._defaultMarkupContext = context;
+    return this;
+  }
+
+  /**
      * Parses the input and returns an the generated commands.
      * @param {String} input Input text
      * @return {Command[]} The generated commands
@@ -34,6 +44,9 @@ module.exports = class TemplateParser {
   parse(input) {
     const stream = new CommandStream();
     const handler = new MarkupHandler(stream);
+    if (this._defaultMarkupContext !== undefined) {
+      handler.withDefaultMarkupContext(this._defaultMarkupContext);
+    }
 
     HTMLParser.parse(input, handler);
     return stream.commands;
