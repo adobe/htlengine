@@ -30,7 +30,7 @@ ${document.body}
 <!DOCTYPE html><html>
 
 <head><title>Hello</title></head>
-<body><ul><li>This is foo.</li></ul><p>Hello, world.</p></body>
+<body><ul><li>This is foo.</li><li>This is bar.</li></ul><p>Hello, world.</p></body>
 </html>
 #
 ### add body in body
@@ -50,7 +50,29 @@ ${document.body}
 <head><title>Hello</title></head>
 <body>
 <div>header</div>
-<ul><li>This is foo.</li></ul><p>Hello, world.</p>
+<ul><li>This is foo.</li><li>This is bar.</li></ul><p>Hello, world.</p>
+<div>footer</div>
+</body>
+</html>
+#
+### add body in div
+#
+<!DOCTYPE html>
+<html>
+<head><title>Hello</title></head>
+<body>
+<div>header</div>
+<div>${document.body1}</div>
+<div>footer</div>
+</body>
+</html>
+===
+<!DOCTYPE html><html>
+
+<head><title>Hello</title></head>
+<body>
+<div>header</div>
+<div><ul><li>This is foo.</li><li>This is bar.</li></ul><p>Hello, world.</p></div>
 <div>footer</div>
 </body>
 </html>
@@ -61,14 +83,20 @@ ${document.body}
 <!-- test -->
 <html>
 <head><title>Hello</title></head>
-${document.body1}
+${document.body2}
 </html>
 ===
 <!DOCTYPE html><html>
 <!-- test -->
 
 <head><title>Hello</title></head>
-<body><ul><li>This is foo.</li></ul><p>Hello, world.</p></body>
+<body><ul><li>This is foo.</li><li>This is bar.</li></ul><p>Hello, world.</p></body>
 </html>
+#
+### can insert child nodes
+#
+<ul>${document.list.childNodes}</ul>
+===
+<ul><li>This is foo.</li><li>This is bar.</li></ul>
 #
 ###

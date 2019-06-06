@@ -15,7 +15,7 @@ const { JSDOM } = require('jsdom');
 
 const header = '<title>Hello, World</title>';
 
-const mydoc = new JSDOM('<!DOCTYPE html><ul><li>This is foo.</li></ul><p>Hello, world.</p>').window.document;
+const mydoc = new JSDOM('<!DOCTYPE html><ul><li>This is foo.</li><li>This is bar.</li></ul><p>Hello, world.</p>').window.document;
 
 module.exports = {
   document: {
@@ -25,5 +25,6 @@ module.exports = {
     body: mydoc.body,
     body1: mydoc.body.cloneNode(true),
     body2: mydoc.body.cloneNode(true),
+    list: mydoc.querySelector('ul').cloneNode(true),
   },
 };
