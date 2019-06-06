@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/adobe/htlengine/compare/v3.0.0...v3.1.0) (2019-06-06)
+
+
+### Features
+
+* **dom:** allow injection of ${document.body} anywhere ([269aaf7](https://github.com/adobe/htlengine/commit/269aaf7)), closes [#71](https://github.com/adobe/htlengine/issues/71)
+
 # [3.0.0](https://github.com/adobe/htlengine/compare/v2.3.2...v3.0.0) (2019-06-05)
 
 
