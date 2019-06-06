@@ -74,11 +74,10 @@ module.exports = class VDOMFactory extends DOMFactory {
           node.appendChild(value);
           return;
         }
-        if (node.nodeName === 'BODY') {
-          // case <html><body>${resource.document.body}</body></html>
-          while (value.firstChild) {
-            node.appendChild(value.firstChild);
-          }
+        // case <html><body>${resource.document.body}</body></html>
+        // or <div>${resource.document.body}</div>
+        while (value.firstChild) {
+          node.appendChild(value.firstChild);
         }
         return;
       }
@@ -89,13 +88,27 @@ module.exports = class VDOMFactory extends DOMFactory {
       } else {
         this._usedNodes.push(value);
       }
-    } else {
-      const template = this._doc.createElement('template');
-      template.innerHTML = String(value);
-      // eslint-disable-next-line no-param-reassign
-      value = template.content;
+      node.appendChild(value);
+      return;
     }
-    node.appendChild(value);
+
+    // node list
+    if (typeof value === 'object' && value.forEach) {
+      while (value.length > 0) {
+        let child = value[0];
+        if (this._usedNodes.includes(child)) {
+          child = child.cloneNode(true);
+        } else {
+          this._usedNodes.push(child);
+        }
+        node.appendChild(child);
+      }
+      return;
+    }
+
+    const template = this._doc.createElement('template');
+    template.innerHTML = String(value);
+    node.appendChild(template.content);
   }
 
   text(node, text) {
