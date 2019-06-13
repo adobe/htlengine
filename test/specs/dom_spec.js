@@ -27,6 +27,7 @@ module.exports = {
     body2: mydoc.body.cloneNode(true),
     list: mydoc.querySelector('ul').cloneNode(true),
     list1: mydoc.querySelector('ul').cloneNode(true),
+    list2: mydoc.querySelector('ul').cloneNode(true),
     array: ['a', 'b', 'c'],
   },
 };

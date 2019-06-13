@@ -109,7 +109,7 @@ module.exports = class ExpressionFormatter {
       node.elseBranch.accept(this);
     } else if (node instanceof UnaryOperation) {
       if (node.operator === UnaryOperator.LENGTH) {
-        this.result += '$.lengthOf(';
+        this.result += '$.col.len(';
         node.target.accept(this);
         this.result += ')';
       } else if (node.operator === UnaryOperator.NOT && node.target instanceof ArrayLiteral) {

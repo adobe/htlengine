@@ -117,4 +117,16 @@ ${document.body2}
 ===
 <div>abc</div>
 #
+### can loop over node lists
+#
+<ul data-sly-list="${document.list2.childNodes}">
+  ${item}
+</ul>
+===
+<ul>
+  <li>This is foo.</li>
+
+  <li>This is bar.</li>
+</ul>
+#
 ###

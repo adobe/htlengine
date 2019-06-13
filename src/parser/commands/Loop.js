@@ -14,6 +14,22 @@ const Command = require('./Command');
 
 module.exports = {
 
+  Init: class Init extends Command {
+    constructor(variableName, expression) {
+      super();
+      this._variableName = variableName;
+      this._expression = expression;
+    }
+
+    get variableName() {
+      return this._variableName;
+    }
+
+    get expression() {
+      return this._expression;
+    }
+  },
+
   Start: class Start extends Command {
     constructor(listVariable, itemVariable, indexVariable) {
       super();

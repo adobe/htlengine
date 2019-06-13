@@ -165,10 +165,13 @@ module.exports = class JSCodeGenVisitor {
       this.out('}');
     } else if (cmd instanceof OutputVariable) {
       this._dom.outVariable(cmd.variableName);
+    } else if (cmd instanceof Loop.Init) {
+      const exp = ExpressionFormatter.format(cmd.expression);
+      this.out(`const ${cmd.variableName} = $.col.init(${exp});`);
     } else if (cmd instanceof Loop.Start) {
-      this.out(`for (const ${cmd.indexVariable} of Object.keys(${cmd.listVariable})) {`);
+      this.out(`for (const ${cmd.indexVariable} of $.col.keys(${cmd.listVariable})) {`);
       this.indent();
-      this.out(`const ${cmd.itemVariable} = Array.isArray(${cmd.listVariable}) ? ${cmd.listVariable}[${cmd.indexVariable}] : ${cmd.indexVariable};`);
+      this.out(`const ${cmd.itemVariable} = $.col.get(${cmd.listVariable}, ${cmd.indexVariable});`);
     } else if (cmd instanceof Loop.End) {
       this.outdent();
       this.out('}');
