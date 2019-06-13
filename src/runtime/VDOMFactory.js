@@ -94,18 +94,18 @@ module.exports = class VDOMFactory extends DOMFactory {
 
     // node list
     if (typeof value === 'object' && value.forEach) {
-      const list = [];
-      value.forEach((child) => {
+      Array.from(value).forEach((child) => {
         if (typeof child !== 'object' || !child.cloneNode) {
-          list.push(String(child));
-        } else if (this._usedNodes.includes(child)) {
-          list.push(child.cloneNode(true));
+          const template = this._doc.createElement('template');
+          template.innerHTML = String(child);
+          // eslint-disable-next-line no-param-reassign
+          child = template.content;
         } else {
-          this._usedNodes.push(child);
-          list.push(child);
+          // eslint-disable-next-line no-param-reassign
+          child = child.cloneNode(true);
         }
+        node.appendChild(child);
       });
-      list.forEach(child => node.appendChild(child));
       return;
     }
 

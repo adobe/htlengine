@@ -66,6 +66,8 @@ module.exports = function formatXss(value, ctx) {
   const stringValue = isArray ? value.join(',') : `${value}`;
 
   switch (ctx) {
+    case 'null':
+      return value;
     case 'unsafe':
       return stringValue;
     case 'html':

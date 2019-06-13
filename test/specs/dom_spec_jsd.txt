@@ -19,6 +19,18 @@ ${document.listItem}
 <li>This is foo.</li>
 </ul>
 #
+### insert same list several times
+#
+<ul>
+${document.list1.childNodes}
+${document.list1.childNodes}
+</ul>
+===
+<ul>
+<li>This is foo.</li><li>This is bar.</li>
+<li>This is foo.</li><li>This is bar.</li>
+</ul>
+#
 ### add body
 #
 <!DOCTYPE html>
@@ -101,8 +113,8 @@ ${document.body2}
 #
 ### insert an array
 #
-<div>${document.array}</div>
+<div>${document.array @ context='null'}</div>
 ===
-<div>a,b,c</div>
+<div>abc</div>
 #
 ###
