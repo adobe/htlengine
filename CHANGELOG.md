@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/adobe/htlengine/compare/v3.1.0...v3.1.1) (2019-06-13)
+
+
+### Bug Fixes
+
+* **dom:** be more lenient when adding arrays ([1a08518](https://github.com/adobe/htlengine/commit/1a08518)), closes [#73](https://github.com/adobe/htlengine/issues/73)
+
 # [3.1.0](https://github.com/adobe/htlengine/compare/v3.0.0...v3.1.0) (2019-06-06)
 
 
