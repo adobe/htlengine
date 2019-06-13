@@ -94,15 +94,18 @@ module.exports = class VDOMFactory extends DOMFactory {
 
     // node list
     if (typeof value === 'object' && value.forEach) {
-      while (value.length > 0) {
-        let child = value[0];
-        if (this._usedNodes.includes(child)) {
-          child = child.cloneNode(true);
+      const list = [];
+      value.forEach((child) => {
+        if (typeof child !== 'object' || !child.cloneNode) {
+          list.push(String(child));
+        } else if (this._usedNodes.includes(child)) {
+          list.push(child.cloneNode(true));
         } else {
           this._usedNodes.push(child);
+          list.push(child);
         }
-        node.appendChild(child);
-      }
+      });
+      list.forEach(child => node.appendChild(child));
       return;
     }
 

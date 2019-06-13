@@ -99,4 +99,10 @@ ${document.body2}
 ===
 <ul><li>This is foo.</li><li>This is bar.</li></ul>
 #
+### insert an array
+#
+<div>${document.array}</div>
+===
+<div>a,b,c</div>
+#
 ###
