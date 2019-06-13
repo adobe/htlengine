@@ -14,7 +14,7 @@
 
 module.exports = function main(runtime) {
   const $ = {
-    lengthOf: c => Array.isArray(c) ? c.length : Object.keys(c).length,
+    col: runtime.col,
     exec: runtime.exec.bind(runtime),
     xss: runtime.xss.bind(runtime),
     listInfo: runtime.listInfo.bind(runtime),
