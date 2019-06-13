@@ -94,15 +94,18 @@ module.exports = class VDOMFactory extends DOMFactory {
 
     // node list
     if (typeof value === 'object' && value.forEach) {
-      while (value.length > 0) {
-        let child = value[0];
-        if (this._usedNodes.includes(child)) {
-          child = child.cloneNode(true);
+      Array.from(value).forEach((child) => {
+        if (typeof child !== 'object' || !child.cloneNode) {
+          const template = this._doc.createElement('template');
+          template.innerHTML = String(child);
+          // eslint-disable-next-line no-param-reassign
+          child = template.content;
         } else {
-          this._usedNodes.push(child);
+          // eslint-disable-next-line no-param-reassign
+          child = child.cloneNode(true);
         }
         node.appendChild(child);
-      }
+      });
       return;
     }
 

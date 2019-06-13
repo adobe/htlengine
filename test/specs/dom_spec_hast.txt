@@ -5,4 +5,10 @@
 ===
 <div><title>Hello, World</title></div>
 #
+### insert an array
+#
+<div>${document.array}</div>
+===
+<div>a,b,c</div>
+#
 ###
