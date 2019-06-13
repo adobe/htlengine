@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/adobe/htlengine/compare/v3.1.1...v3.2.0) (2019-06-13)
+
+
+### Features
+
+* **dom:** add support for nodelist iteration ([#75](https://github.com/adobe/htlengine/issues/75)) ([c979d42](https://github.com/adobe/htlengine/commit/c979d42)), closes [#37](https://github.com/adobe/htlengine/issues/37)
+
 ## [3.1.1](https://github.com/adobe/htlengine/compare/v3.1.0...v3.1.1) (2019-06-13)
 
 
