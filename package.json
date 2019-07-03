@@ -29,7 +29,8 @@
     "source-map": "^0.7.3",
     "unified": "^7.1.0",
     "urijs": "^1.19.1",
-    "xregexp": "^4.2.4"
+    "xregexp": "^4.2.4",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^3.0.2",
@@ -54,8 +55,7 @@
     "rehype-stringify": "^5.0.0",
     "remark-parse": "^6.0.3",
     "remark-rehype": "^4.0.0",
-    "semantic-release": "^15.13.12",
-    "snyk": "^1.145.0"
+    "semantic-release": "^15.13.12"
   },
   "snyk": true,
   "lint-staged": {

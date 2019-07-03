@@ -1,4 +1,86 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.13.4
+version: v1.13.5
 ignore: {}
-patch: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-450202:
+    - semantic-release > @semantic-release/release-notes-generator > conventional-commits-parser > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - '@semantic-release/changelog > lodash':
+        patched: '2019-07-03T23:44:35.268Z'
+    - semantic-release > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - commitizen > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - lint-staged > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - eslint-plugin-import > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - eslint > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - eslint > table > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - semantic-release > @semantic-release/github > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - snyk > snyk-php-plugin > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - snyk > snyk-nuget-plugin > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - snyk > snyk-nodejs-lockfile-parser > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - snyk > snyk-config > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - snyk > @snyk/dep-graph > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - lint-staged > yup > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - eslint > inquirer > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - mocha > yargs-unparser > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - commitizen > inquirer > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - snyk > inquirer > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - snyk > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - snyk > @snyk/dep-graph > graphlib > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - nyc > istanbul-lib-instrument > @babel/traverse > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - istanbul > istanbul-api > async > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - snyk > snyk-nodejs-lockfile-parser > graphlib > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - jsdom > request-promise-native > request-promise-core > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - semantic-release > @semantic-release/release-notes-generator > conventional-changelog-writer > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - snyk > snyk-go-plugin > graphlib > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - istanbul > istanbul-api > istanbul-lib-instrument > babel-generator > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - nyc > istanbul-lib-instrument > @babel/traverse > @babel/generator > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - istanbul > istanbul-api > istanbul-lib-instrument > babel-traverse > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - istanbul > istanbul-api > istanbul-lib-instrument > babel-template > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - istanbul > istanbul-api > istanbul-lib-instrument > babel-types > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - nyc > istanbul-lib-instrument > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - istanbul > istanbul-api > istanbul-lib-instrument > babel-template > babel-traverse > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - istanbul > istanbul-api > istanbul-lib-instrument > babel-template > babel-types > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - istanbul > istanbul-api > istanbul-lib-instrument > babel-traverse > babel-types > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - istanbul > istanbul-api > istanbul-lib-instrument > babel-generator > babel-types > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - nyc > istanbul-lib-instrument > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
+    - istanbul > istanbul-api > istanbul-lib-instrument > babel-template > babel-traverse > babel-types > lodash:
+        patched: '2019-07-03T23:44:35.268Z'
