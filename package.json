@@ -30,7 +30,7 @@
     "unified": "^7.1.0",
     "urijs": "^1.19.1",
     "xregexp": "^4.2.4",
-    "snyk": "^1.189.0"
+    "snyk": "^1.192.3"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^3.0.2",
