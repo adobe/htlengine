@@ -55,7 +55,7 @@
     "rehype-stringify": "^5.0.0",
     "remark-parse": "^6.0.3",
     "remark-rehype": "^4.0.0",
-    "semantic-release": "^15.13.12"
+    "semantic-release": "^15.13.19"
   },
   "snyk": true,
   "lint-staged": {
