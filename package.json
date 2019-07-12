@@ -8,7 +8,6 @@
   "scripts": {
     "build": "antlr4 -Dlanguage=JavaScript -Xexact-output-dir -o src/parser/generated src/parser/grammar/SightlyLexer.g4 src/parser/grammar/SightlyParser.g4 src/parser/grammar/SightlyParser.g4",
     "semantic-release": "semantic-release",
-    "commit": "git-cz",
     "start": "node src/run.js",
     "test": "nyc --reporter=text --reporter=lcov --check-coverage --branches 68 --statements 82 --lines 82 mocha",
     "test-ci": "npm run lint && npm run test && codecov",
@@ -20,51 +19,46 @@
     "antlr4": "^4.7.2",
     "co": "^4.6.0",
     "fs-extra": "^7.0.1",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.14",
     "moment": "^2.24.0",
     "node-esapi": "0.0.1",
     "numeral": "^2.0.6",
-    "rehype-parse": "^6.0.0",
+    "rehype-parse": "^6.0.1",
     "sanitizer": "^0.1.3",
+    "snyk": "^1.192.3",
     "source-map": "^0.7.3",
     "unified": "^7.1.0",
     "urijs": "^1.19.1",
-    "xregexp": "^4.2.4",
-    "snyk": "^1.192.3"
+    "xregexp": "^4.2.4"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "^3.0.2",
-    "@semantic-release/git": "^7.0.10",
-    "@semantic-release/github": "^5.2.10",
-    "codecov": "^3.2.0",
-    "commitizen": "^3.1.1",
-    "cz-conventional-changelog": "^2.1.0",
-    "eslint": "^5.15.3",
-    "eslint-config-airbnb": "^17.1.0",
+    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/git": "^7.0.16",
+    "@semantic-release/github": "^5.4.2",
+    "codecov": "^3.5.0",
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb": "^17.1.1",
     "eslint-plugin-header": "^3.0.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-jsx-a11y": "^6.2.1",
-    "eslint-plugin-react": "^7.12.2",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.2",
     "ghooks": "^2.0.4",
     "istanbul": "^1.1.0-alpha.1",
-    "jsdom": "^15.1.0",
-    "lint-staged": "^8.1.5",
+    "jsdom": "^15.1.1",
+    "lint-staged": "^8.2.1",
     "mocha": "6.1.4",
-    "mocha-junit-reporter": "^1.21.0",
-    "nyc": "^13.3.0",
+    "mocha-junit-reporter": "^1.23.0",
+    "nyc": "^14.1.1",
     "rehype-stringify": "^5.0.0",
     "remark-parse": "^6.0.3",
-    "remark-rehype": "^4.0.0",
-    "semantic-release": "^15.13.12"
+    "remark-rehype": "^4.0.1",
+    "semantic-release": "^15.13.18"
   },
   "snyk": true,
   "lint-staged": {
     "*.js": "eslint"
   },
   "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    },
     "ghooks": {
       "pre-commit": "npx lint-staged"
     }
