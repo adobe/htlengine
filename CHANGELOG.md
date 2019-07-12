@@ -1,3 +1,10 @@
+## [3.2.1](https://github.com/adobe/htlengine/compare/v3.2.0...v3.2.1) (2019-07-12)
+
+
+### Bug Fixes
+
+* **package:** update dependencies to address security issues ([#80](https://github.com/adobe/htlengine/issues/80)) ([acaa174](https://github.com/adobe/htlengine/commit/acaa174))
+
 # [3.2.0](https://github.com/adobe/htlengine/compare/v3.1.1...v3.2.0) (2019-06-13)
 
 
