@@ -36,6 +36,7 @@ jobs:
   build_win:
     executor: win/preview-default
     steps:
+      - run: git config --global core.autocrlf true
       - checkout
       - run: choco install nodejs
       - run: npm install
