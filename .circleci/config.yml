@@ -1,4 +1,7 @@
 version: 2.1
+orbs:
+  win: circleci/windows-tools@0.0.4
+
 executors:
   node8:
     docker:
@@ -28,10 +31,29 @@ commands:
         name: prepare test git user
         command: git config --global user.email "circleci@example.com" && git config --global user.name "CircleCi Build"
 
-orbs:
-    helix-smoke-tests: adobe/helix-smoke-tests@0.0.7
-
 jobs:
+  build_win:
+    executor: win/preview-default
+    steps:
+      - run: git config --global core.autocrlf false
+      - checkout
+      - run: choco install nodejs
+      - run: npm install
+      - run: mkdir junit
+
+      # test & get code coverage
+      - run:
+          name: Test and Code Coverage
+          command: npm run test-ci
+          environment:
+            MOCHA_FILE: junit/test-results.xml
+
+      - store_test_results:
+          path: junit
+
+      - store_artifacts:
+          path: junit  
+
   build:
     executor: node8
 
@@ -81,7 +103,9 @@ workflows:
     - publish-pre-release:
         requires:
         - build
+        - build_win
         filters:
           branches:
             only: master
     - build
+    - build_win
