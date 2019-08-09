@@ -18,12 +18,11 @@ module.exports = class PluginSignature {
     this._arguments = args || [];
   }
 
-
   get name() {
     return this._name;
   }
 
-  get arguments() {
+  get args() {
     return this._arguments;
   }
 

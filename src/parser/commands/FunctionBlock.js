@@ -27,7 +27,7 @@ class Start extends Command {
     return this._options;
   }
 
-  get arguments() {
+  get args() {
     return Object.keys(this._options);
   }
 }

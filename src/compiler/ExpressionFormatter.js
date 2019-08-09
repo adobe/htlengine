@@ -112,6 +112,10 @@ module.exports = class ExpressionFormatter {
         this.result += '$.col.len(';
         node.target.accept(this);
         this.result += ')';
+      } else if (node.operator === UnaryOperator.IS_EMPTY) {
+        this.result += '$.col.empty(';
+        node.target.accept(this);
+        this.result += ')';
       } else if (node.operator === UnaryOperator.NOT && node.target instanceof ArrayLiteral) {
         this.result += '!';
         node.target.accept(this);

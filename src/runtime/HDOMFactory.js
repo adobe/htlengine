@@ -58,7 +58,7 @@ module.exports = class HDOMFactory extends DOMFactory {
 
   attr(node, name, value) {
     // eslint-disable-next-line no-param-reassign
-    node.properties[name] = value;
+    node.properties[name] = Array.isArray(value) ? value.join(',') : `${value}`;
   }
 
   push(parent, node) {

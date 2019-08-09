@@ -43,8 +43,8 @@ function filterAttributeName(name) {
   return '';
 }
 
-function escapeAttributeValue(input, mContext) {
-  if (isUriAttribute(mContext.attributeName)) {
+function escapeAttributeValue(input, attributeName) {
+  if (isUriAttribute(attributeName)) {
     return xss.getValidHref(input);
   }
   return xss.encodeForHTMLAttribute(input);
@@ -58,7 +58,7 @@ function filterElementName(input) {
   return 'div';
 }
 
-module.exports = function formatXss(value, ctx) {
+module.exports = function formatXss(value, ctx, hint) {
   const isArray = Array.isArray(value);
   if (typeof value === 'boolean' || value === undefined || (!isArray && typeof value === 'object')) {
     return value;
@@ -82,7 +82,7 @@ module.exports = function formatXss(value, ctx) {
     case 'attributeName':
       return filterAttributeName(stringValue);
     case 'attribute':
-      return escapeAttributeValue(stringValue, ctx);
+      return escapeAttributeValue(stringValue, hint);
 
     case 'uri':
       return xss.getValidHref(stringValue);

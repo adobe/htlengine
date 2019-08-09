@@ -27,7 +27,7 @@ const TestHandler = require('./TestHandler');
  * Simple tests that check if the parser can parse html
  */
 describe('HTML Parsing', () => {
-  const TEST_FILES = ['simple.htm', '400kb.htm', '700kb.htm'];
+  const TEST_FILES = ['simple.htm'];
 
   TEST_FILES.forEach((filename) => {
     it(`parses ${filename}`, async () => {

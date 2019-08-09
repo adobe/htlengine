@@ -25,6 +25,10 @@ module.exports = class TestHandler {
 
   onAttribute(name, value, quoteChar, line, column) {
     if (value !== null) {
+      if (quoteChar === '"') {
+        // eslint-disable-next-line no-param-reassign
+        value = value.replace('"', '&quot;');
+      }
       this._result += ` ${name}=${quoteChar}${value}${quoteChar}`;
     } else {
       this._result += ` ${name}`;

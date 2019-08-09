@@ -11,13 +11,14 @@
  */
 
 const Command = require('./Command');
+const MarkupContext = require('../html/MarkupContext');
 
 module.exports = class AddAttribute extends Command {
-  constructor(name, value, quoteChar) {
+  constructor(name, value, context = MarkupContext.ATTRIBUTE) {
     super();
     this._name = name;
     this._value = value;
-    this._quoteChar = quoteChar || '"';
+    this._context = context;
   }
 
   get name() {
@@ -28,7 +29,7 @@ module.exports = class AddAttribute extends Command {
     return this._value;
   }
 
-  get quote() {
-    return this._quoteChar;
+  get context() {
+    return this._context;
   }
 };

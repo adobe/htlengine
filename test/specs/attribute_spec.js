@@ -16,7 +16,7 @@ module.exports = {
     'jcr:content': 'the content',
   },
   'jcr:content': 'hello again',
-  quotes: 'Hello, "World!"',
+  quotes: 'Hello, "World & Mars!"',
   foobar: {
     id: 'foo',
     class: 'bar',
@@ -25,4 +25,5 @@ module.exports = {
   attrs: {
     checked: true,
   },
+  date: '2019-04-02T08:44:26.000Z',
 };

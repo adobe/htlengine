@@ -24,11 +24,10 @@ module.exports = class ElementContext {
     this._plugin = new PluginProxy();
   }
 
-  addAttribute(name, value, quoteChar, location) {
+  addAttribute(name, value, location) {
     this._attributes[name] = {
       name,
       value,
-      quoteChar,
       location,
     };
   }

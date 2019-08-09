@@ -5,7 +5,21 @@
 ===
 <div data-values="some data value"></div>
 ^^^
-    if ((var_attrValueEscaped_data_values1) || (("false") == (var_attrValue_data_values0))) {
+if (!$.col.empty(var_attrValue_data_values0)) {
+#
+### don't double escape attributes
+#
+<time datetime="${date}">${date}</time>
+<time data-sly-attribute.datetime="${date}">${date}</time>
+===
+<time datetime="2019-04-02T08&#x3a;44&#x3a;26.000Z">2019-04-02T08:44:26.000Z</time>
+<time datetime="2019-04-02T08&#x3a;44&#x3a;26.000Z">2019-04-02T08:44:26.000Z</time>
+#
+### keep existing attribute
+#
+<div title="Hello &amp; world."></div>
+===
+<div title="Hello &amp; world."></div>
 #
 ### replace single attribute
 #
@@ -13,7 +27,7 @@
 ===
 <div title="" class="super-green"/>
 ^^^
-    if ((var_attrValueEscaped_class1) || (("false") == (var_attrValue_class0))) {
+if (!$.col.empty(var_attrValue_class0)) {
 #
 ### replace single attribute after call works.
 #
@@ -27,13 +41,13 @@
 ===
 <div title=""/>
 ^^^
-    if ((var_attrValueEscaped_class1) || (("false") == (var_attrValue_class0))) {
+if (!$.col.empty(var_attrValue_class0)) {
 #
 ### ignore dangerous attributes
 #
 <div title="" onMouseMove="javascript:alert()" data-sly-attribute.onMouseMove="${'system.exit()'}"/>
 ===
-<div title="" onMouseMove="javascript:alert()"/>
+<div title="" onMouseMove="javascript&#x3a;alert&#x28;&#x29;"/>
 #
 ### create / replace / delete multiple arguments
 #
@@ -41,7 +55,7 @@
 ===
 <input class="bar" type="text" id="foo"/>
 ^^^
-    if ((var_attrContentEscaped3) || (("false") == (var_mapContains_class2))) {
+if (!$.col.empty(var_mapContains_class2)) {
 #
 ### left to right
 #
@@ -65,11 +79,10 @@
 <div></div>
 <div id="foo" class="bar"></div>
 ^^^
-    if ((var_attrContent1) || (("false") == (var_attrValue0))) {
-    if ((var_attrValueEscaped_lang3) || (("false") == (var_attrValue_lang2))) {
-    if ((var_attrValueEscaped_lang5) || (("false") == (var_attrValue_lang4))) {
-    if ((var_attrValueEscaped_lang7) || (("false") == (var_attrValue_lang6))) {
-    if ((var_attrContentEscaped11) || (("false") == (var_mapContains_lang10))) {
+    if (!$.col.empty(var_attrValue_lang1)) {
+    if (!$.col.empty(var_attrValue_lang2)) {
+    if (!$.col.empty(var_attrValue_lang3)) {
+    if (!$.col.empty(var_mapContains_lang6)) {
 #
 ### empty attributes are left as they are if no data-sly-attribute applies to them
 #
@@ -77,7 +90,7 @@
 ===
 <div title="" id="foo" class="bar"></div>
 ^^^
-    if ((var_attrContentEscaped3) || (("false") == (var_mapContains_title2))) {
+    if (!$.col.empty(var_mapContains_title2)) {
 #
 ### Boolean values allow to control the display of boolean attributes:
 #
@@ -97,13 +110,9 @@
 <input checked="false"/>
 <input checked/>
 ^^^
-    if ((var_attrContent1) || (("false") == (var_attrValue0))) {
-    if ((var_attrValueEscaped_checked3) || (("false") == (var_attrValue_checked2))) {
-    if ((var_attrContent5) || (("false") == (var_attrValue4))) {
-    if ((var_attrValueEscaped_checked7) || (("false") == (var_attrValue_checked6))) {
-    if ((var_attrContent9) || (("false") == (var_attrValue8))) {
-    if ((var_attrContent11) || (("false") == (var_attrValue10))) {
-          if ((var_attrContentEscaped18) || (("false") == (var_attrContent17))) {
+if (!$.col.empty(var_attrValue_checked1)) {
+    if (!$.col.empty(var_attrValue_checked3)) {
+          if (!$.col.empty(var_attrContent11)) {
 #
 ### Arrays are cast to strings:
 #
@@ -112,17 +121,12 @@
 ===
 <div title="one,two,three"></div>
 <div></div>
-^^^
-    if ((var_attrContent1) || (("false") == (var_attrValue0))) {
-    if ((var_attrContent3) || (("false") == (var_attrValue2))) {
 #
 ### Numbers are cast to strings (i.e. zero doesn't remove the attribute):
 #
 <div class="${0}"></div>
 ===
 <div class="0"></div>
-^^^
-    if ((var_attrContent1) || (("false") == (var_attrValue0))) {
 #
 ### Quotes are escaped
 #
@@ -134,17 +138,13 @@
 #
 <div class="${quotes}"></div>
 ===
-<div class="Hello, &quot;World&#x21;&quot;"></div>
-^^^
-    if ((var_attrContent1) || (("false") == (var_attrValue0))) {
+<div class="Hello, &quot;World &amp; Mars&#x21;&quot;"></div>
 #
 ### can output vars with colon
 #
 <div class="${jcr:content}"></div>
 ===
 <div class="hello again"></div>
-^^^
-    if ((var_attrContent1) || (("false") == (var_attrValue0))) {
 #
 #
 ### can output vars with colon in property
@@ -152,7 +152,5 @@
 <div class="${properties.jcr:content}"></div>
 ===
 <div class="the content"></div>
-^^^
-    if ((var_attrContent1) || (("false") == (var_attrValue0))) {
 #
 ###

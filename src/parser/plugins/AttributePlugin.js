@@ -22,6 +22,8 @@ const PropertyAccess = require('../htl/nodes/PropertyAccess');
 const BooleanConstant = require('../htl/nodes/BooleanConstant');
 const BinaryOperation = require('../htl/nodes/BinaryOperation');
 const BinaryOperator = require('../htl/nodes/BinaryOperator');
+const UnaryOperation = require('../htl/nodes/UnaryOperation');
+const UnaryOperator = require('../htl/nodes/UnaryOperator');
 const StringConstant = require('../htl/nodes/StringConstant');
 const RuntimeCall = require('../htl/nodes/RuntimeCall');
 const Identifier = require('../htl/nodes/Identifier');
@@ -40,9 +42,8 @@ function escapeNodeWithHint(ctx, node, markupContext, hint) {
 }
 
 function decodeAttributeName(signature) {
-  const args = signature.arguments;
-  if (args.length > 0) {
-    return args.join('-');
+  if (signature.args.length > 0) {
+    return signature.args.join('-');
   }
   return null;
 }
@@ -52,29 +53,22 @@ class SingleAttributePlugin extends Plugin {
     super(signature, ctx, expression);
     this.attributeName = attributeName;
     this.attrValue = ctx.generateVariable(`attrValue_${attributeName}`);
-    this.attrValueNode = new Identifier(this.attrValue);
-    this.escapedAttrValue = ctx.generateVariable(`attrValueEscaped_${attributeName}`);
     this.node = expression.root;
-    this.contentNode = this.attrValueNode;
-    if (!expression.containsOption('context')) {
-      this.contentNode = escapeNodeWithHint(ctx, this.contentNode, MarkupContext.ATTRIBUTE, new StringConstant(attributeName));
-    }
     this.location = location;
   }
 
   beforeElement(stream, elemContext) {
-    // eslint-disable-next-line no-param-reassign
     elemContext.addCallbackAttribute(this.attributeName, () => {
       stream.write(new VariableBinding.Start(this.attrValue, this.node));
-      stream.write(new VariableBinding.Start(this.escapedAttrValue, this.contentNode));
-      stream.write(new Conditional.Start(new BinaryOperation(
-        BinaryOperator.OR,
-        new Identifier(this.escapedAttrValue),
-        new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, this.attrValueNode),
+      stream.write(new Conditional.Start(new UnaryOperation(
+        UnaryOperator.NOT,
+        new UnaryOperation(
+          UnaryOperator.IS_EMPTY,
+          new Identifier(this.attrValue),
+        ),
       ), false, this.location));
-      stream.write(new AddAttribute(this.attributeName, new OutputVariable(this.escapedAttrValue)));
+      stream.write(new AddAttribute(this.attributeName, new OutputVariable(this.attrValue)));
       stream.write(Conditional.END);
-      stream.write(VariableBinding.END);
       stream.write(VariableBinding.END);
     });
   }
@@ -160,25 +154,19 @@ class MultiAttributePlugin extends Plugin {
   }
 
   _writeAttribute(stream, attrNameVar, attrContentVar) {
-    const escapedContent = this.pluginContext.generateVariable('attrContentEscaped');
-    stream.write(new VariableBinding.Start(escapedContent, this._escapedExpression(new Identifier(attrContentVar), new Identifier(attrNameVar, true))));
-    stream.write(new Conditional.Start(new BinaryOperation(
-      BinaryOperator.OR,
-      new Identifier(escapedContent),
-      new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrContentVar)),
+    stream.write(new Conditional.Start(new UnaryOperation(
+      UnaryOperator.NOT,
+      new UnaryOperation(
+        UnaryOperator.IS_EMPTY,
+        new Identifier(attrContentVar),
+      ),
     ), false, this.location));
-    stream.write(new AddAttribute(new OutputVariable(attrNameVar), new OutputVariable(escapedContent), '"', true));
-
+    stream.write(new AddAttribute(new OutputVariable(attrNameVar), new OutputVariable(attrContentVar)));
     stream.write(Conditional.END);
-    stream.write(VariableBinding.END);
   }
 
   _attributeValueNode(attributeNameNode) {
     return new PropertyAccess(new Identifier(this.attrMapVar), attributeNameNode);
-  }
-
-  _escapedExpression(original, hint) {
-    return this._escapeNode(original, MarkupContext.ATTRIBUTE, hint);
   }
 
   _escapeNode(node, markupContext, hint) {
