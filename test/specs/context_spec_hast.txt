@@ -35,7 +35,7 @@ ${properties.title @ context='attribute'}
 <div class="${properties.attvalue}" />
 ===
 HTML &#x26; Things &#x3C;b>are bold&#x3C;/b> or Single ' or double " quoted.&#x3C;script>alert("hello");&#x3C;/script>
-<div class="&#x26;quot; onload&#x26;#x3d;&#x26;quot;alert&#x26;#x28;&#x26;#x29;&#x26;quot; &#x26;quot;"></div>
+<div class="&#x22; onload=&#x22;alert()&#x22; &#x22;"></div>
 #
 ### uri
 #

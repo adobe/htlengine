@@ -135,9 +135,13 @@ function escapeJSToken(input) {
 }
 
 function sanitizeURL(url) {
-  const decodedUrl = decodeURIComponent(url);
-  if (XRegExp(RELATIVE_REF).test(decodedUrl) || XRegExp(URI).test(decodedUrl)) {
-    return url;
+  try {
+    const decodedUrl = decodeURIComponent(url);
+    if (XRegExp(RELATIVE_REF).test(decodedUrl) || XRegExp(URI).test(decodedUrl)) {
+      return url;
+    }
+  } catch (e) {
+    // ignore
   }
   return '';
 }

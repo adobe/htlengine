@@ -5,6 +5,20 @@
 ===
 <div data-values="some data value"></div>
 #
+### don't double escape attributes
+#
+<time datetime="${date}">${date}</time>
+<time data-sly-attribute.datetime="${date}">${date}</time>
+===
+<time datetime="2019-04-02T08:44:26.000Z">2019-04-02T08:44:26.000Z</time>
+<time datetime="2019-04-02T08:44:26.000Z">2019-04-02T08:44:26.000Z</time>
+#
+### keep existing attribute
+#
+<div title="Hello &amp; world."></div>
+===
+<div title="Hello &#x26; world."></div>
+#
 ### replace single attribute
 #
 <div title="" class="className" data-sly-attribute.class="${properties.myClass}"/>
@@ -105,7 +119,7 @@
 #
 <div class="${quotes}"></div>
 ===
-<div class="Hello, &#x26;quot;World&#x26;#x21;&#x26;quot;"></div>
+<div class="Hello, &#x22;World &#x26; Mars!&#x22;"></div>
 #
 ### can output vars with colon
 #

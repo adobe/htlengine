@@ -66,9 +66,9 @@ module.exports = class DomHandler {
     const { value } = cmd;
     const name = cmd.name instanceof OutputVariable ? cmd.name.variableName : `'${cmd.name}'`;
     if (value instanceof OutputVariable) {
-      this._out(`$.dom.attr($t, ${name}, ${value.variableName});`);
+      this._out(`$.dom.attr($t, ${name}, ${value.variableName}, '${cmd.context}');`);
     } else {
-      this._out(`$.dom.attr($t, ${name}, ${value === null ? 'null' : JSON.stringify(value)});`);
+      this._out(`$.dom.attr($t, ${name}, ${value === null ? 'null' : JSON.stringify(value)}, '${cmd.context}');`);
     }
   }
 
@@ -77,7 +77,7 @@ module.exports = class DomHandler {
     const functionName = `_template_${exp.replace('.', '_')}`;
     this._out(`$.template('${exp}', function* ${functionName}(args) { `);
     this._gen.indent();
-    cmd.arguments.forEach((arg) => {
+    cmd.args.forEach((arg) => {
       this._out(`const ${ExpressionFormatter.escapeVariable(arg)} = args[1]['${arg}'] || '';`);
     });
     this._out('let $t, $n = args[0];');

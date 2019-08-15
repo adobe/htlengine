@@ -67,8 +67,9 @@ export interface DOMFactory {
    * @param {*} node Current node
    * @param {string} name Name of the attribute
    * @param {string} value Value of the attribute
+   * @param {string} [context] optional attribute context
    */
-  attr(node: any, name: string, value: string);
+  attr(node: any, name: string, value: string, context?: string);
 
   /**
    * Adds the `node` as child of the `parent` node.

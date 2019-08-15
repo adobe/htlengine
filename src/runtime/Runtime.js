@@ -48,6 +48,8 @@ module.exports = class Runtime {
       len: c => (Array.isArray(c) ? c.length : Object.keys(c).length),
       keys: c => Object.keys(c),
       get: (c, k) => (Array.isArray(c) ? c[k] : k),
+      // eslint-disable-next-line no-nested-ternary
+      empty: c => (Array.isArray(c) ? c.length === 0 : (typeof c === 'number' ? !`${c}` : !c)),
     };
   }
 

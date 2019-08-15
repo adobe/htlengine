@@ -150,7 +150,7 @@ $.dom.append($n, var_0);
 ===
 <div class="bar">Hello, World</div>
 ^^^
-    if ((var_attrValueEscaped_class1) || (("false") == (var_attrValue_class0))) {
+if (!$.col.empty(var_attrValue_class0)) {
 #
 ### string constant test
 #

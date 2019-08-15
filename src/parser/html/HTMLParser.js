@@ -12,6 +12,7 @@
 
 /* eslint-disable no-plusplus */
 
+const he = require('he');
 const TagTokenizer = require('./TagTokenizer');
 
 const VOID_ELEMENTS = Object.freeze({
@@ -365,9 +366,9 @@ module.exports = class HTMLParser {
   }
 
   /**
-     * Flush internal buffer. This forces the parser to flush the characters
-     * still held in its internal buffer, if the parsing state allows.
-     */
+   * Flush internal buffer. This forces the parser to flush the characters
+   * still held in its internal buffer, if the parsing state allows.
+   */
   _flushBuffer() {
     if (this._buffer.length > 0) {
       this._handler.onText(this._buffer, this._startPos.line, this._startPos.column);
@@ -377,16 +378,16 @@ module.exports = class HTMLParser {
   }
 
   /**
-     * Process a comment from current and accumulated character data
-     */
+   * Process a comment from current and accumulated character data
+   */
   _processComment(source, line, column) {
     this._handler.onComment(this._buffer + source, line, column);
     this._buffer = '';
   }
 
   /**
-     * Decompose a tag and feed it to the document handler.
-     */
+   * Decompose a tag and feed it to the document handler.
+   */
   _processTag(source, line, column) {
     const snippet = this._buffer + source;
     this._buffer = '';
@@ -394,7 +395,8 @@ module.exports = class HTMLParser {
     if (!tok.endTag) {
       this._handler.onOpenTagStart(tok.tagName, line, column);
       tok.attributes.forEach((attr) => {
-        this._handler.onAttribute(attr.name, attr.value, attr.quoteChar, attr.line, attr.column);
+        const decoded = attr.value ? he.decode(attr.value, { isAttributeValue: true }) : attr.value;
+        this._handler.onAttribute(attr.name, decoded, attr.quoteChar, attr.line, attr.column);
       });
       this._handler.onOpenTagEnd(tok.endSlash, VOID_ELEMENTS[tok.tagName]);
     } else {

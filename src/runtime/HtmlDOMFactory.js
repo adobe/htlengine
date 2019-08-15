@@ -10,6 +10,7 @@
  * governing permissions and limitations under the License.
  */
 const DOMFactory = require('./DOMFactory');
+const formatXss = require('./format_xss');
 
 module.exports = class HtmlDOMFactory extends DOMFactory {
   constructor() {
@@ -52,11 +53,18 @@ module.exports = class HtmlDOMFactory extends DOMFactory {
     this._out(`<!--${text}-->`);
   }
 
-  attr(node, name, value) {
+  attr(node, name, value, context) {
     if (value === true) {
       this._out(` ${name}`);
-    } else {
-      this._out(` ${name}="${value.replace(/"/g, '&quot;')}"`);
+      return;
+    }
+    if (typeof value === 'string' && !value) {
+      this._out(` ${name}=""`);
+      return;
+    }
+    const escaped = formatXss(value, context, name);
+    if (escaped) {
+      this._out(` ${name}="${escaped}"`);
     }
   }
 

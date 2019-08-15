@@ -45,10 +45,26 @@ module.exports = Object.freeze({
       if (Array.isArray(operand)) {
         return operand.length;
       }
-      if (operand.length && (typeof operand === 'function')) {
+      if (operand.length && (typeof operand.length === 'function')) {
         return operand.length();
       }
       return -1;
+    },
+  },
+
+  /**
+     * Evaluates if a value is empty
+     */
+  IS_EMPTY: {
+    sym: 'emp:',
+    calc: (operand) => {
+      if (Array.isArray(operand)) {
+        return operand.length === 0;
+      }
+      if (operand.length && (typeof operand.length === 'function')) {
+        return operand.length() === 0;
+      }
+      return !`${operand}`;
     },
   },
 

@@ -18,8 +18,8 @@ const MarkupContext = require('./MarkupContext');
 const HTLParser = require('../htl/HTLParser');
 const ThrowingErrorListener = require('../htl/ThrowingErrorListener');
 const Identifier = require('../htl/nodes/Identifier');
-const BinaryOperation = require('../htl/nodes/BinaryOperation');
-const BinaryOperator = require('../htl/nodes/BinaryOperator');
+const UnaryOperation = require('../htl/nodes/UnaryOperation');
+const UnaryOperator = require('../htl/nodes/UnaryOperator');
 const StringConstant = require('../htl/nodes/StringConstant');
 const RuntimeCall = require('../htl/nodes/RuntimeCall');
 const MultiOperation = require('../htl/nodes/MultiOperation');
@@ -96,7 +96,7 @@ module.exports = class MarkupHandler {
     if (signature) {
       this._handlePlugin(name, signature, value, context, { line, column });
     } else {
-      context.addAttribute(name, value, quoteChar, { line, column });
+      context.addAttribute(name, value, { line, column });
     }
   }
 
@@ -189,33 +189,33 @@ module.exports = class MarkupHandler {
 
   _emitAttributes(context, plugin) {
     Object.values(context.attributes).forEach((attr) => {
-      const { name: attrName, value, location } = attr;
+      const { name, value, location } = attr;
       if (attr.callback) {
-        plugin.beforeAttribute(this._stream, attrName);
+        plugin.beforeAttribute(this._stream, name);
         attr.callback(context, this._stream, attr);
-        plugin.afterAttribute(this._stream, attrName);
+        plugin.afterAttribute(this._stream, name);
       } else if (attr.signature) {
         plugin.onPluginCall(this._stream, attr.signature, attr.expression);
       } else if (value == null || typeof value === 'string') {
-        this._emitAttribute(attrName, value, attr.quoteChar, plugin, location);
+        this._emitAttribute(name, value, plugin, location);
       }
     });
   }
 
-  _emitAttribute(name, value, quoteChar, plugin, location) {
+  _emitAttribute(name, value, plugin, location) {
     plugin.beforeAttribute(this._stream, name);
     if (value == null) {
-      this._emitSimpleTextAttribute(name, null, quoteChar, plugin);
+      this._emitSimpleTextAttribute(name, null);
     } else if (value.indexOf('${') >= 0) {
       const interpolation = this._htlParser.parse(value);
       const plainText = interpolation.getPlainText();
       if (plainText !== null) {
-        this._emitSimpleTextAttribute(name, plainText, quoteChar, plugin);
+        this._emitSimpleTextAttribute(name, plainText);
       } else {
-        this._emitExpressionAttribute(name, interpolation, quoteChar, plugin, location);
+        this._emitFragment(name, interpolation, plugin, location);
       }
     } else {
-      this._emitSimpleTextAttribute(name, value, quoteChar, plugin);
+      this._emitSimpleTextAttribute(name, value);
     }
     plugin.afterAttribute(this._stream, name);
   }
@@ -224,80 +224,25 @@ module.exports = class MarkupHandler {
     this._stream.write(new AddAttribute(name, textValue));
   }
 
-  _emitExpressionAttribute(name, interpolation, quoteChar, plugin, location) {
-    // interpolation = attributeChecked(name, interpolation); todo!
-    if (interpolation.length === 1) {
-      this._emitSingleFragment(name, interpolation, quoteChar, plugin, location);
-    } else {
-      this._emitMultipleFragment(name, interpolation, quoteChar, plugin, location);
-    }
-  }
-
-  _emitMultipleFragment(name, interpolation, quoteChar, plugin, location) {
-    // Simplified algorithm for attribute output, which works when the interpolation is not of
-    // size 1. In this case we are certain that the attribute value cannot be the boolean value
-    // true, so we can skip this test altogether
-    const stream = this._stream;
-    const expression = this._transformer.transform(
-      interpolation,
-      MarkupContext.attributeContext(name),
-      ExpressionContext.ATTRIBUTE,
-    );
-    const attrContent = this._symbolGenerator.next('attrContent');
-    stream.write(new VariableBinding.Start(attrContent, expression.root));
-    stream.write(new Conditional.Start(new BinaryOperation(
-      BinaryOperator.OR,
-      new Identifier(attrContent),
-      new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrContent)),
-    ), false, location));
-    stream.write(new AddAttribute(name, new OutputVariable(attrContent), quoteChar));
-    stream.write(Conditional.END);
-    stream.write(VariableBinding.END);
-  }
-
-  _emitSingleFragment(name, interpolation, quoteChar, plugin, location) {
+  _emitFragment(name, interpolation, quoteChar, plugin, location) {
     const stream = this._stream;
     const valueExpression = this._transformer.transform(
       interpolation,
       null,
-      ExpressionContext.ATTRIBUTE,
+      null,
     ); // raw expression
     const attrValue = this._symbolGenerator.next('attrValue'); // holds the raw attribute value
-    const attrContent = this._symbolGenerator.next('attrContent'); // holds the escaped attribute value
-    const markupContext = MarkupContext.attributeContext(name);
-    const alreadyEscaped = false;
     const node = valueExpression.root;
     stream.write(new VariableBinding.Start(attrValue, node)); // attrValue = <expr>
-    let shouldDisplayExp;
-    if (!alreadyEscaped) {
-      const contentExpression = valueExpression.withNode(new Identifier(attrValue));
-      stream.write(new VariableBinding.Start(
-        attrContent,
-        this._adjustContext(contentExpression, markupContext, ExpressionContext.ATTRIBUTE).root,
-      )); // attrContent = <expr>
-      shouldDisplayExp = new BinaryOperation(
-        BinaryOperator.OR,
-        new Identifier(attrContent),
-        new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrValue)),
-      );
-    } else {
-      shouldDisplayExp = new BinaryOperation(
-        BinaryOperator.OR,
+    stream.write(new Conditional.Start(new UnaryOperation(
+      UnaryOperator.NOT,
+      new UnaryOperation(
+        UnaryOperator.IS_EMPTY,
         new Identifier(attrValue),
-        new BinaryOperation(BinaryOperator.EQ, StringConstant.FALSE, new Identifier(attrValue)),
-      );
-    }
-    stream.write(new Conditional.Start(shouldDisplayExp, false, location)); // if (attrContent)
-
-    if (!alreadyEscaped) {
-      stream.write(new AddAttribute(name, new OutputVariable(attrContent), quoteChar));
-    } else {
-      stream.write(new AddAttribute(name, new OutputVariable(attrValue), quoteChar));
-    }
+      ),
+    ), false, location)); // if (attrValue)
+    stream.write(new AddAttribute(name, new OutputVariable(attrValue)));
     stream.write(Conditional.END); // end if (attrContent)
-    if (!alreadyEscaped) {
-      stream.write(VariableBinding.END); // end scope for attrContent
-    }
     stream.write(VariableBinding.END); // end scope for attrValue
   }
 
