@@ -1,3 +1,10 @@
+## [3.2.2](https://github.com/adobe/htlengine/compare/v3.2.1...v3.2.2) (2019-08-15)
+
+
+### Bug Fixes
+
+* **html:** attributes are double escaped ([#85](https://github.com/adobe/htlengine/issues/85)) ([0d68835](https://github.com/adobe/htlengine/commit/0d68835))
+
 ## [3.2.1](https://github.com/adobe/htlengine/compare/v3.2.0...v3.2.1) (2019-07-12)
 
 
