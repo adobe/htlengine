@@ -14,7 +14,7 @@ This engine can parse [HTL](https://github.com/Adobe-Marketing-Cloud/htl-spec) s
 ## Install
 
 ```bash
-npm add @adobe/htlengine
+npm install @adobe/htlengine
 ```
 
 ## Build
