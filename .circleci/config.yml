@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  win: circleci/windows-tools@0.0.4
+  win: circleci/windows-tools@0.1.0
 
 executors:
   node8:
@@ -33,7 +33,7 @@ commands:
 
 jobs:
   build_win:
-    executor: win/preview-default
+    executor: win/default
     steps:
       - run: git config --global core.autocrlf false
       - checkout
@@ -52,7 +52,7 @@ jobs:
           path: junit
 
       - store_artifacts:
-          path: junit  
+          path: junit
 
   build:
     executor: node8
