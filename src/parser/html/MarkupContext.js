@@ -42,6 +42,6 @@ Object.keys(MCTX).forEach((k) => {
   reverse[MCTX[k]] = k;
 });
 
-MCTX.lookup = k => reverse[k];
+MCTX.lookup = (k) => reverse[k];
 
 module.exports = MCTX;

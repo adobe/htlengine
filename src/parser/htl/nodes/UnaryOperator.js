@@ -33,7 +33,7 @@ module.exports = Object.freeze({
      */
   IS_WHITESPACE: {
     sym: 'ws:',
-    calc: operand => String(operand).trim().length === 0,
+    calc: (operand) => String(operand).trim().length === 0,
   },
 
   /**

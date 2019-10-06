@@ -67,7 +67,7 @@ function readTests(filename) {
   return tests;
 }
 
-function runTests(specs, typ = '', runtimeFn = () => {}, resultFn = ret => ret) {
+function runTests(specs, typ = '', runtimeFn = () => {}, resultFn = (ret) => ret) {
   Object.keys(specs).forEach((name) => {
     const filename = specs[name];
     // eslint-disable-next-line import/no-dynamic-require,global-require
@@ -148,7 +148,7 @@ describe('Compiler Tests (HAST)', () => {
   });
   runTests(specs, '_hst', (runtime) => {
     runtime.withDomFactory(new Runtime.HDOMFactory());
-  }, ret => unified().use(tohtml).stringify(ret));
+  }, (ret) => unified().use(tohtml).stringify(ret));
 });
 
 describe('Compiler Tests (JSDOM)', () => {

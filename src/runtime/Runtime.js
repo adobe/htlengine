@@ -44,12 +44,12 @@ module.exports = class Runtime {
   // eslint-disable-next-line class-methods-use-this
   get col() {
     return {
-      init: c => (typeof c[Symbol.iterator] === 'function' ? Array.from(c) : c),
-      len: c => (Array.isArray(c) ? c.length : Object.keys(c).length),
-      keys: c => Object.keys(c),
+      init: (c) => (typeof c[Symbol.iterator] === 'function' ? Array.from(c) : c),
+      len: (c) => (Array.isArray(c) ? c.length : Object.keys(c).length),
+      keys: (c) => Object.keys(c),
       get: (c, k) => (Array.isArray(c) ? c[k] : k),
       // eslint-disable-next-line no-nested-ternary
-      empty: c => (Array.isArray(c) ? c.length === 0 : (typeof c === 'number' ? !`${c}` : !c)),
+      empty: (c) => (Array.isArray(c) ? c.length === 0 : (typeof c === 'number' ? !`${c}` : !c)),
     };
   }
 

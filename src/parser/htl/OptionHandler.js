@@ -19,14 +19,14 @@ const OPTIONS = [
     fn: 'join',
     options: ['join'],
     asArguments: true,
-    condition: expContext => expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
+    condition: (expContext) => expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
             && expContext !== ExpressionContext.PLUGIN_DATA_SLY_TEMPLATE
             && expContext !== ExpressionContext.PLUGIN_DATA_SLY_CALL,
   }, {
     fn: 'format',
     options: ['format', 'timezone', 'locale'],
     asArguments: false,
-    condition: expContext => expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
+    condition: (expContext) => expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
             && expContext !== ExpressionContext.PLUGIN_DATA_SLY_TEMPLATE
             && expContext !== ExpressionContext.PLUGIN_DATA_SLY_CALL,
   }, {
@@ -34,14 +34,14 @@ const OPTIONS = [
     options: ['scheme', 'domain', 'path', 'appendPath', 'prependPath', 'selectors', 'addSelectors', 'removeSelectors',
       'extension', 'suffix', 'prependSuffix', 'appendSuffix', 'fragment', 'query', 'addQuery', 'removeQuery'],
     asArguments: false,
-    condition: expContext => expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
+    condition: (expContext) => expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
             && expContext !== ExpressionContext.PLUGIN_DATA_SLY_TEMPLATE
             && expContext !== ExpressionContext.PLUGIN_DATA_SLY_CALL,
   }, {
     fn: 'xss',
     options: ['context'],
     asArguments: true,
-    condition: expContext => expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
+    condition: (expContext) => expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
             && expContext !== ExpressionContext.PLUGIN_DATA_SLY_TEMPLATE
             && expContext !== ExpressionContext.PLUGIN_DATA_SLY_CALL,
   },

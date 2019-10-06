@@ -10,6 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
+// eslint-disable-next-line max-classes-per-file
 const START = 0;
 const TAG = START + 1;
 const NAME = TAG + 1;

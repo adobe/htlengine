@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-/* eslint-disable max-len,no-unused-vars */
+/* eslint-disable max-len,no-unused-vars,max-classes-per-file */
 const Plugin = require('../html/Plugin');
 const VariableBinding = require('../commands/VariableBinding');
 const Conditional = require('../commands/Conditional');
