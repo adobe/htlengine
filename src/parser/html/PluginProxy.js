@@ -28,7 +28,7 @@ module.exports = class PluginProxy {
   }
 };
 
-Object.getOwnPropertyNames(Plugin.prototype).filter(p => p.startsWith('before') || p.startsWith('after') || p.startsWith('on')).forEach((fn) => {
+Object.getOwnPropertyNames(Plugin.prototype).filter((p) => p.startsWith('before') || p.startsWith('after') || p.startsWith('on')).forEach((fn) => {
   module.exports.prototype[fn] = function () { // eslint-disable-line func-names
     this._delegate(fn, arguments); // eslint-disable-line prefer-rest-params
   };

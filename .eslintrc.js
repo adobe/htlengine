@@ -26,7 +26,7 @@ module.exports = {
   'plugins': [
     'header',
   ],
-  'extends': 'airbnb',
+  'extends': 'airbnb-base',
   'rules': {
     'strict': 0,
 

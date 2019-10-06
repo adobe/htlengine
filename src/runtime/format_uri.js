@@ -139,7 +139,7 @@ module.exports = function formatUri(uri, opts) {
   if (removeQuery) {
     const qry = u.query(true);
     if (Array.isArray(removeQuery)) {
-      removeQuery.forEach(q => delete qry[q]);
+      removeQuery.forEach((q) => delete qry[q]);
     } else {
       delete qry[removeQuery];
     }

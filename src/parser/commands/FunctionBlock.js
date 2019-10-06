@@ -10,6 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
+// eslint-disable-next-line max-classes-per-file
 const Command = require('./Command');
 
 class Start extends Command {

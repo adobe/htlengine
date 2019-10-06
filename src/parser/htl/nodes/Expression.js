@@ -48,7 +48,7 @@ module.exports = class Expression {
   }
 
   containsSomeOption(options) {
-    return options.some(opt => opt in this._options);
+    return options.some((opt) => opt in this._options);
   }
 
   /**

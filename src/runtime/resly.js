@@ -37,7 +37,7 @@ module.exports = function resly(options = {}) {
       runtime.setGlobal('dom', node);
 
       compile(options.code)
-        .then(main => main(runtime))
+        .then((main) => main(runtime))
         .then((result) => {
           next(null, result, file);
         }).catch(next);
