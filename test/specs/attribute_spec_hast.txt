@@ -41,7 +41,7 @@
 #
 <div title="" onMouseMove="javascript:alert()" data-sly-attribute.onMouseMove="${'system.exit()'}"/>
 ===
-<div title="" onMouseMove="javascript:alert()"></div>
+<div title="" onmousemove="javascript:alert()"></div>
 #
 ### create / replace / delete multiple arguments
 #
