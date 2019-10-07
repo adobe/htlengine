@@ -1,3 +1,10 @@
+## [3.2.3](https://github.com/adobe/htlengine/compare/v3.2.2...v3.2.3) (2019-10-07)
+
+
+### Bug Fixes
+
+* **deps:** update any ([#93](https://github.com/adobe/htlengine/issues/93)) ([552f174](https://github.com/adobe/htlengine/commit/552f174))
+
 ## [3.2.2](https://github.com/adobe/htlengine/compare/v3.2.1...v3.2.2) (2019-08-15)
 
 
