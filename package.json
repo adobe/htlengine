@@ -33,11 +33,11 @@
     "xregexp": "^4.2.4"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "3.0.4",
-    "@semantic-release/git": "7.0.16",
-    "@semantic-release/github": "5.5.4",
+    "@semantic-release/changelog": "3.0.5",
+    "@semantic-release/git": "7.0.17",
+    "@semantic-release/github": "5.5.5",
     "codecov": "3.6.1",
-    "eslint": "6.5.1",
+    "eslint": "6.6.0",
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-plugin-header": "3.0.0",
     "eslint-plugin-import": "2.18.2",
@@ -50,7 +50,7 @@
     "rehype-stringify": "6.0.0",
     "remark-parse": "7.0.1",
     "remark-rehype": "5.0.0",
-    "semantic-release": "15.13.27"
+    "semantic-release": "15.13.28"
   },
   "snyk": true,
   "lint-staged": {
