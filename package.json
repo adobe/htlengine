@@ -11,9 +11,7 @@
     "start": "node src/run.js",
     "test": "nyc --reporter=text --reporter=lcov --check-coverage --branches 68 --statements 82 --lines 82 mocha",
     "test-ci": "npm run lint && npm run test && codecov",
-    "lint": "./node_modules/.bin/eslint .",
-    "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
+    "lint": "./node_modules/.bin/eslint ."
   },
   "dependencies": {
     "antlr4": "^4.7.2",
@@ -26,7 +24,6 @@
     "numeral": "^2.0.6",
     "rehype-parse": "^6.0.1",
     "sanitizer": "^0.1.3",
-    "snyk": "^1.231.0",
     "source-map": "^0.7.3",
     "unified": "^8.0.0",
     "urijs": "^1.19.1",
@@ -52,7 +49,6 @@
     "remark-rehype": "5.0.0",
     "semantic-release": "15.13.28"
   },
-  "snyk": true,
   "lint-staged": {
     "*.js": "eslint"
   },
