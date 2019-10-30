@@ -1,3 +1,10 @@
+## [3.2.4](https://github.com/adobe/htlengine/compare/v3.2.3...v3.2.4) (2019-10-30)
+
+
+### Bug Fixes
+
+* **build:** remove snyk ([#101](https://github.com/adobe/htlengine/issues/101)) ([3d61054](https://github.com/adobe/htlengine/commit/3d610545f650bcb84904d1c79bfd80b6d418eacb))
+
 ## [3.2.3](https://github.com/adobe/htlengine/compare/v3.2.2...v3.2.3) (2019-10-07)
 
 
