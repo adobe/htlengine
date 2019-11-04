@@ -39,7 +39,7 @@
     "eslint-plugin-header": "3.0.0",
     "eslint-plugin-import": "2.18.2",
     "ghooks": "2.0.4",
-    "jsdom": "15.2.0",
+    "jsdom": "15.2.1",
     "lint-staged": "9.4.2",
     "mocha": "6.2.2",
     "mocha-junit-reporter": "1.23.1",
@@ -47,7 +47,7 @@
     "rehype-stringify": "6.0.0",
     "remark-parse": "7.0.1",
     "remark-rehype": "5.0.0",
-    "semantic-release": "15.13.28"
+    "semantic-release": "15.13.30"
   },
   "lint-staged": {
     "*.js": "eslint"
