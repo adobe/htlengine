@@ -11,4 +11,14 @@
  */
 module.exports = {
   foo: 42,
+  component: {
+    path: 'template_spec/button.htl',
+    name: 'button',
+    data: {
+      text: 'This is a button',
+    },
+  },
+  page: {
+    title: 'This is the title',
+  },
 };
