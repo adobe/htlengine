@@ -1,3 +1,10 @@
+## [3.2.5](https://github.com/adobe/htlengine/compare/v3.2.4...v3.2.5) (2019-11-06)
+
+
+### Bug Fixes
+
+* **template:** ensure correct template function names ([#103](https://github.com/adobe/htlengine/issues/103)) ([8582132](https://github.com/adobe/htlengine/commit/858213250e2261a447425c33c8c0da94a5c6ed8e))
+
 ## [3.2.4](https://github.com/adobe/htlengine/compare/v3.2.3...v3.2.4) (2019-10-30)
 
 
