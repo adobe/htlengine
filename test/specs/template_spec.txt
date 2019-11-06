@@ -23,4 +23,39 @@ blah 1
 
 blah Hello, world.
 #
+### static include with data
+#
+<h1>${page.title}</h1>
+<div data-sly-use.lib="template_spec/button.htl" data-sly-call="${lib.button @ data=component.data}"></div>
+===
+<h1>This is the title</h1>
+<div>
+    <button>This is a button</button>
+</div>
+#
+###
+#
+<sly data-sly-use.lib="template_spec/library.htl"/>
+<h1>${page.title}</h1>
+<!-- here comes the heading -->
+<div data-sly-call="${lib.lib @ name='heading', data=component.data}"></div>
+<!-- here comes the button -->
+<div data-sly-call="${lib.lib @ name=component.name, data=component.data}"></div>
+===
+<h1>This is the title</h1>
+<!-- here comes the heading -->
+<div>
+
+
+    <h1>This is a button</h1>
+
+</div>
+<!-- here comes the button -->
+<div>
+
+    <button>This is a button</button>
+
+
+</div>
+#
 ###

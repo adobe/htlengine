@@ -74,7 +74,7 @@ module.exports = class DomHandler {
 
   functionStart(cmd) {
     const exp = ExpressionFormatter.escapeVariable(ExpressionFormatter.format(cmd.expression));
-    const functionName = `_template_${exp.replace('.', '_')}`;
+    const functionName = `_template_${exp.replace(/\./g, '_')}`;
     this._out(`$.template('${exp}', function* ${functionName}(args) { `);
     this._gen.indent();
     cmd.args.forEach((arg) => {
