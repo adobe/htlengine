@@ -38,7 +38,7 @@ function readTests(filename) {
 
   const tests = [];
   let test = null;
-  lines.forEach((line) => {
+  lines.forEach((line, idx) => {
     if (line === '#') {
       return;
     }
@@ -61,6 +61,9 @@ function readTests(filename) {
     } else if (test && ('commands' in test)) {
       test.commands += `${line}\n`;
     } else if (test && ('input' in test)) {
+      if (!test.offset) {
+        test.offset = idx;
+      }
       test.input += `${line}\n`;
     }
   });
@@ -73,7 +76,8 @@ function runTests(specs, typ = '', runtimeFn = () => {}, resultFn = (ret) => ret
     // eslint-disable-next-line import/no-dynamic-require,global-require
     const payload = require(`./specs/${name}_spec.js`);
 
-    const tests = readTests(`test/specs/${filename}`);
+    const sourceFile = path.resolve(__dirname, 'specs', filename);
+    const tests = readTests(sourceFile);
     const outputDir = path.join(__dirname, 'generated');
     try {
       fs.mkdirSync(outputDir);
@@ -84,6 +88,7 @@ function runTests(specs, typ = '', runtimeFn = () => {}, resultFn = (ret) => ret
     const compiler = new Compiler()
       .withOutputDirectory(outputDir)
       .withRuntimeVar(Object.keys(payload))
+      .withSourceFile(sourceFile)
       .withSourceMap(true);
 
     describe(name, async () => {
@@ -99,7 +104,9 @@ function runTests(specs, typ = '', runtimeFn = () => {}, resultFn = (ret) => ret
               .setGlobal(payload);
             runtimeFn(runtime);
 
-            compiler.compileToFile(test.input, `${name}_${idx}${typ}.js`, path.join(__dirname, 'specs'))
+            compiler
+              .withSourceOffset(test.offset)
+              .compileToFile(test.input, `${name}_${idx}${typ}.js`, path.join(__dirname, 'specs'))
               .then((compiledFilename) => {
                 // eslint-disable-next-line import/no-dynamic-require,global-require
                 const service = require(compiledFilename);
@@ -112,25 +119,24 @@ function runTests(specs, typ = '', runtimeFn = () => {}, resultFn = (ret) => ret
           });
         }
         if ('mappedOutput' in test) {
-          it(`${idx}. Maps lines for '${test.name}' correctly.`, (done) => {
-            compiler.compile(test.input)
-              .then(({ template, sourceMap }) => {
-                const lines = template.split('\n');
-                return SourceMapConsumer.with(sourceMap, null, (consumer) => {
-                  let result = '';
-                  consumer.eachMapping((mapping) => {
-                    const lineNumber = mapping.generatedLine - 1;
-                    if (lineNumber < 0 || lineNumber >= lines.length) {
-                      assert.fail(`mapped line number ${lineNumber} outside generated file (0, ${lines.length})`);
-                    }
-                    result += `${lines[lineNumber]}\n`;
-                  });
-                  return result;
-                }).then((mappedOutput) => {
-                  assert.equal(mappedOutput.trim(), test.mappedOutput.trim());
-                  done();
-                }).catch(done);
+          it(`${idx}. Maps lines for '${test.name}' correctly.`, async () => {
+            const { template, sourceMap } = await compiler
+              .withSourceOffset(test.offset)
+              .compile(test.input, path.join(__dirname, 'specs'));
+            const lines = template.split('\n');
+
+            const mappedOutput = await SourceMapConsumer.with(sourceMap, null, (consumer) => {
+              let result = '';
+              consumer.eachMapping((mapping) => {
+                const lineNumber = mapping.generatedLine - 1;
+                if (lineNumber < 0 || lineNumber >= lines.length) {
+                  assert.fail(`mapped line number ${lineNumber} outside generated file (0, ${lines.length})`);
+                }
+                result += `${String(lineNumber + 1).padStart(2, '0')}: ${lines[lineNumber]}\n`;
               });
+              return result;
+            });
+            assert.equal(mappedOutput.trim(), test.mappedOutput.trim());
           });
         }
       });

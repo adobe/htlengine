@@ -13,7 +13,7 @@ Hello, ${world}.
 ===
 Hello, Earth.
 ^^^
-$.dom.append($n, var_0);
+47:     $.dom.append($n, var_0);
 #
 #
 ### simple expression in attribute
@@ -40,7 +40,7 @@ Fruits: ${['Apple', 'Banana', 'Orange'] @ join='*'}
 ===
 Fruits: Apple*Banana*Orange
 ^^^
-$.dom.append($n, var_0);
+47:     $.dom.append($n, var_0);
 #
 ### join filter test with variables
 #
@@ -48,7 +48,7 @@ Fruits: ${properties.fruits @ join=properties.comma}
 ===
 Fruits: Apple, Banana, Orange
 ^^^
-$.dom.append($n, var_0);
+47:     $.dom.append($n, var_0);
 #
 ### string OR
 #
@@ -60,7 +60,7 @@ Hello, world.
 bar
 string constant
 ^^^
-$.dom.append($n, var_0);
+46:     $.dom.append($n, var_0);
 #
 ### comparison
 #
@@ -94,7 +94,7 @@ true
 false
 true
 ^^^
-$.dom.append($n, var_0);
+46:     $.dom.append($n, var_0);
 #
 ### boolean casting
 #
@@ -112,7 +112,7 @@ true
 false
 false
 ^^^
-$.dom.append($n, var_0);
+46:     $.dom.append($n, var_0);
 #
 ### string casting
 #
@@ -132,7 +132,7 @@ true,false
 foo,bar
 foo,
 ^^^
-$.dom.append($n, var_0);
+46:     $.dom.append($n, var_0);
 #
 ### comments
 #
@@ -150,7 +150,7 @@ $.dom.append($n, var_0);
 ===
 <div class="bar">Hello, World</div>
 ^^^
-if (!$.col.empty(var_attrValue_class0)) {
+47:     if (!$.col.empty(var_attrValue_class0)) {
 #
 ### string constant test
 #

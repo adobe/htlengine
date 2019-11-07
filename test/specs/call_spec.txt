@@ -23,7 +23,8 @@
 
 <div><section>Template</section></div>
 ^^^
-$.dom.append($n, var_0);
+34:     $.dom.append($n, var_0);
+54:     yield $.call($.template().foo, [$n, {"param": "Template", }]);
 #
 ### sightly call function with colon in name
 #
@@ -49,7 +50,8 @@ $.dom.append($n, var_0);
 
 <div><section></section></div>
 ^^^
-$.dom.append($n, var_0);
+34:     $.dom.append($n, var_0);
+54:     yield $.call($.template().foo, [$n, {}]);
 #
 ### sightly call function can be redeclared
 #
@@ -79,19 +81,34 @@ $.dom.append($n, var_0);
 <div><section></section></div>
 
 ^^^
-$.dom.append($n, var_0);
+34:     $.dom.append($n, var_0);
+57:     yield $.call($.template().foo, [$n, {}]);
 #
 ### sightly call function can call other templates
 #
-<template data-sly-template.foo="${@ a}"><div data-sly-call="${bar @ a=a}"></div></template>
-<template data-sly-template.bar="${@ a}"><section>${a}</section></template>
+<template data-sly-template.foo="${@ a}">
+    <!-- calling bar -->
+    <div data-sly-call="${bar @ a=a}"></div>
+</template>
+
+<template data-sly-template.bar="${@ a}">
+    <!-- this is bar -->
+    <section>${a}</section>
+</template>
+
 <div data-sly-call="${foo @ a=123}"></div>
 ===
-
-
-<div><div><section>123</section></div></div>
+<div>
+    <!-- calling bar -->
+    <div>
+    <!-- this is bar -->
+    <section>123</section>
+</div>
+</div>
 ^^^
-$.dom.append($n, var_0);
+36:     yield $.call($.template().bar, [$n, {"a": a, }]);
+51:     $.dom.append($n, var_0);
+80:     yield $.call($.template().foo, [$n, {"a": 123, }]);
 #
 ### sightly call function can call itself recursively
 #
@@ -155,7 +172,9 @@ $.dom.append($n, var_0);
 </ul>
 
 ^^^
-if (var_size1) {
-        $.dom.append($n, var_3);
+34:     if (var_size1) {
+46:         $.dom.append($n, var_3);
+52:         yield $.call($.template().foo, [$n, {"pages": item["pages"], }]);
+85:     yield $.call($.template().foo, [$n, {"pages": bar["pages"], }]);
 #
 ###

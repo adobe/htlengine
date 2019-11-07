@@ -58,4 +58,14 @@ blah Hello, world.
 
 </div>
 #
+### template defining and calling another template
+#
+<div data-sly-use.lib="template_spec/templateLib.html" data-sly-call="${lib.foo @ a=123}"></div>
+===
+<div>
+    <div>
+    <section>123</section>
+</div>
+</div>
+#
 ###

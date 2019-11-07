@@ -33,7 +33,7 @@ blah Hello, world.
     <button>This is a button</button>
 </div>
 #
-###
+### selecting templates example
 #
 <sly data-sly-use.lib="template_spec/library.htl"/>
 <h1>${page.title}</h1>
@@ -57,5 +57,28 @@ blah Hello, world.
 
 
 </div>
+^^^
+35:     $.dom.append($n, var_0);
+46:     $.dom.append($n, var_0);
+61:       yield $.call($.template().comps["button"], [$n, {"data": data, }]);
+75:       yield $.call($.template().comps["heading"], [$n, {"data": data, }]);
+104:     $.dom.append($n, var_0);
+111:     yield $.call($.template().lib["lib"], [$n, {"name": "heading", "data": component["data"], }]);
+120:     yield $.call($.template().lib["lib"], [$n, {"name": component["name"], "data": component["data"], }]);
+#
+### template defining and calling another template
+#
+<div data-sly-use.lib="template_spec/templateLib.html" data-sly-call="${lib.foo @ a=123}"></div>
+===
+<div>
+    <div>
+    <section>123</section>
+</div>
+</div>
+^^^
+35:     $.dom.append($n, var_0);
+52:     $.dom.append($n, var_0);
+60:     yield $.call($.template().lib["bar"], [$n, {"a": a, }]);
+77:     yield $.call($.template().lib["foo"], [$n, {"a": 123, }]);
 #
 ###

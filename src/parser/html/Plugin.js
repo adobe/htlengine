@@ -13,10 +13,11 @@
 /* eslint-disable no-unused-vars,class-methods-use-this */
 
 module.exports = class Plugin {
-  constructor(signature, pluginContext, expression) {
+  constructor(signature, pluginContext, expression, location) {
     this._signature = signature;
     this._pluginContext = pluginContext;
     this._expression = expression;
+    this._location = location;
   }
 
   isValid() {
@@ -29,6 +30,10 @@ module.exports = class Plugin {
 
   get expression() {
     return this._expression;
+  }
+
+  get location() {
+    return this._location;
   }
 
   beforeElement(stream, tagName, elementContext) {

@@ -28,15 +28,19 @@ const DomHandler = require('./DomHandler');
 
 module.exports = class JSCodeGenVisitor {
   constructor() {
-    this._result = '';
-    this._templates = '';
+    this._main = {
+      line: 1,
+      code: '',
+      map: [],
+    };
+    this._blocks = [];
+    this._blk = this._main;
+    this._templateStack = [];
+    this._sourceFile = null;
     this._indentLevel = 0;
-    this._lastIndentLevel = 0;
-    this._inFunctionBlock = false;
     this._indents = [];
-    this._codeLine = 0;
-    this._templateLine = 0;
     this._dom = new DomHandler(this);
+    this._enableSourceMaps = false;
   }
 
   withIndent(delim) {
@@ -49,8 +53,27 @@ module.exports = class JSCodeGenVisitor {
   }
 
   withSourceMap(enabled) {
-    this._mappings = enabled ? [] : null;
+    this._enableSourceMaps = enabled;
+    return this;
+  }
 
+  /**
+   * Sets the name of the source file used when generating the source map.
+   * @param {string} value the source file name.
+   * @returns {Compiler} this
+   */
+  withSourceFile(value) {
+    this._sourceFile = value;
+    return this;
+  }
+
+  /**
+   * Sets the offset of the code in the source file when generating the source map.
+   * @param {number} value the offset.
+   * @returns {Compiler} this
+   */
+  withSourceOffset(value) {
+    this._sourceOffset = value;
     return this;
   }
 
@@ -70,64 +93,112 @@ module.exports = class JSCodeGenVisitor {
     return this;
   }
 
-  process(commands) {
+  pushBlock(name) {
+    const block = {
+      name,
+      line: 1,
+      code: '',
+      lastIndentLevel: this._indentLevel,
+      map: [],
+    };
+    this._blocks.push(block);
+    this._templateStack.push(block);
+    this._blk = block;
+    this.setIndent(0);
+  }
+
+  popBlock() {
+    const blk = this._templateStack.pop();
+    this.setIndent(blk.lastIndentLevel);
+    if (this._templateStack.length > 0) {
+      this._blk = this._templateStack[this._templateStack.length - 1];
+    } else {
+      this._blk = this._main;
+    }
+  }
+
+  process({ commands, templates }) {
     this._dom.beginDocument();
+
+    // first process the main commands
     commands.forEach((c) => {
       c.accept(this);
     });
+
+    // then process the templates
+    this._sourceOffset = 0;
+    templates.forEach((t) => {
+      this._sourceFile = t.file;
+      t.commands.forEach((c) => {
+        c.accept(this);
+      });
+    });
+
     this._dom.endDocument();
-    return this;
+
+    let templateCode = '';
+
+    // create the template code mappings
+    const templateMappings = [];
+    let offset = 0;
+    this._blocks.forEach((blk) => {
+      templateCode += blk.code;
+      blk.map.forEach((m) => {
+        // eslint-disable-next-line no-param-reassign
+        m.generated.line += offset;
+        templateMappings.push(m);
+      });
+      // shift the offset by the length of the block
+      offset += blk.line - 1;
+    });
+
+    return {
+      code: this._main.code,
+      mappings: this._main.map,
+      templateCode,
+      templateMappings,
+    };
   }
 
   out(msg) {
     if (this._indent) {
-      if (this._inFunctionBlock) {
-        this._templates += `${this._indent + msg}\n`;
-        this._templateLine += 1;
-      } else {
-        this._result += `${this._indent + msg}\n`;
-        this._codeLine += 1;
-      }
-    } else if (this._inFunctionBlock) {
-      this._templates += msg;
+      this._blk.code += `${this._indent}${msg}\n`;
     } else {
-      this._result += msg;
+      this._blk.code += msg;
     }
-  }
-
-  get code() {
-    return this._result;
-  }
-
-  get templates() {
-    return this._templates;
-  }
-
-  get mappings() {
-    return this._mappings;
+    this._blk.line += 1;
   }
 
   _addMapping(location) {
     if (!location) {
       return;
     }
-    const lastmapping = this._mappings[this._mappings.length - 1];
-    if (lastmapping && lastmapping.originalLine === location.line) {
-      // skip multiple mappings for the same original line, as
-      // IDEs wouldn't probably know how to distinguish them
+    const line = location.line + this._sourceOffset + 1;
+    const { column } = location;
+
+    // skip multiple mappings for the same original line and column, as
+    // IDEs wouldn't probably know how to distinguish them
+    const lastmapping = this._blk.map[this._blk.map.length - 1];
+    if (lastmapping
+      && lastmapping.original.line === line
+      && lastmapping.original.column === column) {
       return;
     }
-    this._mappings.push({
-      inFunctionBlock: this._inFunctionBlock,
-      originalLine: location.line,
-      originalColumn: location.column,
-      generatedLine: this._inFunctionBlock ? this._templateLine : this._codeLine,
-      generatedColumn: 0,
+    this._blk.map.push({
+      original: {
+        line,
+        column,
+      },
+      generated: {
+        line: this._blk.line,
+        column: 0,
+      },
+      source: this._sourceFile || '<internal>',
     });
   }
 
   visit(cmd) {
-    if (this._mappings) {
+    if (this._enableSourceMaps) {
       this._addMapping(cmd.location);
     }
 
@@ -142,17 +213,11 @@ module.exports = class JSCodeGenVisitor {
     } else if (cmd instanceof VariableBinding.End) {
       // nop
     } else if (cmd instanceof FunctionBlock.Start) {
-      if (this._inFunctionBlock) {
-        throw new Error('Template cannot be defined in another template');
-      }
-      this._inFunctionBlock = true;
-      this._lastIndentLevel = this._indentLevel;
-      this.setIndent(0);
+      this.pushBlock(cmd.expression);
       this._dom.functionStart(cmd);
     } else if (cmd instanceof FunctionBlock.End) {
       this._dom.functionEnd(cmd);
-      this._inFunctionBlock = false;
-      this.setIndent(this._lastIndentLevel);
+      this.popBlock();
     } else if (cmd instanceof FunctionCall) {
       this._dom.functionCall(cmd);
     } else if (cmd instanceof Conditional.Start) {

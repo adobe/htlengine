@@ -13,8 +13,8 @@
 const Command = require('./Command');
 
 module.exports = class OutText extends Command {
-  constructor(text) {
-    super();
+  constructor(text, location) {
+    super(location);
     this._text = text;
   }
 

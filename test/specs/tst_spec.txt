@@ -36,7 +36,7 @@ if (mytest) {
 <div>It is true!</div>
 It was: hello
 ^^^
-$.dom.append($n, var_0);
+44:     $.dom.append($n, var_0);
 #
 ### recursive test: true - true
 #

@@ -96,7 +96,7 @@
 <th/>
 
 ^^^
-    if (var_size1) {
+37:     if (var_size1) {
 #
 ### forbidden
 #
@@ -109,7 +109,7 @@
 <div/>
 
 ^^^
-    if (var_size1) {
+37:     if (var_size1) {
 #
 ###
 
