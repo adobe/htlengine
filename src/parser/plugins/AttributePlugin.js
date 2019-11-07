@@ -50,11 +50,10 @@ function decodeAttributeName(signature) {
 
 class SingleAttributePlugin extends Plugin {
   constructor(signature, ctx, expression, attributeName, location) {
-    super(signature, ctx, expression);
+    super(signature, ctx, expression, location);
     this.attributeName = attributeName;
     this.attrValue = ctx.generateVariable(`attrValue_${attributeName}`);
     this.node = expression.root;
-    this.location = location;
   }
 
   beforeElement(stream, elemContext) {
@@ -76,13 +75,12 @@ class SingleAttributePlugin extends Plugin {
 
 class MultiAttributePlugin extends Plugin {
   constructor(signature, ctx, expression, location) {
-    super(signature, ctx, expression);
+    super(signature, ctx, expression, location);
 
     this.attrMap = expression.root;
     this.attrMapVar = ctx.generateVariable('attrMap');
     this.beforeCall = true;
     this.ignored = {};
-    this.location = location;
   }
 
   // eslint-disable-next-line class-methods-use-this

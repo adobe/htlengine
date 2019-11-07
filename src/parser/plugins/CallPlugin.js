@@ -15,7 +15,13 @@ const MapLiteral = require('../htl/nodes/MapLiteral');
 
 module.exports = class CallPlugin extends Plugin {
   beforeChildren(stream) {
-    stream.write(new FunctionCall(this._expression.root, new MapLiteral(this._expression.options)));
+    stream.write(
+      new FunctionCall(
+        this._expression.root,
+        new MapLiteral(this._expression.options),
+        this.location,
+      ),
+    );
     stream.beginIgnore();
   }
 

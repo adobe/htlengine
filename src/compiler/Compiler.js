@@ -36,6 +36,8 @@ module.exports = class Compiler {
     this._modHTLEngine = '@adobe/htlengine';
     this._codeTemplate = null;
     this._defaultMarkupContext = undefined;
+    this._sourceFile = null;
+    this._sourceOffset = 0;
   }
 
   withOutputDirectory(dir) {
@@ -89,6 +91,26 @@ module.exports = class Compiler {
    */
   withDefaultMarkupContext(context) {
     this._defaultMarkupContext = context;
+    return this;
+  }
+
+  /**
+   * Sets the name of the source file used when generating the source map.
+   * @param {string} value the source file name.
+   * @returns {Compiler} this
+   */
+  withSourceFile(value) {
+    this._sourceFile = value;
+    return this;
+  }
+
+  /**
+   * Sets the offset of the code in the source file when generating the source map.
+   * @param {number} value the offset.
+   * @returns {Compiler} this
+   */
+  withSourceOffset(value) {
+    this._sourceOffset = value;
     return this;
   }
 
@@ -163,13 +185,15 @@ module.exports = class Compiler {
    *
    * @param {String} source the HTL template code
    * @param {String} baseDir the base directory to resolve file references
-   * @returns The command stream.
+   * @returns {object} The result object with a `commands` stream and `templates`.
    */
   async _parse(source, baseDir) {
     const commands = new TemplateParser()
       .withErrorListener(ThrowingErrorListener.INSTANCE)
       .withDefaultMarkupContext(this._defaultMarkupContext)
       .parse(source);
+
+    const templates = [];
 
     // find any templates and inject them into the stream
     for (let i = 0; i < commands.length; i += 1) {
@@ -178,33 +202,44 @@ module.exports = class Compiler {
         // remove from command array
         const templatePath = path.resolve(baseDir, c.filename);
         // eslint-disable-next-line no-await-in-loop
-        const template = await fse.readFile(templatePath, 'utf-8');
+        const templateSource = await fse.readFile(templatePath, 'utf-8');
         // eslint-disable-next-line no-await-in-loop
-        const templateCommands = await this._parse(template, path.dirname(templatePath));
+        const res = await this._parse(templateSource, path.dirname(templatePath));
 
+        // add recursive templates, if any.
+        templates.push(...res.templates);
+
+        // add this templates
+        const template = {
+          file: templatePath,
+          commands: [],
+        };
+        templates.push(template);
         // prefix all templates with the variable name of the use class and discard commands
         // outside functions.
         let inside = false;
-        for (let j = 0; j < templateCommands.length; j += 1) {
-          const cmd = templateCommands[j];
+        res.commands.forEach((cmd) => {
           if (cmd instanceof FunctionBlock.Start) {
             inside = true;
-            // eslint-disable-next-line no-underscore-dangle
+            // eslint-disable-next-line no-underscore-dangle,no-param-reassign
             cmd._expression = `${c.name}.${cmd._expression}`;
           } else if (cmd instanceof FunctionBlock.End) {
             inside = false;
           } else if (!inside) {
-            // eslint-disable-next-line no-plusplus
-            templateCommands.splice(j--, 1);
+            return;
           }
-        }
+          template.commands.push(cmd);
+        });
 
         // finally merge the template functions into the commands stream
-        commands.splice(i, 1, ...templateCommands);
-        i += templateCommands.length - 1;
+        commands.splice(i, 1);
+        i -= 1;
       }
     }
-    return commands;
+    return {
+      templates,
+      commands,
+    };
   }
 
   /**
@@ -217,8 +252,8 @@ module.exports = class Compiler {
    *                           defaults to the output directory.
    * @returns {Promise<Object>} An object consisting of a generated template and a source map
    */
-  async compile(source, baseDir) {
-    const commands = await this._parse(source, baseDir || this._dir);
+  async compile(source, baseDir = this._dir) {
+    const parseResult = await this._parse(source, baseDir);
 
     const global = [];
     this._runtimeGlobals.forEach((g) => {
@@ -228,11 +263,15 @@ module.exports = class Compiler {
       global.push(`    const ${this._runtimeGlobal} = runtime.globals;\n`);
     }
 
-    const { code, templates, mappings } = new JSCodeGenVisitor()
+    const {
+      code, templateCode, mappings, templateMappings,
+    } = new JSCodeGenVisitor()
       .withIndent('  ')
       .withSourceMap(this._sourceMap)
+      .withSourceOffset(this._sourceOffset)
+      .withSourceFile(this._sourceFile)
       .indent()
-      .process(commands);
+      .process(parseResult);
 
     let template = this._codeTemplate;
     if (!template) {
@@ -247,7 +286,7 @@ module.exports = class Compiler {
 
     let index = template.search(/^\s*\/\/\s*TEMPLATES\s*$/m);
     const templatesOffset = index !== -1 ? template.substring(0, index).match(/\n/g).length + 1 : 0;
-    template = template.replace(/^\s*\/\/\s*TEMPLATES\s*$/m, `\n${templates}`);
+    template = template.replace(/^\s*\/\/\s*TEMPLATES\s*$/m, `\n${templateCode}`);
 
     template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, `\n${global.join('')}`);
 
@@ -257,22 +296,22 @@ module.exports = class Compiler {
 
     let sourceMap = null;
     if (mappings) {
-      const generator = new SourceMapGenerator();
+      const generator = new SourceMapGenerator({
+        sourceRoot: baseDir,
+      });
       mappings.forEach((mapping) => {
-        generator.addMapping({
-          generated: {
-            line: mapping.generatedLine
-              + (mapping.inFunctionBlock ? templatesOffset : codeOffset) + 1,
-            column: mapping.generatedColumn,
-          },
-          source: '<internal>',
-          original: {
-            line: mapping.originalLine + 1,
-            column: mapping.originalColumn,
-          },
-        });
+        // eslint-disable-next-line no-param-reassign
+        mapping.generated.line += codeOffset;
+        generator.addMapping(mapping);
+      });
+      templateMappings.forEach((mapping) => {
+        // eslint-disable-next-line no-param-reassign
+        mapping.generated.line += templatesOffset;
+        generator.addMapping(mapping);
       });
       sourceMap = generator.toJSON();
+      // relativize source files
+      sourceMap.sources = sourceMap.sources.map((file) => path.relative(baseDir, file));
     }
     return { template, sourceMap };
   }

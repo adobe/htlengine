@@ -13,8 +13,8 @@
 const Command = require('./Command');
 
 module.exports = class FunctionCall extends Command {
-  constructor(functionName, args) {
-    super();
+  constructor(functionName, args, location) {
+    super(location);
     this._functionName = functionName;
     this._args = args;
   }

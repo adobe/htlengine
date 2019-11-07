@@ -5,3 +5,7 @@ stuff outside the template should not be rendered!
 <template data-sly-template.two>blah 2</template>
 
 <template data-sly-template.any="${@ jcr:title}">blah ${jcr:title}</template>
+
+<template data-sly-template.foo="${@ a}">
+    <div data-sly-use.lib="templateLib1.html" data-sly-call="${lib.bar @ a=a}"></div>
+</template>

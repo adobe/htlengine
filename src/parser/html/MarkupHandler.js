@@ -312,8 +312,8 @@ module.exports = class MarkupHandler {
     }
   }
 
-  _out(text) {
-    this._stream.write(new OutText(text));
+  _out(text, location) {
+    this._stream.write(new OutText(text, location));
   }
 
   _adjustContext(expression, markupContext, expressionContext) {

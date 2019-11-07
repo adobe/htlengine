@@ -5,7 +5,7 @@
 ===
 <div data-values="some data value"></div>
 ^^^
-if (!$.col.empty(var_attrValue_data_values0)) {
+42:     if (!$.col.empty(var_attrValue_data_values0)) {
 #
 ### don't double escape attributes
 #
@@ -14,6 +14,10 @@ if (!$.col.empty(var_attrValue_data_values0)) {
 ===
 <time datetime="2019-04-02T08&#x3a;44&#x3a;26.000Z">2019-04-02T08:44:26.000Z</time>
 <time datetime="2019-04-02T08&#x3a;44&#x3a;26.000Z">2019-04-02T08:44:26.000Z</time>
+^^^
+47:     $.dom.append($n, var_1);
+52:     if (!$.col.empty(var_attrValue_datetime2)) {
+57:     $.dom.append($n, var_3);
 #
 ### keep existing attribute
 #
@@ -27,7 +31,7 @@ if (!$.col.empty(var_attrValue_data_values0)) {
 ===
 <div title="" class="super-green"/>
 ^^^
-if (!$.col.empty(var_attrValue_class0)) {
+43:     if (!$.col.empty(var_attrValue_class0)) {
 #
 ### replace single attribute after call works.
 #
@@ -41,7 +45,7 @@ if (!$.col.empty(var_attrValue_class0)) {
 ===
 <div title=""/>
 ^^^
-if (!$.col.empty(var_attrValue_class0)) {
+43:     if (!$.col.empty(var_attrValue_class0)) {
 #
 ### ignore dangerous attributes
 #
@@ -55,7 +59,7 @@ if (!$.col.empty(var_attrValue_class0)) {
 ===
 <input class="bar" type="text" id="foo"/>
 ^^^
-if (!$.col.empty(var_mapContains_class2)) {
+44:     if (!$.col.empty(var_mapContains_class2)) {
 #
 ### left to right
 #
@@ -79,10 +83,10 @@ if (!$.col.empty(var_mapContains_class2)) {
 <div></div>
 <div id="foo" class="bar"></div>
 ^^^
-    if (!$.col.empty(var_attrValue_lang1)) {
-    if (!$.col.empty(var_attrValue_lang2)) {
-    if (!$.col.empty(var_attrValue_lang3)) {
-    if (!$.col.empty(var_mapContains_lang6)) {
+50:     if (!$.col.empty(var_attrValue_lang1)) {
+58:     if (!$.col.empty(var_attrValue_lang2)) {
+66:     if (!$.col.empty(var_attrValue_lang3)) {
+76:     if (!$.col.empty(var_mapContains_lang6)) {
 #
 ### empty attributes are left as they are if no data-sly-attribute applies to them
 #
@@ -90,7 +94,7 @@ if (!$.col.empty(var_mapContains_class2)) {
 ===
 <div title="" id="foo" class="bar"></div>
 ^^^
-    if (!$.col.empty(var_mapContains_title2)) {
+44:     if (!$.col.empty(var_mapContains_title2)) {
 #
 ### Boolean values allow to control the display of boolean attributes:
 #
@@ -110,9 +114,9 @@ if (!$.col.empty(var_mapContains_class2)) {
 <input checked="false"/>
 <input checked/>
 ^^^
-if (!$.col.empty(var_attrValue_checked1)) {
-    if (!$.col.empty(var_attrValue_checked3)) {
-          if (!$.col.empty(var_attrContent11)) {
+50:     if (!$.col.empty(var_attrValue_checked1)) {
+66:     if (!$.col.empty(var_attrValue_checked3)) {
+97:           if (!$.col.empty(var_attrContent11)) {
 #
 ### Arrays are cast to strings:
 #
