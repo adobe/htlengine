@@ -1,3 +1,10 @@
+## [3.2.6](https://github.com/adobe/htlengine/compare/v3.2.5...v3.2.6) (2019-11-07)
+
+
+### Bug Fixes
+
+* **template:** add support for external templates calling templates and produce correct sourcemap. ([#104](https://github.com/adobe/htlengine/issues/104)) ([c528991](https://github.com/adobe/htlengine/commit/c5289912bc376adbef5119fa7fe7f4ea04d42f4b)), closes [#86](https://github.com/adobe/htlengine/issues/86)
+
 ## [3.2.5](https://github.com/adobe/htlengine/compare/v3.2.4...v3.2.5) (2019-11-06)
 
 
