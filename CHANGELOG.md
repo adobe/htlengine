@@ -1,3 +1,10 @@
+## [3.2.7](https://github.com/adobe/htlengine/compare/v3.2.6...v3.2.7) (2019-11-11)
+
+
+### Bug Fixes
+
+* **compiler:** avoid writing if(false) blocks ([#109](https://github.com/adobe/htlengine/issues/109)) ([8e83c52](https://github.com/adobe/htlengine/commit/8e83c52700ec65026c91ec6248d5ffa114c826f0))
+
 ## [3.2.6](https://github.com/adobe/htlengine/compare/v3.2.5...v3.2.6) (2019-11-07)
 
 
