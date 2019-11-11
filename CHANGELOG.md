@@ -1,3 +1,10 @@
+## [3.2.8](https://github.com/adobe/htlengine/compare/v3.2.7...v3.2.8) (2019-11-11)
+
+
+### Bug Fixes
+
+* **compiler:** use node require semantics for importing use classes ([#110](https://github.com/adobe/htlengine/issues/110)) ([6d00698](https://github.com/adobe/htlengine/commit/6d0069874cb5fb14c8a39a109f19c9bbe90a829e)), closes [#105](https://github.com/adobe/htlengine/issues/105) [#106](https://github.com/adobe/htlengine/issues/106)
+
 ## [3.2.7](https://github.com/adobe/htlengine/compare/v3.2.6...v3.2.7) (2019-11-11)
 
 
