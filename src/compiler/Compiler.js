@@ -21,6 +21,9 @@ const ThrowingErrorListener = require('../parser/htl/ThrowingErrorListener');
 const JSCodeGenVisitor = require('./JSCodeGenVisitor');
 const ExpressionFormatter = require('./ExpressionFormatter');
 const TemplateReference = require('../parser/commands/TemplateReference');
+const VariableBinding = require('../parser/commands/VariableBinding');
+const RuntimeCall = require('../parser/htl/nodes/RuntimeCall');
+const Identifier = require('../parser/htl/nodes/Identifier');
 const FunctionBlock = require('../parser/commands/FunctionBlock');
 
 const DEFAULT_TEMPLATE = 'JSCodeTemplate.js';
@@ -185,9 +188,10 @@ module.exports = class Compiler {
    *
    * @param {String} source the HTL template code
    * @param {String} baseDir the base directory to resolve file references
+   * @param {object} mods object with module mappings from use classes
    * @returns {object} The result object with a `commands` stream and `templates`.
    */
-  async _parse(source, baseDir) {
+  async _parse(source, baseDir, mods) {
     const commands = new TemplateParser()
       .withErrorListener(ThrowingErrorListener.INSTANCE)
       .withDefaultMarkupContext(this._defaultMarkupContext)
@@ -195,45 +199,59 @@ module.exports = class Compiler {
 
     const templates = [];
 
-    // find any templates and inject them into the stream
+    // find any templates references and use classes and process them
     for (let i = 0; i < commands.length; i += 1) {
       const c = commands[i];
       if (c instanceof TemplateReference) {
-        // remove from command array
-        const templatePath = path.resolve(baseDir, c.filename);
-        // eslint-disable-next-line no-await-in-loop
-        const templateSource = await fse.readFile(templatePath, 'utf-8');
-        // eslint-disable-next-line no-await-in-loop
-        const res = await this._parse(templateSource, path.dirname(templatePath));
+        if (c.isTemplate()) {
+          const templatePath = path.resolve(baseDir, c.filename);
+          // eslint-disable-next-line no-await-in-loop
+          const templateSource = await fse.readFile(templatePath, 'utf-8');
+          // eslint-disable-next-line no-await-in-loop
+          const res = await this._parse(templateSource, path.dirname(templatePath), mods);
 
-        // add recursive templates, if any.
-        templates.push(...res.templates);
+          // add recursive templates, if any.
+          templates.push(...res.templates);
 
-        // add this templates
-        const template = {
-          file: templatePath,
-          commands: [],
-        };
-        templates.push(template);
-        // prefix all templates with the variable name of the use class and discard commands
-        // outside functions.
-        let inside = false;
-        res.commands.forEach((cmd) => {
-          if (cmd instanceof FunctionBlock.Start) {
-            inside = true;
-            // eslint-disable-next-line no-underscore-dangle,no-param-reassign
-            cmd._expression = `${c.name}.${cmd._expression}`;
-          } else if (cmd instanceof FunctionBlock.End) {
-            inside = false;
-          } else if (!inside) {
-            return;
+          // add this templates
+          const template = {
+            file: templatePath,
+            commands: [],
+          };
+          templates.push(template);
+          // prefix all templates with the variable name of the use class and discard commands
+          // outside functions.
+          let inside = false;
+          res.commands.forEach((cmd) => {
+            if (cmd instanceof FunctionBlock.Start) {
+              inside = true;
+              // eslint-disable-next-line no-underscore-dangle,no-param-reassign
+              cmd._expression = `${c.name}.${cmd._expression}`;
+            } else if (cmd instanceof FunctionBlock.End) {
+              inside = false;
+            } else if (!inside) {
+              return;
+            }
+            template.commands.push(cmd);
+          });
+
+          // remove the template reference from the stream
+          commands.splice(i, 1);
+          i -= 1;
+        } else {
+          let file = c.filename;
+          if (file.startsWith('./')) {
+            file = path.resolve(baseDir, file);
           }
-          template.commands.push(cmd);
-        });
-
-        // finally merge the template functions into the commands stream
-        commands.splice(i, 1);
-        i -= 1;
+          let name = mods[file];
+          if (!name) {
+            name = `$$use_${Object.keys(mods).length}`;
+            // eslint-disable-next-line no-param-reassign
+            mods[file] = name;
+          }
+          // replace command with runtime call
+          commands[i] = new VariableBinding.Global(c.name, new RuntimeCall('use', new Identifier(name), c.args));
+        }
       }
     }
     return {
@@ -253,7 +271,8 @@ module.exports = class Compiler {
    * @returns {Promise<Object>} An object consisting of a generated template and a source map
    */
   async compile(source, baseDir = this._dir) {
-    const parseResult = await this._parse(source, baseDir);
+    const mods = {};
+    const parseResult = await this._parse(source, baseDir, mods);
 
     const global = [];
     this._runtimeGlobals.forEach((g) => {
@@ -273,6 +292,20 @@ module.exports = class Compiler {
       .indent()
       .process(parseResult);
 
+    // add modules
+    let imports = templateCode;
+    Object.entries(mods).forEach(([file, name], idx) => {
+      if (idx === 0 && imports) {
+        imports += '\n';
+      }
+      // make path relative to output directory
+      if (path.isAbsolute(file)) {
+        // eslint-disable-next-line no-param-reassign
+        file = path.relative(this._dir, file);
+      }
+      imports += `  const ${name} = require(${JSON.stringify(file)});\n`;
+    });
+
     let template = this._codeTemplate;
     if (!template) {
       const codeTemplate = this._includeRuntime ? RUNTIME_TEMPLATE : DEFAULT_TEMPLATE;
@@ -286,7 +319,7 @@ module.exports = class Compiler {
 
     let index = template.search(/^\s*\/\/\s*TEMPLATES\s*$/m);
     const templatesOffset = index !== -1 ? template.substring(0, index).match(/\n/g).length + 1 : 0;
-    template = template.replace(/^\s*\/\/\s*TEMPLATES\s*$/m, `\n${templateCode}`);
+    template = template.replace(/^\s*\/\/\s*TEMPLATES\s*$/m, `\n${imports}`);
 
     template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, `\n${global.join('')}`);
 

@@ -117,7 +117,7 @@
 <li><span>${item.title}</span><sly data-sly-call="${foo @ pages=item.pages}"></sly></li>
 </ul>
 </template>
-<sly data-sly-use.bar="${'call_spec/recursion_test.js'}" data-sly-call="${foo @ pages=bar.pages}"></sly>
+<sly data-sly-use.bar="${'./call_spec/recursion_test.js'}" data-sly-call="${foo @ pages=bar.pages}"></sly>
 ===
 
 
@@ -175,6 +175,6 @@
 34:     if (var_size1) {
 46:         $.dom.append($n, var_3);
 48:         yield $.call($.template().foo, [$n, {"pages": item["pages"], }]);
-65:     yield $.call($.template().foo, [$n, {"pages": bar["pages"], }]);
+67:     yield $.call($.template().foo, [$n, {"pages": bar["pages"], }]);
 #
 ###

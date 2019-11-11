@@ -92,7 +92,7 @@
 <li><span>${item.title}</span><sly data-sly-call="${foo @ pages=item.pages}"></sly></li>
 </ul>
 </template>
-<sly data-sly-use.bar="${'call_spec/recursion_test.js'}" data-sly-call="${foo @ pages=bar.pages}"></sly>
+<sly data-sly-use.bar="${'./call_spec/recursion_test.js'}" data-sly-call="${foo @ pages=bar.pages}"></sly>
 ===
 
 
