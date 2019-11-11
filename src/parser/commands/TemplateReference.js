@@ -13,10 +13,11 @@
 const Command = require('./Command');
 
 module.exports = class TemplateReference extends Command {
-  constructor(name, filename) {
+  constructor(name, filename, args) {
     super();
     this._name = name;
     this._filename = filename;
+    this._args = args || [];
   }
 
   get name() {
@@ -25,5 +26,13 @@ module.exports = class TemplateReference extends Command {
 
   get filename() {
     return this._filename;
+  }
+
+  get args() {
+    return this._args;
+  }
+
+  isTemplate() {
+    return this._filename.endsWith('.htl') || this._filename.endsWith('.html');
   }
 };

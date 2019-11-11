@@ -104,10 +104,7 @@ module.exports = class Runtime {
     };
   }
 
-  use(uri, options) {
-    // todo: use more save module loading
-    // eslint-disable-next-line import/no-dynamic-require,global-require
-    const Mod = require(path.resolve(this._useDir, uri));
+  use(Mod, options) {
     const mod = new Mod();
     Object.keys(options).forEach((k) => {
       mod[k] = options[k];
