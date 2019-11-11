@@ -60,11 +60,11 @@ blah Hello, world.
 ^^^
 35:     $.dom.append($n, var_0);
 46:     $.dom.append($n, var_0);
-61:       yield $.call($.template().comps["button"], [$n, {"data": data, }]);
-75:       yield $.call($.template().comps["heading"], [$n, {"data": data, }]);
-104:     $.dom.append($n, var_0);
-111:     yield $.call($.template().lib["lib"], [$n, {"name": "heading", "data": component["data"], }]);
-120:     yield $.call($.template().lib["lib"], [$n, {"name": component["name"], "data": component["data"], }]);
+57:       yield $.call($.template().comps["button"], [$n, {"data": data, }]);
+62:       yield $.call($.template().comps["heading"], [$n, {"data": data, }]);
+79:     $.dom.append($n, var_0);
+86:     yield $.call($.template().lib["lib"], [$n, {"name": "heading", "data": component["data"], }]);
+93:     yield $.call($.template().lib["lib"], [$n, {"name": component["name"], "data": component["data"], }]);
 #
 ### template defining and calling another template
 #
@@ -79,6 +79,6 @@ blah Hello, world.
 35:     $.dom.append($n, var_0);
 52:     $.dom.append($n, var_0);
 60:     yield $.call($.template().lib["bar"], [$n, {"a": a, }]);
-77:     yield $.call($.template().lib["foo"], [$n, {"a": 123, }]);
+75:     yield $.call($.template().lib["foo"], [$n, {"a": 123, }]);
 #
 ###

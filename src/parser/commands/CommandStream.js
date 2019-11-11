@@ -11,8 +11,6 @@
  */
 
 const FunctionBlock = require('./FunctionBlock');
-const Conditional = require('./Conditional');
-const BooleanConstant = require('../htl/nodes/BooleanConstant');
 const OutText = require('./OutText');
 
 module.exports = class CommandStream {
@@ -20,9 +18,13 @@ module.exports = class CommandStream {
     this._commands = [];
     this._warnings = [];
     this._wasText = false;
+    this._ignore = 0;
   }
 
   write(command) {
+    if (this._ignore) {
+      return;
+    }
     const isText = command instanceof OutText;
     if (isText) {
       if (this._wasText) {
@@ -58,10 +60,14 @@ module.exports = class CommandStream {
   }
 
   beginIgnore() {
-    this.write(new Conditional.Start(BooleanConstant.FALSE));
+    this._ignore += 1;
+    this._wasText = false;
   }
 
   endIgnore() {
-    this.write(Conditional.END);
+    this._ignore -= 1;
+    if (this._ignore < 0) {
+      throw Error('stream ignore block mismatch');
+    }
   }
 };
