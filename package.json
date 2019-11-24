@@ -30,11 +30,11 @@
     "xregexp": "^4.2.4"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "3.0.5",
+    "@semantic-release/changelog": "3.0.6",
     "@semantic-release/git": "7.0.18",
     "@semantic-release/github": "5.5.5",
     "codecov": "3.6.1",
-    "eslint": "6.6.0",
+    "eslint": "6.7.0",
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-plugin-header": "3.0.0",
     "eslint-plugin-import": "2.18.2",
