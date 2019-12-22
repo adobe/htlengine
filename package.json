@@ -34,7 +34,7 @@
     "@semantic-release/git": "7.0.18",
     "@semantic-release/github": "5.5.5",
     "codecov": "3.6.1",
-    "eslint": "6.7.2",
+    "eslint": "6.8.0",
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-plugin-header": "3.0.0",
     "eslint-plugin-import": "2.19.1",
@@ -47,7 +47,7 @@
     "rehype-stringify": "6.0.1",
     "remark-parse": "7.0.2",
     "remark-rehype": "5.0.0",
-    "semantic-release": "15.13.31"
+    "semantic-release": "15.14.0"
   },
   "lint-staged": {
     "*.js": "eslint"
