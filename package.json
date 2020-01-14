@@ -34,15 +34,15 @@
   },
   "devDependencies": {
     "@semantic-release/changelog": "3.0.6",
-    "@semantic-release/git": "7.0.18",
-    "@semantic-release/github": "5.5.8",
+    "@semantic-release/git": "8.0.0",
+    "@semantic-release/github": "6.0.1",
     "codecov": "3.6.1",
     "eslint": "6.8.0",
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-plugin-header": "3.0.0",
     "eslint-plugin-import": "2.20.0",
     "ghooks": "2.0.4",
-    "jsdom": "15.2.1",
+    "jsdom": "16.0.0",
     "lint-staged": "9.5.0",
     "mocha": "7.0.0",
     "mocha-junit-reporter": "1.23.2",
@@ -50,7 +50,7 @@
     "rehype-stringify": "6.0.1",
     "remark-parse": "7.0.2",
     "remark-rehype": "5.0.0",
-    "semantic-release": "15.14.0"
+    "semantic-release": "16.0.1"
   },
   "lint-staged": {
     "*.js": "eslint"
