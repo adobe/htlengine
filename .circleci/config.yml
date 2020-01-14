@@ -3,9 +3,9 @@ orbs:
   win: circleci/windows-tools@0.1.0
 
 executors:
-  node8:
+  node10:
     docker:
-    - image: circleci/node:8-jessie
+    - image: circleci/node:10-jessie
       environment:
         NPM_CONFIG_PREFIX: "~/.npm-global"
     working_directory: ~/repo
@@ -18,8 +18,8 @@ commands:
         keys:
         - v5-dependencies-{{ arch }}-{{ checksum "package-lock.json" }}
     - run:
-        name: install npm 6.11.3
-        command: sudo npm -g install npm@6.11.3
+        name: install npm 6.13.4
+        command: sudo npm -g install npm@6.13.4
     - run:
         name: Installing Dependencies
         command: npm install
@@ -37,7 +37,7 @@ jobs:
     steps:
       - run: git config --global core.autocrlf false
       - checkout
-      - run: choco install nodejs
+      - run: choco install nodejs-lts
       - run: npm install
       - run: mkdir junit
 
@@ -55,7 +55,7 @@ jobs:
           path: junit
 
   build:
-    executor: node8
+    executor: node10
 
     steps:
     - setup
@@ -79,7 +79,7 @@ jobs:
         path: junit
 
   release:
-    executor: node8
+    executor: node10
 
     steps:
     - setup
