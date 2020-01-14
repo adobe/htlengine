@@ -5,6 +5,9 @@
   "main": "src/index.js",
   "license": "Apache-2.0",
   "repository": "https://github.com/adobe/htlengine",
+  "engines": {
+    "node": ">=10.13 <11.0 || >=12.11.1 <13.0"
+  },
   "scripts": {
     "build": "antlr4 -Dlanguage=JavaScript -Xexact-output-dir -o src/parser/generated src/parser/grammar/SightlyLexer.g4 src/parser/grammar/SightlyParser.g4 src/parser/grammar/SightlyParser.g4",
     "semantic-release": "semantic-release",
