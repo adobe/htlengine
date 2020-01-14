@@ -1,3 +1,10 @@
+# [3.3.0](https://github.com/adobe/htlengine/compare/v3.2.8...v3.3.0) (2020-01-14)
+
+
+### Features
+
+* **node:** require node 10.13.x ([#124](https://github.com/adobe/htlengine/issues/124)) ([0876049](https://github.com/adobe/htlengine/commit/0876049e5834f909b9b1e929ee3a913c7fea15fd))
+
 ## [3.2.8](https://github.com/adobe/htlengine/compare/v3.2.7...v3.2.8) (2019-11-11)
 
 
