@@ -5,7 +5,7 @@ orbs:
 executors:
   node10:
     docker:
-    - image: circleci/node:10-jessie
+    - image: circleci/node:10-stretch
       environment:
         NPM_CONFIG_PREFIX: "~/.npm-global"
     working_directory: ~/repo
