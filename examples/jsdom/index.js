@@ -15,7 +15,7 @@ const { JSDOM } = require('jsdom');
 const { Compiler, Runtime } = require('@adobe/htlengine');
 
 const code = ''
-  + '<sly data-sly-use.doc="helper.js"/>'
+  + '<sly data-sly-use.doc="./helper.js"/>'
   + '<!DOCTYPE html>'
   + '<html><head><title>${doc.title}</title></head>\n'
   + '<body>\n'
@@ -40,8 +40,7 @@ async function run() {
   // setup the HTL compiler
   const compiler = new Compiler().withRuntimeVar('document');
 
-  // compile the script to a executable template function
-  const template = await compiler.compileToFunction(code);
+  const template = await compiler.compileToFunction(code, __dirname, require);
 
   // generate the input data using JSDOM
   const document = new JSDOM(html).window.document;

@@ -170,16 +170,24 @@ module.exports = class Compiler {
    * @async
    * @param {String} source HTL template code
    * @param {String} baseDir the base directory to resolve file references
+   * @param {NodeRequire} localRequire Require function that will be used to load modules.
    * @returns {Promise<Function>} the resulting function
    */
-  async compileToFunction(source, baseDir) {
+  async compileToFunction(source, baseDir, localRequire = require) {
     const js = await this.compileToString(source, baseDir);
-    // poor men's module loader
     // eslint-disable-next-line no-new-func
-    const template = new Function('module', 'require', js);
-    const module = {};
-    template.call(null, module, require);
-    return module.exports;
+    const template = new Function('exports', 'require', 'module', '__filename', '__dirname', js);
+    const mod = {
+      id: '.',
+      exports: {},
+      filename: 'internal',
+      children: [],
+      parent: null,
+      dirname: baseDir,
+      require: localRequire,
+    };
+    template.call(null, mod.exports, mod.require, mod, mod.filename, mod.dirname);
+    return mod.exports;
   }
 
   /**
@@ -240,7 +248,7 @@ module.exports = class Compiler {
           i -= 1;
         } else {
           let file = c.filename;
-          if (file.startsWith('./')) {
+          if (file.startsWith('./') || file.startsWith('../')) {
             file = path.resolve(baseDir, file);
           }
           let name = mods[file];
@@ -301,7 +309,7 @@ module.exports = class Compiler {
       // make path relative to output directory
       if (path.isAbsolute(file)) {
         // eslint-disable-next-line no-param-reassign
-        file = path.relative(this._dir, file);
+        file = `.${path.sep}${path.relative(this._dir, file)}`;
       }
       imports += `  const ${name} = require(${JSON.stringify(file)});\n`;
     });
