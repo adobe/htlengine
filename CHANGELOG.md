@@ -1,3 +1,10 @@
+## [3.3.1](https://github.com/adobe/htlengine/compare/v3.3.0...v3.3.1) (2020-02-03)
+
+
+### Bug Fixes
+
+* **compiler:** allow to specify require when using compileToFunction() ([#117](https://github.com/adobe/htlengine/issues/117)) ([fb901fd](https://github.com/adobe/htlengine/commit/fb901fdeb88c09a7a18cab9a3b95059b9ecfec6a)), closes [#114](https://github.com/adobe/htlengine/issues/114)
+
 # [3.3.0](https://github.com/adobe/htlengine/compare/v3.2.8...v3.3.0) (2020-01-14)
 
 
