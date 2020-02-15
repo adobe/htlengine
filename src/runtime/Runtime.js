@@ -10,9 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-const path = require('path');
 const co = require('co');
-const fs = require('fs');
 const format = require('./format');
 const formatUri = require('./format_uri');
 const formatXss = require('./format_xss');
@@ -24,8 +22,7 @@ module.exports = class Runtime {
   constructor() {
     this._globals = {};
     this._templates = {};
-    this._useDir = '.';
-    this._resourceDir = '.';
+    this._resourceLoader = null;
     this._dom = new HtmlDOMFactory();
   }
 
@@ -67,13 +64,8 @@ module.exports = class Runtime {
     return this;
   }
 
-  withUseDirectory(dir) {
-    this._useDir = dir;
-    return this;
-  }
-
-  withResourceDirectory(dir) {
-    this._resourceDir = dir;
+  withResourceLoader(value) {
+    this._resourceLoader = value;
     return this;
   }
 
@@ -113,17 +105,10 @@ module.exports = class Runtime {
   }
 
   resource(uri) {
-    const resourcePath = path.resolve(this._resourceDir, uri);
-
-    return new Promise((resolve, reject) => {
-      fs.readFile(resourcePath, 'utf8', (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(data);
-        }
-      });
-    });
+    if (!this._resourceLoader) {
+      return '';
+    }
+    return this._resourceLoader(this, uri);
   }
 
   // eslint-disable-next-line class-methods-use-this
