@@ -61,7 +61,20 @@ module.exports = class Compiler {
     this._moduleImportGenerator = Compiler.defaultModuleGenerator;
   }
 
+  /**
+   * @deprecated use {@link #withDirectoty()} instead.
+   */
   withOutputDirectory(dir) {
+    this._dir = dir;
+    return this;
+  }
+
+  /**
+   * Sets the base directory the compiler uses to resolve compile time paths.
+   * @param {string} dir the directory
+   * @returns {Compiler} this.
+   */
+  withDirectory(dir) {
     this._dir = dir;
     return this;
   }
@@ -239,7 +252,11 @@ module.exports = class Compiler {
       const c = commands[i];
       if (c instanceof TemplateReference) {
         if (c.isTemplate()) {
-          const templatePath = path.resolve(baseDir, c.filename);
+          let templatePath = path.resolve(baseDir, c.filename);
+          // eslint-disable-next-line no-await-in-loop
+          if (!(await fse.pathExists(templatePath))) {
+            templatePath = path.resolve(this._dir, c.filename);
+          }
           // eslint-disable-next-line no-await-in-loop
           const templateSource = await fse.readFile(templatePath, 'utf-8');
           // eslint-disable-next-line no-await-in-loop

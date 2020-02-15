@@ -87,7 +87,7 @@ function runTests(specs, typ = '', runtimeFn = () => {}, resultFn = (ret) => ret
     }
 
     const compiler = new Compiler()
-      .withOutputDirectory(outputDir)
+      .withDirectory(outputDir)
       .withRuntimeVar(Object.keys(payload))
       .withSourceFile(sourceFile)
       .withSourceMap(true);
@@ -190,7 +190,7 @@ describe('Compiler Tests (API)', () => {
   it('can specify custom module generator', async () => {
     const dir = path.resolve(__dirname, 'templates', 'custom_modules');
     const comp = new Compiler()
-      .withOutputDirectory(dir)
+      .withDirectory(dir)
       .withModuleImportGenerator((baseDir, varName, id) => {
         if (id === 'foo') {
           return `const ${varName} = myRequire('foo');`;

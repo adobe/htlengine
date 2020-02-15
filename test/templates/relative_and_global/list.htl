@@ -1,0 +1,5 @@
+<sly data-sly-use.template="templates/relative_and_global/header.htl" data-sly-call="${template.heading @ data = data}" />
+<ul data-sly-use.itemTemplate="item.htl"
+    data-sly-list.item="${data.list}">
+    <li data-sly-call="${itemTemplate.item @  item = item}"></li>
+</ul>

@@ -36,10 +36,11 @@ node src/cli.js test/simple2.html
 You can also use the API directly:
 
 ```javascript
+```javascript
 const { Compiler } = require('@adobe/htlengine');
 
 const compiler = new Compiler()
-      .withOutputDirectory('')
+      .withDirectory('')
       .includeRuntime(true)
       .withRuntimeGlobalName('it');
 
