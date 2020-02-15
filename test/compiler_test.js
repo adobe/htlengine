@@ -20,6 +20,7 @@ const unified = require('unified');
 const tohtml = require('rehype-stringify');
 const { JSDOM } = require('jsdom');
 const Runtime = require('../src/runtime/Runtime');
+const fsResourceLoader = require('../src/runtime/fsResourceLoader');
 const Compiler = require('../src/compiler/Compiler');
 
 function serializeDom(node) {
@@ -99,8 +100,7 @@ function runTests(specs, typ = '', runtimeFn = () => {}, resultFn = (ret) => ret
         if ('output' in test) {
           it(`${idx}. Generates output for '${test.name}' correctly.`, (done) => {
             const runtime = new Runtime()
-              .withUseDirectory(path.join(__dirname, 'specs'))
-              .withResourceDirectory(path.join(__dirname, 'specs'))
+              .withResourceLoader(fsResourceLoader(path.join(__dirname, 'specs')))
               .setGlobal(payload);
             runtimeFn(runtime);
 
