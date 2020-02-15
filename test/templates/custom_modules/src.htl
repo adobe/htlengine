@@ -1,0 +1,4 @@
+<sly data-sly-use.v1="foo"/>
+<sly data-sly-use.v2="global-module"/>
+<sly data-sly-use.v4="./local-module"/>
+<sly data-sly-use.v5="../relative-module"/>

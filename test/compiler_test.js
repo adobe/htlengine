@@ -185,3 +185,22 @@ describe('Compiler Tests (HTML)', () => {
   });
   runTests(specs);
 });
+
+describe('Compiler Tests (API)', () => {
+  it('can specify custom module generator', async () => {
+    const dir = path.resolve(__dirname, 'templates', 'custom_modules');
+    const comp = new Compiler()
+      .withOutputDirectory(dir)
+      .withModuleImportGenerator((baseDir, varName, id) => {
+        if (id === 'foo') {
+          return `const ${varName} = myRequire('foo');`;
+        }
+        return '';
+      });
+    const htl = fs.readFileSync(path.resolve(dir, 'src.htl'), 'utf-8');
+    const exp = fs.readFileSync(path.resolve(dir, 'exp.js'), 'utf-8');
+    let src = await comp.compileToString(htl, dir);
+    src = src.replace(/\\\\/g, '/');
+    assert.equal(src, exp);
+  });
+});

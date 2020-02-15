@@ -30,6 +30,23 @@ const DEFAULT_TEMPLATE = 'JSCodeTemplate.js';
 const RUNTIME_TEMPLATE = 'JSRuntimeTemplate.js';
 
 module.exports = class Compiler {
+  /**
+   * Generates the module import statement.
+   *
+   * @param {string} baseDir the base directory (usually cwd)
+   * @param {string} varName the variable name of the module to be defined.
+   * @param {string} moduleId the id of the module
+   * @returns {string} the import string.
+   */
+  static defaultModuleGenerator(baseDir, varName, moduleId) {
+    // make path relative to output directory
+    if (path.isAbsolute(moduleId)) {
+      // eslint-disable-next-line no-param-reassign
+      moduleId = `.${path.sep}${path.relative(baseDir, moduleId)}`;
+    }
+    return `const ${varName} = require(${JSON.stringify(moduleId)});`;
+  }
+
   constructor() {
     this._dir = '.';
     this._outfile = '';
@@ -41,6 +58,7 @@ module.exports = class Compiler {
     this._defaultMarkupContext = undefined;
     this._sourceFile = null;
     this._sourceOffset = 0;
+    this._moduleImportGenerator = Compiler.defaultModuleGenerator;
   }
 
   withOutputDirectory(dir) {
@@ -114,6 +132,15 @@ module.exports = class Compiler {
    */
   withSourceOffset(value) {
     this._sourceOffset = value;
+    return this;
+  }
+
+  /**
+   * Sets the function that generates the module import string.
+   * @param {function} fn the function taking the baseDir, variable name and file name.
+   */
+  withModuleImportGenerator(fn) {
+    this._moduleImportGenerator = fn;
     return this;
   }
 
@@ -306,12 +333,11 @@ module.exports = class Compiler {
       if (idx === 0 && imports) {
         imports += '\n';
       }
-      // make path relative to output directory
-      if (path.isAbsolute(file)) {
-        // eslint-disable-next-line no-param-reassign
-        file = `.${path.sep}${path.relative(this._dir, file)}`;
+      let exp = this._moduleImportGenerator(this._dir, name, file);
+      if (!exp) {
+        exp = Compiler.defaultModuleGenerator(this._dir, name, file);
       }
-      imports += `  const ${name} = require(${JSON.stringify(file)});\n`;
+      imports += `  ${exp}\n`;
     });
 
     let template = this._codeTemplate;
