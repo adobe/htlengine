@@ -1,3 +1,10 @@
+# [3.4.0](https://github.com/adobe/htlengine/compare/v3.3.1...v3.4.0) (2020-02-15)
+
+
+### Features
+
+* **compiler:** add support for custom import module statements ([7487d58](https://github.com/adobe/htlengine/commit/7487d58d3749027d27d75620763664e420f4425f)), closes [#134](https://github.com/adobe/htlengine/issues/134)
+
 ## [3.3.1](https://github.com/adobe/htlengine/compare/v3.3.0...v3.3.1) (2020-02-03)
 
 
