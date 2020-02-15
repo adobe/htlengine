@@ -20,6 +20,7 @@ const fse = require('fs-extra');
 // local modules
 const pkgJson = require('../package.json');
 const Compiler = require('../src/compiler/Compiler');
+const Runtime = require('../src/runtime/Runtime');
 
 const TEMPLATE_SIMPLE_2 = path.resolve(__dirname, 'templates', 'simple2.htl');
 const TEMPLATE_XSS = path.resolve(__dirname, 'templates', 'xss.htl');
@@ -77,7 +78,7 @@ describe('Runtime Tests', () => {
     const outputDir = path.join(__dirname, 'generated');
 
     const compiler = new Compiler()
-      .withOutputDirectory(outputDir)
+      .withDirectory(outputDir)
       .includeRuntime(true)
       .withRuntimeHTLEngine(path.resolve(__dirname, '..', pkgJson.main))
       .withOutputFile(path.resolve(outputDir, 'runtime_test_script_1.js'))
@@ -97,7 +98,7 @@ describe('Runtime Tests', () => {
 
     const customTemplate = await fse.readFile(path.resolve(__dirname, 'templates', 'custom_template.js'), 'utf-8');
     const compiler = new Compiler()
-      .withOutputDirectory(outputDir)
+      .withDirectory(outputDir)
       .includeRuntime(true)
       .withRuntimeHTLEngine(path.resolve(__dirname, '..', pkgJson.main))
       .withOutputFile(path.resolve(outputDir, 'runtime_test_script_2.js'))
@@ -117,7 +118,7 @@ describe('Runtime Tests', () => {
     const outputDir = path.join(__dirname, 'generated');
 
     const compiler = new Compiler()
-      .withOutputDirectory(outputDir)
+      .withDirectory(outputDir)
       .includeRuntime(true)
       .withRuntimeHTLEngine(path.resolve(__dirname, '..', pkgJson.main))
       .withOutputFile(path.resolve(outputDir, 'runtime_test_script_3.js'))
@@ -137,7 +138,7 @@ describe('Runtime Tests', () => {
 
     const compiler = new Compiler()
       .withDefaultMarkupContext('unsafe')
-      .withOutputDirectory(outputDir)
+      .withDirectory(outputDir)
       .includeRuntime(true)
       .withRuntimeHTLEngine(path.resolve(__dirname, '..', pkgJson.main))
       .withOutputFile(path.resolve(outputDir, 'runtime_test_script_4.js'))
@@ -150,5 +151,35 @@ describe('Runtime Tests', () => {
 
     const ret = await main(GLOBALS);
     assert.equal(ret.trim(), (await fse.readFile(EXPECTED_XSS_UNSAFE, 'utf-8')).trim());
+  });
+
+  it('Resolves templates correct', async () => {
+    const outputDir = path.join(__dirname, 'generated');
+
+    const dir = path.resolve(__dirname);
+    const comp = new Compiler()
+      .withRuntimeGlobalName('data')
+      .withDirectory(dir)
+      .withOutputFile(path.resolve(outputDir, 'relative_and_global.js'))
+      .includeRuntime(false);
+    const htlFile = path.resolve(dir, 'templates', 'relative_and_global', 'list.htl');
+    const exp = await fse.readFile(path.resolve(dir, 'templates', 'relative_and_global', 'exp.html'), 'utf-8');
+
+    const filename = await comp.compileFile(htlFile);
+
+    // eslint-disable-next-line import/no-dynamic-require,global-require
+    const main = require(filename);
+
+    const runtime = new Runtime();
+    runtime.setGlobal({
+      title: 'Hello, world.',
+      list: [
+        { title: 'item 1' },
+        { title: 'item 2' },
+        { title: 'item 3' },
+      ],
+    });
+    const html = await main(runtime);
+    assert.equal(html, exp);
   });
 });
