@@ -1,3 +1,24 @@
+# [4.0.0](https://github.com/adobe/htlengine/compare/v3.4.0...v4.0.0) (2020-02-16)
+
+
+### Bug Fixes
+
+* **compiler:** use local and global path then resolving templates ([84c845e](https://github.com/adobe/htlengine/commit/84c845e3f7f31f24c1c9f915e66c530d15840db8)), closes [#135](https://github.com/adobe/htlengine/issues/135)
+
+
+### Features
+
+* **runtime:** make resource losder pluggable ([4f0088b](https://github.com/adobe/htlengine/commit/4f0088b7183d3587db2bcba779c980b626f15e66))
+
+
+### BREAKING CHANGES
+
+* **runtime:** Runtime API change
+
+- the `Runtime.withResourceDir()` method was replaced by a
+  pluggable `withResourceResolver()` method.
+- `Runtime.withUseDir()` was removed
+
 # [3.4.0](https://github.com/adobe/htlengine/compare/v3.3.1...v3.4.0) (2020-02-15)
 
 
