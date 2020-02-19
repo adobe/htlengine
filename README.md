@@ -20,7 +20,7 @@ npm install @adobe/htlengine
 ## Build
 
 ```bash
-yarn install
+npm install
 ```
 
 ## run
@@ -31,11 +31,14 @@ currently not very cool. just passes the given file into the HTML parser and out
 node src/cli.js test/simple2.html
 ```
 
+## Webpack
+
+Compile the HTL templates wth webpack using the [htl-loader](https://github.com/backflip/htl-loader)
+
 ## API
 
 You can also use the API directly:
 
-```javascript
 ```javascript
 const { Compiler } = require('@adobe/htlengine');
 
@@ -58,13 +61,13 @@ const js = await compiler.compileToString(code);
 The tests are more comprehensive. They validate if the the HTL expressions are parsed and re-created using the generated parse tree.
 
 ```bash
-yarn test
+npm test
 ```
 
 ## rebuild antlr4 generated source
 
 ```bash
-yarn build
+npm run build
 ```
 
 ### prerequisites
