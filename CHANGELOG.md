@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/adobe/htlengine/compare/v4.0.0...v4.0.1) (2020-02-25)
+
+
+### Bug Fixes
+
+* **format:** use correct date format ([#148](https://github.com/adobe/htlengine/issues/148)) ([1ae13fe](https://github.com/adobe/htlengine/commit/1ae13fe2f4fe787b98c3bcb17e216ab1af04cccb)), closes [#146](https://github.com/adobe/htlengine/issues/146)
+
 # [4.0.0](https://github.com/adobe/htlengine/compare/v3.4.0...v4.0.0) (2020-02-16)
 
 
