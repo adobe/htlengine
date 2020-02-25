@@ -232,7 +232,15 @@ module.exports = class JSCodeGenVisitor {
       this._dom.outVariable(cmd.variableName);
     } else if (cmd instanceof Loop.Init) {
       const exp = ExpressionFormatter.format(cmd.expression);
-      this.out(`const ${cmd.variableName} = $.col.init(${exp});`);
+      if (cmd.options && Object.keys(cmd.options).length) {
+        const opts = {};
+        Object.entries(cmd.options).forEach(([key, value]) => {
+          opts[key] = ExpressionFormatter.format(value);
+        });
+        this.out(`const ${cmd.variableName} = $.col.init(${exp},${JSON.stringify(opts)});`);
+      } else {
+        this.out(`const ${cmd.variableName} = $.col.init(${exp});`);
+      }
     } else if (cmd instanceof Loop.Start) {
       this.out(`for (const ${cmd.indexVariable} of $.col.keys(${cmd.listVariable})) {`);
       this.indent();

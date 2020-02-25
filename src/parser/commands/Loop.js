@@ -16,10 +16,11 @@ const Command = require('./Command');
 module.exports = {
 
   Init: class Init extends Command {
-    constructor(variableName, expression) {
+    constructor(variableName, expression, options = {}) {
       super();
       this._variableName = variableName;
       this._expression = expression;
+      this._options = options;
     }
 
     get variableName() {
@@ -28,6 +29,10 @@ module.exports = {
 
     get expression() {
       return this._expression;
+    }
+
+    get options() {
+      return this._options;
     }
   },
 

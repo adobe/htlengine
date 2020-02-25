@@ -41,7 +41,7 @@ const PluginContext = require('./PluginContext');
 const PLUGINS = {
   text: require('../plugins/TextPlugin'),
   list: require('../plugins/ListPlugin'),
-  repeat: require('../plugins/ListPlugin'),
+  repeat: require('../plugins/RepeatPlugin'),
   test: require('../plugins/TestPlugin'),
   unwrap: require('../plugins/UnwrapPlugin'),
   attribute: require('../plugins/AttributePlugin'),

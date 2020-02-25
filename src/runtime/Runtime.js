@@ -40,8 +40,27 @@ module.exports = class Runtime {
 
   // eslint-disable-next-line class-methods-use-this
   get col() {
+    function limit(col, { begin, end, step } = {}) {
+      if (!begin && !end && !step) {
+        return col;
+      }
+      /* eslint-disable no-param-reassign */
+      if (!Array.isArray(col)) {
+        col = Object.keys(col);
+      }
+      begin = begin ? Number.parseInt(begin, 10) : 0;
+      end = end ? Number.parseInt(end, 10) : col.length - 1;
+      step = step ? Number.parseInt(step, 10) : 1;
+      const ret = [];
+      for (let i = begin; i <= end; i += step) {
+        ret.push(col[i]);
+      }
+      return ret;
+      /* eslint-enable no-param-reassign */
+    }
+
     return {
-      init: (c) => (typeof c[Symbol.iterator] === 'function' ? Array.from(c) : c),
+      init: (c, opts) => limit(typeof c[Symbol.iterator] === 'function' ? Array.from(c) : c, opts),
       len: (c) => (Array.isArray(c) ? c.length : Object.keys(c).length),
       keys: (c) => Object.keys(c),
       get: (c, k) => (Array.isArray(c) ? c[k] : k),
