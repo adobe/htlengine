@@ -14,16 +14,10 @@ const moment = require('moment');
 const numeral = require('numeral');
 require('numeral/locales');
 
-function parseDate(format, locale, timezone) {
-  const tz = timezone.replace('GMT', '').replace('UTC', '');
-  const date = moment(parseInt(format, 10));
-
-  return date.isValid() ? date.utc(tz).locale(locale) : null;
-}
-
 module.exports = function format(fmt, args) {
   const locale = args.locale ? args.locale : '';
   const timezone = args.timezone ? args.timezone : '';
+  const value = args.format;
 
   // test for matching number pattern
   if (/^[0-9.,#;$E%()-]*$/gm.test(fmt)) {
@@ -31,7 +25,7 @@ module.exports = function format(fmt, args) {
     try {
       numeral.locale(locale.toLowerCase());
       // replace '#' with '0' as is expected by numeral
-      const number = numeral(args.format).format(fmt.replace(/#/g, '0'));
+      const number = numeral(value).format(fmt.replace(/#/g, '0'));
       return number;
     } finally {
       // reset locale
@@ -41,13 +35,50 @@ module.exports = function format(fmt, args) {
 
   // test for matching placeholder '{}' pattern
   if (/{(\d+)}/g.test(fmt)) {
-    const argArray = Array.isArray(args.format) ? args.format : [args.format];
+    const argArray = Array.isArray(value) ? value : [value];
     return fmt.replace(/{(\d+)}/g, (match, number) => (typeof argArray[number] !== 'undefined'
       ? argArray[number]
       : match));
   }
 
-  // default to date
-  const date = parseDate(args.format, locale, timezone);
-  return date !== null ? date.format(fmt) : null;
+  // default to date. parse date and put into timezone
+  let date = moment.utc(parseInt(value, 10));
+  if (!date.isValid()) {
+    return null;
+  }
+  date = date.utcOffset(timezone).locale(locale);
+
+  // map HTL format to moment.js format
+  let dateFormat = '';
+
+  let prev = fmt[0];
+  let group = prev;
+  for (let i = 1; i < fmt.length + 1; i += 1) {
+    const c = fmt[i];
+    if (c === prev) {
+      group += c;
+    } else {
+      switch (group) {
+        case 'D': dateFormat += 'DDD'; break;
+        case 'DD': dateFormat += 'DDDD'; break;
+        case 'd': dateFormat += 'D'; break;
+        case 'dd': dateFormat += 'DD'; break;
+        case 'y': dateFormat += 'Y'; break;
+        case 'yy': dateFormat += 'YY'; break;
+        case 'yyyy': dateFormat += 'YYYY'; break;
+        case 'X': dateFormat += 'Z'; break;
+        case 'XX': dateFormat += 'Z'; break;
+        case 'XXX': dateFormat += 'Z'; break;
+        case 'Z': dateFormat += 'ZZ'; break;
+        case 'E': dateFormat += 'd'; break;
+        case 'EE': dateFormat += 'dd'; break;
+        case 'EEE': dateFormat += 'ddd'; break;
+        case 'EEEE': dateFormat += 'dddd'; break;
+        default: dateFormat += group; break;
+      }
+      prev = c;
+      group = c;
+    }
+  }
+  return date !== null ? date.format(dateFormat) : null;
 };
