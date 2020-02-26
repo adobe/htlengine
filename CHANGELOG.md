@@ -1,3 +1,10 @@
+# [4.3.0](https://github.com/adobe/htlengine/compare/v4.2.0...v4.3.0) (2020-02-26)
+
+
+### Features
+
+* **vdom:** add option to suppress automatic body generation ([dc127e6](https://github.com/adobe/htlengine/commit/dc127e6628febba5b56f4dd09ffce6069e24313e)), closes [#154](https://github.com/adobe/htlengine/issues/154)
+
 # [4.2.0](https://github.com/adobe/htlengine/compare/v4.1.1...v4.2.0) (2020-02-26)
 
 
