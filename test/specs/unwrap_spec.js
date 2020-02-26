@@ -12,6 +12,7 @@
 module.exports = {
   properties: {
     unwrap: true,
+    falseTest: false,
     url: 'url',
     title: 'yes',
   },
