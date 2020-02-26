@@ -31,7 +31,7 @@ module.exports = class ListPlugin extends Plugin {
   }
 
   beforeElement(stream) {
-    stream.write(new Loop.Init(this._listVariable, this.expression.root));
+    stream.write(new Loop.Init(this._listVariable, this.expression.root, this.expression.options));
     stream.write(new VariableBinding.Start(
       this._collectionSizeVar,
       new UnaryOperation(UnaryOperator.LENGTH, new Identifier(this._listVariable)),

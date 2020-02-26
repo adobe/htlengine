@@ -112,4 +112,10 @@
     <li>Orange</li>
 </ul>
 #
+### list with controls
+#
+<div data-sly-list="${properties.primes @ start = 3, step = 2, end = 10}">${item},</div>
+===
+<div>2,5,11,17,23,31,</div>
+#
 ###
