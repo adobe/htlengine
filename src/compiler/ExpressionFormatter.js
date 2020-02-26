@@ -85,12 +85,20 @@ module.exports = class ExpressionFormatter {
         this.result += ']';
       }
     } else if (node instanceof BinaryOperation) {
-      const fn = node.operator.isNumeric ? 'Number' : '';
-      this.result += `${fn}(`;
-      node.leftOperand.accept(this);
-      this.result += `) ${node.operator.sym} ${fn}(`;
-      node.rightOperand.accept(this);
-      this.result += ')';
+      if (node.operator.sym === 'in') {
+        this.result += '$.col.rel(';
+        node.leftOperand.accept(this);
+        this.result += ',';
+        node.rightOperand.accept(this);
+        this.result += ')';
+      } else {
+        const fn = node.operator.isNumeric ? 'Number' : '';
+        this.result += `${fn}(`;
+        node.leftOperand.accept(this);
+        this.result += `) ${node.operator.sym} ${fn}(`;
+        node.rightOperand.accept(this);
+        this.result += ')';
+      }
     } else if (node instanceof MultiOperation) {
       const fn = node.operator.isNumeric ? 'Number' : '';
       node.operands.forEach((op, idx) => {

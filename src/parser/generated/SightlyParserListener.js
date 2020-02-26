@@ -1,4 +1,4 @@
-// Generated from src/parser/grammar/SightlyParser.g4 by ANTLR 4.7.1
+// Generated from src/parser/grammar/SightlyParser.g4 by ANTLR 4.8
 // jshint ignore: start
 var antlr4 = require('antlr4/index');
 
@@ -65,21 +65,30 @@ SightlyParserListener.prototype.exitExprNode = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SightlyParser#binaryOp.
-SightlyParserListener.prototype.enterBinaryOp = function(ctx) {
+// Enter a parse tree produced by SightlyParser#orBinaryOp.
+SightlyParserListener.prototype.enterOrBinaryOp = function(ctx) {
 };
 
-// Exit a parse tree produced by SightlyParser#binaryOp.
-SightlyParserListener.prototype.exitBinaryOp = function(ctx) {
+// Exit a parse tree produced by SightlyParser#orBinaryOp.
+SightlyParserListener.prototype.exitOrBinaryOp = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SightlyParser#operator.
-SightlyParserListener.prototype.enterOperator = function(ctx) {
+// Enter a parse tree produced by SightlyParser#andBinaryOp.
+SightlyParserListener.prototype.enterAndBinaryOp = function(ctx) {
 };
 
-// Exit a parse tree produced by SightlyParser#operator.
-SightlyParserListener.prototype.exitOperator = function(ctx) {
+// Exit a parse tree produced by SightlyParser#andBinaryOp.
+SightlyParserListener.prototype.exitAndBinaryOp = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SightlyParser#inBinaryOp.
+SightlyParserListener.prototype.enterInBinaryOp = function(ctx) {
+};
+
+// Exit a parse tree produced by SightlyParser#inBinaryOp.
+SightlyParserListener.prototype.exitInBinaryOp = function(ctx) {
 };
 
 

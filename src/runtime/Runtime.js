@@ -58,6 +58,13 @@ module.exports = class Runtime {
       /* eslint-enable no-param-reassign */
     }
 
+    function rel(key, value) {
+      if (typeof value === 'object') {
+        return Array.isArray(value) ? value.indexOf(key) >= 0 : (key in value);
+      }
+      return value.toString().indexOf(key) >= 0;
+    }
+
     return {
       init: (c, opts) => limit(typeof c[Symbol.iterator] === 'function' ? Array.from(c) : c, opts),
       len: (c) => (Array.isArray(c) ? c.length : Object.keys(c).length),
@@ -65,6 +72,7 @@ module.exports = class Runtime {
       get: (c, k) => (Array.isArray(c) ? c[k] : k),
       // eslint-disable-next-line no-nested-ternary
       empty: (c) => (Array.isArray(c) ? c.length === 0 : (typeof c === 'number' ? !`${c}` : !c)),
+      rel,
     };
   }
 

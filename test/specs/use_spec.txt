@@ -61,4 +61,10 @@
 ===
 <div>delayed: delayed hello.</div>
 #
+### get like function with 'in' operator
+#
+<div data-sly-use.page="${'./use_spec/test_page.js'}">text: ${'text' in page}</div>
+===
+<div>text: true</div>
+#
 ###

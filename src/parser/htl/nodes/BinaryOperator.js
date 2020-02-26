@@ -32,6 +32,14 @@ module.exports = Object.freeze({
   },
 
   /**
+     * Relation.
+     */
+  IN: {
+    sym: 'in',
+    calc: (left, right) => left in right,
+  },
+
+  /**
      * String concatenation.
      */
   CONCATENATE: {

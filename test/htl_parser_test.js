@@ -52,6 +52,11 @@ const TESTS = {
     { s: '${varOne || varTwo}', r: '${varOne||varTwo}' },
     { s: '${varChoice ? varOne : varTwo}' },
   ],
+  'Relational Operators': [
+    { s: '${\'a\' in \'abc\'}', r: '${\'a\'in\'abc\'}' },
+    { s: '${300 in myArray}', r: '${300inmyArray}' },
+    { s: '${\'a\' in myObject}', r: '${\'a\'inmyObject}' },
+  ],
   Comparison: [
     { s: '${nullValueOne == nullValueTwo}', r: '${nullValueOne===nullValueTwo}' },
     { s: '${nullValueOne != nullValueTwo}', r: '${nullValueOne!==nullValueTwo}' },
