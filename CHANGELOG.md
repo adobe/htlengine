@@ -1,3 +1,10 @@
+## [4.0.3](https://github.com/adobe/htlengine/compare/v4.0.2...v4.0.3) (2020-02-26)
+
+
+### Bug Fixes
+
+* **runtime:** support function as getters for use-classes ([#150](https://github.com/adobe/htlengine/issues/150)) ([dd53ffc](https://github.com/adobe/htlengine/commit/dd53ffc50fd7643d0821249e4248d37742aed607)), closes [#137](https://github.com/adobe/htlengine/issues/137)
+
 ## [4.0.2](https://github.com/adobe/htlengine/compare/v4.0.1...v4.0.2) (2020-02-26)
 
 
