@@ -2,12 +2,22 @@
 ### unwrap with value and variable
 #
 <a href="${properties.url}" data-sly-unwrap.unwrapTest="${properties.unwrap}">
-    <span>${properties.title}</span>
+    <span>${properties.title}: ${unwrapTest}</span>
 </a>
 ===
 
-    <span>yes</span>
+    <span>yes: true</span>
 
+#
+### unwrap with value and variable with false
+#
+<a href="${properties.url}" data-sly-unwrap.unwrapTest="${properties.falseTest}">
+    <span>${properties.title}: ${unwrapTest}</span>
+</a>
+===
+<a href="url">
+    <span>yes: false</span>
+</a>
 #
 ### unwrap with value no variable
 #
