@@ -39,6 +39,7 @@ const PluginContext = require('./PluginContext');
 
 /* eslint-disable global-require */
 const PLUGINS = {
+  set: require('../plugins/SetPlugin'),
   text: require('../plugins/TextPlugin'),
   list: require('../plugins/ListPlugin'),
   repeat: require('../plugins/RepeatPlugin'),

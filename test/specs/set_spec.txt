@@ -1,0 +1,10 @@
+#
+### set variable
+#
+<span data-sly-set.profile="${user.profile}">Hello, ${profile.firstName} ${profile.lastName}!</span>
+<a class="profile-link" href="${profile.url}">Edit your profile</a>
+===
+<span>Hello, John Doe!</span>
+<a class="profile-link" href="about:blank()">Edit your profile</a>
+#
+###
