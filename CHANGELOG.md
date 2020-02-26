@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/adobe/htlengine/compare/v4.0.3...v4.1.0) (2020-02-26)
+
+
+### Features
+
+* **htl:** implement 'in' operator ([#151](https://github.com/adobe/htlengine/issues/151)) ([4258898](https://github.com/adobe/htlengine/commit/4258898e8a5355ef9be503d45317b9597bbac53b)), closes [#136](https://github.com/adobe/htlengine/issues/136)
+
 ## [4.0.3](https://github.com/adobe/htlengine/compare/v4.0.2...v4.0.3) (2020-02-26)
 
 
