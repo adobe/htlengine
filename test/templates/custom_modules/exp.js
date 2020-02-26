@@ -25,15 +25,14 @@ module.exports = function main(runtime) {
     dom: runtime.dom,
   };
 
+  const global = runtime.globals;
+
   const $use_0 = myRequire('foo');
   const $use_1 = require("global-module");
   const $use_2 = require("./local-module");
   const $use_3 = require("./../relative-module");
 
   return runtime.run(function* () {
-
-    const global = runtime.globals;
-
     let $t, $n = $.dom.start();
     const v1 = yield $.use($use_0, {});
     $.dom.text($n,"\n");

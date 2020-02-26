@@ -25,12 +25,11 @@ module.exports = function main(runtime) {
     dom: runtime.dom,
   };
 
+  // RUNTIME_GLOBALS
+
   // TEMPLATES
 
   return runtime.run(function* () {
-
-    // RUNTIME_GLOBALS
-
     // CODE
   });
 };

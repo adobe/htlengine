@@ -327,12 +327,12 @@ module.exports = class Compiler {
     const parseResult = await this._parse(source, baseDir, mods);
 
     const global = [];
-    this._runtimeGlobals.forEach((g) => {
-      global.push(`    let ${ExpressionFormatter.escapeVariable(g)} = runtime.globals[${JSON.stringify(g)}];\n`);
-    });
     if (this._runtimeGlobal) {
-      global.push(`    const ${this._runtimeGlobal} = runtime.globals;\n`);
+      global.push(`  const ${this._runtimeGlobal} = runtime.globals;\n`);
     }
+    this._runtimeGlobals.forEach((g) => {
+      global.push(`  let ${ExpressionFormatter.escapeVariable(g)} = runtime.globals[${JSON.stringify(g)}];\n`);
+    });
 
     const {
       code, templateCode, mappings, templateMappings,
@@ -368,15 +368,15 @@ module.exports = class Compiler {
       template = template.replace(/MOD_HTLENGINE/, engine);
     }
 
+    template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, `\n${global.join('')}`);
+
     let index = template.search(/^\s*\/\/\s*TEMPLATES\s*$/m);
     const templatesOffset = index !== -1 ? template.substring(0, index).match(/\n/g).length + 1 : 0;
     template = template.replace(/^\s*\/\/\s*TEMPLATES\s*$/m, `\n${imports}`);
 
-    template = template.replace(/^\s*\/\/\s*RUNTIME_GLOBALS\s*$/m, `\n${global.join('')}`);
-
     index = template.search(/^\s*\/\/\s*CODE\s*$/m);
-    const codeOffset = index !== -1 ? template.substring(0, index).match(/\n/g).length + 1 : 0;
-    template = template.replace(/^\s*\/\/\s*CODE\s*$/m, `\n${code}`);
+    const codeOffset = index !== -1 ? template.substring(0, index).match(/\n/g).length : 0;
+    template = template.replace(/^\s*\/\/\s*CODE\s*$/m, code);
 
     let sourceMap = null;
     if (mappings) {

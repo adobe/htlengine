@@ -26,12 +26,11 @@ function run(runtime) {
     dom: runtime.dom,
   };
 
+  // RUNTIME_GLOBALS
+
   // TEMPLATES
 
   return runtime.run(function* () {
-
-    // RUNTIME_GLOBALS
-
     // CODE
   });
 }
