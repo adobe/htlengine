@@ -1,3 +1,10 @@
+## [4.0.2](https://github.com/adobe/htlengine/compare/v4.0.1...v4.0.2) (2020-02-26)
+
+
+### Bug Fixes
+
+* **repeat:** implement data-sly-repeat ([#149](https://github.com/adobe/htlengine/issues/149)) ([98da102](https://github.com/adobe/htlengine/commit/98da102aef8ae46ac6806489a965d28d9e3f3604)), closes [#138](https://github.com/adobe/htlengine/issues/138)
+
 ## [4.0.1](https://github.com/adobe/htlengine/compare/v4.0.0...v4.0.1) (2020-02-25)
 
 
