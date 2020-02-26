@@ -10,7 +10,6 @@
  * governing permissions and limitations under the License.
  */
 
-const co = require('co');
 const format = require('./format');
 const formatUri = require('./format_uri');
 const formatXss = require('./format_xss');
@@ -70,8 +69,16 @@ module.exports = class Runtime {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  run(fn) {
-    return co(fn);
+  async run(fn) {
+    const gen = fn();
+    let ret = {};
+    for (;;) {
+      // eslint-disable-next-line no-await-in-loop
+      ret = gen.next(await ret.value);
+      if (ret.done) {
+        return ret.value;
+      }
+    }
   }
 
   withDomFactory(domFactory) {
@@ -115,12 +122,41 @@ module.exports = class Runtime {
     };
   }
 
-  use(Mod, options) {
+  async use(Mod, options) {
     const mod = new Mod();
     Object.keys(options).forEach((k) => {
       mod[k] = options[k];
     });
-    return mod.use(this._globals);
+    return new Proxy(await mod.use(this._globals), {
+      has(target, key) {
+        if (!(key in target)) {
+          // eslint-disable-next-line no-param-reassign
+          key = `get${key.charAt(0).toUpperCase()}${key.substring(1)}`;
+          return key in target;
+        }
+        return true;
+      },
+
+      get(target, prop, receiver) {
+        if (prop === 'then') {
+          return Reflect.get(target, prop, receiver);
+        }
+        if (!(prop in target)) {
+          if (!prop.startsWith('get')) {
+            // eslint-disable-next-line no-param-reassign
+            prop = `get${prop.charAt(0).toUpperCase()}${prop.substring(1)}`;
+          }
+        }
+        if (prop in target) {
+          let value = target[prop];
+          if (typeof value === 'function') {
+            value = value();
+          }
+          return value;
+        }
+        return undefined;
+      },
+    });
   }
 
   resource(uri) {
@@ -135,12 +171,12 @@ module.exports = class Runtime {
     return formatXss(value, context, hint);
   }
 
-  call(fn, args) {
+  async call(fn, args) {
     if (!fn) {
       throw new Error('Template call that has not been registered.');
     }
     const callable = fn.bind(this, args);
-    return co(callable);
+    return this.run(callable);
   }
 
   template(name, callback) {
