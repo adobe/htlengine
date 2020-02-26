@@ -203,4 +203,43 @@ describe('Compiler Tests (API)', () => {
     src = src.replace(/\\\\/g, '/');
     assert.equal(src, exp);
   });
+
+  it('generates fragments with or without body', async () => {
+    const dir = path.resolve(__dirname, 'templates');
+    const comp = new Compiler()
+      .withRuntimeGlobalName('it')
+      .withDirectory(dir);
+    const htl = fs.readFileSync(path.resolve(dir, 'fragment.htl'), 'utf-8');
+    const exp1 = fs.readFileSync(path.resolve(dir, 'fragment_body.html'), 'utf-8');
+    const exp2 = fs.readFileSync(path.resolve(dir, 'fragment_frag.html'), 'utf-8');
+    const main = await comp.compileToFunction(htl, dir);
+
+    const r1 = new Runtime()
+      .setGlobal({
+        title: 'Test',
+        children: [1, 2, 3],
+      })
+      .withDomFactory(new Runtime.VDOMFactory(new JSDOM().window.document.implementation)
+        .withKeepFragment(false));
+
+    const result1 = await main(r1);
+    assert.equal(result1.outerHTML.trim(), exp1.trim());
+
+    const r2 = new Runtime()
+      .setGlobal({
+        title: 'Test',
+        children: [1, 2, 3],
+      })
+      .withDomFactory(new Runtime.VDOMFactory(new JSDOM().window.document.implementation)
+        .withKeepFragment(true));
+
+    const result2 = await main(r2);
+    // since the document fragment has no innerHTML, let build it here
+    let html = '';
+    for (let i = 0; i < result2.children.length; i += 1) {
+      html += result2.children[i].outerHTML;
+      html += '\n';
+    }
+    assert.equal(html.trim(), exp2.trim());
+  });
 });
