@@ -43,4 +43,22 @@
 ^^^
 41:     $.dom.append($n, var_0);
 #
+### get like function
+#
+<div data-sly-use.page="${'./use_spec/test_page.js'}">text: ${page.text}</div>
+===
+<div>text: some text</div>
+#
+### normal function
+#
+<div data-sly-use.page="${'./use_spec/test_page.js'}"><button enabled="${page.isBold}">bold</button></div>
+===
+<div><button enabled>bold</button></div>
+#
+### async function
+#
+<div data-sly-use.page="${'./use_spec/test_page.js'}">delayed: ${page.delayedText}</div>
+===
+<div>delayed: delayed hello.</div>
+#
 ###

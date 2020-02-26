@@ -156,8 +156,10 @@ module.exports = class ExpressionFormatter {
     } else if (node instanceof RuntimeCall) {
       // special handling for xss. todo: make more generic
       let delim = '';
-      if (node.functionName === 'xss' || node.functionName === 'listInfo') {
-        this.result += `$.${node.functionName}(`;
+      if (node.functionName === 'xss') {
+        this.result += 'yield $.xss(';
+      } else if (node.functionName === 'listInfo') {
+        this.result += '$.listInfo(';
       } else if (node.functionName === 'use') {
         this.result += 'yield $.use(';
       } else if (node.functionName === 'call') {

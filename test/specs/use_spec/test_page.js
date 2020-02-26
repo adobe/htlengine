@@ -22,6 +22,17 @@ module.exports = class MyUseClass {
       get 'jcr:etag'() {
         return '1234';
       },
+      getText() {
+        return 'some text';
+      },
+      isBold() {
+        return true;
+      },
+      delayedText() {
+        return new Promise((resolve) => {
+          setTimeout(() => resolve('delayed hello.'), 10);
+        });
+      },
     };
   }
 };
