@@ -25,12 +25,26 @@ module.exports = class VDOMFactory extends DOMFactory {
     this._usedNodes = [];
   }
 
+  /**
+   * If set to {@code true}, calling {@link #end()} will keep the document fragment if it exists.
+   * Otherwise a `<body>` element is returned.
+   * @param {boolean} value flag that dictates the return behaviour.
+   * @returns {VDOMFactory} this.
+   */
+  withKeepFragment(value) {
+    this._keepFragment = value;
+    return this;
+  }
+
   start() {
     return this._root;
   }
 
   end() {
     if (this._isFragment) {
+      if (this._keepFragment) {
+        return this._root;
+      }
       this._doc.body.appendChild(this._root);
       return this._doc.body;
     }

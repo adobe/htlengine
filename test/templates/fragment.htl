@@ -1,0 +1,6 @@
+<div>
+    This
+    is a ${it.title}.
+    all right
+</div>
+<div data-sly-list="${it.children}"><div class="container-fluid">${item}</div></div>
