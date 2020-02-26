@@ -158,4 +158,35 @@ foo,
 ===
 <div>\"'</div>
 #
-###
+### relational string
+#
+${'a' in 'abc'}
+${'ab' in 'abc'}
+${'bc' in 'abc'}
+${'abc' in 'abc'}
+${'d' in 'abc'}
+===
+true
+true
+true
+true
+false
+#
+### relational array
+#
+${'Apple' in properties.fruits}
+${'Banana' in properties.fruits}
+${'Coconut' in properties.fruits}
+===
+true
+true
+false
+#
+### relational key
+#
+${'title' in properties}
+${'nokey' in properties}
+===
+true
+false
+#

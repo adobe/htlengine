@@ -78,18 +78,24 @@ option returns [String name, ExpressionNode value]
 
 
 exprNode returns [ExpressionNode node]
-    :   condition=binaryOp TERNARY_Q_OP thenBranch=binaryOp TERNARY_BRANCHES_OP elseBranch=binaryOp
+    :   condition=orBinaryOp TERNARY_Q_OP thenBranch=orBinaryOp TERNARY_BRANCHES_OP elseBranch=orBinaryOp
         {$node = new TernaryOperation($condition.node, $thenBranch.node, $elseBranch.node);}
-    |   binaryOp {$node = $binaryOp.node;}
+    |   orBinaryOp {$node = $orBinaryOp.node;}
     ;
 
-binaryOp returns [ExpressionNode node] //is there any priority precedence between AND & OR ?
+orBinaryOp returns [ExpressionNode node]
+    :   left=andBinaryOp { $node = $left.node; }
+        (OR_OP right=andBinaryOp { $node = new BinaryOperation(BinaryOperator.OR, $node, $right.node); })*
+    ;
+
+andBinaryOp returns [ExpressionNode node]
+    :   left=inBinaryOp { $node = $left.node; }
+        (AND_OP right=inBinaryOp { $node = new BinaryOperation(BinaryOperator.AND, $node, $right.node); })*
+    ;
+
+inBinaryOp returns [ExpressionNode node]
     :   left=comparisonTerm { $node = $left.node; }
-        (operator right=comparisonTerm { $node = new BinaryOperation($operator.op, $node, $right.node); })*
-    ;
-
-operator returns [BinaryOperator op]
-    :    AND_OP { $op = BinaryOperator.AND; } | OR_OP { $op = BinaryOperator.OR; }
+        (IN_OP right=comparisonTerm { $node = new BinaryOperation(BinaryOperator.IN, $node, $right.node); })*
     ;
 
 comparisonTerm returns [ExpressionNode node]

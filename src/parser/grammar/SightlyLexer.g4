@@ -44,6 +44,8 @@ OR_OP: '||';
 
 NOT_OP: '!';
 
+IN_OP: 'in';
+
 COMMA: ',';
 
 ARRAY_START: '[';
