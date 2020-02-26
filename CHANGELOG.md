@@ -1,3 +1,16 @@
+# [4.2.0](https://github.com/adobe/htlengine/compare/v4.1.1...v4.2.0) (2020-02-26)
+
+
+### Bug Fixes
+
+* **htl:** add iteration control for data-sly-list ([656c99a](https://github.com/adobe/htlengine/commit/656c99a8b88ac79888031ccf0c95a2c6022f55a9))
+* **htl:** allow negative numbers in htl expressions ([6b21df4](https://github.com/adobe/htlengine/commit/6b21df49151125529e1524059652b5356c5201fb))
+
+
+### Features
+
+* **htl:** implement data-sly-set ([e380939](https://github.com/adobe/htlengine/commit/e380939ee55332be916d9cf8e1773542a47e4752))
+
 ## [4.1.1](https://github.com/adobe/htlengine/compare/v4.1.0...v4.1.1) (2020-02-26)
 
 
