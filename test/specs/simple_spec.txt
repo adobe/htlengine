@@ -190,3 +190,10 @@ ${'nokey' in properties}
 true
 false
 #
+### negative numbers
+#
+${-1}
+===
+-1
+#
+###

@@ -43,7 +43,7 @@ const TESTS = {
     { s: '${42}' },
     { s: '${\'string\'}' },
     { s: '${"string"}', r: '${\'string\'}' },
-    { s: '${[1, 2, 3, true, \'string\']}' },
+    { s: '${[1, -2, 3, 4.1, -5.3, true, \'string\']}' },
   ],
   'Logic Operators': [
     { s: '${varOne && !(varTwo || varThree)}', r: '${varOne&&!(varTwo||varThree)}' },
