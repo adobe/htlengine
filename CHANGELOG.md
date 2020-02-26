@@ -1,3 +1,10 @@
+## [4.1.1](https://github.com/adobe/htlengine/compare/v4.1.0...v4.1.1) (2020-02-26)
+
+
+### Bug Fixes
+
+* **htl:** ensure that templates have access to global variables ([#152](https://github.com/adobe/htlengine/issues/152)) ([19d6910](https://github.com/adobe/htlengine/commit/19d6910796f21770b09ae1eec5dcd53bb27cb069)), closes [#133](https://github.com/adobe/htlengine/issues/133)
+
 # [4.1.0](https://github.com/adobe/htlengine/compare/v4.0.3...v4.1.0) (2020-02-26)
 
 
