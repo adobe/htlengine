@@ -13,7 +13,7 @@
 // declared dependencies
 const fse = require('fs-extra');
 // local modules
-const engine = require('../src/main');
+const engine = require('./main');
 
 (async () => {
   const filename = process.argv[2];
