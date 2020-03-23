@@ -1,3 +1,10 @@
+## [4.3.1](https://github.com/adobe/htlengine/compare/v4.3.0...v4.3.1) (2020-03-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency fs-extra to v9 ([a779c81](https://github.com/adobe/htlengine/commit/a779c81498887871b6e2dcef1618b8d34f674ea6))
+
 # [4.3.0](https://github.com/adobe/htlengine/compare/v4.2.0...v4.3.0) (2020-02-26)
 
 
