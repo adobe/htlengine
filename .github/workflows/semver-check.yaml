@@ -1,0 +1,15 @@
+on:
+  push:
+    branches-ignore:
+      - 'master'
+
+jobs:
+  ci_trigger:
+    runs-on: ubuntu-latest
+    name: Comment Semantic Release Status
+    steps:
+      - name: Comment
+        id: comment
+        uses: adobe-rnd/github-semantic-release-comment-action@master
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
