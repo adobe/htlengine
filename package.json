@@ -42,14 +42,14 @@
     "eslint-plugin-import": "2.20.2",
     "ghooks": "2.0.4",
     "jsdom": "16.2.2",
-    "lint-staged": "10.1.6",
-    "mocha": "7.1.1",
+    "lint-staged": "10.1.7",
+    "mocha": "7.1.2",
     "mocha-junit-reporter": "1.23.3",
     "nyc": "15.0.1",
     "rehype-stringify": "7.0.0",
-    "remark-parse": "8.0.1",
+    "remark-parse": "8.0.2",
     "remark-rehype": "6.0.0",
-    "semantic-release": "17.0.6"
+    "semantic-release": "17.0.7"
   },
   "lint-staged": {
     "*.js": "eslint"
