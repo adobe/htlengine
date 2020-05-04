@@ -22,6 +22,7 @@ const { JSDOM } = require('jsdom');
 const Runtime = require('../src/runtime/Runtime');
 const fsResourceLoader = require('../src/runtime/fsResourceLoader');
 const Compiler = require('../src/compiler/Compiler');
+const TemplateLoader = require('../src/compiler/TemplateLoader.js');
 
 function serializeDom(node) {
   if (node.doctype) {
@@ -80,14 +81,15 @@ function runTests(specs, typ = '', runtimeFn = () => {}, resultFn = (ret) => ret
     const sourceFile = path.resolve(__dirname, 'specs', filename);
     const tests = readTests(sourceFile);
     const outputDir = path.join(__dirname, 'generated');
+    const rootProject1 = path.join(__dirname, 'specs', 'template_spec', 'jcr_root');
     try {
       fs.mkdirSync(outputDir);
     } catch (e) {
       // ignore
     }
-
     const compiler = new Compiler()
       .withDirectory(outputDir)
+      .withTemplateLoader(TemplateLoader([outputDir, rootProject1]))
       .withRuntimeVar(Object.keys(payload))
       .withSourceFile(sourceFile)
       .withSourceMap(true);
