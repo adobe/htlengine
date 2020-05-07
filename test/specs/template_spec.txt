@@ -89,4 +89,12 @@ blah Hello, world.
     <h1>This is the title</h1>
 </div>
 #
+### template works on multiple roots
+#
+<div data-sly-use.lib="project1/template.htl" data-sly-call="${lib.tmpl}"></div>
+===
+<div>
+    <h1>Project This is the title</h1>
+</div>
+#
 ###

@@ -11,11 +11,13 @@
  */
 
 const Compiler = require('./compiler/Compiler.js');
+const createTemplateLoader = require('./compiler/TemplateLoader.js');
 const Runtime = require('./runtime/Runtime.js');
 const resly = require('./runtime/resly.js');
 
 module.exports = Object.freeze({
   Compiler,
   Runtime,
+  createTemplateLoader,
   resly,
 });

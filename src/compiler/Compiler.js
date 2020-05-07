@@ -10,6 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
+/* eslint-disable no-await-in-loop */
+
 // built-in modules
 const path = require('path');
 // declared dependencies
@@ -25,6 +27,7 @@ const VariableBinding = require('../parser/commands/VariableBinding');
 const RuntimeCall = require('../parser/htl/nodes/RuntimeCall');
 const Identifier = require('../parser/htl/nodes/Identifier');
 const FunctionBlock = require('../parser/commands/FunctionBlock');
+const TemplateLoader = require('./TemplateLoader.js');
 
 const DEFAULT_TEMPLATE = 'JSCodeTemplate.js';
 const RUNTIME_TEMPLATE = 'JSRuntimeTemplate.js';
@@ -59,14 +62,14 @@ module.exports = class Compiler {
     this._sourceFile = null;
     this._sourceOffset = 0;
     this._moduleImportGenerator = Compiler.defaultModuleGenerator;
+    this._templateLoader = TemplateLoader('.');
   }
 
   /**
    * @deprecated use {@link #withDirectoty()} instead.
    */
   withOutputDirectory(dir) {
-    this._dir = dir;
-    return this;
+    return this.withDirectory(dir);
   }
 
   /**
@@ -76,6 +79,7 @@ module.exports = class Compiler {
    */
   withDirectory(dir) {
     this._dir = dir;
+    this._templateLoader = TemplateLoader(dir);
     return this;
   }
 
@@ -154,6 +158,15 @@ module.exports = class Compiler {
    */
   withModuleImportGenerator(fn) {
     this._moduleImportGenerator = fn;
+    return this;
+  }
+
+  /**
+   * Sets the function that loads the templates.
+   * @param {function} fn the async function taking the baseDir and file name.
+   */
+  withTemplateLoader(fn) {
+    this._templateLoader = fn;
     return this;
   }
 
@@ -252,14 +265,11 @@ module.exports = class Compiler {
       const c = commands[i];
       if (c instanceof TemplateReference) {
         if (c.isTemplate()) {
-          let templatePath = path.resolve(baseDir, c.filename);
-          // eslint-disable-next-line no-await-in-loop
-          if (!(await fse.pathExists(templatePath))) {
-            templatePath = path.resolve(this._dir, c.filename);
-          }
-          // eslint-disable-next-line no-await-in-loop
-          const templateSource = await fse.readFile(templatePath, 'utf-8');
-          // eslint-disable-next-line no-await-in-loop
+          const {
+            data: templateSource,
+            path: templatePath,
+          } = await this._templateLoader(baseDir, c.filename);
+
           const res = await this._parse(templateSource, path.dirname(templatePath), mods);
 
           // add recursive templates, if any.
