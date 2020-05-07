@@ -1,3 +1,10 @@
+# [4.4.0](https://github.com/adobe/htlengine/compare/v4.3.1...v4.4.0) (2020-05-07)
+
+
+### Features
+
+* **compiler:** add ability to specify template loader ([#173](https://github.com/adobe/htlengine/issues/173)) ([076ad15](https://github.com/adobe/htlengine/commit/076ad15a637009e9bdc3621aed814515fe666f6a)), closes [#172](https://github.com/adobe/htlengine/issues/172)
+
 ## [4.3.1](https://github.com/adobe/htlengine/compare/v4.3.0...v4.3.1) (2020-03-23)
 
 
