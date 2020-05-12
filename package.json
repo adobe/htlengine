@@ -4,7 +4,10 @@
   "description": "Javascript Based HTL (Sightly) parser",
   "main": "src/index.js",
   "license": "Apache-2.0",
-  "repository": "https://github.com/adobe/htlengine",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/htlengine.git"
+  },
   "engines": {
     "node": ">=10.13 <11.0 || >=12.11.1 <13.0"
   },
@@ -58,5 +61,9 @@
     "ghooks": {
       "pre-commit": "npx lint-staged"
     }
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/adobe/htlengine/issues"
+  },
+  "homepage": "https://github.com/adobe/htlengine#readme"
 }
