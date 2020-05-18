@@ -140,4 +140,11 @@
 ===
 <div class="the content"></div>
 #
+### allow for attributes without value
+### TODO: Update after JSDOM bug will be fixed https://github.com/jsdom/jsdom/issues/2977
+#
+<input type="checkbox" checked disabled>
+===
+<input type="checkbox" checked="" disabled="">
+#
 ###
