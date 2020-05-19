@@ -141,7 +141,7 @@ module.exports = class VDOMFactory extends DOMFactory {
   }
 
   attr(node, name, value) {
-    node.setAttribute(name, value);
+    node.setAttribute(name, value != null ? value : '');
   }
 
   push(parent, node) {

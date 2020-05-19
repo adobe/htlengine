@@ -54,7 +54,7 @@ module.exports = class HtmlDOMFactory extends DOMFactory {
   }
 
   attr(node, name, value, context) {
-    if (value === true) {
+    if (value === true || value === null) {
       this._out(` ${name}`);
       return;
     }
