@@ -1,3 +1,10 @@
+## [4.4.1](https://github.com/adobe/htlengine/compare/v4.4.0...v4.4.1) (2020-05-19)
+
+
+### Bug Fixes
+
+* **html:** Attributes without value are treated as attributes with value = 'true' ([c50cf66](https://github.com/adobe/htlengine/commit/c50cf6669e6deafa674624d17cfe3302760a2879)), closes [#177](https://github.com/adobe/htlengine/issues/177)
+
 # [4.4.0](https://github.com/adobe/htlengine/compare/v4.3.1...v4.4.0) (2020-05-07)
 
 
