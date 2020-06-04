@@ -167,11 +167,11 @@ module.exports = class Runtime {
     });
   }
 
-  resource(uri) {
+  resource(uri, options) {
     if (!this._resourceLoader) {
       return '';
     }
-    return this._resourceLoader(this, uri);
+    return this._resourceLoader(this, uri, options);
   }
 
   // eslint-disable-next-line class-methods-use-this
