@@ -1,3 +1,10 @@
+# [4.5.0](https://github.com/adobe/htlengine/compare/v4.4.1...v4.5.0) (2020-06-05)
+
+
+### Features
+
+* **runtime:** pass expression options to resource loader ([92e9ae4](https://github.com/adobe/htlengine/commit/92e9ae47ceabfac0287a2a45f533d81381ee849b)), closes [#186](https://github.com/adobe/htlengine/issues/186) [#187](https://github.com/adobe/htlengine/issues/187)
+
 ## [4.4.1](https://github.com/adobe/htlengine/compare/v4.4.0...v4.4.1) (2020-05-19)
 
 
