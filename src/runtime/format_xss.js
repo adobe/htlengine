@@ -13,8 +13,8 @@
 const xss = require('./xss_api');
 
 const VALID_ATTRIBUTE = /^[a-zA-Z_:][-a-zA-Z0-9_:.]*$/;
-const BLACKLIST_ATTRIBUTE = /^(style|(on.*))$/;
-const ELEMENT_NAME_WHITELIST = [
+const REJECTLIST_ATTRIBUTE = /^(style|(on.*))$/;
+const ELEMENT_NAME_ACCEPTLIST = [
   'a', 'abbbr', 'address', 'article', 'aside',
   'b', 'bdi', 'bdo', 'blockquote', 'br', 'caption',
   'cite', 'code', 'col', 'colgroup', 'data', 'dd',
@@ -37,7 +37,7 @@ function isUriAttribute(name) {
 
 function filterAttributeName(name) {
   const trimmedName = (name || '').trim();
-  if (VALID_ATTRIBUTE.test(trimmedName) && !BLACKLIST_ATTRIBUTE.test(trimmedName)) {
+  if (VALID_ATTRIBUTE.test(trimmedName) && !REJECTLIST_ATTRIBUTE.test(trimmedName)) {
     return name;
   }
   return '';
@@ -52,7 +52,7 @@ function escapeAttributeValue(input, attributeName) {
 
 function filterElementName(input) {
   const trimmedInput = (input || '').trim();
-  if (trimmedInput.toLowerCase() in ELEMENT_NAME_WHITELIST) {
+  if (trimmedInput.toLowerCase() in ELEMENT_NAME_ACCEPTLIST) {
     return trimmedInput;
   }
   return 'div';
