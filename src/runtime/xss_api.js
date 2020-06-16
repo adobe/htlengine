@@ -232,7 +232,6 @@ const CSS_TOKEN = new RegExp(_CSS_TOKEN, 'i');
 // const NUMBER = new RegExp(_NUMBER);
 // const NON_ASCII = new RegExp(_NON_ASCII);
 
-
 /**
  * Provides filtering against cross-site scripting attacks
  */
