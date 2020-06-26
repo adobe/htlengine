@@ -208,7 +208,7 @@ module.exports = class Runtime {
 
   exec(name, value, arg0, arg1) {
     if (name === 'join') {
-      return value.join(arg0 || ', ');
+      return Array.isArray(value) ? value.join(arg0 || ', ') : value;
     }
 
     if (name === 'format') {
