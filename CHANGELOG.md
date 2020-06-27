@@ -1,3 +1,10 @@
+## [4.5.1](https://github.com/adobe/htlengine/compare/v4.5.0...v4.5.1) (2020-06-27)
+
+
+### Bug Fixes
+
+* allow to join strings ([#196](https://github.com/adobe/htlengine/issues/196)) ([#197](https://github.com/adobe/htlengine/issues/197)) ([b6b067f](https://github.com/adobe/htlengine/commit/b6b067f24c42c091d01d040bd4c999e27e71c73e))
+
 # [4.5.0](https://github.com/adobe/htlengine/compare/v4.4.1...v4.5.0) (2020-06-05)
 
 
