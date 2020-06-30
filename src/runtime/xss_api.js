@@ -136,8 +136,7 @@ function escapeJSToken(input) {
 
 function sanitizeURL(url) {
   try {
-    const decodedUrl = decodeURIComponent(url);
-    if (XRegExp(RELATIVE_REF).test(decodedUrl) || XRegExp(URI).test(decodedUrl)) {
+    if (XRegExp(RELATIVE_REF).test(url) || XRegExp(URI).test(url)) {
       return url;
     }
   } catch (e) {

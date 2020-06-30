@@ -33,13 +33,14 @@
     <li>${xss.imgTag5}</li>
     <li><img src="fake.jpg" onerror="${xss.eventHandler}"/></li>
   </ul>
-  ${xss.scriptTag1}
-  ${xss.scriptTag2}
-  ${xss.scriptTag3}
+${xss.scriptTag1}
+${xss.scriptTag2}
+${xss.scriptTag3}
   <form action="${xss.breakAttr}" onsubmit="${xss.eventHandler}">
     <input name="test" value="${xss.breakAttr}"/>
   </form>
   <img src="${xss.url5}/bla.jpg" />
   <img src="${xss.url6}" />
+  <img src="${xss.url7}" />
 </body>
 </html>
