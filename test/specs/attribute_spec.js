@@ -17,6 +17,7 @@ module.exports = {
   },
   'jcr:content': 'hello again',
   quotes: 'Hello, "World & Mars!"',
+  colorName: 'red',
   foobar: {
     id: 'foo',
     class: 'bar',

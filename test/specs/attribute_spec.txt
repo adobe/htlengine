@@ -19,6 +19,14 @@
 51:     if (!$.col.empty(var_attrValue_datetime2)) {
 56:     $.dom.append($n, var_3);
 #
+### test style attribute
+#
+<a href="#whatever" style="color: ${colorName @ context='styleToken'};">Link</a>
+<a href="#whatever" data-sly-attribute.style="color: ${colorName @ context='styleToken'};">Link</a>
+===
+<a href="#whatever" style="color&#x3a; red&#x3b;">Link</a>
+<a href="#whatever" style="color&#x3a; red&#x3b;">Link</a>
+#
 ### keep existing attribute
 #
 <div title="Hello &amp; world."></div>
