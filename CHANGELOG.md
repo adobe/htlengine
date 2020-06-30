@@ -1,3 +1,10 @@
+## [4.5.2](https://github.com/adobe/htlengine/compare/v4.5.1...v4.5.2) (2020-06-30)
+
+
+### Bug Fixes
+
+* **xss:** test xss against original form ([#200](https://github.com/adobe/htlengine/issues/200)) ([56f6733](https://github.com/adobe/htlengine/commit/56f6733d3b9f1b1535d2ad738e520200ed5f9e90)), closes [#183](https://github.com/adobe/htlengine/issues/183)
+
 ## [4.5.1](https://github.com/adobe/htlengine/compare/v4.5.0...v4.5.1) (2020-06-27)
 
 
