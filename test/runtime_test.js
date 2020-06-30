@@ -59,6 +59,7 @@ const GLOBALS = {
     url4: 'javascript:alert(String.fromCharCode(48))', // avoiding quotes
     url5: '/foo', // rel part
     url6: 'https://www.primordialsoup.life/image.png', // absolute url
+    url7: 'https://via.placeholder.com/1280x550&text=desktop%201280x550', // escaped url
     breakAttr: '"><script>alert(0);</script>', // break out of html tag
     eventHandler: 'alert(0)',
     imgTag1: '<img src="javascript:alert(0)"/>',
