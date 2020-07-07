@@ -135,36 +135,55 @@ module.exports = class Runtime {
     Object.keys(options).forEach((k) => {
       mod[k] = options[k];
     });
-    return new Proxy(await mod.use(this._globals), {
-      has(target, key) {
-        if (!(key in target)) {
-          // eslint-disable-next-line no-param-reassign
-          key = `get${key.charAt(0).toUpperCase()}${key.substring(1)}`;
-          return key in target;
-        }
-        return true;
-      },
 
-      get(target, prop, receiver) {
-        if (prop === 'then') {
-          return Reflect.get(target, prop, receiver);
-        }
-        if (!(prop in target)) {
-          if (!prop.startsWith('get')) {
+    /**
+     * For every property of the given object this function will
+     * add a camel cased getter property
+     *
+     * For example:
+     * const demo = enhanceWithGetters({ foo: "bar" })
+     * console.log(demo.getFoo); // 'bar'
+     */
+    function enhanceWithGetters(baseObject) {
+      // Use a object without getters and setters for
+      // browser which have no support for Proxy as Proxy
+      // can not be polyfilled e.g. Internet Explorer 11
+      if (typeof Proxy === 'undefined') {
+        return baseObject;
+      }
+      return new Proxy(baseObject, {
+        has(target, key) {
+          if (!(key in target)) {
             // eslint-disable-next-line no-param-reassign
-            prop = `get${prop.charAt(0).toUpperCase()}${prop.substring(1)}`;
+            key = `get${key.charAt(0).toUpperCase()}${key.substring(1)}`;
+            return key in target;
           }
-        }
-        if (prop in target) {
-          let value = target[prop];
-          if (typeof value === 'function') {
-            value = value();
+          return true;
+        },
+
+        get(target, prop, receiver) {
+          if (prop === 'then') {
+            return Reflect.get(target, prop, receiver);
           }
-          return value;
-        }
-        return undefined;
-      },
-    });
+          if (!(prop in target)) {
+            if (!prop.startsWith('get')) {
+              // eslint-disable-next-line no-param-reassign
+              prop = `get${prop.charAt(0).toUpperCase()}${prop.substring(1)}`;
+            }
+          }
+          if (prop in target) {
+            let value = target[prop];
+            if (typeof value === 'function') {
+              value = value();
+            }
+            return value;
+          }
+          return undefined;
+        },
+      });
+    }
+
+    return enhanceWithGetters(await mod.use(this._globals));
   }
 
   resource(uri, options) {
