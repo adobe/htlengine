@@ -1,3 +1,10 @@
+# [4.6.0](https://github.com/adobe/htlengine/compare/v4.5.2...v4.6.0) (2020-07-07)
+
+
+### Features
+
+* **runtime:** Add support for Internet Explorer 11 ([1619c8e](https://github.com/adobe/htlengine/commit/1619c8edd282f9b9a250f9330ce6461d0706d4b4)), closes [#205](https://github.com/adobe/htlengine/issues/205)
+
 ## [4.5.2](https://github.com/adobe/htlengine/compare/v4.5.1...v4.5.2) (2020-06-30)
 
 
