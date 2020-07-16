@@ -1,3 +1,10 @@
+## [4.6.1](https://github.com/adobe/htlengine/compare/v4.6.0...v4.6.1) (2020-07-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency lodash to v4.17.19 [security] ([#212](https://github.com/adobe/htlengine/issues/212)) ([46a032d](https://github.com/adobe/htlengine/commit/46a032d35548276db017fda338fac3843b046cfa))
+
 # [4.6.0](https://github.com/adobe/htlengine/compare/v4.5.2...v4.6.0) (2020-07-07)
 
 
