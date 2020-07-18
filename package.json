@@ -38,7 +38,7 @@
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/git": "9.0.0",
     "@semantic-release/github": "7.0.7",
-    "codecov": "3.7.0",
+    "codecov": "3.7.1",
     "eslint": "7.4.0",
     "eslint-config-airbnb-base": "14.2.0",
     "eslint-plugin-header": "3.0.0",
@@ -50,7 +50,7 @@
     "mocha-junit-reporter": "2.0.0",
     "nyc": "15.1.0",
     "rehype-stringify": "8.0.0",
-    "remark-parse": "8.0.2",
+    "remark-parse": "8.0.3",
     "remark-rehype": "7.0.0",
     "semantic-release": "17.1.1"
   },
