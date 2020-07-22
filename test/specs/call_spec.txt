@@ -106,9 +106,9 @@
 </div>
 </div>
 ^^^
-39:     yield $.call(bar, [$n, {"a": a, }]);
-52:     $.dom.append($n, var_0);
-65:     yield $.call(foo, [$n, {"a": 123, }]);
+40:     yield $.call(bar, [$n, {"a": a, }]);
+54:     $.dom.append($n, var_0);
+66:     yield $.call(foo, [$n, {"a": 123, }]);
 #
 ### sightly call function can call itself recursively
 #

@@ -18,6 +18,7 @@ module.exports = class DomHandler {
     this._gen = generator;
     this._out = generator.out.bind(generator);
     this._globalTemplates = {};
+    this._currentTemplate = null;
   }
 
   beginDocument() {
@@ -78,23 +79,29 @@ module.exports = class DomHandler {
   }
 
   functionStart(cmd) {
-    const exp = ExpressionFormatter.escapeVariable(ExpressionFormatter.format(cmd.expression));
-    const id = cmd.id || 'global';
-    const functionName = `_template_${id}_${exp.replace(/\./g, '_')}`;
-    this._out(`$.template('${id}', '${exp}', function* ${functionName}(args) { `);
+    const name = ExpressionFormatter.escapeVariable(ExpressionFormatter.format(cmd.expression));
+    const id = cmd.id || this._gen.scriptId;
+    const functionName = `_template_${id.replace(/[^\w]/g, '_')}_${name.replace(/\./g, '_')}`;
+    // this._out(`${exp} = $.template('${id}', '${exp}', function* ${functionName}(args) { `);
+    this._out(`${name} = function* ${functionName}(args) { `);
     this._gen.indent();
     cmd.args.forEach((arg) => {
       this._out(`const ${ExpressionFormatter.escapeVariable(arg)} = args[1]['${arg}'] || '';`);
     });
     this._out('let $t, $n = args[0];');
-    if (!cmd.id) {
-      this._globalTemplates[exp] = true;
-    }
+    this._globalTemplates[name] = id;
+    this._currentTemplate = {
+      id,
+      name,
+      functionName,
+    };
   }
 
   functionEnd() {
     this._gen.outdent();
-    this._out('});');
+    this._out('};');
+    const { id, name } = this._currentTemplate;
+    this._out(`$.template('${id}', '${name}', ${name});`);
   }
 
   functionCall(cmd) {

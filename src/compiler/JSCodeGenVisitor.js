@@ -14,6 +14,7 @@ const OutText = require('../parser/commands/OutText');
 const VariableBinding = require('../parser/commands/VariableBinding');
 const FileReference = require('../parser/commands/FileReference');
 const FunctionBlock = require('../parser/commands/FunctionBlock');
+const ExternalCode = require('../parser/commands/ExternalCode');
 const FunctionCall = require('../parser/commands/FunctionCall');
 const Conditional = require('../parser/commands/Conditional');
 const Loop = require('../parser/commands/Loop');
@@ -39,9 +40,12 @@ module.exports = class JSCodeGenVisitor {
     this._templateStack = [];
     this._sourceFile = null;
     this._indentLevel = 0;
+    this._templateIndentLevel = 0;
     this._indents = [];
     this._dom = new DomHandler(this);
     this._enableSourceMaps = false;
+    this._scriptId = 'global';
+    this._runtimeGlobals = [];
   }
 
   withIndent(delim) {
@@ -78,6 +82,20 @@ module.exports = class JSCodeGenVisitor {
     return this;
   }
 
+  withScriptId(id) {
+    this._scriptId = id;
+    return this;
+  }
+
+  withGlobals(value) {
+    this._runtimeGlobals = value;
+    return this;
+  }
+
+  get scriptId() {
+    return this._scriptId;
+  }
+
   indent() {
     this._indent = this._indents[++this._indentLevel] || ''; // eslint-disable-line no-plusplus
     return this;
@@ -105,7 +123,8 @@ module.exports = class JSCodeGenVisitor {
     this._blocks.push(block);
     this._templateStack.push(block);
     this._blk = block;
-    this.setIndent(0);
+    this.setIndent(this._templateIndentLevel);
+    return block;
   }
 
   popBlock() {
@@ -121,18 +140,53 @@ module.exports = class JSCodeGenVisitor {
   process({ commands, templates }) {
     this._dom.beginDocument();
 
+    // create a global block for global templates
+    const globalBlock = this.pushBlock('');
+    this.popBlock();
+
     // first process the main commands
     commands.forEach((c) => {
       c.accept(this);
     });
 
+    // add global vars for templates
+    this.outdent();
+    // eslint-disable-next-line no-underscore-dangle
+    Object.keys(this._dom._globalTemplates).forEach((name) => {
+      if (this._runtimeGlobals.indexOf(name) < 0) {
+        globalBlock.code += `${this._indent}let ${name};\n`;
+        globalBlock.line += 1;
+      }
+    });
+    this.indent();
+    // eslint-disable-next-line no-underscore-dangle
+    this._dom._globalTemplates = [];
+
     // then process the templates
     this._sourceOffset = 0;
+    this._templateIndentLevel = 1;
     Object.values(templates).forEach((t) => {
+      // this is kind of a hack to push code to the template stack
+      const groupBlock = this.pushBlock('');
+      this.outdent();
+      this.out(`(function _template_${t.id.replace(/[^\w]/g, '_')}(){ `);
+      this.popBlock();
       this._sourceFile = t.file;
       t.commands.forEach((c) => {
         c.accept(this);
       });
+      this.pushBlock('');
+      this.outdent();
+      this.out('})();');
+      this.popBlock();
+      // add variable initializers for the template names
+      // eslint-disable-next-line no-underscore-dangle
+      Object.keys(this._dom._globalTemplates).forEach((name) => {
+        groupBlock.code += `${this._indent}let ${name};\n`;
+        groupBlock.line += 1;
+      });
+      // eslint-disable-next-line no-underscore-dangle
+      this._dom._globalTemplates = [];
     });
 
     this._dom.endDocument();
@@ -158,8 +212,6 @@ module.exports = class JSCodeGenVisitor {
       mappings: this._main.map,
       templateCode,
       templateMappings,
-      // eslint-disable-next-line no-underscore-dangle
-      globalTemplateNames: Object.keys(this._dom._globalTemplates),
     };
   }
 
@@ -265,6 +317,10 @@ module.exports = class JSCodeGenVisitor {
       this._dom.doctype(cmd);
     } else if (cmd instanceof Comment) {
       this._dom.comment(cmd);
+    } else if (cmd instanceof ExternalCode) {
+      this.pushBlock('');
+      this.out(cmd.code);
+      this.popBlock();
     } else {
       throw new Error(`unknown command: ${cmd}`);
     }

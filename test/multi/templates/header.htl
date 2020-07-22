@@ -1,0 +1,5 @@
+<template data-sly-template.heading="${@ data}">
+    <h1>${data.title}</h1>
+    <sly data-sly-call="${separator}"/>
+</template>
+<template data-sly-template.separator>--------------------------------------</template>

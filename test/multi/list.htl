@@ -1,0 +1,7 @@
+<sly data-sly-use.template="templates/header.htl" data-sly-call="${template.heading @ data = data}" />
+<sly data-sly-use.lib="templates/templateLib.html"></sly>
+<ul data-sly-use.itemTemplate="templates/item.htl"
+    data-sly-list.item="${data.list}">
+    <li data-sly-call="${itemTemplate.item @  item = item}"></li>
+</ul>
+<div data-sly-call="${lib.placeholder @ value=data.foo}"></div>

@@ -4,3 +4,4 @@ extraction:
       filters:
       - exclude: "src/compiler/JSCodeTemplate.js"
       - exclude: "src/compiler/JSRuntimeTemplate.js"
+      - exclude: "src/compiler/JSPureTemplate.js"

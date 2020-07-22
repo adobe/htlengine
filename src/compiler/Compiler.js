@@ -13,7 +13,6 @@
 /* eslint-disable no-await-in-loop */
 
 const path = require('path');
-const crypto = require('crypto');
 const fse = require('fs-extra');
 const { SourceMapGenerator } = require('source-map');
 const TemplateParser = require('../parser/html/TemplateParser');
@@ -25,11 +24,14 @@ const VariableBinding = require('../parser/commands/VariableBinding');
 const RuntimeCall = require('../parser/htl/nodes/RuntimeCall');
 const Identifier = require('../parser/htl/nodes/Identifier');
 const FunctionBlock = require('../parser/commands/FunctionBlock');
+const ExternalCode = require('../parser/commands/ExternalCode');
 const TemplateLoader = require('./TemplateLoader.js');
 const ScriptResolver = require('./ScriptResolver.js');
+const ExternalTemplateLoader = require('./ExternalTemplateLoader.js');
 
 const DEFAULT_TEMPLATE = 'JSCodeTemplate.js';
 const RUNTIME_TEMPLATE = 'JSRuntimeTemplate.js';
+const PURE_TEMPLATE = 'JSPureTemplate.js';
 
 module.exports = class Compiler {
   /**
@@ -63,6 +65,7 @@ module.exports = class Compiler {
     this._moduleImportGenerator = Compiler.defaultModuleGenerator;
     this._templateLoader = TemplateLoader();
     this._scriptResolver = ScriptResolver('.');
+    this._scriptId = 'global';
   }
 
   /**
@@ -180,6 +183,37 @@ module.exports = class Compiler {
   }
 
   /**
+   * Sets the script id. mostly used for template registration.
+   * @param {string} id the script id.
+   * @returns {Compiler}
+   */
+  withScriptId(id) {
+    this._scriptId = id;
+    return this;
+  }
+
+  /**
+   * Creates a compiler suitable to compile external templates.
+   * @returns {Compiler} a compatible compiler
+   */
+  async createTemplateCompiler(templatePath, outputDirectory, scriptId) {
+    const codeTemplate = await fse.readFile(path.join(__dirname, PURE_TEMPLATE), 'utf-8');
+    const compiler = new Compiler()
+      .withDirectory(path.dirname(templatePath))
+      .withRuntimeGlobalName(this._runtimeGlobal)
+      .withRuntimeVar(this._runtimeGlobals)
+      .withScriptResolver(this._scriptResolver)
+      .withScriptId(scriptId)
+      .withCodeTemplate(codeTemplate);
+
+    const extLoader = ExternalTemplateLoader({
+      compiler,
+      outputDirectory,
+    });
+    return compiler.withTemplateLoader(extLoader);
+  }
+
+  /**
    * Compiles the specified source file and saves the result, overwriting the
    * file name.
    *
@@ -276,13 +310,14 @@ module.exports = class Compiler {
           const templatePath = await this._scriptResolver(baseDir, c.filename);
           let template = templates[templatePath];
           if (!template) {
-            // hash the template path for a somewhat stable id
-            const id = crypto.createHash('md5').update(templatePath, 'utf-8').digest().toString('hex');
+            // use the template path for a somewhat stable id
+            const id = path.relative(process.cwd(), templatePath);
 
             // load template
             const {
               data: templateSource,
-            } = await this._templateLoader(templatePath);
+              code,
+            } = await this._templateLoader(templatePath, id);
 
             // register template
             template = {
@@ -293,25 +328,29 @@ module.exports = class Compiler {
             // eslint-disable-next-line no-param-reassign
             templates[templatePath] = template;
 
-            // parse the template
-            const res = await this._parse(
-              templateSource, path.dirname(templatePath), mods, templates,
-            );
+            if (code) {
+              template.commands.push(new ExternalCode(code));
+            } else {
+              // parse the template
+              const res = await this._parse(
+                templateSource, path.dirname(templatePath), mods, templates,
+              );
 
-            // extract the template functions and discard commands outside the functions
-            let inside = false;
-            res.commands.forEach((cmd) => {
-              if (cmd instanceof FunctionBlock.Start) {
-                inside = true;
-                // eslint-disable-next-line no-param-reassign
-                cmd.id = template.id;
-              } else if (cmd instanceof FunctionBlock.End) {
-                inside = false;
-              } else if (!inside) {
-                return;
-              }
-              template.commands.push(cmd);
-            });
+              // extract the template functions and discard commands outside the functions
+              let inside = false;
+              res.commands.forEach((cmd) => {
+                if (cmd instanceof FunctionBlock.Start) {
+                  inside = true;
+                  // eslint-disable-next-line no-param-reassign
+                  cmd.id = template.id;
+                } else if (cmd instanceof FunctionBlock.End) {
+                  inside = false;
+                } else if (!inside) {
+                  return;
+                }
+                template.commands.push(cmd);
+              });
+            }
           }
           // remember the file id on the use statement
           c.id = template.id;
@@ -360,12 +399,14 @@ module.exports = class Compiler {
     });
 
     const {
-      code, templateCode, mappings, templateMappings, globalTemplateNames,
+      code, templateCode, mappings, templateMappings,
     } = new JSCodeGenVisitor()
       .withIndent('  ')
       .withSourceMap(this._sourceMap)
       .withSourceOffset(this._sourceOffset)
       .withSourceFile(this._sourceFile)
+      .withScriptId(this._scriptId)
+      .withGlobals(this._runtimeGlobals)
       .indent()
       .process(parseResult);
 
@@ -380,14 +421,6 @@ module.exports = class Compiler {
         exp = Compiler.defaultModuleGenerator(this._dir, name, file);
       }
       imports += `  ${exp}\n`;
-    });
-    // add global template names
-    globalTemplateNames.forEach((ident) => {
-      if (this._runtimeGlobals.indexOf(ident) >= 0) {
-        imports += `  ${ident} = $.template('global').${ident};\n`;
-      } else {
-        imports += `  let ${ident} = $.template('global').${ident};\n`;
-      }
     });
 
     let template = this._codeTemplate;
