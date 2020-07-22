@@ -1,3 +1,10 @@
+## [4.6.2](https://github.com/adobe/htlengine/compare/v4.6.1...v4.6.2) (2020-07-22)
+
+
+### Bug Fixes
+
+* **runtime:** runtime cannot be executed twice ([#218](https://github.com/adobe/htlengine/issues/218)) ([5a5e6ef](https://github.com/adobe/htlengine/commit/5a5e6ef31e642e8547fdeeaf1b08a95dc9951dba)), closes [#211](https://github.com/adobe/htlengine/issues/211)
+
 ## [4.6.1](https://github.com/adobe/htlengine/compare/v4.6.0...v4.6.1) (2020-07-16)
 
 
