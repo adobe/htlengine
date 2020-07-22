@@ -13,8 +13,7 @@ const DOMFactory = require('./DOMFactory');
 const formatXss = require('./format_xss');
 
 module.exports = class HtmlDOMFactory extends DOMFactory {
-  constructor() {
-    super();
+  start() {
     this._stack = [];
     this._buf = '';
   }
