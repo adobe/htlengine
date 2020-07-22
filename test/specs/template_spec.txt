@@ -9,8 +9,8 @@ blah 1
 #
 ### use external template lib and invoke template 2
 #
-<div data-sly-call="${lib.two}"></div>
 <sly data-sly-use.lib="template_spec/templateLib.html"></sly>
+<div data-sly-call="${lib.two}"></div>
 ===
 <div>blah 2</div>
 
@@ -58,13 +58,13 @@ blah Hello, world.
 
 </div>
 ^^^
-40:     $.dom.append($n, var_0);
-51:     $.dom.append($n, var_0);
-62:       yield $.call($.template().comps["button"], [$n, {"data": data, }]);
-67:       yield $.call($.template().comps["heading"], [$n, {"data": data, }]);
-78:     $.dom.append($n, var_0);
-85:     yield $.call($.template().lib["lib"], [$n, {"name": "heading", "data": component["data"], }]);
-92:     yield $.call($.template().lib["lib"], [$n, {"name": component["name"], "data": component["data"], }]);
+42:       yield $.call(comps1["button"], [$n, {"data": data, }]);
+47:       yield $.call(comps2["heading"], [$n, {"data": data, }]);
+58:     $.dom.append($n, var_0);
+69:     $.dom.append($n, var_0);
+81:     $.dom.append($n, var_0);
+88:     yield $.call(lib["lib"], [$n, {"name": "heading", "data": component["data"], }]);
+95:     yield $.call(lib["lib"], [$n, {"name": component["name"], "data": component["data"], }]);
 #
 ### template defining and calling another template
 #
@@ -76,10 +76,10 @@ blah Hello, world.
 </div>
 </div>
 ^^^
-40:     $.dom.append($n, var_0);
-57:     $.dom.append($n, var_0);
-65:     yield $.call($.template().lib["bar"], [$n, {"a": a, }]);
-74:     yield $.call($.template().lib["foo"], [$n, {"a": 123, }]);
+46:     $.dom.append($n, var_0);
+55:     yield $.call(lib["bar"], [$n, {"a": a, }]);
+66:     $.dom.append($n, var_0);
+76:     yield $.call(lib["foo"], [$n, {"a": 123, }]);
 #
 ### template can use global var
 #
@@ -97,4 +97,21 @@ blah Hello, world.
     <h1>Project This is the title</h1>
 </div>
 #
+### recursive template calls
+#
+<div data-sly-use.lib="template_spec/group.htl" data-sly-call="${lib.group @ items=page.list}"></div>
+===
+<div><ul><li>item 1</li>
+<li>item 2<ul><li>item 2.1</li>
+<li>item 2.2<ul><li> item 2.2.1</li>
+</ul>
+</li>
+<li>item 2.3</li>
+</ul>
+</li>
+<li>item 2</li>
+</ul>
+</div>
+#
 ###
+#

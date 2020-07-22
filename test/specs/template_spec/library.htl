@@ -1,6 +1,7 @@
-<sly data-sly-use.comps="./button.htl"/>
-<sly data-sly-use.comps="./heading.htl"/>
-<template data-sly-template.lib="${@ name, data}">
-<sly data-sly-test="${name == 'button'}" data-sly-call="${comps.button @ data=data}" />
-<sly data-sly-test="${name == 'heading'}" data-sly-call="${comps.heading @ data=data}" />
+<template
+        data-sly-template.lib="${@ name, data}"
+        data-sly-use.comps1="./button.htl"
+        data-sly-use.comps2="./heading.htl">
+<sly data-sly-test="${name == 'button'}" data-sly-call="${comps1.button @ data=data}" />
+<sly data-sly-test="${name == 'heading'}" data-sly-call="${comps2.heading @ data=data}" />
 </template>

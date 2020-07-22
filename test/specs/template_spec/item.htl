@@ -1,0 +1,3 @@
+<template data-sly-template.item="${@ item='The navigation item'}" data-sly-use.groupTemplate="group.htl"><!--/*
+    */--><li>${item.title}<sly data-sly-test="${item.children.length > 0}" data-sly-call="${groupTemplate.group @ items = item.children}"></sly></li>
+</template>

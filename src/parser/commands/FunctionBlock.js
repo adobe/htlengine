@@ -18,6 +18,15 @@ class Start extends Command {
     super();
     this._expression = expression;
     this._options = options;
+    this._id = null;
+  }
+
+  set id(value) {
+    this._id = value;
+  }
+
+  get id() {
+    return this._id;
   }
 
   get expression() {

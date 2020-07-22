@@ -11,7 +11,7 @@
  */
 
 const Plugin = require('../html/Plugin');
-const TemplateReference = require('../commands/TemplateReference');
+const FileReference = require('../commands/FileReference');
 const MapLiteral = require('../htl/nodes/MapLiteral');
 const StringConstant = require('../htl/nodes/StringConstant');
 
@@ -22,9 +22,9 @@ module.exports = class UsePlugin extends Plugin {
     const variableName = this._signature.getVariableName(DEFAULT_VARIABLE_NAME);
     if (this._expression.root instanceof StringConstant) {
       const lib = this._expression.root.text;
-      stream.write(new TemplateReference(
+      stream.write(new FileReference(
         variableName, lib, [new MapLiteral(this._expression.options)],
-      ));
+      ), true);
       return;
     }
     throw new Error('data-sly-use only supports static references.');

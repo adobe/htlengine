@@ -20,5 +20,22 @@ module.exports = {
   },
   page: {
     title: 'This is the title',
+    list: [
+      { title: 'item 1', children: [] },
+      {
+        title: 'item 2',
+        children: [
+          { title: 'item 2.1', children: [] },
+          {
+            title: 'item 2.2',
+            children: [
+              { title: ' item 2.2.1', children: [] },
+            ],
+          },
+          { title: 'item 2.3', children: [] },
+        ],
+      },
+      { title: 'item 2', children: [] },
+    ],
   },
 };

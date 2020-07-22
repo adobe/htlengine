@@ -12,22 +12,21 @@
 
 /* eslint-disable no-await-in-loop */
 
-// built-in modules
 const path = require('path');
-// declared dependencies
+const crypto = require('crypto');
 const fse = require('fs-extra');
 const { SourceMapGenerator } = require('source-map');
-// local modules
 const TemplateParser = require('../parser/html/TemplateParser');
 const ThrowingErrorListener = require('../parser/htl/ThrowingErrorListener');
 const JSCodeGenVisitor = require('./JSCodeGenVisitor');
 const ExpressionFormatter = require('./ExpressionFormatter');
-const TemplateReference = require('../parser/commands/TemplateReference');
+const FileReference = require('../parser/commands/FileReference');
 const VariableBinding = require('../parser/commands/VariableBinding');
 const RuntimeCall = require('../parser/htl/nodes/RuntimeCall');
 const Identifier = require('../parser/htl/nodes/Identifier');
 const FunctionBlock = require('../parser/commands/FunctionBlock');
 const TemplateLoader = require('./TemplateLoader.js');
+const ScriptResolver = require('./ScriptResolver.js');
 
 const DEFAULT_TEMPLATE = 'JSCodeTemplate.js';
 const RUNTIME_TEMPLATE = 'JSRuntimeTemplate.js';
@@ -62,7 +61,8 @@ module.exports = class Compiler {
     this._sourceFile = null;
     this._sourceOffset = 0;
     this._moduleImportGenerator = Compiler.defaultModuleGenerator;
-    this._templateLoader = TemplateLoader('.');
+    this._templateLoader = TemplateLoader();
+    this._scriptResolver = ScriptResolver('.');
   }
 
   /**
@@ -79,7 +79,7 @@ module.exports = class Compiler {
    */
   withDirectory(dir) {
     this._dir = dir;
-    this._templateLoader = TemplateLoader(dir);
+    this._scriptResolver = ScriptResolver(dir);
     return this;
   }
 
@@ -163,10 +163,19 @@ module.exports = class Compiler {
 
   /**
    * Sets the function that loads the templates.
-   * @param {function} fn the async function taking the baseDir and file name.
+   * @param {function} fn the async function taking the file path.
    */
   withTemplateLoader(fn) {
     this._templateLoader = fn;
+    return this;
+  }
+
+  /**
+   * Sets the function that resolves a script.
+   * @param {function} fn the async function taking the baseDir and file name.
+   */
+  withScriptResolver(fn) {
+    this._scriptResolver = fn;
     return this;
   }
 
@@ -250,56 +259,62 @@ module.exports = class Compiler {
    * @param {String} source the HTL template code
    * @param {String} baseDir the base directory to resolve file references
    * @param {object} mods object with module mappings from use classes
+   * @param {object} templates Object with resolved templates
    * @returns {object} The result object with a `commands` stream and `templates`.
    */
-  async _parse(source, baseDir, mods) {
+  async _parse(source, baseDir, mods, templates = {}) {
     const commands = new TemplateParser()
       .withErrorListener(ThrowingErrorListener.INSTANCE)
       .withDefaultMarkupContext(this._defaultMarkupContext)
       .parse(source);
 
-    const templates = [];
-
     // find any templates references and use classes and process them
     for (let i = 0; i < commands.length; i += 1) {
       const c = commands[i];
-      if (c instanceof TemplateReference) {
+      if (c instanceof FileReference) {
         if (c.isTemplate()) {
-          const {
-            data: templateSource,
-            path: templatePath,
-          } = await this._templateLoader(baseDir, c.filename);
+          const templatePath = await this._scriptResolver(baseDir, c.filename);
+          let template = templates[templatePath];
+          if (!template) {
+            // hash the template path for a somewhat stable id
+            const id = crypto.createHash('md5').update(templatePath, 'utf-8').digest().toString('hex');
 
-          const res = await this._parse(templateSource, path.dirname(templatePath), mods);
+            // load template
+            const {
+              data: templateSource,
+            } = await this._templateLoader(templatePath);
 
-          // add recursive templates, if any.
-          templates.push(...res.templates);
+            // register template
+            template = {
+              id,
+              file: templatePath,
+              commands: [],
+            };
+            // eslint-disable-next-line no-param-reassign
+            templates[templatePath] = template;
 
-          // add this templates
-          const template = {
-            file: templatePath,
-            commands: [],
-          };
-          templates.push(template);
-          // prefix all templates with the variable name of the use class and discard commands
-          // outside functions.
-          let inside = false;
-          res.commands.forEach((cmd) => {
-            if (cmd instanceof FunctionBlock.Start) {
-              inside = true;
-              // eslint-disable-next-line no-underscore-dangle,no-param-reassign
-              cmd._expression = `${c.name}.${cmd._expression}`;
-            } else if (cmd instanceof FunctionBlock.End) {
-              inside = false;
-            } else if (!inside) {
-              return;
-            }
-            template.commands.push(cmd);
-          });
+            // parse the template
+            const res = await this._parse(
+              templateSource, path.dirname(templatePath), mods, templates,
+            );
 
-          // remove the template reference from the stream
-          commands.splice(i, 1);
-          i -= 1;
+            // extract the template functions and discard commands outside the functions
+            let inside = false;
+            res.commands.forEach((cmd) => {
+              if (cmd instanceof FunctionBlock.Start) {
+                inside = true;
+                // eslint-disable-next-line no-param-reassign
+                cmd.id = template.id;
+              } else if (cmd instanceof FunctionBlock.End) {
+                inside = false;
+              } else if (!inside) {
+                return;
+              }
+              template.commands.push(cmd);
+            });
+          }
+          // remember the file id on the use statement
+          c.id = template.id;
         } else {
           let file = c.filename;
           if (file.startsWith('./') || file.startsWith('../')) {
@@ -345,7 +360,7 @@ module.exports = class Compiler {
     });
 
     const {
-      code, templateCode, mappings, templateMappings,
+      code, templateCode, mappings, templateMappings, globalTemplateNames,
     } = new JSCodeGenVisitor()
       .withIndent('  ')
       .withSourceMap(this._sourceMap)
@@ -365,6 +380,14 @@ module.exports = class Compiler {
         exp = Compiler.defaultModuleGenerator(this._dir, name, file);
       }
       imports += `  ${exp}\n`;
+    });
+    // add global template names
+    globalTemplateNames.forEach((ident) => {
+      if (this._runtimeGlobals.indexOf(ident) >= 0) {
+        imports += `  ${ident} = $.template('global').${ident};\n`;
+      } else {
+        imports += `  let ${ident} = $.template('global').${ident};\n`;
+      }
     });
 
     let template = this._codeTemplate;
