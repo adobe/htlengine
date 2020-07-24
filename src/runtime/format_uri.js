@@ -30,6 +30,8 @@ const REMOVE_QUERY = 'removeQuery';
 const URI = require('urijs');
 
 module.exports = function formatUri(uri, opts) {
+  if (!uri) return null;
+
   const u = URI(uri);
   if (SCHEME in opts) {
     u.scheme(opts[SCHEME]);
