@@ -16,7 +16,7 @@ const VALID_ATTRIBUTE = /^[a-zA-Z_:][-a-zA-Z0-9_:.]*$/;
 const BLACKLIST_ATTRIBUTE = /^(style|(on.*))$/;
 const ELEMENT_NAME_WHITELIST = [
   'a', 'abbbr', 'address', 'article', 'aside',
-  'b', 'bdi', 'bdo', 'blockquote', 'br', 'caption',
+  'b', 'bdi', 'bdo', 'blockquote', 'br', 'button', 'caption',
   'cite', 'code', 'col', 'colgroup', 'data', 'dd',
   'del', 'dfn', 'div', 'dl', 'dt', 'em', 'figcaption',
   'figure', 'footer', 'h1', 'h2', 'h3', 'h4',
