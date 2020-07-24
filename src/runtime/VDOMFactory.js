@@ -19,10 +19,7 @@ module.exports = class VDOMFactory extends DOMFactory {
    */
   constructor(domImplementation) {
     super();
-    this._doc = domImplementation.createHTMLDocument();
-    this._isFragment = true;
-    this._root = this._doc.createDocumentFragment();
-    this._usedNodes = [];
+    this._impl = domImplementation;
   }
 
   /**
@@ -37,6 +34,10 @@ module.exports = class VDOMFactory extends DOMFactory {
   }
 
   start() {
+    this._doc = this._impl.createHTMLDocument();
+    this._isFragment = true;
+    this._root = this._doc.createDocumentFragment();
+    this._usedNodes = [];
     return this._root;
   }
 
@@ -141,7 +142,7 @@ module.exports = class VDOMFactory extends DOMFactory {
   }
 
   attr(node, name, value) {
-    node.setAttribute(name, value);
+    node.setAttribute(name, value != null ? value : '');
   }
 
   push(parent, node) {

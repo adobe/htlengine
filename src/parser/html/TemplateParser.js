@@ -14,7 +14,6 @@ const MarkupHandler = require('./MarkupHandler');
 const CommandStream = require('../commands/CommandStream');
 const HTMLParser = require('./HTMLParser');
 
-
 module.exports = class TemplateParser {
   /**
      * @param {antlr4.error.ErrorListener} listener Error listener

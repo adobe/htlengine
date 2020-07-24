@@ -17,6 +17,7 @@ const assert = require('assert');
 const path = require('path');
 // declared dependencies
 const fse = require('fs-extra');
+const { JSDOM } = require('jsdom');
 // local modules
 const pkgJson = require('../package.json');
 const Compiler = require('../src/compiler/Compiler');
@@ -59,6 +60,7 @@ const GLOBALS = {
     url4: 'javascript:alert(String.fromCharCode(48))', // avoiding quotes
     url5: '/foo', // rel part
     url6: 'https://www.primordialsoup.life/image.png', // absolute url
+    url7: 'https://via.placeholder.com/1280x550&text=desktop%201280x550', // escaped url
     breakAttr: '"><script>alert(0);</script>', // break out of html tag
     eventHandler: 'alert(0)',
     imgTag1: '<img src="javascript:alert(0)"/>',
@@ -91,6 +93,71 @@ describe('Runtime Tests', () => {
 
     const ret = await main(GLOBALS);
     assert.equal(ret, await fse.readFile(EXPECTED_SIMPLE_2, 'utf-8'));
+  });
+
+  it('Executes a script with VDOM twice', async () => {
+    const outputDir = path.join(__dirname, 'generated');
+
+    const compiler = new Compiler()
+      .withDirectory(outputDir)
+      .includeRuntime(false)
+      .withRuntimeHTLEngine(path.resolve(__dirname, '..', pkgJson.main))
+      .withOutputFile(path.resolve(outputDir, 'runtime_test_script_1-vdom.js'))
+      .withRuntimeVar(Object.keys(GLOBALS));
+    const filename = await compiler.compileFile(TEMPLATE_SIMPLE_2);
+
+    const runtime = new Runtime()
+      .withDomFactory(new Runtime.VDOMFactory(new JSDOM().window.document.implementation));
+    runtime.setGlobal(GLOBALS);
+    // eslint-disable-next-line import/no-dynamic-require,global-require
+    const main = require(filename);
+    const ret1 = await main(runtime);
+    const html1 = `<!DOCTYPE ${ret1.doctype.name}>${ret1.documentElement.outerHTML}`;
+    const ret2 = await main(runtime);
+    const html2 = `<!DOCTYPE ${ret2.doctype.name}>${ret2.documentElement.outerHTML}`;
+    assert.equal(html1, html2);
+  });
+
+  it('Executes a script with HTML twice', async () => {
+    const outputDir = path.join(__dirname, 'generated');
+
+    const compiler = new Compiler()
+      .withDirectory(outputDir)
+      .includeRuntime(false)
+      .withRuntimeHTLEngine(path.resolve(__dirname, '..', pkgJson.main))
+      .withOutputFile(path.resolve(outputDir, 'runtime_test_script_1-vdom.js'))
+      .withRuntimeVar(Object.keys(GLOBALS));
+    const filename = await compiler.compileFile(TEMPLATE_SIMPLE_2);
+
+    const runtime = new Runtime()
+      .withDomFactory(new Runtime.HtmlDOMFactory());
+    runtime.setGlobal(GLOBALS);
+    // eslint-disable-next-line import/no-dynamic-require,global-require
+    const main = require(filename);
+    const html1 = await main(runtime);
+    const html2 = await main(runtime);
+    assert.equal(html1, html2);
+  });
+
+  it('Executes a script with HAST twice', async () => {
+    const outputDir = path.join(__dirname, 'generated');
+
+    const compiler = new Compiler()
+      .withDirectory(outputDir)
+      .includeRuntime(false)
+      .withRuntimeHTLEngine(path.resolve(__dirname, '..', pkgJson.main))
+      .withOutputFile(path.resolve(outputDir, 'runtime_test_script_1-vdom.js'))
+      .withRuntimeVar(Object.keys(GLOBALS));
+    const filename = await compiler.compileFile(TEMPLATE_SIMPLE_2);
+
+    const runtime = new Runtime()
+      .withDomFactory(new Runtime.HDOMFactory());
+    runtime.setGlobal(GLOBALS);
+    // eslint-disable-next-line import/no-dynamic-require,global-require
+    const main = require(filename);
+    const hast1 = await main(runtime);
+    const hast2 = await main(runtime);
+    assert.deepEqual(hast1, hast2);
   });
 
   it('Can set custom template', async () => {

@@ -1,3 +1,52 @@
+## [4.6.2](https://github.com/adobe/htlengine/compare/v4.6.1...v4.6.2) (2020-07-22)
+
+
+### Bug Fixes
+
+* **runtime:** runtime cannot be executed twice ([#218](https://github.com/adobe/htlengine/issues/218)) ([5a5e6ef](https://github.com/adobe/htlengine/commit/5a5e6ef31e642e8547fdeeaf1b08a95dc9951dba)), closes [#211](https://github.com/adobe/htlengine/issues/211)
+
+## [4.6.1](https://github.com/adobe/htlengine/compare/v4.6.0...v4.6.1) (2020-07-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency lodash to v4.17.19 [security] ([#212](https://github.com/adobe/htlengine/issues/212)) ([46a032d](https://github.com/adobe/htlengine/commit/46a032d35548276db017fda338fac3843b046cfa))
+
+# [4.6.0](https://github.com/adobe/htlengine/compare/v4.5.2...v4.6.0) (2020-07-07)
+
+
+### Features
+
+* **runtime:** Add support for Internet Explorer 11 ([1619c8e](https://github.com/adobe/htlengine/commit/1619c8edd282f9b9a250f9330ce6461d0706d4b4)), closes [#205](https://github.com/adobe/htlengine/issues/205)
+
+## [4.5.2](https://github.com/adobe/htlengine/compare/v4.5.1...v4.5.2) (2020-06-30)
+
+
+### Bug Fixes
+
+* **xss:** test xss against original form ([#200](https://github.com/adobe/htlengine/issues/200)) ([56f6733](https://github.com/adobe/htlengine/commit/56f6733d3b9f1b1535d2ad738e520200ed5f9e90)), closes [#183](https://github.com/adobe/htlengine/issues/183)
+
+## [4.5.1](https://github.com/adobe/htlengine/compare/v4.5.0...v4.5.1) (2020-06-27)
+
+
+### Bug Fixes
+
+* allow to join strings ([#196](https://github.com/adobe/htlengine/issues/196)) ([#197](https://github.com/adobe/htlengine/issues/197)) ([b6b067f](https://github.com/adobe/htlengine/commit/b6b067f24c42c091d01d040bd4c999e27e71c73e))
+
+# [4.5.0](https://github.com/adobe/htlengine/compare/v4.4.1...v4.5.0) (2020-06-05)
+
+
+### Features
+
+* **runtime:** pass expression options to resource loader ([92e9ae4](https://github.com/adobe/htlengine/commit/92e9ae47ceabfac0287a2a45f533d81381ee849b)), closes [#186](https://github.com/adobe/htlengine/issues/186) [#187](https://github.com/adobe/htlengine/issues/187)
+
+## [4.4.1](https://github.com/adobe/htlengine/compare/v4.4.0...v4.4.1) (2020-05-19)
+
+
+### Bug Fixes
+
+* **html:** Attributes without value are treated as attributes with value = 'true' ([c50cf66](https://github.com/adobe/htlengine/commit/c50cf6669e6deafa674624d17cfe3302760a2879)), closes [#177](https://github.com/adobe/htlengine/issues/177)
+
 # [4.4.0](https://github.com/adobe/htlengine/compare/v4.3.1...v4.4.0) (2020-05-07)
 
 

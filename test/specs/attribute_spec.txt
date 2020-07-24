@@ -150,11 +150,16 @@
 ===
 <div class="hello again"></div>
 #
-#
 ### can output vars with colon in property
 #
 <div class="${properties.jcr:content}"></div>
 ===
 <div class="the content"></div>
+#
+### allow for attributes without value
+#
+<input type="checkbox" checked disabled>
+===
+<input type="checkbox" checked disabled>
 #
 ###

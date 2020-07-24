@@ -31,7 +31,7 @@ const Expression = require('../htl/nodes/Expression');
 const ExpressionContext = require('../html/ExpressionContext');
 const MarkupContext = require('../html/MarkupContext');
 
-const BLACKLIST_ATTRIBUTE = /^(style|(on.*))$/;
+const REJECTLIST_ATTRIBUTE = /^(style|(on.*))$/;
 
 function escapeNodeWithHint(ctx, node, markupContext, hint) {
   if (hint != null) {
@@ -185,7 +185,7 @@ module.exports = class AttributePlugin extends Plugin {
   }
 
   isValid() {
-    if (this.attributeName == null || !BLACKLIST_ATTRIBUTE.test(this.attributeName)) {
+    if (this.attributeName == null || !REJECTLIST_ATTRIBUTE.test(this.attributeName)) {
       return true;
     }
     const warningMessage = ''

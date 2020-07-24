@@ -134,4 +134,10 @@
 ===
 <div class="the content"></div>
 #
+### allow for attributes without value
+#
+<input type="checkbox" checked disabled>
+===
+<input type="checkbox" checked disabled>
+#
 ###

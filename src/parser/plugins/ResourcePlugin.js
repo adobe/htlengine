@@ -13,12 +13,13 @@
 const Plugin = require('../html/Plugin');
 const OutputVariable = require('../commands/OutputVariable');
 const RuntimeCall = require('../htl/nodes/RuntimeCall');
+const MapLiteral = require('../htl/nodes/MapLiteral');
 const VariableBinding = require('../commands/VariableBinding');
 
 module.exports = class ResourcePlugin extends Plugin {
   beforeChildren(stream) {
     const variableName = this.pluginContext.generateVariable('resourceContent');
-    const runtimeCall = new RuntimeCall('resource', this._expression.root);
+    const runtimeCall = new RuntimeCall('resource', this._expression.root, [new MapLiteral(this._expression.options)]);
     stream.write(new VariableBinding.Global(variableName, runtimeCall));
     stream.write(new OutputVariable(variableName));
     stream.write(VariableBinding.END);

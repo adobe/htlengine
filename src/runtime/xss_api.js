@@ -136,8 +136,7 @@ function escapeJSToken(input) {
 
 function sanitizeURL(url) {
   try {
-    const decodedUrl = decodeURIComponent(url);
-    if (XRegExp(RELATIVE_REF).test(decodedUrl) || XRegExp(URI).test(decodedUrl)) {
+    if (XRegExp(RELATIVE_REF).test(url) || XRegExp(URI).test(url)) {
       return url;
     }
   } catch (e) {
@@ -231,7 +230,6 @@ const CSS_TOKEN = new RegExp(_CSS_TOKEN, 'i');
 // const HEX_DIGITS = new RegExp(_HEX_DIGITS);
 // const NUMBER = new RegExp(_NUMBER);
 // const NON_ASCII = new RegExp(_NON_ASCII);
-
 
 /**
  * Provides filtering against cross-site scripting attacks

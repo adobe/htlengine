@@ -13,8 +13,7 @@ const DOMFactory = require('./DOMFactory');
 const formatXss = require('./format_xss');
 
 module.exports = class HtmlDOMFactory extends DOMFactory {
-  constructor() {
-    super();
+  start() {
     this._stack = [];
     this._buf = '';
   }
@@ -54,7 +53,7 @@ module.exports = class HtmlDOMFactory extends DOMFactory {
   }
 
   attr(node, name, value, context) {
-    if (value === true) {
+    if (value === true || value === null) {
       this._out(` ${name}`);
       return;
     }

@@ -8,7 +8,7 @@ This engine can parse [HTL](https://github.com/Adobe-Marketing-Cloud/htl-spec) s
 [![CircleCI](https://img.shields.io/circleci/project/github/adobe/htlengine.svg)](https://circleci.com/gh/adobe/htlengine)
 [![GitHub license](https://img.shields.io/github/license/adobe/htlengine.svg)](https://github.com/adobe/htlengine/blob/master/LICENSE.txt)
 [![GitHub issues](https://img.shields.io/github/issues/adobe/htlengine.svg)](https://github.com/adobe/htlengine/issues)
-[![Greenkeeper badge](https://badges.greenkeeper.io/adobe/htlengine.svg)](https://greenkeeper.io/)
+
 [![LGTM Code Quality Grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/adobe/htlengine.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/adobe/htlengine)
 
 ## Install
