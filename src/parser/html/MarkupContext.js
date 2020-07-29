@@ -14,6 +14,7 @@ const MCTX = {
   HTML: 'html',
   TEXT: 'text',
   ELEMENT_NAME: 'elementName',
+  ELEMENT_NAME_NF: 'elementNameNoFallback',
   ATTRIBUTE_NAME: 'attributeName',
   ATTRIBUTE: 'attribute',
   URI: 'uri',

@@ -23,9 +23,15 @@
 ===
 <br/>
 #
+### fallback to original element if forbidden
+#
+<button data-sly-element="${'button'}">Click me!</button>
+===
+<button>Click me!</button>
+#
 ###
 #
-<sly data-sly-list=${properties.allowed}><error data-sly-element="${item}" />
+<sly data-sly-list=${properties.allowed}><div data-sly-element="${item}" />
 </sly>
 ===
 <section/>
@@ -100,7 +106,7 @@
 #
 ### forbidden
 #
-<sly data-sly-list=${properties.forbidden}><error data-sly-element="${item}" />
+<sly data-sly-list=${properties.forbidden}><div data-sly-element="${item}" />
 </sly>
 ===
 <div/>
