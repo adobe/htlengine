@@ -50,12 +50,12 @@ function escapeAttributeValue(input, attributeName) {
   return xss.encodeForHTMLAttribute(input);
 }
 
-function filterElementName(input) {
+function filterElementName(input, def) {
   const trimmedInput = (input || '').trim();
   if (trimmedInput.toLowerCase() in ELEMENT_NAME_ACCEPTLIST) {
     return trimmedInput;
   }
-  return 'div';
+  return def;
 }
 
 module.exports = function formatXss(value, ctx, hint) {
@@ -77,7 +77,9 @@ module.exports = function formatXss(value, ctx, hint) {
     case 'text':
       return xss.encodeForHTML(stringValue);
     case 'elementName':
-      return filterElementName(stringValue);
+      return filterElementName(stringValue, 'div');
+    case 'elementNameNoFallback':
+      return filterElementName(stringValue, '');
 
     case 'attributeName':
       return filterAttributeName(stringValue);

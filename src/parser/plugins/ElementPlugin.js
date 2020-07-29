@@ -25,7 +25,7 @@ module.exports = class ElementPlugin extends Plugin {
 
     this.node = pluginContext.adjustToContext(
       expression,
-      MarkupContext.ELEMENT_NAME,
+      MarkupContext.ELEMENT_NAME_NF,
       ExpressionContext.ELEMENT,
     ).root;
     this.tagVar = pluginContext.generateVariable('tagVar');
