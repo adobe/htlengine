@@ -1,3 +1,22 @@
+# [5.0.0](https://github.com/adobe/htlengine/compare/v4.6.2...v5.0.0) (2020-07-29)
+
+
+### Bug Fixes
+
+* **compiler:** refactor template resolution ([#220](https://github.com/adobe/htlengine/issues/220)) ([b64729b](https://github.com/adobe/htlengine/commit/b64729b0229521400f065576e938eabcbd600971)), closes [#216](https://github.com/adobe/htlengine/issues/216)
+* **element:** data-sly-element should default to existing tag if not allowed ([#228](https://github.com/adobe/htlengine/issues/228)) ([3f457ba](https://github.com/adobe/htlengine/commit/3f457bac07cfdeb5d6d7892d5b78ec34cee8f85c)), closes [#223](https://github.com/adobe/htlengine/issues/223)
+* **uri:** undefined uri ([#229](https://github.com/adobe/htlengine/issues/229)) ([3dc23b7](https://github.com/adobe/htlengine/commit/3dc23b7cf8d6da70e73b29a691bf4d372bad3483)), closes [#221](https://github.com/adobe/htlengine/issues/221) [#222](https://github.com/adobe/htlengine/issues/222)
+
+
+### BREAKING CHANGES
+
+* **compiler:** - The templateLoader and scriptResolver are now 2
+                   separate functions that can be set on the compiler
+
+                 - The Runtime.template() has an extra argument 'id'
+                   that specifies the group (script) the template is
+                   defined.
+
 ## [4.6.2](https://github.com/adobe/htlengine/compare/v4.6.1...v4.6.2) (2020-07-22)
 
 
