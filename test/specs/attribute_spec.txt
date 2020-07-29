@@ -162,4 +162,10 @@
 ===
 <input type="checkbox" checked disabled>
 #
+### undefined link
+#
+<a href="${ foobar.link @ extension = 'html' }">test</a>
+===
+<a>test</a>
+#
 ###
