@@ -17,6 +17,7 @@ module.exports = class DomHandler {
   constructor(generator) {
     this._gen = generator;
     this._out = generator.out.bind(generator);
+    this._globalTemplates = {};
   }
 
   beginDocument() {
@@ -72,15 +73,23 @@ module.exports = class DomHandler {
     }
   }
 
+  bindFunction(cmd) {
+    this._out(`const ${cmd.name} = $.template('${cmd.id}');`);
+  }
+
   functionStart(cmd) {
     const exp = ExpressionFormatter.escapeVariable(ExpressionFormatter.format(cmd.expression));
-    const functionName = `_template_${exp.replace(/\./g, '_')}`;
-    this._out(`$.template('${exp}', function* ${functionName}(args) { `);
+    const id = cmd.id || 'global';
+    const functionName = `_template_${id}_${exp.replace(/\./g, '_')}`;
+    this._out(`$.template('${id}', '${exp}', function* ${functionName}(args) { `);
     this._gen.indent();
     cmd.args.forEach((arg) => {
       this._out(`const ${ExpressionFormatter.escapeVariable(arg)} = args[1]['${arg}'] || '';`);
     });
     this._out('let $t, $n = args[0];');
+    if (!cmd.id) {
+      this._globalTemplates[exp] = true;
+    }
   }
 
   functionEnd() {
@@ -91,6 +100,6 @@ module.exports = class DomHandler {
   functionCall(cmd) {
     const funcName = ExpressionFormatter.format(cmd.functionName);
     const args = ExpressionFormatter.format(cmd.args);
-    this._out(`yield $.call($.template().${funcName}, [$n, ${args}]);`);
+    this._out(`yield $.call(${funcName}, [$n, ${args}]);`);
   }
 };

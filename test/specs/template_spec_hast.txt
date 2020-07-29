@@ -9,8 +9,8 @@ blah 1
 #
 ### use external template lib and invoke template 2
 #
-<div data-sly-call="${lib.two}"></div>
 <sly data-sly-use.lib="template_spec/templateLib.html"></sly>
+<div data-sly-call="${lib.two}"></div>
 ===
 <div>blah 2</div>
 
@@ -33,7 +33,7 @@ blah Hello, world.
     <button>This is a button</button>
 </div>
 #
-###
+### components
 #
 <sly data-sly-use.lib="template_spec/library.htl"/>
 <h1>${page.title}</h1>

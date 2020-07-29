@@ -12,20 +12,18 @@
 const Plugin = require('../html/Plugin');
 
 module.exports = class TemplatePlugin extends Plugin {
-  // eslint-disable-next-line class-methods-use-this
   beforeElement(stream) {
-    stream.beginIgnore();
-  }
-
-  beforeChildren(stream) {
     const variableName = this._signature.getVariableName(null);
-
     if (variableName === null) {
       throw new Error('data-sly-template must be called with an identifier');
     }
-
-    stream.endIgnore();
     stream.beginFunction(variableName, this._expression.options);
+    stream.beginIgnore();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  beforeChildren(stream) {
+    stream.endIgnore();
   }
 
   // eslint-disable-next-line class-methods-use-this

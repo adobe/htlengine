@@ -21,8 +21,8 @@ module.exports = class CommandStream {
     this._ignore = 0;
   }
 
-  write(command) {
-    if (this._ignore) {
+  write(command, force) {
+    if (this._ignore && !force) {
       return;
     }
     const isText = command instanceof OutText;

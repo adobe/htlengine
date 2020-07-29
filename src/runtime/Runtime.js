@@ -206,23 +206,23 @@ module.exports = class Runtime {
     return this.run(callable);
   }
 
-  template(name, callback) {
-    if (!name) {
-      // this is called to retrieve the template map, so that it looks like the template is
-      // like a function reference
-      return this._templates;
+  /**
+   * Registers a template.
+   * @param {string} id The id of the use group
+   * @param {string} name The name of the template function
+   * @param {Function} fn Template function
+   * @returns {object} the use group.
+   */
+  template(id, name, fn) {
+    let group = this._templates[id];
+    if (!group) {
+      group = {};
+      this._templates[id] = group;
     }
-
-    return name.split('.').reduce((prev, seg, idx, arr) => {
-      if (idx === arr.length - 1) {
-        // eslint-disable-next-line no-param-reassign
-        prev[seg] = callback;
-      } else {
-        // eslint-disable-next-line no-param-reassign
-        prev[seg] = prev[seg] || {};
-      }
-      return prev[seg];
-    }, this._templates);
+    if (name) {
+      group[name] = fn;
+    }
+    return group;
   }
 
   exec(name, value, arg0, arg1) {

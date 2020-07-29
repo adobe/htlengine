@@ -12,6 +12,7 @@
 
 const OutText = require('../parser/commands/OutText');
 const VariableBinding = require('../parser/commands/VariableBinding');
+const FileReference = require('../parser/commands/FileReference');
 const FunctionBlock = require('../parser/commands/FunctionBlock');
 const FunctionCall = require('../parser/commands/FunctionCall');
 const Conditional = require('../parser/commands/Conditional');
@@ -127,7 +128,7 @@ module.exports = class JSCodeGenVisitor {
 
     // then process the templates
     this._sourceOffset = 0;
-    templates.forEach((t) => {
+    Object.values(templates).forEach((t) => {
       this._sourceFile = t.file;
       t.commands.forEach((c) => {
         c.accept(this);
@@ -157,6 +158,8 @@ module.exports = class JSCodeGenVisitor {
       mappings: this._main.map,
       templateCode,
       templateMappings,
+      // eslint-disable-next-line no-underscore-dangle
+      globalTemplateNames: Object.keys(this._dom._globalTemplates),
     };
   }
 
@@ -212,6 +215,8 @@ module.exports = class JSCodeGenVisitor {
       this.out(`const ${ExpressionFormatter.escapeVariable(cmd.variableName)} = ${exp};`);
     } else if (cmd instanceof VariableBinding.End) {
       // nop
+    } else if (cmd instanceof FileReference) {
+      this._dom.bindFunction(cmd);
     } else if (cmd instanceof FunctionBlock.Start) {
       this.pushBlock(cmd.expression);
       this._dom.functionStart(cmd);

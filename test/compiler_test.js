@@ -22,7 +22,7 @@ const { JSDOM } = require('jsdom');
 const Runtime = require('../src/runtime/Runtime');
 const fsResourceLoader = require('../src/runtime/fsResourceLoader');
 const Compiler = require('../src/compiler/Compiler');
-const TemplateLoader = require('../src/compiler/TemplateLoader.js');
+const ScriptResolver = require('../src/compiler/ScriptResolver.js');
 
 function serializeDom(node) {
   if (node.doctype) {
@@ -89,7 +89,7 @@ function runTests(specs, typ = '', runtimeFn = () => {}, resultFn = (ret) => ret
     }
     const compiler = new Compiler()
       .withDirectory(outputDir)
-      .withTemplateLoader(TemplateLoader([outputDir, rootProject1]))
+      .withScriptResolver(ScriptResolver([outputDir, rootProject1]))
       .withRuntimeVar(Object.keys(payload))
       .withSourceFile(sourceFile)
       .withSourceMap(true);

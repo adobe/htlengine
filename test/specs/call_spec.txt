@@ -24,7 +24,7 @@
 <div><section>Template</section></div>
 ^^^
 37:     $.dom.append($n, var_0);
-46:     yield $.call($.template().foo, [$n, {"param": "Template", }]);
+47:     yield $.call(foo, [$n, {"param": "Template", }]);
 #
 ### sightly call function with colon in name
 #
@@ -51,7 +51,7 @@
 <div><section></section></div>
 ^^^
 37:     $.dom.append($n, var_0);
-46:     yield $.call($.template().foo, [$n, {}]);
+47:     yield $.call(foo, [$n, {}]);
 #
 ### sightly call function can be redeclared
 #
@@ -82,7 +82,7 @@
 
 ^^^
 37:     $.dom.append($n, var_0);
-49:     yield $.call($.template().foo, [$n, {}]);
+50:     yield $.call(foo, [$n, {}]);
 #
 ### sightly call function can call other templates
 #
@@ -106,9 +106,9 @@
 </div>
 </div>
 ^^^
-39:     yield $.call($.template().bar, [$n, {"a": a, }]);
+39:     yield $.call(bar, [$n, {"a": a, }]);
 52:     $.dom.append($n, var_0);
-63:     yield $.call($.template().foo, [$n, {"a": 123, }]);
+65:     yield $.call(foo, [$n, {"a": 123, }]);
 #
 ### sightly call function can call itself recursively
 #
@@ -174,7 +174,7 @@
 ^^^
 37:     if (var_size1) {
 49:         $.dom.append($n, var_3);
-51:         yield $.call($.template().foo, [$n, {"pages": item["pages"], }]);
-66:     yield $.call($.template().foo, [$n, {"pages": bar["pages"], }]);
+51:         yield $.call(foo, [$n, {"pages": item["pages"], }]);
+67:     yield $.call(foo, [$n, {"pages": bar["pages"], }]);
 #
 ###
