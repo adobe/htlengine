@@ -1,3 +1,10 @@
+# [5.1.0](https://github.com/adobe/htlengine/compare/v5.0.0...v5.1.0) (2020-08-02)
+
+
+### Features
+
+* **compiler:** add support for external templates ([#219](https://github.com/adobe/htlengine/issues/219)) ([90e20de](https://github.com/adobe/htlengine/commit/90e20de71c62353ba58fcab136700bc4f51543dd))
+
 # [5.0.0](https://github.com/adobe/htlengine/compare/v4.6.2...v5.0.0) (2020-07-29)
 
 
