@@ -35,7 +35,7 @@ module.exports = function createLoader(opts) {
     const file = await comp.compileToFile(source, outfile, compiler.dir);
     return {
       path: file,
-      code: `require(${JSON.stringify(file)})(runtime);`,
+      code: `require(${JSON.stringify(file)})($);`,
     };
   }
 

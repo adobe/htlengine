@@ -12,19 +12,7 @@
 
 /* eslint-disable */
 
-module.exports = function main(runtime) {
-  const $ = {
-    col: runtime.col,
-    exec: runtime.exec.bind(runtime),
-    xss: runtime.xss.bind(runtime),
-    listInfo: runtime.listInfo.bind(runtime),
-    use: runtime.use.bind(runtime),
-    slyResource: runtime.resource.bind(runtime),
-    call: runtime.call.bind(runtime),
-    template: runtime.template.bind(runtime),
-    dom: runtime.dom,
-  };
-
+module.exports = function main($) {
   // RUNTIME_GLOBALS
 
   // TEMPLATES
