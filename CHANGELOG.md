@@ -1,3 +1,15 @@
+# [6.0.0](https://github.com/adobe/htlengine/compare/v5.1.0...v6.0.0) (2020-08-11)
+
+
+### Features
+
+* **code:** simplify code ([#235](https://github.com/adobe/htlengine/issues/235)) ([631f18d](https://github.com/adobe/htlengine/commit/631f18dcaf4faef45ea8fe6f18be40690ba90676)), closes [#234](https://github.com/adobe/htlengine/issues/234)
+
+
+### BREAKING CHANGES
+
+* **code:** $.slyResource was renamed to $.resource
+
 # [5.1.0](https://github.com/adobe/htlengine/compare/v5.0.0...v5.1.0) (2020-08-02)
 
 
