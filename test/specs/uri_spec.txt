@@ -13,7 +13,7 @@ https://example.com/path/page.html
 //example.com/path/page.html
 //example.com/path/page.html
 ^^^
-35:     $.dom.append($n, var_0);
+24:     $.dom.append($n, var_0);
 #
 ### domain
 #
@@ -29,7 +29,7 @@ http:///path/page.html
 http://www.example.org/path/page.html
 http:///path/page.html
 ^^^
-35:     $.dom.append($n, var_0);
+24:     $.dom.append($n, var_0);
 #
 ### path
 #
@@ -55,7 +55,7 @@ http://example.com/.selector.html/suffix?key=value#fragment
 http://example.com/this/one.selector.html/suffix?key=value#fragment
 http://example.com/this/one.selector.html/suffix?key=value#fragment
 ^^^
-35:     $.dom.append($n, var_0);
+24:     $.dom.append($n, var_0);
 #
 ### selectors
 #
@@ -77,7 +77,7 @@ path/page.woo.html
 path/page.html
 path/page.html
 ^^^
-35:     $.dom.append($n, var_0);
+24:     $.dom.append($n, var_0);
 #
 ### extension
 ${'path/page' @ extension='html'}
@@ -96,7 +96,7 @@ path/page.html?key=value
 path/page.html#fragment
 path/page
 ^^^
-35:     $.dom.append($n, var_0);
+24:     $.dom.append($n, var_0);
 #
 ### suffix
 ${'path/page.html' @ suffix='my/suffix'}
@@ -115,7 +115,7 @@ path/page.html/prepended/suffix
 path/page.html/suffix/appended
 path/page.html
 ^^^
-35:     $.dom.append($n, var_0);
+24:     $.dom.append($n, var_0);
 #
 ### query
 ${'http://www.example.org/search' @ query=jsuse.query, context='uri'}
@@ -130,7 +130,7 @@ http://www.example.org/search?s=1
 http://www.example.org/search
 http://www.example.org/search
 ^^^
-35:     $.dom.append($n, var_0);
+24:     $.dom.append($n, var_0);
 #
 ### fragment
 #
@@ -142,6 +142,6 @@ path/page#fragment
 path/page#two
 path/page
 ^^^
-35:     $.dom.append($n, var_0);
+24:     $.dom.append($n, var_0);
 #
 ###

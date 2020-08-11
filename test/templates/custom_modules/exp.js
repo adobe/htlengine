@@ -12,27 +12,16 @@
 
 /* eslint-disable */
 
-module.exports = function main(runtime) {
-  const $ = {
-    col: runtime.col,
-    exec: runtime.exec.bind(runtime),
-    xss: runtime.xss.bind(runtime),
-    listInfo: runtime.listInfo.bind(runtime),
-    use: runtime.use.bind(runtime),
-    slyResource: runtime.resource.bind(runtime),
-    call: runtime.call.bind(runtime),
-    template: runtime.template.bind(runtime),
-    dom: runtime.dom,
-  };
+module.exports = function main($) {
 
-  const global = runtime.globals;
+  const global = $.globals;
 
   const $use_0 = myRequire('foo');
   const $use_1 = require("global-module");
   const $use_2 = require("./local-module");
   const $use_3 = require("./../relative-module");
 
-  return runtime.run(function* () {
+  return $.run(function* () {
     let $t, $n = $.dom.start();
     const v1 = yield $.use($use_0, {});
     $.dom.text($n,"\n");

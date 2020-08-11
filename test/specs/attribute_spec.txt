@@ -5,7 +5,7 @@
 ===
 <div data-values="some data value"></div>
 ^^^
-41:     if (!$.col.empty(var_attrValue_data_values0)) {
+30:     if (!$.col.empty(var_attrValue_data_values0)) {
 #
 ### don't double escape attributes
 #
@@ -15,9 +15,9 @@
 <time datetime="2019-04-02T08&#x3a;44&#x3a;26.000Z">2019-04-02T08:44:26.000Z</time>
 <time datetime="2019-04-02T08&#x3a;44&#x3a;26.000Z">2019-04-02T08:44:26.000Z</time>
 ^^^
-46:     $.dom.append($n, var_1);
-51:     if (!$.col.empty(var_attrValue_datetime2)) {
-56:     $.dom.append($n, var_3);
+35:     $.dom.append($n, var_1);
+40:     if (!$.col.empty(var_attrValue_datetime2)) {
+45:     $.dom.append($n, var_3);
 #
 ### keep existing attribute
 #
@@ -31,7 +31,7 @@
 ===
 <div title="" class="super-green"/>
 ^^^
-42:     if (!$.col.empty(var_attrValue_class0)) {
+31:     if (!$.col.empty(var_attrValue_class0)) {
 #
 ### replace single attribute after call works.
 #
@@ -45,7 +45,7 @@
 ===
 <div title=""/>
 ^^^
-42:     if (!$.col.empty(var_attrValue_class0)) {
+31:     if (!$.col.empty(var_attrValue_class0)) {
 #
 ### ignore dangerous attributes
 #
@@ -59,7 +59,7 @@
 ===
 <input class="bar" type="text" id="foo"/>
 ^^^
-43:     if (!$.col.empty(var_mapContains_class2)) {
+32:     if (!$.col.empty(var_mapContains_class2)) {
 #
 ### left to right
 #
@@ -83,10 +83,10 @@
 <div></div>
 <div id="foo" class="bar"></div>
 ^^^
-49:     if (!$.col.empty(var_attrValue_lang1)) {
-57:     if (!$.col.empty(var_attrValue_lang2)) {
-65:     if (!$.col.empty(var_attrValue_lang3)) {
-75:     if (!$.col.empty(var_mapContains_lang6)) {
+38:     if (!$.col.empty(var_attrValue_lang1)) {
+46:     if (!$.col.empty(var_attrValue_lang2)) {
+54:     if (!$.col.empty(var_attrValue_lang3)) {
+64:     if (!$.col.empty(var_mapContains_lang6)) {
 #
 ### empty attributes are left as they are if no data-sly-attribute applies to them
 #
@@ -94,7 +94,7 @@
 ===
 <div title="" id="foo" class="bar"></div>
 ^^^
-43:     if (!$.col.empty(var_mapContains_title2)) {
+32:     if (!$.col.empty(var_mapContains_title2)) {
 #
 ### Boolean values allow to control the display of boolean attributes:
 #
@@ -114,9 +114,9 @@
 <input checked="false"/>
 <input checked/>
 ^^^
-49:     if (!$.col.empty(var_attrValue_checked1)) {
-65:     if (!$.col.empty(var_attrValue_checked3)) {
-96:           if (!$.col.empty(var_attrContent11)) {
+38:     if (!$.col.empty(var_attrValue_checked1)) {
+54:     if (!$.col.empty(var_attrValue_checked3)) {
+85:           if (!$.col.empty(var_attrContent11)) {
 #
 ### Arrays are cast to strings:
 #

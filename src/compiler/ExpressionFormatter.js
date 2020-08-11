@@ -173,7 +173,7 @@ module.exports = class ExpressionFormatter {
       } else if (node.functionName === 'call') {
         throw new Error('$.call not supported via expression formatter');
       } else if (node.functionName === 'resource') {
-        this.result += 'yield $.slyResource(';
+        this.result += 'yield $.resource(';
       } else {
         this.result += `$.exec("${node.functionName}"`;
         delim = ', ';

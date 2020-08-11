@@ -392,10 +392,10 @@ module.exports = class Compiler {
 
     const global = [];
     if (this._runtimeGlobal) {
-      global.push(`  const ${this._runtimeGlobal} = runtime.globals;\n`);
+      global.push(`  const ${this._runtimeGlobal} = $.globals;\n`);
     }
     this._runtimeGlobals.forEach((g) => {
-      global.push(`  let ${ExpressionFormatter.escapeVariable(g)} = runtime.globals[${JSON.stringify(g)}];\n`);
+      global.push(`  let ${ExpressionFormatter.escapeVariable(g)} = $.globals[${JSON.stringify(g)}];\n`);
     });
 
     const {

@@ -58,13 +58,13 @@ blah Hello, world.
 
 </div>
 ^^^
-44:         yield $.call(comps1["button"], [$n, {"data": data, }]);
-49:         yield $.call(comps2["heading"], [$n, {"data": data, }]);
-64:       $.dom.append($n, var_0);
-79:       $.dom.append($n, var_0);
-93:     $.dom.append($n, var_0);
-100:     yield $.call(lib["lib"], [$n, {"name": "heading", "data": component["data"], }]);
-107:     yield $.call(lib["lib"], [$n, {"name": component["name"], "data": component["data"], }]);
+33:         yield $.call(comps1["button"], [$n, {"data": data, }]);
+38:         yield $.call(comps2["heading"], [$n, {"data": data, }]);
+53:       $.dom.append($n, var_0);
+68:       $.dom.append($n, var_0);
+82:     $.dom.append($n, var_0);
+89:     yield $.call(lib["lib"], [$n, {"name": "heading", "data": component["data"], }]);
+96:     yield $.call(lib["lib"], [$n, {"name": component["name"], "data": component["data"], }]);
 #
 ### template defining and calling another template
 #
@@ -76,10 +76,10 @@ blah Hello, world.
 </div>
 </div>
 ^^^
-53:       $.dom.append($n, var_0);
-63:       yield $.call(lib["bar"], [$n, {"a": a, }]);
-78:       $.dom.append($n, var_0);
-90:     yield $.call(lib["foo"], [$n, {"a": 123, }]);
+42:       $.dom.append($n, var_0);
+52:       yield $.call(lib["bar"], [$n, {"a": a, }]);
+67:       $.dom.append($n, var_0);
+79:     yield $.call(lib["foo"], [$n, {"a": 123, }]);
 #
 ### template can use global var
 #

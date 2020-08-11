@@ -13,8 +13,8 @@
     <li>Orange</li>
 </ul>
 ^^^
-36:     if (var_size1) {
-46:         $.dom.append($n, var_3);
+25:     if (var_size1) {
+35:         $.dom.append($n, var_3);
 #
 ### empty list
 #
@@ -24,8 +24,8 @@
 ===
 
 ^^^
-36:     if (var_size1) {
-46:         $.dom.append($n, var_3);
+25:     if (var_size1) {
+35:         $.dom.append($n, var_3);
 #
 ### list variables
 #
@@ -73,8 +73,8 @@
     even: false
 </code>
 ^^^
-36:     if (var_size1) {
-44:         $.dom.append($n, var_3);
+25:     if (var_size1) {
+33:         $.dom.append($n, var_3);
 #
 ### list map
 #
@@ -94,9 +94,9 @@
 <dd>value: 3</dd>
 </dl>
 ^^^
-36:     if (var_size1) {
-47:         $.dom.append($n, var_3);
-54:         $.dom.append($n, var_4);
+25:     if (var_size1) {
+36:         $.dom.append($n, var_3);
+43:         $.dom.append($n, var_4);
 #
 ### list over property with colon
 #
