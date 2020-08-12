@@ -36,7 +36,8 @@ const OPTIONS = [
     asArguments: false,
     condition: (expContext) => expContext !== ExpressionContext.PLUGIN_DATA_SLY_USE
             && expContext !== ExpressionContext.PLUGIN_DATA_SLY_TEMPLATE
-            && expContext !== ExpressionContext.PLUGIN_DATA_SLY_CALL,
+            && expContext !== ExpressionContext.PLUGIN_DATA_SLY_CALL
+            && expContext !== ExpressionContext.PLUGIN_DATA_SLY_INCLUDE,
   }, {
     fn: 'xss',
     options: ['context'],

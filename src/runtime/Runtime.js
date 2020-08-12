@@ -22,6 +22,7 @@ module.exports = class Runtime {
     this._globals = {};
     this._templates = {};
     this._resourceLoader = null;
+    this._includeHandler = null;
     this._dom = new HtmlDOMFactory();
   }
 
@@ -100,6 +101,11 @@ module.exports = class Runtime {
 
   withResourceLoader(value) {
     this._resourceLoader = value;
+    return this;
+  }
+
+  withIncludeHandler(value) {
+    this._includeHandler = value;
     return this;
   }
 
@@ -193,6 +199,20 @@ module.exports = class Runtime {
     return this._resourceLoader(this, uri, options);
   }
 
+  include(uri, options) {
+    if (!uri) {
+      // eslint-disable-next-line no-param-reassign
+      uri = options.file;
+    }
+    if (!uri) {
+      throw new Error('Include call needs file argument or option.');
+    }
+    if (!this._includeHandler) {
+      return '';
+    }
+    return this._includeHandler(this, uri, options);
+  }
+
   // eslint-disable-next-line class-methods-use-this
   xss(value, context, hint) {
     return formatXss(value, context, hint);
@@ -225,7 +245,8 @@ module.exports = class Runtime {
     return group;
   }
 
-  exec(name, value, arg0, arg1) {
+  // eslint-disable-next-line class-methods-use-this
+  exec(name, value, arg0) {
     if (name === 'join') {
       return Array.isArray(value) ? value.join(arg0 || ', ') : value;
     }
@@ -236,26 +257,6 @@ module.exports = class Runtime {
 
     if (name === 'uriManipulation') {
       return formatUri(value, arg0);
-    }
-
-    if (name === 'xss') {
-      return this.xss(value, arg0, arg1);
-    }
-
-    if (name === 'use') {
-      return this.use(value, arg0);
-    }
-
-    if (name === 'resource') {
-      return this.resource(value);
-    }
-
-    if (name === 'call') {
-      return this.call(value, arg0);
-    }
-
-    if (name === 'listInfo') {
-      return this.listInfo(value, arg0);
     }
 
     throw new Error(`Unknown runtime call: ${name}`);
