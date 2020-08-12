@@ -1,3 +1,10 @@
+# [6.1.0](https://github.com/adobe/htlengine/compare/v6.0.0...v6.1.0) (2020-08-12)
+
+
+### Features
+
+* **index:** export script resolver ([#236](https://github.com/adobe/htlengine/issues/236)) ([30b4622](https://github.com/adobe/htlengine/commit/30b46221f2d20679e173c0f2fc55aac5f15ddac2))
+
 # [6.0.0](https://github.com/adobe/htlengine/compare/v5.1.0...v6.0.0) (2020-08-11)
 
 
