@@ -35,6 +35,9 @@ function serializeDom(node) {
 }
 
 async function testIncludeHandler(runtime, uri, options) {
+  // ensure the backslashes are converted on windows tests
+  // eslint-disable-next-line no-param-reassign
+  uri = uri.replace(/\\/g, '/');
   return JSON.stringify({
     uri,
     options,
