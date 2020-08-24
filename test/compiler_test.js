@@ -34,6 +34,16 @@ function serializeDom(node) {
   return '';
 }
 
+async function testIncludeHandler(runtime, uri, options) {
+  // ensure the backslashes are converted on windows tests
+  // eslint-disable-next-line no-param-reassign
+  uri = uri.replace(/\\/g, '/');
+  return JSON.stringify({
+    uri,
+    options,
+  });
+}
+
 function readTests(filename) {
   const text = fs.readFileSync(filename, 'utf-8');
   const lines = text.split(/\r\n|\r|\n/);
@@ -103,6 +113,7 @@ function runTests(specs, typ = '', runtimeFn = () => {}, resultFn = (ret) => ret
           it(`${idx}. Generates output for '${test.name}' correctly.`, (done) => {
             const runtime = new Runtime()
               .withResourceLoader(fsResourceLoader(path.join(__dirname, 'specs')))
+              .withIncludeHandler(testIncludeHandler)
               .setGlobal(payload);
             runtimeFn(runtime);
 

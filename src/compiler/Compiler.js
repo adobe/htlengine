@@ -368,6 +368,15 @@ module.exports = class Compiler {
           // replace command with runtime call
           commands[i] = new VariableBinding.Global(c.name, new RuntimeCall('use', new Identifier(name), c.args));
         }
+      } else if (c instanceof VariableBinding.Global
+        && c.expression instanceof RuntimeCall
+        && c.expression.functionName === 'include') {
+        // need to use script resolver to resolve include file
+        let includeFile = await this._scriptResolver(baseDir, c.expression.expression.text);
+        // make relative to process
+        includeFile = path.relative(process.cwd(), includeFile);
+        // eslint-disable-next-line no-underscore-dangle
+        c.expression.expression._text = includeFile;
       }
     }
     return {

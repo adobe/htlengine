@@ -174,6 +174,8 @@ module.exports = class ExpressionFormatter {
         throw new Error('$.call not supported via expression formatter');
       } else if (node.functionName === 'resource') {
         this.result += 'yield $.resource(';
+      } else if (node.functionName === 'include') {
+        this.result += 'yield $.include(';
       } else {
         this.result += `$.exec("${node.functionName}"`;
         delim = ', ';
