@@ -1,3 +1,10 @@
+# [6.2.0](https://github.com/adobe/htlengine/compare/v6.1.0...v6.2.0) (2020-08-24)
+
+
+### Features
+
+* **compiler:** add support for data-sly-include ([11aaccc](https://github.com/adobe/htlengine/commit/11aacccffd3b7be8aa7b8eedf65f6c1fe875a519))
+
 # [6.1.0](https://github.com/adobe/htlengine/compare/v6.0.0...v6.1.0) (2020-08-12)
 
 
