@@ -50,7 +50,7 @@
     "mocha-junit-reporter": "2.0.0",
     "nyc": "15.1.0",
     "rehype-stringify": "8.0.0",
-    "remark-parse": "8.0.3",
+    "remark-parse": "9.0.0",
     "remark-rehype": "8.0.0",
     "semantic-release": "17.2.1"
   },
