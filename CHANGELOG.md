@@ -1,3 +1,10 @@
+## [6.2.1](https://github.com/adobe/htlengine/compare/v6.2.0...v6.2.1) (2020-11-01)
+
+
+### Bug Fixes
+
+* **htl:** toplevel properties are case insensitive ([#255](https://github.com/adobe/htlengine/issues/255)) ([09d31f1](https://github.com/adobe/htlengine/commit/09d31f100a1cf1251877ed59bbda9893ed0eae23)), closes [#254](https://github.com/adobe/htlengine/issues/254)
+
 # [6.2.0](https://github.com/adobe/htlengine/compare/v6.1.0...v6.2.0) (2020-08-24)
 
 
