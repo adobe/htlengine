@@ -24,7 +24,7 @@ module.exports = class UnwrapPlugin extends Plugin {
     if (this.variableName == null) {
       this.variableName = ctx.generateVariable('unwrapCondition');
     }
-
+    this.variableName = this.variableName.toLowerCase();
     this.unwrapTest = new Conditional.Start(this.variableName, true);
 
     if (this._useGlobalBinding) {

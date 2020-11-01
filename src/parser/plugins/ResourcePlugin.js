@@ -20,7 +20,7 @@ module.exports = class ResourcePlugin extends Plugin {
   beforeChildren(stream) {
     const variableName = this.pluginContext.generateVariable('resourceContent');
     const runtimeCall = new RuntimeCall('resource', this._expression.root, [new MapLiteral(this._expression.options)]);
-    stream.write(new VariableBinding.Global(variableName, runtimeCall));
+    stream.write(new VariableBinding.Start(variableName, runtimeCall));
     stream.write(new OutputVariable(variableName));
     stream.write(VariableBinding.END);
     stream.beginIgnore();

@@ -368,7 +368,7 @@ module.exports = class Compiler {
           // replace command with runtime call
           commands[i] = new VariableBinding.Global(c.name, new RuntimeCall('use', new Identifier(name), c.args));
         }
-      } else if (c instanceof VariableBinding.Global
+      } else if (c instanceof VariableBinding.Start
         && c.expression instanceof RuntimeCall
         && c.expression.functionName === 'include') {
         // need to use script resolver to resolve include file
@@ -404,7 +404,7 @@ module.exports = class Compiler {
       global.push(`  const ${this._runtimeGlobal} = $.globals;\n`);
     }
     this._runtimeGlobals.forEach((g) => {
-      global.push(`  let ${ExpressionFormatter.escapeVariable(g)} = $.globals[${JSON.stringify(g)}];\n`);
+      global.push(`  let ${ExpressionFormatter.escapeVariable(g).toLowerCase()} = $.globals[${JSON.stringify(g)}];\n`);
     });
 
     const {

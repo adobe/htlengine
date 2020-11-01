@@ -57,7 +57,7 @@ module.exports = class IncludePlugin extends Plugin {
 
     const variableName = this.pluginContext.generateVariable('includeContent');
     const runtimeCall = new RuntimeCall('include', new StringConstant(file), [new MapLiteral(this._expression.options)]);
-    stream.write(new VariableBinding.Global(variableName, runtimeCall));
+    stream.write(new VariableBinding.Start(variableName, runtimeCall));
     stream.write(new OutputVariable(variableName));
     stream.write(VariableBinding.END);
     stream.beginIgnore();

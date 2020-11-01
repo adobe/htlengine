@@ -150,7 +150,7 @@ module.exports = class ExpressionFormatter {
       });
       this.result += '}';
     } else if (node instanceof PropertyIdentifier) {
-      this.result += ExpressionFormatter.escapeVariable(node.name);
+      this.result += ExpressionFormatter.escapeVariable(node.name.toLowerCase());
     } else if (node instanceof Identifier) {
       this.result += ExpressionFormatter.escapeVariable(node.name);
     } else if (node instanceof NumericConstant) {
