@@ -7,6 +7,12 @@
 ^^^
 29:     $.dom.append($n, var_0);
 #
+### sightly use variables are case insensitive
+#
+<div data-sly-use.testpage="./use_spec/test_page.js">Hello ${testPage.title}.${testPage.TiTle}</div>
+===
+<div>Hello Jupiter.undefined</div>
+#
 ### passing params
 #
 <div data-sly-use.page="${'./use_spec/test_page.js' @ value1='Moon', value2='Europa'}">${page.subTitle}</div>

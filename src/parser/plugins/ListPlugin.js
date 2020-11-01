@@ -44,8 +44,8 @@ module.exports = class ListPlugin extends Plugin {
   }
 
   beforeChildren(stream) {
-    const itemVariable = this._signature.getVariableName(DEFAULT_LIST_ITEM_VAR_NAME);
-    const loopStatusVar = itemVariable + ITEM_LOOP_STATUS_SUFFIX;
+    const itemVariable = this._signature.getVariableName(DEFAULT_LIST_ITEM_VAR_NAME).toLowerCase();
+    const loopStatusVar = (itemVariable + ITEM_LOOP_STATUS_SUFFIX).toLowerCase();
     const indexVariable = this._pluginContext.generateVariable('index');
     stream.write(new Loop.Start(this._listVariable, itemVariable, indexVariable));
     stream.write(new VariableBinding.Start(

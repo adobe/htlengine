@@ -19,7 +19,7 @@ const DEFAULT_VARIABLE_NAME = 'useBean';
 
 module.exports = class UsePlugin extends Plugin {
   beforeElement(stream) {
-    const variableName = this._signature.getVariableName(DEFAULT_VARIABLE_NAME);
+    const variableName = this._signature.getVariableName(DEFAULT_VARIABLE_NAME).toLowerCase();
     if (this._expression.root instanceof StringConstant) {
       const lib = this._expression.root.text;
       stream.write(new FileReference(

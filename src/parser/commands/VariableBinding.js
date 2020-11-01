@@ -38,7 +38,7 @@ module.exports = {
   Global: class Global extends Command {
     constructor(variableName, expression) {
       super();
-      this._variableName = variableName;
+      this._variableName = variableName.toLowerCase();
       this._expression = expression;
     }
 
