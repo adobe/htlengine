@@ -95,12 +95,12 @@ workflows:
   version: 2
   build:
     jobs:
-    - release:
-        requires:
-        - build
-        - build_win
-        filters:
-          branches:
-            only: master
+#    - release:
+#        requires:
+#        - build
+#        - build_win
+#        filters:
+#          branches:
+#            only: master
     - build
     - build_win
