@@ -12,7 +12,6 @@
 
 'use strict';
 
-const _ = require('lodash');
 const sanitizer = require('sanitizer');
 const esapiEncoder = require('node-esapi').encoder();
 const XRegExp = require('xregexp');
@@ -282,11 +281,11 @@ module.exports = {
    * @returns {String}
    */
   getValidJSToken(input, defaultValue) {
-    if (!_.isString(input)) {
+    if (typeof input !== 'string') {
       return defaultValue;
     }
     const encoded = escapeJSToken(input);
-    if (_.isUndefined(encoded)) {
+    if (encoded === undefined) {
       return defaultValue;
     }
     return encoded;
@@ -298,7 +297,7 @@ module.exports = {
    * @returns {String} a sanitized URL (possibly empty)
    */
   getValidHref(url) {
-    if (!_.isString(url)) {
+    if (typeof url !== 'string') {
       return '';
     }
     return sanitizeURL(url.trim());
@@ -312,7 +311,7 @@ module.exports = {
    * @return {String} a string containing sanitized style token
    */
   getValidStyleToken(input, defaultValue) {
-    if (_.isString(input) && input.length > 0 && CSS_TOKEN.test(input)) {
+    if (typeof input === 'string' && input.length > 0 && CSS_TOKEN.test(input)) {
       return input;
     }
     return defaultValue;
