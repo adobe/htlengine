@@ -1,3 +1,10 @@
+## [6.2.2](https://github.com/adobe/htlengine/compare/v6.2.1...v6.2.2) (2020-11-13)
+
+
+### Bug Fixes
+
+* **deps:** remove lodash ([#257](https://github.com/adobe/htlengine/issues/257)) ([c9e07d4](https://github.com/adobe/htlengine/commit/c9e07d4360b9d31dc113c0f9bb55104ddef68968))
+
 ## [6.2.1](https://github.com/adobe/htlengine/compare/v6.2.0...v6.2.1) (2020-11-01)
 
 
