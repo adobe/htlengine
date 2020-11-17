@@ -1,3 +1,10 @@
+## [6.2.3](https://github.com/adobe/htlengine/compare/v6.2.2...v6.2.3) (2020-11-17)
+
+
+### Bug Fixes
+
+* **win:** fix 'require' problems on windows ([#260](https://github.com/adobe/htlengine/issues/260)) ([177c892](https://github.com/adobe/htlengine/commit/177c8926bf6255332f33b006789f452e4fe993c3)), closes [#259](https://github.com/adobe/htlengine/issues/259)
+
 ## [6.2.2](https://github.com/adobe/htlengine/compare/v6.2.1...v6.2.2) (2020-11-13)
 
 
