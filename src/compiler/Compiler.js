@@ -47,6 +47,11 @@ module.exports = class Compiler {
     if (path.isAbsolute(moduleId)) {
       // eslint-disable-next-line no-param-reassign
       moduleId = `.${path.sep}${path.relative(baseDir, moduleId)}`;
+      if (path.sep === '\\') {
+        // nodejs on windows doesn't like relative paths with windows path separators
+        // eslint-disable-next-line no-param-reassign
+        moduleId = moduleId.replace(/\\/, '/');
+      }
     }
     return `const ${varName} = require(${JSON.stringify(moduleId)});`;
   }
