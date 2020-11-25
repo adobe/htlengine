@@ -20,7 +20,7 @@
     "lint": "./node_modules/.bin/eslint ."
   },
   "dependencies": {
-    "antlr4": "^4.7.2",
+    "antlr4": "4.8.0",
     "fs-extra": "^9.0.0",
     "he": "^1.2.0",
     "moment": "^2.24.0",
