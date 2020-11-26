@@ -1,3 +1,10 @@
+## [6.2.4](https://github.com/adobe/htlengine/compare/v6.2.3...v6.2.4) (2020-11-26)
+
+
+### Bug Fixes
+
+* **dep:** temp fix for antlr4 issue ([#265](https://github.com/adobe/htlengine/issues/265)) ([3855f5f](https://github.com/adobe/htlengine/commit/3855f5f48fd78321d39481f0b56e2a699d6bc1ed))
+
 ## [6.2.3](https://github.com/adobe/htlengine/compare/v6.2.2...v6.2.3) (2020-11-17)
 
 
