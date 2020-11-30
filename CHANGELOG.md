@@ -1,3 +1,10 @@
+## [6.2.5](https://github.com/adobe/htlengine/compare/v6.2.4...v6.2.5) (2020-11-30)
+
+
+### Bug Fixes
+
+* **deps:** revert back to antlr 4.7.2 ([698bf8b](https://github.com/adobe/htlengine/commit/698bf8b53564089e83784d755536e5e161c02e78)), closes [#266](https://github.com/adobe/htlengine/issues/266)
+
 ## [6.2.4](https://github.com/adobe/htlengine/compare/v6.2.3...v6.2.4) (2020-11-26)
 
 
