@@ -31,7 +31,7 @@
     "source-map": "0.7.3",
     "unified": "9.2.0",
     "urijs": "1.19.2",
-    "xregexp": "4.4.0"
+    "xregexp": "4.4.1"
   },
   "devDependencies": {
     "@semantic-release/changelog": "5.0.1",
