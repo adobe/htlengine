@@ -38,7 +38,7 @@ It was: hello
 ^^^
 32:     $.dom.append($n, var_0);
 #
-### test with variable is vase insensitive
+### test with variable is case insensitive
 #
 <div data-sly-test.mytest="${properties.true0}">It is true!</div>
 It was: ${myTest}
@@ -50,6 +50,16 @@ if (mytest) {
 { const var_0 = ("\nIt was: ") + ($.xss(mytest, "html")) + ("\n");
   $.out(var_0);
 }
+===
+<div>It is true!</div>
+It was: hello
+^^^
+32:     $.dom.append($n, var_0);
+#
+### test with variable is case insensitive (with case)
+#
+<div data-sly-test.myTest="${properties.true0}">It is true!</div>
+It was: ${mytest}
 ===
 <div>It is true!</div>
 It was: hello
