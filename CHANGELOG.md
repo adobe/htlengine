@@ -1,3 +1,10 @@
+## [6.2.8](https://github.com/adobe/htlengine/compare/v6.2.7...v6.2.8) (2020-12-17)
+
+
+### Bug Fixes
+
+* **htl:** data-sly-test problem with upper case characters ([#274](https://github.com/adobe/htlengine/issues/274)) ([c5a1f19](https://github.com/adobe/htlengine/commit/c5a1f199c08d6383dd332081b96d594d4164fb34)), closes [#273](https://github.com/adobe/htlengine/issues/273)
+
 ## [6.2.7](https://github.com/adobe/htlengine/compare/v6.2.6...v6.2.7) (2020-12-14)
 
 
