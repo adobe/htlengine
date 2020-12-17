@@ -22,6 +22,8 @@ module.exports = class TestPlugin extends Plugin {
     this._useGlobalBinding = variableName != null;
     if (variableName == null) {
       variableName = ctx.generateVariable('testVariable');
+    } else {
+      variableName = variableName.toLowerCase();
     }
 
     if (this._useGlobalBinding) {
