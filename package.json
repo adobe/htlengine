@@ -20,7 +20,7 @@
     "lint": "./node_modules/.bin/eslint ."
   },
   "dependencies": {
-    "antlr4": "4.7.2",
+    "antlr4": "4.9.0",
     "fs-extra": "9.0.1",
     "he": "1.2.0",
     "moment": "2.29.1",
@@ -30,7 +30,7 @@
     "sanitizer": "0.1.3",
     "source-map": "0.7.3",
     "unified": "9.2.0",
-    "urijs": "1.19.2",
+    "urijs": "1.19.3",
     "xregexp": "4.4.1"
   },
   "devDependencies": {
@@ -38,7 +38,7 @@
     "@semantic-release/git": "9.0.0",
     "@semantic-release/github": "7.2.0",
     "codecov": "3.8.1",
-    "eslint": "7.15.0",
+    "eslint": "7.16.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-header": "3.1.0",
     "eslint-plugin-import": "2.22.1",
