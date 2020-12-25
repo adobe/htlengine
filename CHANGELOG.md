@@ -1,3 +1,11 @@
+## [6.2.10](https://github.com/adobe/htlengine/compare/v6.2.9...v6.2.10) (2020-12-25)
+
+
+### Bug Fixes
+
+* **compiler:** fix upper-/lowercase problems in repeat plugin ([385bd55](https://github.com/adobe/htlengine/commit/385bd55bd2e4dc654caa18b1c63e75e1d52bfaee)), closes [#272](https://github.com/adobe/htlengine/issues/272)
+* **compiler:** ignore call arguments with no assignments ([1a22529](https://github.com/adobe/htlengine/commit/1a2252912a2d541a80a0d16bf33e4fa72c7f13e4)), closes [#275](https://github.com/adobe/htlengine/issues/275)
+
 ## [6.2.9](https://github.com/adobe/htlengine/compare/v6.2.8...v6.2.9) (2020-12-21)
 
 
