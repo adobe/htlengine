@@ -43,7 +43,7 @@ module.exports = class RepeatPlugin extends Plugin {
     ));
 
     const itemVariable = this._signature.getVariableName(DEFAULT_LIST_ITEM_VAR_NAME);
-    const loopStatusVar = itemVariable + ITEM_LOOP_STATUS_SUFFIX;
+    const loopStatusVar = (itemVariable + ITEM_LOOP_STATUS_SUFFIX).toLowerCase();
     const indexVariable = this._pluginContext.generateVariable('index');
     stream.write(new Loop.Start(this._listVariable, itemVariable, indexVariable));
     stream.write(new VariableBinding.Start(

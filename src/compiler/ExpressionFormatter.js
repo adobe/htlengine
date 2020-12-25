@@ -194,9 +194,12 @@ module.exports = class ExpressionFormatter {
     } else if (node instanceof MapLiteral) {
       this.result += '{';
       Object.keys(node.map).forEach((key) => {
-        this.result += `"${key}": `;
-        node.map[key].accept(this);
-        this.result += ', ';
+        const exp = node.map[key];
+        if (exp) {
+          this.result += `"${key}": `;
+          node.map[key].accept(this);
+          this.result += ', ';
+        }
       });
       this.result += '}';
     } else {

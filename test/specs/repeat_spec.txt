@@ -29,4 +29,18 @@
 <li data-sly-repeat.iata="${properties.airports @ begin = 1}">${iata}: ${properties.airports[iata]}</li>
 ====
 <li>bsl: Basel</li><li>hnd: Haneda</li><li>sfo: San Francisco</li>
-###
+#
+### use list control
+#
+<div data-sly-repeat.item="${properties.fruits}" class="${itemList.first ? 'active' : ''}">
+  ${item.title}
+</div>
+===
+<div class="active">
+  Apple
+</div><div>
+  Banana
+</div><div>
+  Orange
+</div>
+#
