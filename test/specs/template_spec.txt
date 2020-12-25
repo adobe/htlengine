@@ -113,5 +113,16 @@ blah Hello, world.
 </ul>
 </div>
 #
-###
+### calling template with invalid argument
 #
+<sly data-sly-use.lib="template_spec/library.htl"/>
+<div data-sly-call="${lib.lib @ name='heading', classAppend, data=component.data}"></div>
+===
+<div>
+
+
+    <h1>This is a button</h1>
+
+</div>
+#
+
