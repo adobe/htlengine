@@ -1,3 +1,10 @@
+## [6.2.11](https://github.com/adobe/htlengine/compare/v6.2.10...v6.2.11) (2020-12-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency urijs to v1.19.4 ([#280](https://github.com/adobe/htlengine/issues/280)) ([4e2696c](https://github.com/adobe/htlengine/commit/4e2696c81cbce791fe11e552cd790d1020fcfe8d))
+
 ## [6.2.10](https://github.com/adobe/htlengine/compare/v6.2.9...v6.2.10) (2020-12-25)
 
 
