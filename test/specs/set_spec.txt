@@ -19,4 +19,10 @@
 ===
 <span>Hello, John Doe!</span>
 #
+### set variable with test
+#
+<span data-sly-set.profile="${user.profile}" data-sly-test="${profile}">Hello, ${profile.firstName} ${profile.lastName}!</span>
+===
+<span>Hello, John Doe!</span>
+#
 ###
