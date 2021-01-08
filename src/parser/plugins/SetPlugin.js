@@ -14,7 +14,7 @@ const Plugin = require('../html/Plugin');
 const VariableBinding = require('../commands/VariableBinding');
 
 module.exports = class SetPlugin extends Plugin {
-  beforeElement(stream) {
+  onPrepareElement(stream) {
     const variableName = this._signature.getVariableName(null);
     stream.write(new VariableBinding.Global(variableName, this.expression.root));
   }

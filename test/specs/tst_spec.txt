@@ -100,4 +100,16 @@ It was: ${is:out}
 <div>It is true!</div>
 It was: hello
 #
+### multiple tests
+#
+<sly
+    data-sly-test.value1="${'abc'}"
+    data-sly-test.value2="${0}"
+    data-sly-test.value3="${999}" />
+<h1>v1: ${value1} v2:${value2} v3:${value3}</h1>
+===
+<h1>v1: abc v2:0 v3:999</h1>
+#
 ###
+
+

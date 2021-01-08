@@ -109,6 +109,7 @@ module.exports = class MarkupHandler {
     const stream = this._stream;
     this._inScriptOrStyle = false; // we never have nesting script or style tags.
 
+    plugin.onPrepareElement(stream, context);
     plugin.beforeElement(stream, context);
     if (context.isSlyTag) {
       stream.beginIgnore();

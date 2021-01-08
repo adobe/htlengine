@@ -36,6 +36,9 @@ module.exports = class Plugin {
     return this._location;
   }
 
+  onPrepareElement(stream, tagName, elementContext) {
+  }
+
   beforeElement(stream, tagName, elementContext) {
   }
 
