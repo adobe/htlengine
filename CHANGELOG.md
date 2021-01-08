@@ -1,3 +1,11 @@
+## [6.2.12](https://github.com/adobe/htlengine/compare/v6.2.11...v6.2.12) (2021-01-08)
+
+
+### Bug Fixes
+
+* **compiler:** ensure data-sly-set variable is defined before test ([fb81e68](https://github.com/adobe/htlengine/commit/fb81e68eacd27c780d203d19a54fc920d5c3df26)), closes [#282](https://github.com/adobe/htlengine/issues/282)
+* **compiler:** ensure that all test variables are set before element ([727ca5a](https://github.com/adobe/htlengine/commit/727ca5a006df7ff1d6780472c54fd23c22315d10)), closes [#231](https://github.com/adobe/htlengine/issues/231)
+
 ## [6.2.11](https://github.com/adobe/htlengine/compare/v6.2.10...v6.2.11) (2020-12-27)
 
 
