@@ -19,7 +19,7 @@ module.exports = class SymbolGenerator {
   }
 
   next(hint) {
-    const middle = hint ? hint.replace('-', '_') : '';
+    const middle = hint ? hint.replace(/-/g, '_') : '';
     this._counter += 1;
     return this._prefix + middle + this._counter;
   }
