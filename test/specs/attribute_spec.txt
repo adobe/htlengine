@@ -168,4 +168,10 @@
 ===
 <a>test</a>
 #
+### add attribute with many dashes
+#
+<div data-sly-attribute.data-cmp-contentfragment-path="${properties.myValues}"></div>
+===
+<div data-cmp-contentfragment-path="some data value"></div>
+#
 ###
