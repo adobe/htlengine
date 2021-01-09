@@ -1,3 +1,10 @@
+## [6.2.13](https://github.com/adobe/htlengine/compare/v6.2.12...v6.2.13) (2021-01-09)
+
+
+### Bug Fixes
+
+* **compiler:** escape all dashes in SymbolGenerator ([11f0f5c](https://github.com/adobe/htlengine/commit/11f0f5cf04c3d54b328d136d2bb4146a75a8152d)), closes [#284](https://github.com/adobe/htlengine/issues/284)
+
 ## [6.2.12](https://github.com/adobe/htlengine/compare/v6.2.11...v6.2.12) (2021-01-08)
 
 
