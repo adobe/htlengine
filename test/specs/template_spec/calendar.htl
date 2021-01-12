@@ -1,0 +1,4 @@
+<template data-sly-template.element="${@ date='The date', format='The format'}">
+<sly data-sly-test.format="${format ? format : 'YYYY-MM-dd HH:mm'}" />
+${format @ format=date, type='date', i18n}
+</template>

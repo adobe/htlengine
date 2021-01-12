@@ -25,7 +25,6 @@ const PopElement = require('../parser/commands/PopElement');
 const Doctype = require('../parser/commands/Doctype');
 const Comment = require('../parser/commands/Comment');
 const AddAttribute = require('../parser/commands/AddAttribute');
-const ExpressionFormatter = require('./ExpressionFormatter');
 const DomHandler = require('./DomHandler');
 
 module.exports = class JSCodeGenVisitor {
@@ -260,11 +259,11 @@ module.exports = class JSCodeGenVisitor {
     if (cmd instanceof OutText) {
       this._dom.outText(cmd);
     } else if (cmd instanceof VariableBinding.Start) {
-      const exp = ExpressionFormatter.format(cmd.expression);
-      this.out(`const ${cmd.variableName} = ${exp};`);
+      this._dom.setVariable(cmd);
+      // const exp = ExpressionFormatter.format(cmd.expression);
+      // this.out(`const ${cmd.variableName} = ${exp};`);
     } else if (cmd instanceof VariableBinding.Global) {
-      const exp = ExpressionFormatter.format(cmd.expression);
-      this.out(`const ${ExpressionFormatter.escapeVariable(cmd.variableName)} = ${exp};`);
+      this._dom.setVariable(cmd);
     } else if (cmd instanceof VariableBinding.End) {
       // nop
     } else if (cmd instanceof FileReference) {
@@ -278,33 +277,21 @@ module.exports = class JSCodeGenVisitor {
     } else if (cmd instanceof FunctionCall) {
       this._dom.functionCall(cmd);
     } else if (cmd instanceof Conditional.Start) {
-      const exp = ExpressionFormatter.format(cmd.expression);
-      const neg = cmd.negate ? '!' : '';
-      this.out(`if (${neg}${exp}) {`);
+      this._dom.conditionStart(cmd);
       this.indent();
     } else if (cmd instanceof Conditional.End) {
       this.outdent();
-      this.out('}');
+      this._dom.conditionEnd();
     } else if (cmd instanceof OutputVariable) {
       this._dom.outVariable(cmd.variableName);
     } else if (cmd instanceof Loop.Init) {
-      const exp = ExpressionFormatter.format(cmd.expression);
-      if (cmd.options && Object.keys(cmd.options).length) {
-        const opts = {};
-        Object.entries(cmd.options).forEach(([key, value]) => {
-          opts[key] = ExpressionFormatter.format(value);
-        });
-        this.out(`const ${cmd.variableName} = $.col.init(${exp},${JSON.stringify(opts)});`);
-      } else {
-        this.out(`const ${cmd.variableName} = $.col.init(${exp});`);
-      }
+      this._dom.loopInit(cmd);
     } else if (cmd instanceof Loop.Start) {
-      this.out(`for (const ${cmd.indexVariable} of $.col.keys(${cmd.listVariable})) {`);
+      this._dom.loopStart(cmd);
       this.indent();
-      this.out(`const ${cmd.itemVariable} = $.col.get(${cmd.listVariable}, ${cmd.indexVariable});`);
     } else if (cmd instanceof Loop.End) {
       this.outdent();
-      this.out('}');
+      this._dom.loopEnd(cmd);
     } else if (cmd instanceof CreateElement) {
       this._dom.createElement(cmd);
     } else if (cmd instanceof PushElement) {

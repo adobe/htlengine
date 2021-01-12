@@ -125,4 +125,14 @@ blah Hello, world.
 
 </div>
 #
+### using template with clashing variables
+#
+<sly data-sly-use.cal="template_spec/calendar.htl"/>
+<div data-sly-call="${cal.element @ date=component.date}"></div>
+===
+<div>
+
+2021-01-12 04:47
+</div>
+#
 
