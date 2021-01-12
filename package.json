@@ -24,6 +24,7 @@
     "fs-extra": "9.0.1",
     "he": "1.2.0",
     "moment": "2.29.1",
+    "moo": "0.5.1",
     "node-esapi": "0.0.1",
     "numeral": "2.0.6",
     "rehype-parse": "7.0.1",
