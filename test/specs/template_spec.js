@@ -17,6 +17,7 @@ module.exports = {
     data: {
       text: 'This is a button',
     },
+    date: 1610426834000,
   },
   page: {
     title: 'This is the title',

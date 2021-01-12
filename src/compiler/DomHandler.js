@@ -74,6 +74,53 @@ module.exports = class DomHandler {
     }
   }
 
+  setVariable(cmd) {
+    const exp = ExpressionFormatter.format(cmd.expression);
+    const name = ExpressionFormatter.escapeVariable(cmd.variableName);
+    if (this._isVarDefined(name)) {
+      this._out(`${name} = ${exp};`);
+    } else {
+      this._defineVar(name);
+      this._out(`const ${name} = ${exp};`);
+    }
+  }
+
+  conditionStart(cmd) {
+    const exp = ExpressionFormatter.format(cmd.expression);
+    const neg = cmd.negate ? '!' : '';
+    this._out(`if (${neg}${exp}) {`);
+    this._pushBlock();
+  }
+
+  conditionEnd() {
+    this._popBlock();
+    this._out('}');
+  }
+
+  loopInit(cmd) {
+    const exp = ExpressionFormatter.format(cmd.expression);
+    if (cmd.options && Object.keys(cmd.options).length) {
+      const opts = {};
+      Object.entries(cmd.options).forEach(([key, value]) => {
+        opts[key] = ExpressionFormatter.format(value);
+      });
+      this._out(`const ${cmd.variableName} = $.col.init(${exp},${JSON.stringify(opts)});`);
+    } else {
+      this._out(`const ${cmd.variableName} = $.col.init(${exp});`);
+    }
+  }
+
+  loopStart(cmd) {
+    this._out(`for (const ${cmd.indexVariable} of $.col.keys(${cmd.listVariable})) {`);
+    this._out(`  const ${cmd.itemVariable} = $.col.get(${cmd.listVariable}, ${cmd.indexVariable});`);
+    this._pushBlock();
+  }
+
+  loopEnd() {
+    this._popBlock();
+    this._out('}');
+  }
+
   bindFunction(cmd) {
     this._out(`const ${cmd.name} = $.template('${cmd.id}');`);
   }
@@ -85,8 +132,11 @@ module.exports = class DomHandler {
     // this._out(`${exp} = $.template('${id}', '${exp}', function* ${functionName}(args) { `);
     this._out(`${name} = function* ${functionName}(args) { `);
     this._gen.indent();
+    const vars = new Set();
     cmd.args.forEach((arg) => {
-      this._out(`const ${ExpressionFormatter.escapeVariable(arg)} = args[1]['${arg}'] || '';`);
+      const varName = ExpressionFormatter.escapeVariable(arg);
+      vars.add(varName);
+      this._out(`let ${varName} = args[1]['${arg}'] || '';`);
     });
     this._out('let $t, $n = args[0];');
     this._globalTemplates[name] = id;
@@ -94,6 +144,7 @@ module.exports = class DomHandler {
       id,
       name,
       functionName,
+      stack: [vars],
     };
   }
 
@@ -108,5 +159,30 @@ module.exports = class DomHandler {
     const funcName = ExpressionFormatter.format(cmd.functionName);
     const args = ExpressionFormatter.format(cmd.args);
     this._out(`yield $.call(${funcName}, [$n, ${args}]);`);
+  }
+
+  _isVarDefined(name) {
+    if (!this._currentTemplate) {
+      return false;
+    }
+    return !!this._currentTemplate.stack.find((s) => s.has(name));
+  }
+
+  _defineVar(name) {
+    if (this._currentTemplate) {
+      this._currentTemplate.stack[0].add(name);
+    }
+  }
+
+  _pushBlock() {
+    if (this._currentTemplate) {
+      this._currentTemplate.stack.unshift(new Set());
+    }
+  }
+
+  _popBlock() {
+    if (this._currentTemplate) {
+      this._currentTemplate.stack.shift();
+    }
   }
 };
