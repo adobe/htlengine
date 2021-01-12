@@ -25,6 +25,7 @@ const lexer = moo.states({
     RBRACKET: ')',
     AND_OP: '&&',
     OR_OP: '||',
+    NEQ: '!=',
     NOT_OP: '!',
     IN_OP: 'in',
     COMMA: ',',
@@ -39,7 +40,6 @@ const lexer = moo.states({
     GEQ: '>=',
     GT: '>',
     EQ: '==',
-    NEQ: '!=',
     ID: {
       match: /[a-zA-Z_][a-zA-Z0-9_:]*/,
       type: moo.keywords({
@@ -55,21 +55,5 @@ const lexer = moo.states({
     D_STRING: /"(?:\\u[a-fA-F0-9]{4}|\\["\\btnfr]|[^"\n\\])*"/,
   },
 });
-
-lexer.reset('${varChoice ? varOne : varTwo}');
-lexer.reset('${varOne && !(varTwo || varThree || true)}');
-lexer.reset('${myVar @ optOne, optTwo=myVar, optThree=\'string\', optFour=[myVar, \'string\']}');
-lexer.reset('Hello, ${myVar}.');
-lexer.reset('Hello, ${}.');
-lexer.reset('Hello, $toby .');
-lexer.reset('Hello, \\${foo}.');
-
-let token;
-do {
-  token = lexer.next();
-  if (token) {
-    console.log(token.type, token.value);
-  }
-} while (token);
 
 module.exports = lexer;
