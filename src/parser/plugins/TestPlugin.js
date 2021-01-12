@@ -16,7 +16,7 @@ const Conditional = require('../commands/Conditional');
 const Identifier = require('../htl/nodes/Identifier');
 
 module.exports = class TestPlugin extends Plugin {
-  onPrepareElement(stream) {
+  beforeElement(stream) {
     const ctx = this.pluginContext;
     let variableName = this._signature.getVariableName(null);
     this._useGlobalBinding = variableName != null;
@@ -34,8 +34,8 @@ module.exports = class TestPlugin extends Plugin {
     }
   }
 
-  beforeElement(stream) {
-    stream.write(new Conditional.Start(new Identifier(this._variableName)));
+  beforeTagOpen(stream) {
+    stream.write(new Conditional.Start(new Identifier(this._variableName)), true);
   }
 
   afterElement(stream) {

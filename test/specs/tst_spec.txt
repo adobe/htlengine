@@ -111,5 +111,12 @@ It was: hello
 <h1>v1: abc v2:0 v3:999</h1>
 #
 ###
+#
+### test and use
+#
+<sly data-sly-use.page="./use_spec/test_page.js" data-sly-test="${page.title}"></sly>
+===
 
+#
+###
 
