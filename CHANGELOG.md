@@ -1,3 +1,18 @@
+## [6.2.15](https://github.com/adobe/htlengine/compare/v6.2.14...v6.2.15) (2021-01-13)
+
+
+### Bug Fixes
+
+* **runtime:** fix type error with lists ([9ad3740](https://github.com/adobe/htlengine/commit/9ad3740922c5563a3a13dda82c62a0fba3b52ae2)), closes [#290](https://github.com/adobe/htlengine/issues/290)
+
+## [6.2.14](https://github.com/adobe/htlengine/compare/v6.2.13...v6.2.14) (2021-01-12)
+
+
+### Bug Fixes
+
+* **compiler:** fix regression in data-sly-test ([4606712](https://github.com/adobe/htlengine/commit/46067128b5d40664431fddfa7acc5e583d36b2dc)), closes [#287](https://github.com/adobe/htlengine/issues/287)
+* **compiler:** fix variable redefinition inside templates ([43a8b14](https://github.com/adobe/htlengine/commit/43a8b149e8f921cd86f4218b0f22fd9da5e63dd8)), closes [#286](https://github.com/adobe/htlengine/issues/286)
+
 ## [6.2.13](https://github.com/adobe/htlengine/compare/v6.2.12...v6.2.13) (2021-01-09)
 
 
