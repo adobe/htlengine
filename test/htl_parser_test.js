@@ -19,13 +19,12 @@ const HTLParser = require('../src/parser/htl/HTLParser2');
 const ThrowingErrorListener = require('../src/parser/htl/ThrowingErrorListener');
 
 function process(input) {
-  const interp = new HTLParser()
+  const ast = new HTLParser()
     .withErrorListener(ThrowingErrorListener.INSTANCE)
     .parse(input);
 
   const visitor = new DebugVisitor();
-  visitor.visit(interp);
-
+  visitor.visit(ast);
   return visitor.result;
 }
 
