@@ -1,3 +1,10 @@
+## [6.2.15](https://github.com/adobe/htlengine/compare/v6.2.14...v6.2.15) (2021-01-13)
+
+
+### Bug Fixes
+
+* **runtime:** fix type error with lists ([9ad3740](https://github.com/adobe/htlengine/commit/9ad3740922c5563a3a13dda82c62a0fba3b52ae2)), closes [#290](https://github.com/adobe/htlengine/issues/290)
+
 ## [6.2.14](https://github.com/adobe/htlengine/compare/v6.2.13...v6.2.14) (2021-01-12)
 
 
