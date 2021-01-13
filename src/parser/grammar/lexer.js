@@ -12,12 +12,24 @@
 /* eslint-disable no-template-curly-in-string */
 const moo = require('moo');
 
+function parseDString(str) {
+  return JSON.parse(`{"s":${str}}`).s;
+}
+
+function parseSString(str) {
+  const sb = str.substring(1, str.length - 1)
+    .replace(/[^\\]"/g, '\\"')
+    .replace('\\\'', '\'');
+  return JSON.parse(`{"s":"${sb}"}`).s;
+}
+
 const lexer = moo.states({
   main: {
     EXPR_START: { match: /\$\{/, push: 'expr' },
-    TEXT_PART: { match: /(?:(?!\${)(?:\\\$|.))+/, lineBreaks: true },
+    TEXT_PART: { match: /(?:(?!\${)(?:\\\$|[^]))+/, lineBreaks: true },
   },
   expr: {
+    COMMENT: /<!--\/\*.*?\*\/-->/,
     EXPR_END: { match: '}', pop: 1 },
     BOOL_CONSTANT: ['true', 'false'],
     DOT: '.',
@@ -48,11 +60,16 @@ const lexer = moo.states({
     },
     FLOAT: /-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/,
     INT: /-?\d+/,
-    COMMENT: /<!--\/\*.*?\*\/-->/,
     WS: { match: /\s+/, lineBreaks: true },
 
-    S_STRING: /'(?:\\u[a-fA-F0-9]{4}|\\["\\btnfr]|[^'\n\\])*'/,
-    D_STRING: /"(?:\\u[a-fA-F0-9]{4}|\\["\\btnfr]|[^"\n\\])*"/,
+    S_STRING: {
+      match: /'(?:\\u[a-fA-F0-9]{4}|\\['\\btnfr]|[^'\n\\])*'/,
+      value: parseSString,
+    },
+    D_STRING: {
+      match: /"(?:\\u[a-fA-F0-9]{4,6}|\\["\\btnfr]|[^"\n\\])*"/,
+      value: parseDString,
+    },
   },
 });
 

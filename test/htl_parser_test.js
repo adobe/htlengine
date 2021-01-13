@@ -90,6 +90,11 @@ const TESTS = {
     { s: '${myVar} Hello' },
     { s: 'Foo ${} Bar' },
   ],
+  Comments: [
+    { s: 'Hello, <!--/* ${myVar} */-->. ' },
+    { s: 'Hello <!-- ${myVar} --> ' },
+    { s: 'Hello ${myVar <!--/* @ a = 1 */--> }', r: 'Hello ${myVar}' },
+  ],
 };
 
 /* eslint-enable no-template-curly-in-string */

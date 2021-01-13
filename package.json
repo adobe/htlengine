@@ -12,7 +12,9 @@
     "node": ">=10.13 <11.0 || >=12.11.1 <13.0"
   },
   "scripts": {
-    "build": "nearleyc ./src/parser/grammar/sightly.ne  --out ./src/parser/generated/grammar.js",
+    "build": "npm run build:compile && npm run build:railroad",
+    "build:compile": "nearleyc ./src/parser/grammar/sightly.ne  --out ./src/parser/generated/grammar.js",
+    "build:railroad": "nearley-railroad ./src/parser/grammar/sightly.ne  --out ./src/parser/generated/grammar.html",
     "semantic-release": "semantic-release",
     "start": "node src/run.js",
     "test": "nyc --reporter=text --reporter=lcov --check-coverage --branches 68 --statements 82 --lines 82 mocha",

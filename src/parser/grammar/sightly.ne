@@ -1,11 +1,12 @@
 @{%
 lexer = require('../grammar/lexer.js');
 
-function h(type, value, children = []) {
+function h(type, value, children = [], props = {}) {
   return {
     type,
     value,
     children,
+    ...props,
   }
 }
 
@@ -29,7 +30,7 @@ function expression(d) {
   return {
     type: 'expression',
     value: d[2],
-    opts: d[3],
+    options: d[3],
   }
 }
 
@@ -50,8 +51,8 @@ function term(d) {
   let node = d[0];
   d[1].forEach((s) => {
     node = {
-      type: 'prop',
-      children: [node],
+      type: 'access',
+      target: node,
       value: s,
     }
   });
@@ -98,7 +99,7 @@ optionList -> _ %OPTION_SEP _ option (_ %COMMA _ option):* {% optionList %}
 option -> %ID (_ %ASSIGN _ exprNode):? {% option %}
 
 exprNode
-    -> orBinaryOp _ %TERNARY_Q_OP _ orBinaryOp _ %TERNARY_BRANCHES_OP _ orBinaryOp {% d => h('tenary', d[0], [d[4], d[8]]) %}
+    -> orBinaryOp _ %TERNARY_Q_OP _ orBinaryOp _ %TERNARY_BRANCHES_OP _ orBinaryOp {% d => h('ternary', d[0], [d[4], d[8]]) %}
     |  orBinaryOp {% id %}
 
 orBinaryOp -> andBinaryOp (_ %OR_OP _ andBinaryOp):* {% binaryList('or') %}
@@ -133,12 +134,10 @@ simple
 valueList -> exprNode (_ %COMMA _ exprNode):*
 
 atom
-  -> (%D_STRING | %S_STRING) {% d => h('string', d[0][0].value) %}
+  -> (%D_STRING | %S_STRING) {% d => h('string', d[0][0].value, null, { text: d[0][0].text }) %}
   |  %ID {% d => h('ident', d[0].value) %}
   |  (%FLOAT | %INT) {% d => h('number', Number.parseFloat(d[0][0].value)) %}
   |  %BOOL_CONSTANT {% d => h('bool', d[0].value === 'true') %}
 
-
-__ -> %WS:+
-_ -> %WS:*
+_ -> (%WS|%COMMENT):*
 

@@ -5,11 +5,12 @@ function id(x) { return x[0]; }
 
 lexer = require('../grammar/lexer.js');
 
-function h(type, value, children = []) {
+function h(type, value, children = [], props = {}) {
   return {
     type,
     value,
     children,
+    ...props,
   }
 }
 
@@ -33,7 +34,7 @@ function expression(d) {
   return {
     type: 'expression',
     value: d[2],
-    opts: d[3],
+    options: d[3],
   }
 }
 
@@ -54,8 +55,8 @@ function term(d) {
   let node = d[0];
   d[1].forEach((s) => {
     node = {
-      type: 'prop',
-      children: [node],
+      type: 'access',
+      target: node,
       value: s,
     }
   });
@@ -111,7 +112,7 @@ var grammar = {
     {"name": "option$ebnf$1", "symbols": ["option$ebnf$1$subexpression$1"], "postprocess": id},
     {"name": "option$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}},
     {"name": "option", "symbols": [(lexer.has("ID") ? {type: "ID"} : ID), "option$ebnf$1"], "postprocess": option},
-    {"name": "exprNode", "symbols": ["orBinaryOp", "_", (lexer.has("TERNARY_Q_OP") ? {type: "TERNARY_Q_OP"} : TERNARY_Q_OP), "_", "orBinaryOp", "_", (lexer.has("TERNARY_BRANCHES_OP") ? {type: "TERNARY_BRANCHES_OP"} : TERNARY_BRANCHES_OP), "_", "orBinaryOp"], "postprocess": d => h('tenary', d[0], [d[4], d[8]])},
+    {"name": "exprNode", "symbols": ["orBinaryOp", "_", (lexer.has("TERNARY_Q_OP") ? {type: "TERNARY_Q_OP"} : TERNARY_Q_OP), "_", "orBinaryOp", "_", (lexer.has("TERNARY_BRANCHES_OP") ? {type: "TERNARY_BRANCHES_OP"} : TERNARY_BRANCHES_OP), "_", "orBinaryOp"], "postprocess": d => h('ternary', d[0], [d[4], d[8]])},
     {"name": "exprNode", "symbols": ["orBinaryOp"], "postprocess": id},
     {"name": "orBinaryOp$ebnf$1", "symbols": []},
     {"name": "orBinaryOp$ebnf$1$subexpression$1", "symbols": ["_", (lexer.has("OR_OP") ? {type: "OR_OP"} : OR_OP), "_", "andBinaryOp"]},
@@ -152,17 +153,16 @@ var grammar = {
     {"name": "valueList", "symbols": ["exprNode", "valueList$ebnf$1"]},
     {"name": "atom$subexpression$1", "symbols": [(lexer.has("D_STRING") ? {type: "D_STRING"} : D_STRING)]},
     {"name": "atom$subexpression$1", "symbols": [(lexer.has("S_STRING") ? {type: "S_STRING"} : S_STRING)]},
-    {"name": "atom", "symbols": ["atom$subexpression$1"], "postprocess": d => h('string', d[0][0].value)},
+    {"name": "atom", "symbols": ["atom$subexpression$1"], "postprocess": d => h('string', d[0][0].value, null, { text: d[0][0].text })},
     {"name": "atom", "symbols": [(lexer.has("ID") ? {type: "ID"} : ID)], "postprocess": d => h('ident', d[0].value)},
     {"name": "atom$subexpression$2", "symbols": [(lexer.has("FLOAT") ? {type: "FLOAT"} : FLOAT)]},
     {"name": "atom$subexpression$2", "symbols": [(lexer.has("INT") ? {type: "INT"} : INT)]},
     {"name": "atom", "symbols": ["atom$subexpression$2"], "postprocess": d => h('number', Number.parseFloat(d[0][0].value))},
     {"name": "atom", "symbols": [(lexer.has("BOOL_CONSTANT") ? {type: "BOOL_CONSTANT"} : BOOL_CONSTANT)], "postprocess": d => h('bool', d[0].value === 'true')},
-    {"name": "__$ebnf$1", "symbols": [(lexer.has("WS") ? {type: "WS"} : WS)]},
-    {"name": "__$ebnf$1", "symbols": ["__$ebnf$1", (lexer.has("WS") ? {type: "WS"} : WS)], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
-    {"name": "__", "symbols": ["__$ebnf$1"]},
     {"name": "_$ebnf$1", "symbols": []},
-    {"name": "_$ebnf$1", "symbols": ["_$ebnf$1", (lexer.has("WS") ? {type: "WS"} : WS)], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
+    {"name": "_$ebnf$1$subexpression$1", "symbols": [(lexer.has("WS") ? {type: "WS"} : WS)]},
+    {"name": "_$ebnf$1$subexpression$1", "symbols": [(lexer.has("COMMENT") ? {type: "COMMENT"} : COMMENT)]},
+    {"name": "_$ebnf$1", "symbols": ["_$ebnf$1", "_$ebnf$1$subexpression$1"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "_", "symbols": ["_$ebnf$1"]}
 ]
   , ParserStart: "interpolation"
