@@ -1,16 +1,21 @@
 @{%
 lexer = require('../grammar/lexer.js');
 
-function h(type, value, children = [], props = {}) {
-  return {
+function h(type, value, children, props = {}) {
+  const node = {
     type,
-    value,
-    children,
     ...props,
+  };
+  if (value) {
+    node.value = value;
   }
+  if (children) {
+    node.children = children;
+  }
+  return node;
 }
 
-function binaryList(type) {
+function binaryList(op) {
   return (d) => {
     if (!d[1].length) {
       return d[0];
@@ -20,7 +25,8 @@ function binaryList(type) {
       children.push(s[3])
     });
     return {
-      type,
+      type: 'binary',
+      op,
       children,
     }
   }
@@ -29,8 +35,7 @@ function binaryList(type) {
 function expression(d) {
   return {
     type: 'expression',
-    value: d[2],
-    options: d[3],
+    children: [d[2], d[3]],
   }
 }
 
@@ -47,48 +52,40 @@ function array(d) {
   }
 }
 
-function term(d) {
+function access(d) {
   let node = d[0];
   d[1].forEach((s) => {
     node = {
       type: 'access',
-      target: node,
-      value: s,
+      children: [node, s],
     }
   });
   return node;
-  return {
-    type: 'term',
-    children: node,
-  }
 }
 
 function optionList(d) {
-  const opts = {};
   const children = [d[3]];
-  opts[d[3].key] = d[3].value;
   d[4].forEach((s) => {
-    opts[s[3].key] = s[3].value;
     children.push(s[3]);
   });
   return {
     type: 'options',
-    value: opts,
     children,
   }
 }
 
 function option(d) {
   return {
-    key: d[0].value,
-    value: d[1] ? d[1][3].value : null,
+    type: 'option',
+    value: d[0].value,
+    children: d[1] ? [d[1][3]] : [],
   }
 }
 %}
 
 @lexer lexer
 
-interpolation -> ( textFrag | expression ):* {% d => d[0].map((s) => s[0]) %}
+interpolation -> ( textFrag | expression ):* {% d => h('htl', null, d[0].map((s) => s[0])) %}
 
 textFrag -> %TEXT_PART:+ {% d => h('text', d.map((s) => s[0].value).join('')) %}
 
@@ -102,29 +99,29 @@ exprNode
     -> orBinaryOp _ %TERNARY_Q_OP _ orBinaryOp _ %TERNARY_BRANCHES_OP _ orBinaryOp {% d => h('ternary', d[0], [d[4], d[8]]) %}
     |  orBinaryOp {% id %}
 
-orBinaryOp -> andBinaryOp (_ %OR_OP _ andBinaryOp):* {% binaryList('or') %}
+orBinaryOp -> andBinaryOp (_ %OR_OP _ andBinaryOp):* {% binaryList('||') %}
 
-andBinaryOp -> inBinaryOp (_ %AND_OP _ inBinaryOp):* {% binaryList('and') %}
+andBinaryOp -> inBinaryOp (_ %AND_OP _ inBinaryOp):* {% binaryList('&&') %}
 
 inBinaryOp -> comparisonTerm (_ %IN_OP _ comparisonTerm):* {% binaryList('in') %}
 
 comparisonTerm
   -> factor {% id %}
-  |  factor _ comparisonOp _ factor {% d => h('comparison', d[2][0].value, [d[0], d[4]]) %}
+  |  factor _ comparisonOp _ factor {% d => h('comparison', null, [d[0], d[4]], { op: d[2][0].value }) %}
 
 comparisonOp -> %GT | %LT | %LEQ | %GEQ | %EQ | %NEQ
 
 factor
   -> term {% id %}
-  |  %NOT_OP _ term {% d => h('not', d[2]) %}
+  |  %NOT_OP _ term {% d => h('unary', d[2], [], { op: '!' }) %}
 
 term
   -> simple
       ( %ARRAY_START _ exprNode _ %ARRAY_END {% d => d[2] %}
       | %DOT field {% d => d[1] %}
-    ):* {% term %}
+    ):* {% access %}
 
-field -> %ID {% d => d[0].value %}
+field -> %ID {% d => h('string', d[0].value, [], { quotes: '\'' }) %}
 
 simple
     -> atom {% id %}
@@ -134,7 +131,7 @@ simple
 valueList -> exprNode (_ %COMMA _ exprNode):*
 
 atom
-  -> (%D_STRING | %S_STRING) {% d => h('string', d[0][0].value, null, { text: d[0][0].text }) %}
+  -> (%D_STRING | %S_STRING) {% d => h('string', d[0][0].value, null, { quotes: d[0][0].text[0] }) %}
   |  %ID {% d => h('ident', d[0].value) %}
   |  (%FLOAT | %INT) {% d => h('number', Number.parseFloat(d[0][0].value)) %}
   |  %BOOL_CONSTANT {% d => h('bool', d[0].value === 'true') %}

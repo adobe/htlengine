@@ -14,8 +14,8 @@
 
 const assert = require('assert');
 
-const DebugVisitor = require('../src/parser/htl/DebugVisitor');
-const HTLParser = require('../src/parser/htl/HTLParser');
+const DebugVisitor = require('../src/parser/htl/DebugVisitor2');
+const HTLParser = require('../src/parser/htl/HTLParser2');
 const ThrowingErrorListener = require('../src/parser/htl/ThrowingErrorListener');
 
 function process(input) {
