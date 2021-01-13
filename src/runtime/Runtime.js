@@ -59,6 +59,16 @@ module.exports = class Runtime {
       /* eslint-enable no-param-reassign */
     }
 
+    function coerce(c) {
+      if (!c) {
+        return [];
+      }
+      if (typeof c[Symbol.iterator] === 'function') {
+        return Array.from(c);
+      }
+      return c;
+    }
+
     function rel(key, value) {
       if (typeof value === 'object') {
         return Array.isArray(value) ? value.indexOf(key) >= 0 : (key in value);
@@ -67,7 +77,7 @@ module.exports = class Runtime {
     }
 
     return {
-      init: (c, opts) => limit(typeof c[Symbol.iterator] === 'function' ? Array.from(c) : c, opts),
+      init: (c, opts) => limit(coerce(c), opts),
       len: (c) => (Array.isArray(c) ? c.length : Object.keys(c).length),
       keys: (c) => Object.keys(c),
       get: (c, k) => (Array.isArray(c) ? c[k] : k),
