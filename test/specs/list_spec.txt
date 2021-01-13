@@ -118,4 +118,10 @@
 ===
 <div>2,5,11,17,23,31,</div>
 #
+### iterating over undefined
+#
+<div data-sly-test="${properties.nav}" data-sly-list="${properties.nav}">${item}</div>
+<div data-sly-test="${properties.null}" data-sly-list="${properties.null}">${item}</div>
+===
+#
 ###
