@@ -1,3 +1,10 @@
+# [6.3.0](https://github.com/adobe/htlengine/compare/v6.2.15...v6.3.0) (2021-01-14)
+
+
+### Features
+
+* **parser:** replace antrl with nearly/moo ([2295d3a](https://github.com/adobe/htlengine/commit/2295d3af062b375064ac37d9d49362b5f714f44f)), closes [#268](https://github.com/adobe/htlengine/issues/268)
+
 ## [6.2.15](https://github.com/adobe/htlengine/compare/v6.2.14...v6.2.15) (2021-01-13)
 
 
