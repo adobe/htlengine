@@ -15,9 +15,9 @@ const inspect = require('unist-util-inspect');
 const grammar = require('../generated/grammar.js');
 const Interpolation = require('./nodes/Interpolation');
 
-module.exports = class HTLParser2 {
+module.exports = class HTLParser {
   constructor() {
-    this.debug = true;
+    this.debug = false;
   }
 
   /**
@@ -26,7 +26,7 @@ module.exports = class HTLParser2 {
      * @return {object} The parsed abstract syntax tree.
      */
   // eslint-disable-next-line class-methods-use-this
-  parse(text, { line = 0, column = 0 }) {
+  parse(text, { line = 0, column = 0 } = {}) {
     // eslint-disable-next-line no-param-reassign
     text = text || ''; // avoid null
     if (this.debug) {

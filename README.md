@@ -64,15 +64,8 @@ The tests are more comprehensive. They validate if the the HTL expressions are p
 npm test
 ```
 
-## rebuild antlr4 generated source
+## rebuild generated [nearley](https://nearley.js.org/) grammar
 
 ```bash
 npm run build
 ```
-
-### prerequisites
-
-```bash
-brew install antlr
-```
-

@@ -379,7 +379,7 @@ module.exports = class Compiler {
         // make relative to process
         includeFile = path.relative(process.cwd(), includeFile);
         // eslint-disable-next-line no-underscore-dangle
-        c.expression.expression._text = includeFile;
+        c.expression.expression.value = includeFile;
       }
     }
     return {
