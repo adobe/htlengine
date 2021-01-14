@@ -17,28 +17,26 @@
  */
 module.exports = class Interpolation {
   constructor() {
-    this._fragments = [];
+    this.type = 'interpolation';
+    this.children = [];
     this._content = '';
     this._isPlainText = true;
   }
 
-  // eslint-disable-next-line no-unused-vars
-  addExpression(expression, token) {
+  addExpression(expression) {
     this._isPlainText = false;
-    this._fragments.push({
-      expression,
-    });
+    this.children.push(expression);
   }
 
-  // eslint-disable-next-line no-unused-vars
-  addText(text, token) {
-    this._fragments.push({
-      text,
+  addText(text) {
+    this.children.push({
+      type: 'text',
+      value: text,
     });
   }
 
   get fragments() {
-    return this._fragments;
+    return this.children;
   }
 
   get content() {
@@ -58,13 +56,9 @@ module.exports = class Interpolation {
       return null;
     }
     let text = '';
-    for (let i = 0; i < this._fragments.length; i += 1) {
-      text += this._fragments[i].text;
+    for (let i = 0; i < this.children.length; i += 1) {
+      text += this.children[i].value;
     }
     return text;
-  }
-
-  get length() {
-    return this._fragments.length;
   }
 };

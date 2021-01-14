@@ -39,16 +39,16 @@ module.exports = class DebugVisitor {
       this.result += '(';
     }
     if (node instanceof Interpolation) {
-      node.fragments.forEach((frag) => {
-        if (frag.expression) {
-          frag.expression.accept(this);
+      node.children.forEach((frag) => {
+        if (frag.type === 'expression') {
+          frag.accept(this);
         } else {
-          this.result += `${frag.text}`;
+          this.result += `${frag.value}`;
         }
       });
     } else if (node instanceof ArrayLiteral) {
       this.result += '[';
-      node.items.forEach((i, idx) => {
+      node.children.forEach((i, idx) => {
         if (idx > 0) {
           this.result += ', ';
         }
@@ -61,9 +61,12 @@ module.exports = class DebugVisitor {
       node.property.accept(this);
       this.result += ']';
     } else if (node instanceof BinaryOperation) {
-      node.leftOperand.accept(this);
-      this.result += node.operator.sym;
-      node.rightOperand.accept(this);
+      node.children.forEach((child, idx) => {
+        if (idx > 0) {
+          this.result += ` ${node.operator.sym} `;
+        }
+        this.visit(child);
+      });
     } else if (node instanceof TernaryOperation) {
       node.condition.accept(this);
       this.result += ' ? ';

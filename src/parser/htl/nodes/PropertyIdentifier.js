@@ -13,6 +13,10 @@
 const Identifier = require('./Identifier');
 
 class PropertyIdentifier extends Identifier {
+  constructor(name) {
+    super(name);
+    this.type = 'property';
+  }
 }
 
 module.exports = PropertyIdentifier;

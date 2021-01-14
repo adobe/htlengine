@@ -9,7 +9,7 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-/* eslint-disable no-template-curly-in-string */
+/* eslint-disable no-template-curly-in-string,no-control-regex */
 const moo = require('moo');
 
 function parseDString(str) {
@@ -26,12 +26,13 @@ function parseSString(str) {
 const lexer = moo.states({
   main: {
     EXPR_START: { match: /\$\{/, push: 'expr' },
-    TEXT_PART: { match: /(?:(?!\${)(?:\\\$|[^]))+/, lineBreaks: true },
+    EOF: /\03/,
+    TEXT_PART: { match: /(?:(?!\${)(?:\\\$|[^\x03]))+/, lineBreaks: true },
   },
   expr: {
+    EOF: /\x03/,
     COMMENT: /<!--\/\*.*?\*\/-->/,
     EXPR_END: { match: '}', pop: 1 },
-    BOOL_CONSTANT: ['true', 'false'],
     DOT: '.',
     LBRACKET: '(',
     RBRACKET: ')',
@@ -69,11 +70,11 @@ const lexer = moo.states({
     WS: { match: /\s+/, lineBreaks: true },
 
     S_STRING: {
-      match: /'(?:\\u[a-fA-F0-9]{4}|\\['\\btnfr]|[^'\n\\])*'/,
+      match: /'(?:\\u[a-fA-F0-9]{4}|\\["'\\btnfr]|[^'\n\\])*'/,
       value: parseSString,
     },
     D_STRING: {
-      match: /"(?:\\u[a-fA-F0-9]{4,6}|\\["\\btnfr]|[^"\n\\])*"/,
+      match: /"(?:\\u[a-fA-F0-9]{4,6}|\\["'\\btnfr]|[^"\n\\])*"/,
       value: parseDString,
     },
   },

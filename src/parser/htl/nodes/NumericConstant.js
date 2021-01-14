@@ -21,18 +21,14 @@ class NumericConstant extends Atom {
      *
      * @param {*} text the text representation
      */
-  constructor(text) {
+  constructor(value) {
     super();
-    this._value = Number(text);
-    this._text = text;
+    this.type = 'number';
+    this.value = value;
   }
 
   get text() {
-    return this._text;
-  }
-
-  get value() {
-    return this._value;
+    return String(this.value);
   }
 }
 

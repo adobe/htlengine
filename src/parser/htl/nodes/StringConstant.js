@@ -25,11 +25,12 @@ class StringConstant extends Atom {
 
   constructor(text) {
     super();
-    this._text = text;
+    this.type = 'string';
+    this.value = text;
   }
 
   get text() {
-    return this._text;
+    return this.value;
   }
 }
 

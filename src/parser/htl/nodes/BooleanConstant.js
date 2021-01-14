@@ -13,18 +13,14 @@
 const Atom = require('./Atom');
 
 class BooleanConstant extends Atom {
-  constructor(text) {
+  constructor(value) {
     super();
-    this._value = text.toString() === 'true';
-    this._text = text;
+    this.type = 'bool';
+    this.value = value;
   }
 
   get text() {
-    return this._text;
-  }
-
-  get value() {
-    return this._value;
+    return this.value ? 'true' : 'false';
   }
 }
 BooleanConstant.TRUE = new BooleanConstant(true);

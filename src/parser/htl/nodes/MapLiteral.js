@@ -15,6 +15,7 @@ const ExpressionNode = require('./ExpressionNode');
 module.exports = class MapLiteral extends ExpressionNode {
   constructor(map) {
     super();
+    this.type = 'map';
     this._map = map;
   }
 

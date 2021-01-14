@@ -16,7 +16,6 @@ const path = require('path');
 const fse = require('fs-extra');
 const { SourceMapGenerator } = require('source-map');
 const TemplateParser = require('../parser/html/TemplateParser');
-const ThrowingErrorListener = require('../parser/htl/ThrowingErrorListener');
 const JSCodeGenVisitor = require('./JSCodeGenVisitor');
 const ExpressionFormatter = require('./ExpressionFormatter');
 const FileReference = require('../parser/commands/FileReference');
@@ -303,7 +302,6 @@ module.exports = class Compiler {
    */
   async _parse(source, baseDir, mods, templates = {}) {
     const commands = new TemplateParser()
-      .withErrorListener(ThrowingErrorListener.INSTANCE)
       .withDefaultMarkupContext(this._defaultMarkupContext)
       .parse(source);
 

@@ -21,9 +21,10 @@ module.exports = class BinaryOperation extends ExpressionNode {
    */
   constructor(operator, leftOperand, rightOperand) {
     super();
-    this._operator = operator;
-    this._target = leftOperand;
-    this._rightOperand = rightOperand;
+    this.type = 'binary';
+    Object.defineProperty(this, '_operator', { value: operator, enumerable: false });
+    this.name = operator.sym;
+    this.children = [leftOperand, rightOperand];
   }
 
   get operator() {
@@ -31,10 +32,10 @@ module.exports = class BinaryOperation extends ExpressionNode {
   }
 
   get leftOperand() {
-    return this._target;
+    return this.children[0];
   }
 
   get rightOperand() {
-    return this._rightOperand;
+    return this.children[1];
   }
 };

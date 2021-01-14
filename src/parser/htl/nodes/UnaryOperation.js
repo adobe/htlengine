@@ -20,8 +20,10 @@ module.exports = class UnaryOperation extends ExpressionNode {
      */
   constructor(operator, target) {
     super();
-    this._operator = operator;
-    this._target = target;
+    this.type = 'unary';
+    Object.defineProperty(this, '_operator', { value: operator, enumerable: false });
+    this.name = operator.sym;
+    this.children = [target];
   }
 
   get operator() {
@@ -29,6 +31,6 @@ module.exports = class UnaryOperation extends ExpressionNode {
   }
 
   get target() {
-    return this._target;
+    return this.children[0];
   }
 };

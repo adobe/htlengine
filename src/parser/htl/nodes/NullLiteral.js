@@ -13,6 +13,15 @@
 const ExpressionNode = require('./ExpressionNode');
 
 class NullLiteral extends ExpressionNode {
+  constructor() {
+    super();
+    this.type = 'null';
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  toString() {
+    return 'null';
+  }
 }
 
 NullLiteral.INSTANCE = new NullLiteral();

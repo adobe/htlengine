@@ -19,8 +19,10 @@ module.exports = class MultiOperation extends ExpressionNode {
      */
   constructor(operator, operands) {
     super();
-    this._operator = operator;
-    this._operands = operands;
+    this.type = 'multi';
+    Object.defineProperty(this, '_operator', { value: operator, enumerable: false });
+    this.name = operator.sym;
+    this.children = operands;
   }
 
   get operator() {
@@ -28,6 +30,6 @@ module.exports = class MultiOperation extends ExpressionNode {
   }
 
   get operands() {
-    return this._operands;
+    return this.children;
   }
 };

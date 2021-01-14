@@ -65,7 +65,7 @@ module.exports = class ExpressionFormatter {
       });
     } else if (node instanceof ArrayLiteral) {
       this.result += '[';
-      node.items.forEach((i, idx) => {
+      node.children.forEach((i, idx) => {
         if (idx > 0) {
           this.result += ', ';
         }

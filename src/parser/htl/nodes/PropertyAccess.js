@@ -19,15 +19,15 @@ module.exports = class PropertyAccess extends ExpressionNode {
      */
   constructor(target, property) {
     super();
-    this._target = target;
-    this._property = property;
+    this.type = 'access';
+    this.children = [target, property];
   }
 
   get target() {
-    return this._target;
+    return this.children[0];
   }
 
   get property() {
-    return this._property;
+    return this.children[1];
   }
 };

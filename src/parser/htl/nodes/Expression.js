@@ -18,13 +18,14 @@ module.exports = class Expression {
      * @param {String} rawText Raw text
      */
   constructor(root, options, rawText) {
+    this.type = 'expression';
     this._options = options || {};
-    this._root = root;
+    this.children = [root];
     this._rawText = rawText;
   }
 
   get root() {
-    return this._root;
+    return this.children[0];
   }
 
   get options() {

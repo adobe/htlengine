@@ -18,10 +18,7 @@ module.exports = class ArrayLiteral extends ExpressionNode {
      */
   constructor(items) {
     super();
-    this._items = items;
-  }
-
-  get items() {
-    return this._items;
+    this.type = 'array';
+    this.children = items || [];
   }
 };
