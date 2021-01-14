@@ -25,9 +25,11 @@ function parseSString(str) {
 
 const lexer = moo.states({
   main: {
+    TEXT_PART: { match: /[^$\\\x03]+/, lineBreaks: true },
     EXPR_START: { match: /\$\{/, push: 'expr' },
+    ESC_EXPR: /\\\$/,
+    DOLLAR: '$',
     EOF: /\03/,
-    TEXT_PART: { match: /(?:(?!\${)(?:\\\$|[^\x03]))+/, lineBreaks: true },
   },
   expr: {
     EOF: /\x03/,

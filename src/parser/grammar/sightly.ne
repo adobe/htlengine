@@ -27,7 +27,7 @@ function seq(arr, firstIdx, listIdx, itemIdx) {
 
 interpolation -> ( textFrag | expression ):* %EOF {% d => interpolation(d[0]) %}
 
-textFrag -> %TEXT_PART:+ {% d => d.map((s) => s[0].value).join('') %}
+textFrag -> (%TEXT_PART | %ESC_EXPR | %DOLLAR):+ {% d => d[0].map((s) => s[0].value).join('') %}
 
 expression -> %EXPR_START _ exprNode:? optionList:? _ %EXPR_END {% d => expression(d[2], d[3]) %}
 

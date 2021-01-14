@@ -85,6 +85,7 @@ const TESTS = {
     { s: 'Hello' },
     { s: '${myVar} Hello' },
     { s: 'Foo ${} Bar' },
+    { s: 'Foo $24 and \\${ not Bar' },
   ],
   Comments: [
     { s: 'Hello, <!--/* ${myVar} */-->. ' },
