@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Adobe. All rights reserved.
+ * Copyright 2021 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy
  * of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -10,35 +10,40 @@
  * governing permissions and limitations under the License.
  */
 
-const antlr4 = require('antlr4');
-const { SightlyLexer } = require('../generated/SightlyLexer');
-const { SightlyParser } = require('../generated/SightlyParser');
+const nearley = require('nearley');
+const inspect = require('unist-util-inspect');
+const grammar = require('../generated/grammar.js');
+const Interpolation = require('./nodes/Interpolation');
 
 module.exports = class HTLParser {
-  /**
-     * @param {antlr4.error.ErrorListener} listener Error listener
-     * @returns {module.HTLParser} This parser.
-     */
-  withErrorListener(listener) {
-    this._errorListener = listener;
-    return this;
+  constructor() {
+    this.debug = false;
   }
 
   /**
      * Parses the input and returns an Interpolation.
-     * @param {String} text Input text
-     * @return {Interpolation} The parsed interpolation.
+     * @param {string} text Input text
+     * @return {object} The parsed abstract syntax tree.
      */
-  parse(text) {
-    const input = text || '';
-    const chars = new antlr4.InputStream(input);
-    const lexer = new SightlyLexer(chars);
-    const tokens = new antlr4.CommonTokenStream(lexer);
-    const parser = new SightlyParser(tokens);
-
-    if (this._errorListener) {
-      parser.addErrorListener(this._errorListener);
+  // eslint-disable-next-line class-methods-use-this
+  parse(text, { line = 0, column = 0 } = {}) {
+    // eslint-disable-next-line no-param-reassign
+    text = text || ''; // avoid null
+    if (this.debug) {
+      process.stdout.write(`[${line}:${column}] ${text.substring(0, 40).replace(/\n\r/g, ' ')}\n`);
     }
-    return parser.interpolation().interp;
+    let htl = new Interpolation();
+    if (text) {
+      const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
+      parser.feed(`${text}\x03`);
+      // eslint-disable-next-line prefer-destructuring
+      htl = parser.results[0];
+    }
+
+    if (this.debug) {
+      process.stdout.write(inspect(htl));
+      process.stdout.write('\n\n');
+    }
+    return htl;
   }
 };

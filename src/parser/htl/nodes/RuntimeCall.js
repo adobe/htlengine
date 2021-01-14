@@ -27,9 +27,14 @@ module.exports = class RuntimeCall extends ExpressionNode {
    */
   constructor(functionName, expression, args) {
     super();
+    this.type = 'runtimeCall';
     this._functionName = functionName;
     this._expression = expression;
     this._args = args || [];
+  }
+
+  get children() {
+    return [this._expression, ...this._args];
   }
 
   get functionName() {

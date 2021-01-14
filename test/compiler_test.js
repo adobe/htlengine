@@ -86,7 +86,7 @@ function runTests(specs, typ = '', runtimeFn = () => {}, resultFn = (ret) => ret
   Object.keys(specs).forEach((name) => {
     const filename = specs[name];
     // eslint-disable-next-line import/no-dynamic-require,global-require
-    const payload = require(`./specs/${name}_spec.js`);
+    const payload = require(`./specs/${name}.js`);
 
     const sourceFile = path.resolve(__dirname, 'specs', filename);
     const tests = readTests(sourceFile);
@@ -160,8 +160,8 @@ function runTests(specs, typ = '', runtimeFn = () => {}, resultFn = (ret) => ret
 describe('Compiler Tests (HAST)', () => {
   const specs = {};
   fs.readdirSync('test/specs').forEach((filename) => {
-    if (filename.endsWith('_spec_hast.txt')) {
-      const name = filename.substring(0, filename.length - 9 - 5);
+    if (filename.endsWith('_hast.spec')) {
+      const name = filename.substring(0, filename.length - 10);
       specs[name] = filename;
     }
   });
@@ -173,13 +173,13 @@ describe('Compiler Tests (HAST)', () => {
 describe('Compiler Tests (JSDOM)', () => {
   const specs = {};
   fs.readdirSync('test/specs').forEach((filename) => {
-    if (filename.endsWith('_spec_hast.txt')) {
-      const name = filename.substring(0, filename.length - 9 - 5);
+    if (filename.endsWith('_hast.spec')) {
+      const name = filename.substring(0, filename.length - 10);
       if (!specs[name]) {
         specs[name] = filename;
       }
-    } else if (filename.endsWith('_spec_jsd.txt')) {
-      const name = filename.substring(0, filename.length - 9 - 4);
+    } else if (filename.endsWith('_jsd.spec')) {
+      const name = filename.substring(0, filename.length - 9);
       specs[name] = filename;
     }
   });
@@ -191,8 +191,8 @@ describe('Compiler Tests (JSDOM)', () => {
 describe('Compiler Tests (HTML)', () => {
   const specs = {};
   fs.readdirSync('test/specs').forEach((filename) => {
-    if (filename.endsWith('_spec.txt')) {
-      const name = filename.substring(0, filename.length - 9);
+    if (filename.endsWith('.spec') && filename.indexOf('_') < 0) {
+      const name = filename.substring(0, filename.length - 5);
       specs[name] = filename;
     }
   });

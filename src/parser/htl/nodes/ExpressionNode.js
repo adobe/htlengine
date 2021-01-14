@@ -12,7 +12,7 @@
 
 module.exports = class ExpressionNode {
   constructor() {
-    this._hasParens = false;
+    this.type = 'node';
   }
 
   withHasParens(p) {

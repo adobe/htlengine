@@ -11,6 +11,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@adobe/htlengine": "file:../../",
-    "jsdom": "^15.1.0"
+    "jsdom": "^15.2.1"
   }
 }

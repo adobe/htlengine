@@ -16,15 +16,6 @@ const HTMLParser = require('./HTMLParser');
 
 module.exports = class TemplateParser {
   /**
-     * @param {antlr4.error.ErrorListener} listener Error listener
-     * @returns {module.TemplateParser} This parser.
-     */
-  withErrorListener(listener) {
-    this._errorListener = listener;
-    return this;
-  }
-
-  /**
    * Sets the default markup context when writing properties to the response.
    * @param {MarkupContext} context the default context
    * @return this

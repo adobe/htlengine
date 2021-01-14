@@ -16,16 +16,11 @@ const assert = require('assert');
 
 const DebugVisitor = require('../src/parser/htl/DebugVisitor');
 const HTLParser = require('../src/parser/htl/HTLParser');
-const ThrowingErrorListener = require('../src/parser/htl/ThrowingErrorListener');
 
 function process(input) {
-  const interp = new HTLParser()
-    .withErrorListener(ThrowingErrorListener.INSTANCE)
-    .parse(input);
-
+  const ast = new HTLParser().parse(input);
   const visitor = new DebugVisitor();
-  visitor.visit(interp);
-
+  visitor.visit(ast);
   return visitor.result;
 }
 
@@ -46,31 +41,32 @@ const TESTS = {
     { s: '${[1, -2, 3, 4.1, -5.3, true, \'string\']}' },
   ],
   'Logic Operators': [
-    { s: '${varOne && !(varTwo || varThree)}', r: '${varOne&&!(varTwo||varThree)}' },
+    { s: '${varOne && !(varTwo || varThree)}' },
     { s: '${!myVar}' },
-    { s: '${varOne && varTwo}', r: '${varOne&&varTwo}' },
-    { s: '${varOne || varTwo}', r: '${varOne||varTwo}' },
+    { s: '${varOne && varTwo}' },
+    { s: '${varOne && varTwo || varThree in varFive}' },
+    { s: '${varOne || varTwo}' },
     { s: '${varChoice ? varOne : varTwo}' },
   ],
   'Relational Operators': [
-    { s: '${\'a\' in \'abc\'}', r: '${\'a\'in\'abc\'}' },
-    { s: '${300 in myArray}', r: '${300inmyArray}' },
-    { s: '${\'a\' in myObject}', r: '${\'a\'inmyObject}' },
+    { s: '${\'a\' in \'abc\'}', r: '${\'a\' in \'abc\'}' },
+    { s: '${300 in myArray}', r: '${300 in myArray}' },
+    { s: '${\'a\' in myObject}', r: '${\'a\' in myObject}' },
   ],
   Comparison: [
-    { s: '${nullValueOne == nullValueTwo}', r: '${nullValueOne===nullValueTwo}' },
-    { s: '${nullValueOne != nullValueTwo}', r: '${nullValueOne!==nullValueTwo}' },
-    { s: '${stringValueOne == stringValueTwo}', r: '${stringValueOne===stringValueTwo}' },
-    { s: '${stringValueOne != stringValueTwo}', r: '${stringValueOne!==stringValueTwo}' },
-    { s: '${numberValueOne < numberValueTwo}', r: '${numberValueOne<numberValueTwo}' },
-    { s: '${numberValueOne <= numberValueTwo}', r: '${numberValueOne<=numberValueTwo}' },
-    { s: '${numberValueOne == numberValueTwo}', r: '${numberValueOne===numberValueTwo}' },
-    { s: '${numberValueOne >= numberValueTwo}', r: '${numberValueOne>=numberValueTwo}' },
-    { s: '${numberValueOne > numberValueTwo}', r: '${numberValueOne>numberValueTwo}' },
-    { s: '${numberValueOne != numberValueTwo}', r: '${numberValueOne!==numberValueTwo}' },
-    { s: '${booleanValueOne == booleanValueTwo}', r: '${booleanValueOne===booleanValueTwo}' },
-    { s: '${booleanValueOne != booleanValueTwo}', r: '${booleanValueOne!==booleanValueTwo}' },
-    { s: '${enumConstant == \'CONSTANT_NAME\'}', r: '${enumConstant===\'CONSTANT_NAME\'}' },
+    { s: '${nullValueOne == nullValueTwo}', r: '${nullValueOne === nullValueTwo}' },
+    { s: '${nullValueOne != nullValueTwo}', r: '${nullValueOne !== nullValueTwo}' },
+    { s: '${stringValueOne == stringValueTwo}', r: '${stringValueOne === stringValueTwo}' },
+    { s: '${stringValueOne != stringValueTwo}', r: '${stringValueOne !== stringValueTwo}' },
+    { s: '${numberValueOne < numberValueTwo}', r: '${numberValueOne < numberValueTwo}' },
+    { s: '${numberValueOne <= numberValueTwo}', r: '${numberValueOne <= numberValueTwo}' },
+    { s: '${numberValueOne == numberValueTwo}', r: '${numberValueOne === numberValueTwo}' },
+    { s: '${numberValueOne >= numberValueTwo}', r: '${numberValueOne >= numberValueTwo}' },
+    { s: '${numberValueOne > numberValueTwo}', r: '${numberValueOne > numberValueTwo}' },
+    { s: '${numberValueOne != numberValueTwo}', r: '${numberValueOne !== numberValueTwo}' },
+    { s: '${booleanValueOne == booleanValueTwo}', r: '${booleanValueOne === booleanValueTwo}' },
+    { s: '${booleanValueOne != booleanValueTwo}', r: '${booleanValueOne !== booleanValueTwo}' },
+    { s: '${enumConstant == \'CONSTANT_NAME\'}', r: '${enumConstant === \'CONSTANT_NAME\'}' },
   ],
   Options: [
     { s: '${myVar @ optName}' },
@@ -80,7 +76,7 @@ const TESTS = {
     { s: '${myVar @ optName=\'string\'}' },
     { s: '${myVar @ optName="string"}', r: '${myVar @ optName=\'string\'}' },
     { s: '${myVar @ optName=[myVar, \'string\']}' },
-    { s: '${myVar @ optName=(varOne && varTwo) || !varThree}', r: '${myVar @ optName=(varOne&&varTwo)||!varThree}' },
+    { s: '${myVar @ optName=(varOne && varTwo) || !varThree}', r: '${myVar @ optName=(varOne && varTwo) || !varThree}' },
     { s: '${myVar @ optOne, optTwo=myVar, optThree=\'string\', optFour=[myVar, \'string\']}' },
   ],
   Fragments: [
@@ -89,6 +85,17 @@ const TESTS = {
     { s: 'Hello' },
     { s: '${myVar} Hello' },
     { s: 'Foo ${} Bar' },
+    { s: 'Foo $24 and \\${ not Bar' },
+  ],
+  Comments: [
+    { s: 'Hello, <!--/* ${myVar} */-->. ' },
+    { s: 'Hello <!-- ${myVar} --> ' },
+    { s: 'Hello ${myVar <!--/* @ a = 1 */--> }', r: 'Hello ${myVar}' },
+  ],
+  Failures: [
+    { s: '${ myVar yourVar }' },
+    { s: 'Hello ${ myVar ' },
+    { s: '<div class="${myVar"></div>', r: 'Hello ${myVar}' },
   ],
 };
 
@@ -105,6 +112,11 @@ describe('HTL Expressions', () => {
         it('evaluates the expression correctly', () => {
           const source = test.s;
           const expected = test.r || test.s;
+
+          if (name === 'Failures') {
+            assert.throws(() => process(source));
+            return;
+          }
           const result = process(source);
           assert.equal(result, expected);
         });

@@ -16,7 +16,6 @@ const ExpressionContext = require('./ExpressionContext');
 const SymbolGenerator = require('./SymbolGenerator');
 const MarkupContext = require('./MarkupContext');
 const HTLParser = require('../htl/HTLParser');
-const ThrowingErrorListener = require('../htl/ThrowingErrorListener');
 const Identifier = require('../htl/nodes/Identifier');
 const UnaryOperation = require('../htl/nodes/UnaryOperation');
 const UnaryOperator = require('../htl/nodes/UnaryOperator');
@@ -61,7 +60,7 @@ const SLY_COMMENT_SUFFIX = '*/';
 module.exports = class MarkupHandler {
   constructor(stream) {
     this._stream = stream;
-    this._htlParser = new HTLParser().withErrorListener(ThrowingErrorListener.INSTANCE);
+    this._htlParser = new HTLParser();
     this._transformer = new ExpressionTransformer();
     this._symbolGenerator = new SymbolGenerator();
     this._defaultMarkupContext = MarkupContext.HTML;
@@ -166,7 +165,7 @@ module.exports = class MarkupHandler {
       && trimmed.endsWith(SLY_COMMENT_SUFFIX);
 
     if (!isSlyComment) {
-      this._outComment(markup, line, column);
+      this._outComment(markup, { line, column });
     }
   }
 
@@ -177,7 +176,7 @@ module.exports = class MarkupHandler {
 
   _handlePlugin(name, signature, value, context, location) {
     const expressionContext = ExpressionContext.getContextForPlugin(signature.name);
-    const interpolation = this._htlParser.parse(value);
+    const interpolation = this._htlParser.parse(value, location);
     const expr = this._transformer.transform(interpolation, null, expressionContext);
 
     const PluginClass = this._lookupPlugin(signature.name);
@@ -209,7 +208,7 @@ module.exports = class MarkupHandler {
     if (value == null) {
       this._emitSimpleTextAttribute(name, null);
     } else if (value.indexOf('${') >= 0) {
-      const interpolation = this._htlParser.parse(value);
+      const interpolation = this._htlParser.parse(value, location);
       const plainText = interpolation.getPlainText();
       if (plainText !== null) {
         this._emitSimpleTextAttribute(name, plainText);
@@ -248,13 +247,13 @@ module.exports = class MarkupHandler {
     stream.write(VariableBinding.END); // end scope for attrValue
   }
 
-  _outComment(content, line, column) {
+  _outComment(content, location) {
     // skip HTL parser if no HTL expression in content
     if (!content || content.indexOf('${') < 0) {
       this._stream.write(new Comment(content));
       return;
     }
-    const interpolation = this._htlParser.parse(content);
+    const interpolation = this._htlParser.parse(content, location);
     const plainText = interpolation.getPlainText();
     if (plainText != null) {
       this._stream.write(new Comment(plainText));
@@ -267,7 +266,7 @@ module.exports = class MarkupHandler {
       const variable = this._symbolGenerator.next();
       this._stream.write(new VariableBinding.Start(variable, node));
       // todo: location doesn't work correctly
-      this._stream.write(new Comment(new OutputVariable(variable), { line, column }));
+      this._stream.write(new Comment(new OutputVariable(variable), location));
       this._stream.write(VariableBinding.END);
     }
   }
@@ -280,7 +279,7 @@ module.exports = class MarkupHandler {
     }
 
     const location = { line, column };
-    const interpolation = this._htlParser.parse(content);
+    const interpolation = this._htlParser.parse(content, location);
     const plainText = interpolation.getPlainText();
     if (plainText != null) {
       this._out(plainText);
@@ -295,6 +294,7 @@ module.exports = class MarkupHandler {
       if (node instanceof MultiOperation) {
         node.operands.every((op) => {
           if (op instanceof StringConstant) {
+            // eslint-disable-next-line no-param-reassign
             location.line += op.text.split('\n').length - 1;
             this._out(op.text);
           } else {

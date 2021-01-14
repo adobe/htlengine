@@ -21,20 +21,19 @@ module.exports = class TernaryOperation extends ExpressionNode {
      */
   constructor(condition, thenBranch, elseBranch) {
     super();
-    this._condition = condition;
-    this._thenBranch = thenBranch;
-    this._elseBranch = elseBranch;
+    this.type = 'ternary';
+    this.children = [condition, thenBranch, elseBranch];
   }
 
   get condition() {
-    return this._condition;
+    return this.children[0];
   }
 
   get thenBranch() {
-    return this._thenBranch;
+    return this.children[1];
   }
 
   get elseBranch() {
-    return this._elseBranch;
+    return this.children[2];
   }
 };

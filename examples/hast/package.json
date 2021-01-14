@@ -12,8 +12,8 @@
   "dependencies": {
     "@adobe/htlengine": "file:../../",
     "remark-parse": "^6.0.3",
-    "remark-rehype": "^4.0.0",
+    "remark-rehype": "^4.0.1",
     "unified": "^7.1.0",
-    "unified-stream": "^1.0.4"
+    "unified-stream": "^1.0.6"
   }
 }

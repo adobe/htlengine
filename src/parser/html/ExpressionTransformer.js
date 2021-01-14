@@ -31,10 +31,10 @@ module.exports = class ExpressionTransformer {
     const nodes = [];
     const /* HashMap<String, ExpressionNode> */ options = {};
     interpolation.fragments.forEach((fragment) => {
-      if (fragment.text) {
-        nodes.push(new StringConstant(fragment.text));
+      if (fragment.type === 'text') {
+        nodes.push(new StringConstant(fragment.value));
       } else {
-        const xformed = this.adjustToContext(fragment.expression, markupContext, expressionContext);
+        const xformed = this.adjustToContext(fragment, markupContext, expressionContext);
         nodes.push(xformed.root);
         Object.assign(options, xformed.options);
       }
@@ -42,7 +42,7 @@ module.exports = class ExpressionTransformer {
 
     const root = join(nodes);
 
-    if (interpolation.length > 1 && options.context) {
+    if (interpolation.fragments.length > 1 && options.context) {
       // context must not be calculated by merging
       delete options.context;
     }

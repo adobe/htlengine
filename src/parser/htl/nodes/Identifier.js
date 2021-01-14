@@ -15,11 +15,12 @@ const Atom = require('./Atom');
 class Identifier extends Atom {
   constructor(name) {
     super();
-    this._name = name;
+    this.type = 'identifier';
+    this.name = name;
   }
 
-  get name() {
-    return this._name;
+  get value() {
+    return this.name;
   }
 
   get text() {
