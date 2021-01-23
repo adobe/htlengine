@@ -22,7 +22,7 @@
     "lint": "./node_modules/.bin/eslint ."
   },
   "dependencies": {
-    "fs-extra": "9.0.1",
+    "fs-extra": "9.1.0",
     "he": "1.2.0",
     "moment": "2.29.1",
     "moo": "0.5.1",
@@ -55,7 +55,7 @@
     "rehype-stringify": "8.0.0",
     "remark-parse": "9.0.0",
     "remark-rehype": "8.0.0",
-    "semantic-release": "17.3.3"
+    "semantic-release": "17.3.7"
   },
   "lint-staged": {
     "*.js": "eslint"
