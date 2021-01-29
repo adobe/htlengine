@@ -56,6 +56,8 @@ function readTests(filename) {
     }
     if (line.startsWith('###')) {
       test = {
+        filename,
+        line: idx + 1,
         name: line.substring(4),
         input: '',
       };
@@ -110,25 +112,27 @@ function runTests(specs, typ = '', runtimeFn = () => {}, resultFn = (ret) => ret
           return;
         }
         if ('output' in test) {
-          it(`${idx}. Generates output for '${test.name}' correctly.`, (done) => {
+          it(`${idx}. Generates output for '${test.name}' correctly.`, async () => {
             const runtime = new Runtime()
               .withResourceLoader(fsResourceLoader(path.join(__dirname, 'specs')))
               .withIncludeHandler(testIncludeHandler)
               .setGlobal(payload);
             runtimeFn(runtime);
 
-            compiler
-              .withSourceOffset(test.offset)
-              .compileToFile(test.input, `${name}_${idx}${typ}.js`, path.join(__dirname, 'specs'))
-              .then((compiledFilename) => {
-                // eslint-disable-next-line import/no-dynamic-require,global-require
-                const service = require(compiledFilename);
-                service(runtime).then((ret) => {
-                  const output = resultFn(ret);
-                  assert.equal(output.trim(), test.output.trim());
-                  done();
-                }).catch(done);
-              }).catch(done);
+            try {
+              const compiledFilename = await compiler
+                .withSourceOffset(test.offset)
+                .compileToFile(test.input, `${name}_${idx}${typ}.js`, path.join(__dirname, 'specs'));
+
+              // eslint-disable-next-line import/no-dynamic-require,global-require
+              const service = require(compiledFilename);
+              const ret = await service(runtime);
+              const output = resultFn(ret);
+              assert.equal(output.trim(), test.output.trim());
+            } catch (e) {
+              e.message = `at ${test.name} (${test.filename}:${test.line}:1)\n\n${e.message}`;
+              throw e;
+            }
           });
         }
         if ('mappedOutput' in test) {

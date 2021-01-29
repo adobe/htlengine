@@ -18,7 +18,11 @@ module.exports = class DomHandler {
     this._gen = generator;
     this._out = generator.out.bind(generator);
     this._globalTemplates = {};
-    this._currentTemplate = null;
+    this._currentTemplate = {
+      id: 'global',
+      name: 'global',
+      stack: [new Set()],
+    };
   }
 
   beginDocument() {
@@ -122,7 +126,12 @@ module.exports = class DomHandler {
   }
 
   bindFunction(cmd) {
-    this._out(`const ${cmd.name} = $.template('${cmd.id}');`);
+    if (this._isVarDefined(cmd.name)) {
+      this._out(`${cmd.name} = $.template('${cmd.id}');`);
+    } else {
+      this._defineVar(cmd.name);
+      this._out(`let ${cmd.name} = $.template('${cmd.id}');`);
+    }
   }
 
   functionStart(cmd) {

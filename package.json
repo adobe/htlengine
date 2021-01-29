@@ -9,7 +9,7 @@
     "url": "https://github.com/adobe/htlengine.git"
   },
   "engines": {
-    "node": ">=10.13 <11.0 || >=12.11.1 <13.0"
+    "node": ">=12.11.1 <13.0"
   },
   "scripts": {
     "build": "npm run build:compile && npm run build:railroad",
@@ -17,7 +17,7 @@
     "build:railroad": "nearley-railroad ./src/parser/grammar/sightly.ne  --out ./src/parser/generated/grammar.html",
     "semantic-release": "semantic-release",
     "start": "node src/run.js",
-    "test": "nyc --reporter=text --reporter=lcov --check-coverage --branches 68 --statements 82 --lines 82 mocha",
+    "test": "c8 --check-coverage --branches 68 --statements 82 --lines 82 mocha",
     "test-ci": "npm run lint && npm run test && codecov",
     "lint": "./node_modules/.bin/eslint ."
   },
@@ -41,6 +41,7 @@
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/git": "9.0.0",
     "@semantic-release/github": "7.2.0",
+    "c8": "7.4.0",
     "codecov": "3.8.1",
     "eslint": "7.18.0",
     "eslint-config-airbnb-base": "14.2.1",
@@ -51,7 +52,6 @@
     "lint-staged": "10.5.3",
     "mocha": "8.2.1",
     "mocha-junit-reporter": "2.0.0",
-    "nyc": "15.1.0",
     "rehype-stringify": "8.0.0",
     "remark-parse": "9.0.0",
     "remark-rehype": "8.0.0",

@@ -260,8 +260,6 @@ module.exports = class JSCodeGenVisitor {
       this._dom.outText(cmd);
     } else if (cmd instanceof VariableBinding.Start) {
       this._dom.setVariable(cmd);
-      // const exp = ExpressionFormatter.format(cmd.expression);
-      // this.out(`const ${cmd.variableName} = ${exp};`);
     } else if (cmd instanceof VariableBinding.Global) {
       this._dom.setVariable(cmd);
     } else if (cmd instanceof VariableBinding.End) {
