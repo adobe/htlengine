@@ -1,3 +1,10 @@
+## [6.3.2](https://github.com/adobe/htlengine/compare/v6.3.1...v6.3.2) (2021-01-29)
+
+
+### Bug Fixes
+
+* **use:** data-sly-use with same variable gives error ([#296](https://github.com/adobe/htlengine/issues/296)) ([bf17da3](https://github.com/adobe/htlengine/commit/bf17da35a87b978c0caf398915d8b4c6276d1773)), closes [#295](https://github.com/adobe/htlengine/issues/295)
+
 ## [6.3.1](https://github.com/adobe/htlengine/compare/v6.3.0...v6.3.1) (2021-01-25)
 
 
