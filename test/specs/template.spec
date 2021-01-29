@@ -135,4 +135,15 @@ blah Hello, world.
 2021-01-12 04:47
 </div>
 #
+### use variable used twice in tests
+#
+<sly data-sly-test="" data-sly-use.headline="template_spec/calendar.htl" >
+  Hello world
+</sly>
 
+<sly data-sly-test="" data-sly-use.headline="template_spec/calendar.htl" >
+  Hello world
+</sly>
+===
+
+#

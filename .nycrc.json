@@ -1,0 +1,9 @@
+{
+  "all": false,
+  "extension": [".js"],
+  "reporter": [
+    "lcov",
+    "text",
+    "text-summary"
+  ]
+}
