@@ -1,3 +1,10 @@
+## [6.3.3](https://github.com/adobe/htlengine/compare/v6.3.2...v6.3.3) (2021-02-02)
+
+
+### Bug Fixes
+
+* **compiler:** ensure template variables are case insensitive ([#298](https://github.com/adobe/htlengine/issues/298)) ([d4f1ced](https://github.com/adobe/htlengine/commit/d4f1ced78c5b04becf8fe2c302a4678f14da0bcd)), closes [#297](https://github.com/adobe/htlengine/issues/297)
+
 ## [6.3.2](https://github.com/adobe/htlengine/compare/v6.3.1...v6.3.2) (2021-01-29)
 
 
