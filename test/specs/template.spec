@@ -147,3 +147,16 @@ blah Hello, world.
 ===
 
 #
+### template variables case insensitive
+#
+<template data-sly-template.headlineDemo="${@ textMessage}">
+  <h1>${textMessage}!</h1>
+</template>
+
+<div data-sly-call="${headlineDemo @ textMessage = 'Hello, world.'}"></div>
+===
+<div>
+  <h1>Hello, world.!</h1>
+</div>
+#
+

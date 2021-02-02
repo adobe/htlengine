@@ -143,7 +143,7 @@ module.exports = class DomHandler {
     this._gen.indent();
     const vars = new Set();
     cmd.args.forEach((arg) => {
-      const varName = ExpressionFormatter.escapeVariable(arg);
+      const varName = ExpressionFormatter.escapeVariable(arg).toLowerCase();
       vars.add(varName);
       this._out(`let ${varName} = args[1]['${arg}'] || '';`);
     });
