@@ -9,7 +9,7 @@
     "url": "https://github.com/adobe/htlengine.git"
   },
   "engines": {
-    "node": ">=12.11.1 <13.0"
+    "node": ">=12.11.1 <15.0"
   },
   "scripts": {
     "build": "npm run build:compile && npm run build:railroad",

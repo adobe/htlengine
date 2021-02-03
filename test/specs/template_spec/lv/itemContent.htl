@@ -1,0 +1,3 @@
+<template data-sly-template.itemContent="${@ item='The language navigation item'}">
+  Hello Item content
+</template>

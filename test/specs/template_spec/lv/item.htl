@@ -1,0 +1,3 @@
+<template data-sly-template.item="${@ item='The language navigation item'}" data-sly-use.itemContentTemplate="itemContent.htl">
+  <div><sly data-sly-call="${itemContentTemplate.itemContent @ item = item}"></sly></div>
+</template>
