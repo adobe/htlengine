@@ -1,3 +1,10 @@
+## [6.3.4](https://github.com/adobe/htlengine/compare/v6.3.3...v6.3.4) (2021-02-03)
+
+
+### Bug Fixes
+
+* **compiler:** regession with camelcased template names ([#300](https://github.com/adobe/htlengine/issues/300)) ([9493719](https://github.com/adobe/htlengine/commit/94937194b3cc88e7e2992fce963e5354dd4100b2)), closes [#299](https://github.com/adobe/htlengine/issues/299)
+
 ## [6.3.3](https://github.com/adobe/htlengine/compare/v6.3.2...v6.3.3) (2021-02-02)
 
 
