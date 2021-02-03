@@ -159,4 +159,14 @@ blah Hello, world.
   <h1>Hello, world.!</h1>
 </div>
 #
-
+### template in template
+#
+<sly data-sly-use.lv="template_spec/lv/item.htl"/>
+<div data-sly-call="${lv.item @ item='Foo, bar.'}"></div>
+===
+<div>
+  <div>
+  Hello Item content
+</div>
+</div>
+#
