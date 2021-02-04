@@ -19,10 +19,10 @@ const VDOMFactory = require('./VDOMFactory');
 
 function createTemplateGroup() {
   return new Proxy({ }, {
-    get: (obj, key) => obj[key.toLowerCase()],
+    get: (obj, key) => obj[typeof key === "string" ? key.toLowerCase() : key],
     set: (obj, key, value) => {
       // eslint-disable-next-line no-param-reassign
-      obj[key.toLowerCase()] = value;
+      obj[typeof key === "string" ? key.toLowerCase() : key] = value;
       return true;
     },
   });
