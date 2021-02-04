@@ -1,0 +1,3 @@
+<template data-sly-template.primaryButton="${@ disableButton }">
+    <button>hello</button>
+</template>

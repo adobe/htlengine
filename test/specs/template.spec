@@ -170,3 +170,9 @@ blah Hello, world.
 </div>
 </div>
 #
+### another case insensitive test
+#
+<sly data-sly-use.primaryButtonTmpl="template_spec/primaryButton.htl" data-sly-call="${primaryButtonTmpl.primaryButton @ disableButton=false }" />
+===
+<button>hello</button>
+#
