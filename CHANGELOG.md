@@ -1,3 +1,10 @@
+## [6.3.5](https://github.com/adobe/htlengine/compare/v6.3.4...v6.3.5) (2021-02-05)
+
+
+### Bug Fixes
+
+* **compiler:** don't use javascript Proxy ([2253231](https://github.com/adobe/htlengine/commit/2253231960cb5e47c6a04c32973ad07622157164)), closes [#303](https://github.com/adobe/htlengine/issues/303) [#304](https://github.com/adobe/htlengine/issues/304)
+
 ## [6.3.4](https://github.com/adobe/htlengine/compare/v6.3.3...v6.3.4) (2021-02-03)
 
 
