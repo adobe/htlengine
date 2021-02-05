@@ -136,22 +136,24 @@ module.exports = class DomHandler {
 
   functionStart(cmd) {
     const name = ExpressionFormatter.escapeVariable(ExpressionFormatter.format(cmd.expression));
+    const varName = name.toLowerCase();
     const id = cmd.id || this._gen.scriptId;
     const functionName = `_template_${id.replace(/[^\w]/g, '_')}_${name.replace(/\./g, '_')}`;
     // this._out(`${exp} = $.template('${id}', '${exp}', function* ${functionName}(args) { `);
-    this._out(`${name} = function* ${functionName}(args) { `);
+    this._out(`${varName} = function* ${functionName}(args) { `);
     this._gen.indent();
     const vars = new Set();
     cmd.args.forEach((arg) => {
-      const varName = ExpressionFormatter.escapeVariable(arg).toLowerCase();
-      vars.add(varName);
-      this._out(`let ${varName} = args[1]['${arg}'] || '';`);
+      const argName = ExpressionFormatter.escapeVariable(arg).toLowerCase();
+      vars.add(argName);
+      this._out(`let ${argName} = args[1]['${arg}'] || '';`);
     });
     this._out('let $t, $n = args[0];');
     this._globalTemplates[name] = id;
     this._currentTemplate = {
       id,
       name,
+      varName,
       functionName,
       stack: [vars],
     };
@@ -160,8 +162,8 @@ module.exports = class DomHandler {
   functionEnd() {
     this._gen.outdent();
     this._out('};');
-    const { id, name } = this._currentTemplate;
-    this._out(`$.template('${id}', '${name}', ${name});`);
+    const { id, name, varName } = this._currentTemplate;
+    this._out(`$.template('${id}', '${name}', ${varName});`);
   }
 
   functionCall(cmd) {

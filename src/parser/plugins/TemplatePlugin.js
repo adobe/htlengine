@@ -13,7 +13,7 @@ const Plugin = require('../html/Plugin');
 
 module.exports = class TemplatePlugin extends Plugin {
   beforeElement(stream) {
-    const variableName = this._signature.getVariableName(null).toLowerCase();
+    const variableName = this._signature.getVariableName(null);
     if (variableName === null) {
       throw new Error('data-sly-template must be called with an identifier');
     }

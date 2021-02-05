@@ -17,17 +17,6 @@ const HtmlDOMFactory = require('./HtmlDOMFactory');
 const HDOMFactory = require('./HDOMFactory');
 const VDOMFactory = require('./VDOMFactory');
 
-function createTemplateGroup() {
-  return new Proxy({ }, {
-    get: (obj, key) => obj[key.toLowerCase()],
-    set: (obj, key, value) => {
-      // eslint-disable-next-line no-param-reassign
-      obj[key.toLowerCase()] = value;
-      return true;
-    },
-  });
-}
-
 module.exports = class Runtime {
   constructor() {
     this._globals = {};
@@ -257,7 +246,7 @@ module.exports = class Runtime {
   template(id, name, fn) {
     let group = this._templates[id];
     if (!group) {
-      group = createTemplateGroup();
+      group = {};
       this._templates[id] = group;
     }
     if (name) {
