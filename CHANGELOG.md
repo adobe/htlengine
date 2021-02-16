@@ -1,3 +1,10 @@
+## [6.3.7](https://github.com/adobe/htlengine/compare/v6.3.6...v6.3.7) (2021-02-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency xregexp to v5 ([#310](https://github.com/adobe/htlengine/issues/310)) ([e9ee1cd](https://github.com/adobe/htlengine/commit/e9ee1cda43b8564d3134d2c6556344fd2cc6cae2))
+
 ## [6.3.6](https://github.com/adobe/htlengine/compare/v6.3.5...v6.3.6) (2021-02-13)
 
 
