@@ -35,7 +35,7 @@
     "unified": "9.2.0",
     "unist-util-inspect": "6.0.1",
     "urijs": "1.19.6",
-    "xregexp": "4.4.1"
+    "xregexp": "5.0.1"
   },
   "devDependencies": {
     "@semantic-release/changelog": "5.0.1",
