@@ -19,7 +19,7 @@
     "start": "node src/run.js",
     "test": "c8 --check-coverage --branches 68 --statements 82 --lines 82 mocha",
     "test-ci": "npm run lint && npm run test && codecov",
-    "lint": "./node_modules/.bin/eslint ."
+    "lint": "eslint ."
   },
   "dependencies": {
     "fs-extra": "10.0.0",
@@ -46,7 +46,7 @@
     "eslint": "7.26.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-header": "3.1.1",
-    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-import": "2.23.2",
     "ghooks": "2.0.4",
     "jsdom": "16.5.3",
     "lint-staged": "11.0.0",
@@ -55,7 +55,7 @@
     "rehype-stringify": "8.0.0",
     "remark-parse": "9.0.0",
     "remark-rehype": "8.1.0",
-    "semantic-release": "17.4.2"
+    "semantic-release": "17.4.3"
   },
   "lint-staged": {
     "*.js": "eslint"

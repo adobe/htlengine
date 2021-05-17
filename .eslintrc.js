@@ -29,6 +29,7 @@ module.exports = {
   extends: 'airbnb-base',
   rules: {
     strict: 0,
+    'import/extensions': 0,
 
     // allow dangling underscores for 'fields'
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
