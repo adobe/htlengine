@@ -19,7 +19,7 @@
     "start": "node src/run.js",
     "test": "c8 --check-coverage --branches 68 --statements 82 --lines 82 mocha",
     "test-ci": "npm run lint && npm run test && codecov",
-    "lint": "./node_modules/.bin/eslint ."
+    "lint": "eslint ."
   },
   "dependencies": {
     "fs-extra": "10.0.0",
