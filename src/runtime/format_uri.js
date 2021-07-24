@@ -26,24 +26,35 @@ const FRAGMENT = 'fragment';
 const QUERY = 'query';
 const ADD_QUERY = 'addQuery';
 const REMOVE_QUERY = 'removeQuery';
-
-const URI = require('urijs');
+const url = require('url');
+const querystring = require('querystring');
+const path = require('path').posix;
 
 module.exports = function formatUri(uri, opts) {
   if (!uri) {
     return null;
   }
 
-  const u = URI(uri);
+  let u;
+  if (uri.startsWith('//')) {
+    // no scheme, but parse will be wrong
+    u = url.parse(`fake:${uri}`);
+    u.protocol = '';
+  } else {
+    u = url.parse(uri);
+  }
   if (SCHEME in opts) {
-    u.scheme(opts[SCHEME]);
+    u.protocol = opts[SCHEME];
   }
   if (DOMAIN in opts) {
-    u.host(opts[DOMAIN]);
+    u.host = opts[DOMAIN];
+    u.hostname = opts[DOMAIN];
   }
+  u.search = null;
+  u.query = u.query ? querystring.parse(u.query) : {};
 
   // remove selectors and suffixes for path manipulation
-  const p = u.path();
+  const p = u.pathname;
   const idxSelStart = p.indexOf('.');
   let idxSuffix = idxSelStart < 0 ? -1 : p.indexOf('/', idxSelStart);
   if (idxSuffix < 0) {
@@ -54,25 +65,22 @@ module.exports = function formatUri(uri, opts) {
   let selectors = selectorString ? selectorString.substring(1).split('.') : [];
   let extension = idxExtension < 0 ? '' : p.substring(idxExtension, idxSuffix);
   let suffix = idxSuffix < 0 ? '' : p.substring(idxSuffix);
-  // const pp = idxSelStart < 0 ? p : p.substring(0, idxSelStart);
-
-  // console.log(`'${p}' -> '${pp}' '${selectors}' '${extension}' '${suffix}'`);
 
   if (idxSelStart >= 0) {
-    u.path(p.substring(0, idxSelStart));
+    u.pathname = p.substring(0, idxSelStart);
   }
 
   const setPath = opts[PATH];
   if (setPath) {
-    u.path(setPath);
+    u.pathname = setPath;
   }
   const appendPath = opts[APPEND_PATH];
   if (appendPath) {
-    u.path(`${u.path()}/${appendPath}`);
+    u.pathname = `${u.pathname}/${appendPath}`;
   }
   const prependPath = opts[PREPEND_PATH];
   if (prependPath) {
-    u.path(`${prependPath}/${u.path()}`);
+    u.pathname = `${prependPath}/${u.pathname}`;
   }
   if (SELECTORS in opts) {
     let setSelectors = opts[SELECTORS];
@@ -129,30 +137,27 @@ module.exports = function formatUri(uri, opts) {
   if (QUERY in opts) {
     const qry = opts[QUERY];
     if (!qry) {
-      u.query('');
+      u.query = {};
     } else {
-      u.query(qry);
+      u.query = qry;
     }
   }
   const addQuery = opts[ADD_QUERY];
   if (addQuery) {
-    const merged = Object.assign(u.query(true), addQuery);
-    u.query(merged);
+    u.query = Object.assign(u.query, addQuery);
   }
   const removeQuery = opts[REMOVE_QUERY];
   if (removeQuery) {
-    const qry = u.query(true);
     if (Array.isArray(removeQuery)) {
-      removeQuery.forEach((q) => delete qry[q]);
+      removeQuery.forEach((q) => delete u.query[q]);
     } else {
-      delete qry[removeQuery];
+      delete u.query[removeQuery];
     }
-    u.query(qry);
   }
   if (FRAGMENT in opts) {
-    u.fragment(opts[FRAGMENT] || '');
+    u.hash = opts[FRAGMENT] || '';
   }
   selectorString = selectors.length > 0 ? `.${selectors.join('.')}` : '';
-  u.path(u.path() + selectorString + extension + suffix);
-  return u.normalizePath().toString();
+  u.pathname = path.normalize(u.pathname + selectorString + extension + suffix);
+  return url.format(u);
 };
