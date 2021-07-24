@@ -34,7 +34,6 @@
     "source-map": "0.7.3",
     "unified": "9.2.1",
     "unist-util-inspect": "6.0.1",
-    "urijs": "1.19.7",
     "xregexp": "5.0.2"
   },
   "devDependencies": {
