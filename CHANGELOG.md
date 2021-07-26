@@ -1,3 +1,12 @@
+## [6.3.8](https://github.com/adobe/htlengine/compare/v6.3.7...v6.3.8) (2021-07-26)
+
+
+### Bug Fixes
+
+* use node 12 for release ([362ff07](https://github.com/adobe/htlengine/commit/362ff072816d75d308d9fdaa25307e2d80cfcb75))
+* use nodejs url instead of urijs ([821e0d9](https://github.com/adobe/htlengine/commit/821e0d97973975522d04ef1636ab994cfc1cacbd))
+* **deps:** update external major ([#327](https://github.com/adobe/htlengine/issues/327)) ([b2450d5](https://github.com/adobe/htlengine/commit/b2450d57ff833c22d50d41a98c210890c68fcc1e))
+
 ## [6.3.7](https://github.com/adobe/htlengine/compare/v6.3.6...v6.3.7) (2021-02-16)
 
 
