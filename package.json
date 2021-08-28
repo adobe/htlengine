@@ -45,7 +45,7 @@
     "eslint": "7.32.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-header": "3.1.1",
-    "eslint-plugin-import": "2.24.1",
+    "eslint-plugin-import": "2.24.2",
     "ghooks": "2.0.4",
     "jsdom": "17.0.0",
     "lint-staged": "11.1.2",
@@ -54,7 +54,7 @@
     "rehype-stringify": "8.0.0",
     "remark-parse": "9.0.0",
     "remark-rehype": "8.1.0",
-    "semantic-release": "17.4.5"
+    "semantic-release": "17.4.7"
   },
   "lint-staged": {
     "*.js": "eslint"
