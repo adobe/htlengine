@@ -336,7 +336,10 @@ module.exports = class Compiler {
             } else {
               // parse the template
               const res = await this._parse(
-                templateSource, path.dirname(templatePath), mods, templates,
+                templateSource,
+                path.dirname(templatePath),
+                mods,
+                templates,
               );
 
               // extract the template functions and discard commands outside the functions

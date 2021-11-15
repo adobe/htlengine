@@ -3,9 +3,9 @@ orbs:
   win: circleci/windows-tools@0.1.0
 
 executors:
-  node12:
+  node14:
     docker:
-    - image: circleci/node:12
+    - image: circleci/node:14
       environment:
         NPM_CONFIG_PREFIX: "~/.npm-global"
     working_directory: ~/repo
@@ -55,7 +55,7 @@ jobs:
           path: junit
 
   build:
-    executor: node12
+    executor: node14
 
     steps:
     - setup

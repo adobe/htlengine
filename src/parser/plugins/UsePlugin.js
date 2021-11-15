@@ -23,7 +23,9 @@ module.exports = class UsePlugin extends Plugin {
     if (this._expression.root instanceof StringConstant) {
       const lib = this._expression.root.text;
       stream.write(new FileReference(
-        variableName, lib, [new MapLiteral(this._expression.options)],
+        variableName,
+        lib,
+        [new MapLiteral(this._expression.options)],
       ), true);
       return;
     }
