@@ -1,3 +1,10 @@
+# [6.4.0](https://github.com/adobe/htlengine/compare/v6.3.8...v6.4.0) (2021-12-16)
+
+
+### Features
+
+* trigger release ([a426c0a](https://github.com/adobe/htlengine/commit/a426c0a7ab41736a17d64dd321b69e34ad93d2ed))
+
 ## [6.3.8](https://github.com/adobe/htlengine/compare/v6.3.7...v6.3.8) (2021-07-26)
 
 
