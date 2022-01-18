@@ -54,7 +54,7 @@
     "rehype-stringify": "8.0.0",
     "remark-parse": "9.0.0",
     "remark-rehype": "8.1.0",
-    "semantic-release": "18.0.1"
+    "semantic-release": "19.0.0"
   },
   "lint-staged": {
     "*.js": "eslint"
