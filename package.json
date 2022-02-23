@@ -22,7 +22,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "fs-extra": "10.0.0",
+    "fs-extra": "10.0.1",
     "he": "1.2.0",
     "moment": "2.29.1",
     "moo": "0.5.1",
@@ -48,8 +48,8 @@
     "eslint-plugin-import": "2.25.4",
     "ghooks": "2.0.4",
     "jsdom": "19.0.0",
-    "lint-staged": "12.3.3",
-    "mocha": "9.2.0",
+    "lint-staged": "12.3.4",
+    "mocha": "9.2.1",
     "mocha-junit-reporter": "2.0.2",
     "rehype-stringify": "8.0.0",
     "remark-parse": "9.0.0",
