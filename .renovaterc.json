@@ -1,3 +1,29 @@
 {
-  "extends": ["github>adobe/helix-shared"]
+  "extends": ["github>adobe/helix-shared"],
+  "packageRules": [
+    {
+      "packageNames": ["rehype-parse"],
+      "allowedVersions": "<8.0.0"
+    },
+    {
+      "packageNames": ["rehype-stringify"],
+      "allowedVersions": "<9.0.0"
+    },
+    {
+      "packageNames": ["remark-rehype"],
+      "allowedVersions": "<9.0.0"
+    },
+    {
+      "packageNames": ["remark-parse"],
+      "allowedVersions": "<10.0.0"
+    },
+    {
+      "packageNames": ["unified"],
+      "allowedVersions": "<10.0.0"
+    },
+    {
+      "packageNames": ["unist-util-inspect"],
+      "allowedVersions": "<7.0.0"
+    }
+  ]
 }
