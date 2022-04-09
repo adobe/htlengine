@@ -24,7 +24,7 @@
   "dependencies": {
     "fs-extra": "10.0.1",
     "he": "1.2.0",
-    "moment": "2.29.1",
+    "moment": "2.29.2",
     "moo": "0.5.1",
     "nearley": "2.20.1",
     "node-esapi": "0.0.1",
