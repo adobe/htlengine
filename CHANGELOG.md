@@ -1,3 +1,10 @@
+## [6.4.2](https://github.com/adobe/htlengine/compare/v6.4.1...v6.4.2) (2022-04-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency fs-extra to v10.1.0 ([#409](https://github.com/adobe/htlengine/issues/409)) ([b10849f](https://github.com/adobe/htlengine/commit/b10849f64da82b7bf1b9ebc5ca1ba08296a98475))
+
 ## [6.4.1](https://github.com/adobe/htlengine/compare/v6.4.0...v6.4.1) (2022-02-23)
 
 
