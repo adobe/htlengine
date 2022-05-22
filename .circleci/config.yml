@@ -6,7 +6,7 @@ orbs:
 executors:
   node14:
     docker:
-      - image: cimg/node:16.15
+      - image: cimg/node:14.19
     working_directory: ~/repo
 
 commands:
@@ -44,7 +44,6 @@ jobs:
           command: npm run test
           environment:
             MOCHA_FILE: junit/test-results.xml
-      - codecov/upload
       - store_test_results:
           path: junit
       - store_artifacts:
@@ -52,7 +51,6 @@ jobs:
 
   build:
     executor: node14
-
     steps:
       - setup
       - run: mkdir junit
