@@ -24,7 +24,7 @@
   "dependencies": {
     "fs-extra": "10.1.0",
     "he": "1.2.0",
-    "moment": "2.29.3",
+    "moment": "2.29.4",
     "moo": "0.5.1",
     "nearley": "2.20.1",
     "node-esapi": "0.0.1",
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@semantic-release/changelog": "6.0.1",
     "@semantic-release/git": "10.0.1",
-    "@semantic-release/github": "8.0.4",
+    "@semantic-release/github": "8.0.5",
     "c8": "7.11.3",
     "eslint": "8.19.0",
     "eslint-config-airbnb-base": "15.0.0",
