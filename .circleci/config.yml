@@ -1,13 +1,12 @@
 version: 2.1
 orbs:
-  win: circleci/windows-tools@0.1.0
+  win: circleci/windows@5.0.0
   codecov: codecov/codecov@3.2.3
 
 executors:
-  node14:
+  node16:
     docker:
-      - image: cimg/node:14.20
-    working_directory: ~/repo
+      - image: cimg/node:16.16
 
 commands:
   setup:
@@ -16,9 +15,6 @@ commands:
       - restore_cache:
           keys:
             - v5-dependencies-{{ arch }}-{{ checksum "package-lock.json" }}
-      - run:
-          name: install latest npm
-          command: npm -g install npm
       - run:
           name: Installing Dependencies
           command: npm install
@@ -36,8 +32,21 @@ jobs:
     steps:
       - run: git config --global core.autocrlf false
       - checkout
-      - run: choco install nodejs-lts
-      - run: npm install
+      - run:
+          name: Install NVM
+          command: choco install nvm -y
+      - run:
+          name: Install Node 16.16.0
+          shell: bash.exe
+          command: |
+            nvm list
+            nvm install 16.16.0
+            nvm use 16.16.0
+      - run:
+          name: Verify Node Version
+          shell: bash.exe
+          command: node --version
+      - run: npm ci
       - run: mkdir junit
       - run:
           name: Test and Code Coverage
@@ -50,7 +59,7 @@ jobs:
           path: junit
 
   build:
-    executor: node14
+    executor: node16
     steps:
       - setup
       - run: mkdir junit

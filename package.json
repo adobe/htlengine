@@ -17,7 +17,7 @@
     "build:railroad": "nearley-railroad ./src/parser/grammar/sightly.ne  --out ./src/parser/generated/grammar.html",
     "semantic-release": "semantic-release",
     "start": "node src/run.js",
-    "test": "c8 --check-coverage --branches 68 --statements 82 --lines 82 mocha",
+    "test": "c8 mocha",
     "lint": "eslint .",
     "prepare": "husky install"
   },
@@ -39,7 +39,6 @@
   "devDependencies": {
     "@semantic-release/changelog": "6.0.1",
     "@semantic-release/git": "10.0.1",
-    "@semantic-release/github": "8.0.5",
     "c8": "7.12.0",
     "eslint": "8.21.0",
     "eslint-config-airbnb-base": "15.0.0",
