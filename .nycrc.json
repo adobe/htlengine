@@ -5,5 +5,9 @@
     "lcov",
     "text",
     "text-summary"
-  ]
+  ],
+  "check-coverage": true,
+  "lines": 95,
+  "branches": 89,
+  "statements": 95
 }
