@@ -71,6 +71,7 @@ const GLOBALS = {
     scriptTag1: '<script>alert(0);</script>',
     scriptTag2: '<script src="http://do.not.serve/this.js"></script>',
     scriptTag3: '<script src="//do.not.serve/this.js"></script>', // protocol resolution bypass
+    noembedTag1: '<noembed>--!><select><iframe><mglyph><select><img src=x onerror=alert(1)></select></mglyph></iframe></select>/*</noembed>',
   },
   /* eslint-enable no-script-url, no-tabs */
 };
