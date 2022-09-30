@@ -1,3 +1,10 @@
+## [6.4.3](https://github.com/adobe/htlengine/compare/v6.4.2...v6.4.3) (2022-09-30)
+
+
+### Bug Fixes
+
+* use dompurify ([#431](https://github.com/adobe/htlengine/issues/431)) ([276e607](https://github.com/adobe/htlengine/commit/276e607a1c34dacb39a52891941e464bc036142a))
+
 ## [6.4.2](https://github.com/adobe/htlengine/compare/v6.4.1...v6.4.2) (2022-04-16)
 
 
