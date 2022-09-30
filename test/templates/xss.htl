@@ -36,6 +36,7 @@
 ${xss.scriptTag1}
 ${xss.scriptTag2}
 ${xss.scriptTag3}
+${xss.noembedTag1}
   <form action="${xss.breakAttr}" onsubmit="${xss.eventHandler}">
     <input name="test" value="${xss.breakAttr}"/>
   </form>

@@ -12,9 +12,12 @@
 
 'use strict';
 
-const sanitizer = require('sanitizer');
 const esapiEncoder = require('node-esapi').encoder();
 const XRegExp = require('xregexp');
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+
+const DOMPurify = createDOMPurify(new JSDOM('').window);
 
 const RESERVED_WORDS = {
   break: true,
@@ -144,48 +147,6 @@ function sanitizeURL(url) {
   return '';
 }
 
-/**
- * Sanitizes the specified attribute in the given array if present.
- *
- * @param {string} attribute the attribute to sanitize
- * @param {*} attribs the attributes array to sanitize from
- * @returns {object} the sanitized attribute and it's index in the array, or an empty object
- */
-function sanitizeURLOnAttr(attribute, attribs) {
-  const index = attribs.indexOf(attribute);
-  if (index > -1) {
-    return { index, sanitizedUrl: sanitizeURL(attribs[index + 1]) || null };
-  }
-  return {};
-}
-
-/**
- * A sanitization policy that validates src/href attributes against the URI scheme.
- *
- * @param {string} tagName The name of the tag currently parsed
- * @param {string[]} attribs An array of attribute names and values
- * @returns {object} the resulting sanitized attributes
- */
-function sanitizeURLPolicy(tagName, attribs) {
-  const initial = [].concat(attribs);
-  const result = sanitizer.makeTagPolicy()(tagName, attribs);
-  if (tagName === 'a') {
-    const { index, sanitizedUrl } = sanitizeURLOnAttr('href', initial);
-    result.attribs[index + 1] = sanitizedUrl;
-  } else if (tagName === 'img') {
-    const { index, sanitizedUrl } = sanitizeURLOnAttr('src', initial);
-    result.attribs[index + 1] = sanitizedUrl;
-  }
-  return result;
-}
-
-// function parseValidNumber(input) {
-//   if (NUMBER_PATTERN.test(input)) {
-//     return parseInt(input, 10);
-//   }
-//   return undefined;
-// }
-//
 /* eslint-disable no-underscore-dangle */
 const _NON_ASCII = '\\x00\\x08\\x0B\\x0C\\x0E-\\x1F';
 /** http://www.w3.org/TR/css-syntax-3/#number-token-diagram */
@@ -242,7 +203,7 @@ module.exports = {
    * @returns {String}
    */
   filterHTML(input) {
-    return sanitizer.sanitizeWithPolicy(input, sanitizeURLPolicy);
+    return DOMPurify.sanitize(input, { USE_PROFILES: { html: true } });
   },
 
   /**
