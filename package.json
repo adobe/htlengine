@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "dompurify": "2.4.1",
-    "fs-extra": "10.1.0",
+    "fs-extra": "11.1.0",
     "he": "1.2.0",
     "jsdom": "20.0.3",
     "moment": "2.29.4",
