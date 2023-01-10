@@ -4,9 +4,9 @@ orbs:
   codecov: codecov/codecov@3.2.4
 
 executors:
-  node16:
+  node18:
     docker:
-      - image: cimg/node:16.16
+      - image: cimg/node:18.2
 
 commands:
   setup:
@@ -28,7 +28,7 @@ commands:
 
 jobs:
   build_win:
-    executor: win/default
+    executor: node18
     steps:
       - run: git config --global core.autocrlf false
       - checkout
@@ -59,7 +59,7 @@ jobs:
           path: junit
 
   build:
-    executor: node16
+    executor: node18
     steps:
       - setup
       - run: mkdir junit
