@@ -22,7 +22,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "dompurify": "2.4.3",
+    "dompurify": "3.0.0",
     "fs-extra": "11.1.0",
     "he": "1.2.0",
     "jsdom": "21.1.0",
