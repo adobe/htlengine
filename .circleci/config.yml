@@ -6,7 +6,7 @@ orbs:
 executors:
   node18:
     docker:
-      - image: cimg/node:18.15
+      - image: cimg/node:18.16
 
 commands:
   setup:
