@@ -1,3 +1,10 @@
+## [6.4.16](https://github.com/adobe/htlengine/compare/v6.4.15...v6.4.16) (2023-07-15)
+
+
+### Bug Fixes
+
+* **deps:** update external fixes ([5db9726](https://github.com/adobe/htlengine/commit/5db9726cf6d490f3ae17e5c1deab49a4b17ba5e3))
+
 ## [6.4.15](https://github.com/adobe/htlengine/compare/v6.4.14...v6.4.15) (2023-07-01)
 
 
