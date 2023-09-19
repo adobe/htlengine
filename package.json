@@ -52,7 +52,7 @@
     "rehype-stringify": "8.0.0",
     "remark-parse": "9.0.0",
     "remark-rehype": "8.1.0",
-    "semantic-release": "21.1.2"
+    "semantic-release": "22.0.0"
   },
   "lint-staged": {
     "*.js": "eslint"
