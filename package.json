@@ -41,7 +41,7 @@
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
     "c8": "8.0.1",
-    "eslint": "8.52.0",
+    "eslint": "8.53.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-plugin-header": "3.1.1",
     "eslint-plugin-import": "2.29.0",
@@ -52,7 +52,7 @@
     "rehype-stringify": "8.0.0",
     "remark-parse": "9.0.0",
     "remark-rehype": "8.1.0",
-    "semantic-release": "22.0.5"
+    "semantic-release": "22.0.7"
   },
   "lint-staged": {
     "*.js": "eslint"
