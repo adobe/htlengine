@@ -1,3 +1,10 @@
+## [6.4.18](https://github.com/adobe/htlengine/compare/v6.4.17...v6.4.18) (2023-12-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency moment to v2.30.1 ([4ab2ea0](https://github.com/adobe/htlengine/commit/4ab2ea0d02e414fcc0a8e00ce12634221340a48d))
+
 ## [6.4.17](https://github.com/adobe/htlengine/compare/v6.4.16...v6.4.17) (2023-12-04)
 
 
