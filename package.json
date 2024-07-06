@@ -22,7 +22,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "dompurify": "3.1.5",
+    "dompurify": "3.1.6",
     "fs-extra": "11.2.0",
     "he": "1.2.0",
     "jsdom": "24.1.0",
@@ -47,7 +47,7 @@
     "eslint-plugin-import": "2.29.1",
     "husky": "9.0.11",
     "lint-staged": "15.2.7",
-    "mocha": "10.5.2",
+    "mocha": "10.6.0",
     "mocha-junit-reporter": "2.2.1",
     "rehype-stringify": "8.0.0",
     "remark-parse": "9.0.0",
