@@ -1,3 +1,18 @@
+## [6.4.23](https://github.com/adobe/htlengine/compare/v6.4.22...v6.4.23) (2024-10-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency dompurify to v3.1.1 ([eae98a0](https://github.com/adobe/htlengine/commit/eae98a088fe08c0b08fdb7a216973598c5ac80f0))
+* **deps:** update dependency dompurify to v3.1.2 ([f5c05fb](https://github.com/adobe/htlengine/commit/f5c05fb791a72e42eb07c0dc614e26c6eb274942))
+* **deps:** update dependency jsdom to v25 ([#546](https://github.com/adobe/htlengine/issues/546)) ([ca80fd2](https://github.com/adobe/htlengine/commit/ca80fd221bc385c19ae6752ef2b0ce3754b7372a))
+* **deps:** update external fixes ([c2b2909](https://github.com/adobe/htlengine/commit/c2b2909708fa6fb86a829418a43812b6688ff59f))
+* **deps:** update external fixes ([4c7e6b6](https://github.com/adobe/htlengine/commit/4c7e6b6cf9765db534c8fd4b566dc12c03a58ee3))
+* **deps:** update external fixes ([e2ffe29](https://github.com/adobe/htlengine/commit/e2ffe29be5cccc4f4568f086ca19b5c41b26925d))
+* **deps:** update external fixes ([8e04f3b](https://github.com/adobe/htlengine/commit/8e04f3bf6ec00e48c50d9d1d325964166b1cdee5))
+* **deps:** update external fixes ([9aad6ca](https://github.com/adobe/htlengine/commit/9aad6cab70bfcb9fa5a06494da368d4c731a1e2c))
+* **deps:** update external fixes ([aa7d3ab](https://github.com/adobe/htlengine/commit/aa7d3ab19a0abaa2f891dbbb2f39e64643f2109a))
+
 ## [6.4.22](https://github.com/adobe/htlengine/compare/v6.4.21...v6.4.22) (2024-03-23)
 
 
