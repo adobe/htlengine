@@ -1,4 +1,0 @@
-paths-ignore:
-  - src/compiler/JSCodeTemplate.js
-  - src/compiler/JSRuntimeTemplate.js
-  - src/compiler/JSPureTemplate.js
