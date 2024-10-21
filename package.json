@@ -19,7 +19,7 @@
     "start": "node src/run.js",
     "test": "c8 mocha",
     "lint": "eslint .",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "dompurify": "3.1.7",
