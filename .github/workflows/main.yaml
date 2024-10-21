@@ -39,7 +39,7 @@ jobs:
       - run: npm ci
       - run: git config --global user.email "test@project-helix.io" && git config --global user.name "Test Build"
       - run: git config --global protocol.file.allow always
-      - run: npm run test-ci-win
+      - run: npm run test
 
   release:
     name: Release
