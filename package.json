@@ -16,6 +16,7 @@
     "build:compile": "nearleyc ./src/parser/grammar/sightly.ne  --out ./src/parser/generated/grammar.js",
     "build:railroad": "nearley-railroad ./src/parser/grammar/sightly.ne  --out ./src/parser/generated/grammar.html",
     "semantic-release": "semantic-release",
+    "semantic-release-dry": "semantic-release --dry-run --branches $CI_BRANCH",
     "start": "node src/run.js",
     "test": "c8 mocha",
     "lint": "eslint .",
