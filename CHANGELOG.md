@@ -1,3 +1,10 @@
+## [6.4.25](https://github.com/adobe/htlengine/compare/v6.4.24...v6.4.25) (2024-11-23)
+
+
+### Bug Fixes
+
+* **deps:** update external fixes ([#558](https://github.com/adobe/htlengine/issues/558)) ([2bd486b](https://github.com/adobe/htlengine/commit/2bd486b57a3fe4a16de3085baf41fc22291e93e2))
+
 ## [6.4.24](https://github.com/adobe/htlengine/compare/v6.4.23...v6.4.24) (2024-11-16)
 
 
