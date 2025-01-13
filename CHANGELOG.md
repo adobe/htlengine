@@ -1,3 +1,10 @@
+## [6.4.28](https://github.com/adobe/htlengine/compare/v6.4.27...v6.4.28) (2025-01-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency jsdom to v26 ([#564](https://github.com/adobe/htlengine/issues/564)) ([9f0c24b](https://github.com/adobe/htlengine/commit/9f0c24bc3fb9969c0e5f8b8f8c11c40c043355ae))
+
 ## [6.4.27](https://github.com/adobe/htlengine/compare/v6.4.26...v6.4.27) (2024-12-14)
 
 
