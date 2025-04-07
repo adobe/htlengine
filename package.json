@@ -23,7 +23,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "dompurify": "3.2.4",
+    "dompurify": "3.2.5",
     "fs-extra": "11.3.0",
     "he": "1.2.0",
     "jsdom": "26.0.0",
