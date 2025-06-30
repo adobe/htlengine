@@ -48,12 +48,12 @@
     "eslint-plugin-import": "2.32.0",
     "husky": "9.1.7",
     "lint-staged": "16.1.2",
-    "mocha": "11.7.0",
+    "mocha": "11.7.1",
     "mocha-junit-reporter": "2.2.1",
     "rehype-stringify": "8.0.0",
     "remark-parse": "9.0.0",
     "remark-rehype": "8.1.0",
-    "semantic-release": "24.2.5"
+    "semantic-release": "24.2.6"
   },
   "lint-staged": {
     "*.js": "eslint"
