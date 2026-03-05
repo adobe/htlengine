@@ -1,3 +1,10 @@
+## [6.4.37](https://github.com/adobe/htlengine/compare/v6.4.36...v6.4.37) (2026-03-05)
+
+
+### Bug Fixes
+
+* **deps:** update external major ([#590](https://github.com/adobe/htlengine/issues/590)) ([455f28c](https://github.com/adobe/htlengine/commit/455f28c0c5f882a90aaab6d702ac1f1df6a10182))
+
 ## [6.4.36](https://github.com/adobe/htlengine/compare/v6.4.35...v6.4.36) (2026-03-05)
 
 
