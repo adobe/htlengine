@@ -5,6 +5,12 @@ env:
   CI_BUILD_NUM: ${{ github.run_id }}
   CI_BRANCH: ${{ github.ref_name }}
 
+permissions:
+  id-token: write
+  contents: write  # semantic-release-dry verifies the write permissions
+  issues: read # needed by semantic-release
+  pull-requests: write # needed by semantic-release
+
 jobs:
   test:
     name: Test
