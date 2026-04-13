@@ -5,6 +5,12 @@ env:
   CI_BUILD_NUM: ${{ github.run_id }}
   CI_BRANCH: ${{ github.ref_name }}
 
+permissions:
+  id-token: write
+  contents: write  # semantic-release-dry verifies the write permissions
+  issues: read # needed by semantic-release
+  pull-requests: write # needed by semantic-release
+
 jobs:
   test:
     name: Test
@@ -20,7 +26,7 @@ jobs:
       - run: git config --global protocol.file.allow always
       - run: npm run lint
       - run: npm test
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Semantic Release (Dry Run)
