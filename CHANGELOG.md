@@ -1,3 +1,10 @@
+## [6.4.45](https://github.com/adobe/htlengine/compare/v6.4.44...v6.4.45) (2026-08-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency dompurify to v3.4.13 [security] ([#606](https://github.com/adobe/htlengine/issues/606)) ([478916c](https://github.com/adobe/htlengine/commit/478916c6520635dccaaaf4c5099f587c11e24f07))
+
 ## [6.4.44](https://github.com/adobe/htlengine/compare/v6.4.43...v6.4.44) (2026-07-25)
 
 
