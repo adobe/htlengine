@@ -13,6 +13,7 @@
 /* eslint-disable no-await-in-loop */
 
 const path = require('path');
+const { pathToFileURL } = require('url');
 const fse = require('fs-extra');
 const { SourceMapGenerator } = require('source-map');
 const TemplateParser = require('../parser/html/TemplateParser');
@@ -461,8 +462,10 @@ module.exports = class Compiler {
 
     let sourceMap = null;
     if (mappings) {
+      // source maps use URLs; windows paths like `C:\foo` would be parsed as a `c:` scheme
+      const isWin = path.sep === '\\';
       const generator = new SourceMapGenerator({
-        sourceRoot: baseDir,
+        sourceRoot: isWin ? pathToFileURL(baseDir).href : baseDir,
       });
       mappings.forEach((mapping) => {
         // eslint-disable-next-line no-param-reassign
@@ -476,7 +479,8 @@ module.exports = class Compiler {
       });
       sourceMap = generator.toJSON();
       // relativize source files
-      sourceMap.sources = sourceMap.sources.map((file) => path.relative(baseDir, file));
+      sourceMap.sources = sourceMap.sources
+        .map((file) => path.relative(baseDir, file).split(path.sep).join('/'));
     }
     return { template, sourceMap };
   }
