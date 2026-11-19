@@ -12,7 +12,7 @@
 
 /* eslint-disable no-plusplus */
 
-const he = require('he');
+const he = require('he'); // eslint-disable-line import/no-unresolved -- resolver does not support package exports
 const TagTokenizer = require('./TagTokenizer');
 
 const VOID_ELEMENTS = Object.freeze({
